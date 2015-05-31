@@ -1,0 +1,5 @@
+node_modules
+js/lib
+.idea
+.DS_Store
+._*
