@@ -1,0 +1,25 @@
+{
+  "name": "mad",
+  "version": "0.0.1",
+  "description": "",
+  "main": "mad/mad",
+  "directories": {},
+  "dependencies": {},
+  "devDependencies": {
+    "documentjs": "^0.2.1",
+    "steal-tools": "^0.10.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:passbolt/mad.git"
+  },
+  "keywords": [
+    "mad",
+    "can"
+  ],
+  "author": "Passbolt",
+  "license": "GPL"
+}
