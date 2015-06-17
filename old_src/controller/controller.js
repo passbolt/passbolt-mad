@@ -1,5 +1,3 @@
-// @migration_in_progress
-
 steal(
 	'jquery/controller',
 	'mad/route/extensionControllerActionDispatcher.js'
@@ -9,16 +7,16 @@ steal(
 	 * @class mad.controller.Controller
 	 * @inherits jQuery.Controller
 	 * @parent mad.core
-	 *
+	 * 
 	 * The core class Controller is an extension of the JavascriptMVC Controller. This
 	 * class allow us to easily hook common behavior, such as :
-	 *
+	 * 
 	 * * referencing automatically newly created controllers with the [mad.controller.AppController|Application Controller]
 	 * * set automatically an id to the DOM element if no id has been provided
-	 *
+	 * 
 	 * @constructor
 	 * Creates a new controller
-	 * <br/>
+	 * <br/> 
 	 * References it to the application controller.
 	 * @return {mad.controller.Controller}
 	 */
@@ -26,7 +24,7 @@ steal(
 		/**
 		 * Get the controller dispatcher. The Dispatcher explain how the routes have to
 		 * be dispatch for this controller.
-		 *
+		 * 
 		 * @return {mad.route.Dispatcher} By default return the common extension -> controller -> action
 		 * dispatcher.
 		 */
@@ -58,26 +56,31 @@ steal(
 			}
 
 			// The id is not given in the options.
+			// If one is defined in the template, get this one.
+			// Otherwise generate a unique identifier.
 			if (typeof options.id == 'undefined' || options.id == null || options.id == '') {
-				// The id is maybe set directly on the templates.
+				// Id found in the template.
 				var elId = this.element.attr('id');
-				if (typeof elId == 'undefined' || elId == '') {
+				// Get this one.
+				if (typeof elId != 'undefined' && elId != '') {
+					options.id = elId;
+				}
+				// Otherwise generate a unique identifier.
+				else {
 					options.id = uuid();
 					this.element.attr('id', options.id);
-				} else {
-					options.id = elId;
 				}
 			}
 			// The id is given in the options.
 			else {
 				// The id is maybe set directly on the templates.
 				var elId = this.element.attr('id');
+				// Override the template id by the one defined in the options.
+				// But warn the developper about that case.
 				if (elId != '') {
-					//console.warn('Controller id defined in options & templates for options.id = ' + options.id);
+					console.warn('Controller id is defined by options and by template, the template id will be overriden by the option id.');
 				}
-				else {
-					options.id = elId;
-				}
+				this.element.attr('id', options.id);
 			}
 
 			// set the options
@@ -116,7 +119,7 @@ steal(
 		'remove': function () {
 			this.element.remove();
 		},
-
+		
 		/**
 		 * Get controller alias
 		 * ex: PasswordBrowserController -> password_browser
@@ -127,7 +130,7 @@ steal(
 			type = (typeof type == 'undefined') ? 'camel' : type;
 			var returnValue = '';
 			var alias = this.constructor.shortName.replace(/Controller$/, '');
-
+			
 			switch (type) {
 				case 'under':
 					returnValue = jQuery.String.underscore(alias);
@@ -137,7 +140,7 @@ steal(
 					returnValue = alias;
 				break;
 			}
-
+			
 			return returnValue;
 		},
 

@@ -15,7 +15,7 @@ steal(
 
 			/**
 			 * Get the dropdown element for the current dropdown button.
-			 * @return {elt}
+			 * @returns {elt}
 			 */
 			'getDropdownContentElement': function() {
 				var contentElement = this.getController().options.contentElement;

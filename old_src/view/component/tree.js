@@ -18,7 +18,7 @@ steal(
 		/**
 		 * Get item element
 		 * @param item
-		 * @return {jQuery}
+		 * @returns {jQuery}
 		 */
 		'getItemElement': function(item) {
 			return $('#' + item.id, this.element);
