@@ -1,6 +1,8 @@
 node_modules
-js/dist
+dist
 js/lib
 .idea
 .DS_Store
 ._*
+npm-debug.log
+.bowerrc

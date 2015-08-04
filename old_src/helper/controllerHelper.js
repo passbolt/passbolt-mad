@@ -29,11 +29,11 @@ steal(
 		 * For controllers from the plugins of the application (passbolt.activity.controller.activityWorkspaceController):
 		 * <br/>
 		 * app/plugin/activity/view/template/activityWorkspaceController.ejs
-		 * 
+		 *
 		 * @param {jQuery.Controller} clazz Controller to determine the view path
-		 * @param {array} options 
+		 * @param {array} options
 		 * @param {boolean} options.check @deprecated Check if the path exists
-		 * @return {string} Return the view path of the given controller. If the options.check is set to 
+		 * @return {string} Return the view path of the given controller. If the options.check is set to
 		 * true and the view template does not exist return an empty string
 		 */
 		'getViewPath': function (clazz, options) {

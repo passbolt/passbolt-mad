@@ -43,7 +43,7 @@ steal(
 						// If a state is defined for the given item.
 						// Add the state to the css classes.
 						if (typeof item.state != 'undefined') {
-							mappedValue = $.merge(mappedValue, item.state.getState());
+							mappedValue = $.merge(mappedValue, item.state.current);
 						}
 						return mappedValue.join(' ');
 					}

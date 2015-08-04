@@ -4,13 +4,26 @@
   "description": "",
   "main": "mad/mad",
   "directories": {},
-  "dependencies": {},
+  "author": "Passbolt",
+  "dependencies": {
+    "steal": "^0.10.4",
+    "can": "^2.2.6",
+    "jquery": "^2.1.4",
+    "underscore": "~1.8.3"
+  },
   "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-shell": "^1.1.2",
     "documentjs": "^0.2.1",
-    "steal-tools": "^0.10.6"
+    "steal-tools": "^0.10.6",
+    "mocha": "^2.2.5",
+    "steal-mocha": "^0.0.2",
+    "chai": "^3.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "steal-tools"
   },
   "repository": {
     "type": "git",
