@@ -4,9 +4,10 @@ import 'mad/model/model';
  * @parent Mad.core_api
  * @inherits mad.Model
  *
- * The state model is used to track the states of another element.
+ * The aim of the State model is to manage states of a component and its
+ * transitions.
  *
- * It is used by ou
+ * This state model is used by the mad.Component.
  */
 var State = mad.model.State = mad.Model.extend('mad.model.State', /** @static */{
 

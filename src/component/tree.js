@@ -4,7 +4,7 @@ import 'mad/view/template/component/tree/tree.ejs!';
 import 'mad/view/template/component/tree/treeItem.ejs!';
 
 /**
- * @parent Mad.core_components
+ * @parent Mad.components_api
  * @inherits mad.Component
  * @group mad.component.Tree.view_events 0 View Events
  *

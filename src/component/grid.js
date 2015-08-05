@@ -4,7 +4,7 @@ import 'mad/view/template/component/grid/grid.ejs!';
 import 'mad/view/template/component/grid/gridItem.ejs!';
 
 /**
- * @parent Mad.core_components
+ * @parent Mad.components_api
  * @inherits mad.Component
  * @group mad.component.Grid.view_events 0 View Events
  *

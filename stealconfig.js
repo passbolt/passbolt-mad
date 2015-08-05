@@ -2,7 +2,7 @@ steal.config({
     //root: 'js/',
     map: {
         "jquery/jquery": "jquery",
-        "underscore": "js/lib/underscore",
+        "underscore": "js/lib/underscore/underscore",
         "can": "js/lib/can",
         "test": "test"
     },

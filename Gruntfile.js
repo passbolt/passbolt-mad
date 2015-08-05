@@ -8,10 +8,10 @@ var childProcess = require('child_process'),
  * @returns {*}
  */
 function getDemoApps(srcpath) {
-    var directories = fs.readdirSync(srcpath).filter(function(file) {
+    var directories = fs.readdirSync(srcpath).filter(function (file) {
         return fs.statSync(path.join(srcpath, file)).isDirectory();
     });
-    return directories.map(function(value) {
+    return directories.map(function (value) {
         return srcpath + '/' + value + '/' + value;
     });
 }
@@ -26,10 +26,14 @@ module.exports = function (grunt) {
             apps: 'js/app',
             lib: 'js/lib',
             doc: 'docs'
-        }
+        },
+        lib: [
+            'can',
+            'jquery',
+            'steal',
+            'underscore'
+        ]
     };
-
-    var demoApps = getDemoApps(config.path.apps);
 
     // ========================================================================
     // Configure tasks options
@@ -60,7 +64,9 @@ module.exports = function (grunt) {
             mad_lib: {
                 files: [{
                     cwd: 'node_modules',
-                    src: ['can/**', 'jquery/**', 'steal/**'],
+                    src: config.lib.map(function (value) {
+                        return value + '/**';
+                    }),
                     dest: '<%= config.path.lib %>',
                     expand: true
                 }]
@@ -70,7 +76,7 @@ module.exports = function (grunt) {
             default: {
                 options: {
                     system: {
-                        config:"stealconfig.js",
+                        config: "stealconfig.js",
                         main: getDemoApps(config.path.apps)
                     },
                     buildOptions: {
