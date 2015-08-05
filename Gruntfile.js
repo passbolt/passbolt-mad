@@ -56,7 +56,8 @@ module.exports = function (grunt) {
                 },
                 command: [
                     '(cd ./js/lib/can; patch -p1 < ../../../patches/can-system_preload_template.patch;)',
-                    '(cd ./js/lib/can; patch -p1 < ../../../patches/can-util_string_get_object_set_object.patch;)'
+                    '(cd ./js/lib/can; patch -p1 < ../../../patches/can-util_string_get_object_set_object.patch;)',
+                    '(cd ./node_modules/documentjs; patch -p1 < ../../patches/documentjs-demo_tag_url_and_sharp.patch;)'
                 ].join('&&')
             }
         },
