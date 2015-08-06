@@ -3,10 +3,8 @@ import 'mad/component/free_composite';
 import 'mad/view/component/dialog';
 import 'mad/view/template/component/dialog.ejs!';
 
-
 /**
  * @parent Mad.components_api
- * @class mad.component.Dialog
  * @inherits {mad.component.FreeComposite}
  *
  * A dialog box implementation.

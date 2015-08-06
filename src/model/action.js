@@ -2,7 +2,6 @@ import 'mad/model/model';
 import 'mad/model/state';
 
 /**
- * @class mad.model.Action
  * @inherits mad.model.Model
  * @parent mad.component
  *

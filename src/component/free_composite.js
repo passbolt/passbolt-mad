@@ -2,7 +2,6 @@ import 'mad/component/composite';
 import 'mad/view/template/component/workspace.ejs!';
 
 /*
- * @class mad.controller.component.WorkspaceController
  * @inherits mad.controller.CompositeController
  * @parent mad.controller.component
  *
@@ -17,7 +16,6 @@ import 'mad/view/template/component/workspace.ejs!';
  */
 /**
  * @parent Mad.components_api
- * @class mad.component.FreeComposite
  * @inherits {mad.component.Composite}
  *
  * Our implementation of a workspace controller. The component

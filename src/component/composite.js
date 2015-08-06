@@ -2,7 +2,6 @@ import 'mad/component/component';
 
 /**
  * @parent Mad.components_api
- * @class mad.component.Composite
  * @inherits mad.Component
  *
  * The Composite component is a very simple component that allows to

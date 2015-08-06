@@ -3,7 +3,6 @@ import 'mad/view/template/component/button/button.ejs!';
 
 /**
  * @parent Mad.components_api
- * @class mad.component.Button
  * @inherits mad.Component
  * @group mad.component.Button.view_events 0 View Events
  * @group mad.component.Button.state_changes 1 State Listeners

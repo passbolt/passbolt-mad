@@ -1,3 +1,6 @@
+// NOT USED : User by the share component, this one will be migrated to the plugin.
+// Doesn't need to be migrated.
+
 steal(
 	'mad/form/element/textboxController.js',
 	'mad/view/form/element/autocompleteView.js'

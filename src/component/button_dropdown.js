@@ -5,7 +5,6 @@ import 'mad/view/template/component/button_dropdown/button_dropdown.ejs!';
 
 /**
  * @parent Mad.components_api
- * @class mad.component.ButtonDropdown
  * @inherits mad.component.Button
  * @group mad.component.ButtonDropdown.state_changes 0 State Changes
  *

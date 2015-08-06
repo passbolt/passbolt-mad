@@ -3,7 +3,6 @@ import 'mad/view/component/contextual_menu';
 
 /**
  * @parent Mad.components_api
- * @class mad.component.ContextualMenu
  * @inherits mad.Component
  *
  * The ContextualMenu is an implementation of a simple contextual menu that can
