@@ -15,6 +15,7 @@ var MadConfig = mad.Config = can.Construct.extend('mad.Config', /** @static */ {
 
 	/**
 	 * Load a config file
+     *
 	 * @param {string} url Url of the config file to load
 	 */
 	loadFile: function (url) {
@@ -31,6 +32,7 @@ var MadConfig = mad.Config = can.Construct.extend('mad.Config', /** @static */ {
 
 	/**
 	 * Load a config array of variables.
+     *
 	 * @param {array} config The config array
 	 */
 	load: function (config) {
@@ -41,6 +43,7 @@ var MadConfig = mad.Config = can.Construct.extend('mad.Config', /** @static */ {
 	 * Retrieve a config variable
 	 *
 	 * @param {string} name The name of the config variable to retrieve.
+     *
 	 * @return {mixed}
 	 */
 	read: function (name) {
@@ -49,6 +52,7 @@ var MadConfig = mad.Config = can.Construct.extend('mad.Config', /** @static */ {
 
 	/**
 	 * Store a config variable.
+     *
 	 * @param {string} name The name of the config variable to set.
 	 * @param {mixed} value The value of the config variable to set.
 	 */

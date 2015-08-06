@@ -10,6 +10,7 @@ mad.view = mad.view || {};
  *
  * The view controller that will be used to drive component's view.
  * @todo complete the documentation
+ * @todo a control variable should be available to the devs.
  */
 var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 

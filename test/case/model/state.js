@@ -1,8 +1,6 @@
 import "steal-mocha";
 import chai from "chai";
 import mad from "mad"
-var expect = chai.expect;
-var assert = chai.assert;
 
 describe("mad.model.State", function(){
 

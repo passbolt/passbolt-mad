@@ -435,12 +435,7 @@
 
 		
 		<section class="description">
-			<p>// * Get deep attribute value(s) functions of a string which defines the full path
-// * of the attribute. By instance : ns.MyModel.MySubmodel.myAttribute
-// * @param {string} modelRef A string which defines the full path of the attribute
-// * @param {mad.model.Model} instance The instance to work on it
-// * @return {mixed}
-//</p>
+			<p>Extract a model attribute value from a reference doted string.</p>
 
 		</section>
 		
@@ -454,12 +449,7 @@
 				<h2 id="sig_">static.getModelAttributeValue(modelRef, instance)
 </h2>
 <div class="signature-wrapper">
-<p>// * Get deep attribute value(s) functions of a string which defines the full path
-// * of the attribute. By instance : ns.MyModel.MySubmodel.myAttribute
-// * @param {string} modelRef A string which defines the full path of the attribute
-// * @param {mad.model.Model} instance The instance to work on it
-// * @return {mixed}
-//</p>
+<p>Extract a model attribute value from a reference doted string.</p>
 
 
 	<h3>Parameters</h3>
@@ -468,7 +458,7 @@
 		
 		<li class="parameter">
 			<h4>modelRef
-				<code>{*}</code></h4>
+				<code>{string}</code></h4>
 			<div class="description">
 				
 			</div>
@@ -479,7 +469,7 @@
 		
 		<li class="parameter">
 			<h4>instance
-				<code>{*}</code></h4>
+				<code>{mad.model.Model}</code></h4>
 			<div class="description">
 				
 			</div>
@@ -491,6 +481,17 @@
 	</ol>
 
 
+	<h3>Returns</h3>
+	<div class="returns">
+		<h4><code>{mixed}</code></h4>
+		<div class="description">
+			
+		</div>
+		
+		
+	</div>
+	
+
 
 
 
@@ -501,6 +502,12 @@
 		
 		
 
+		
+		<section class="comment">
+			<p>By instance for <em>mad.model.MyModel.MySubModel.myAttribute</em> the function will go through
+each given instance attributes and will extract the leaf value.</p>
+
+		</section>
 		
 		
 
@@ -526,7 +533,7 @@
 	
 	
 	<script type="text/javascript">
-		var docObject = {"type":"function","name":"mad.Model.static.getModelAttributeValue","params":[{"name":"modelRef","types":[{"type":"*"}]},{"name":"instance","types":[{"type":"*"}]}],"parent":"mad.Model.static","src":"src/model/model.js","line":66,"codeLine":73,"description":"<p>// * Get deep attribute value(s) functions of a string which defines the full path\n// * of the attribute. By instance : ns.MyModel.MySubmodel.myAttribute\n// * @param {string} modelRef A string which defines the full path of the attribute\n// * @param {mad.model.Model} instance The instance to work on it\n// * @return {mixed}\n//</p>\n","dest":"/var/www/passbolt_mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/passbolt_mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
+		var docObject = {"type":"function","name":"mad.Model.static.getModelAttributeValue","params":[{"types":[{"type":"string"}],"name":"modelRef","description":""},{"types":[{"type":"mad.model.Model"}],"name":"instance","description":""}],"parent":"mad.Model.static","src":"src/model/model.js","line":66,"codeLine":77,"description":"<p>Extract a model attribute value from a reference doted string.</p>\n","returns":{"types":[{"type":"mixed"}],"description":""},"dest":"/var/www/mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
 	</script>
 	
 	

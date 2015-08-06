@@ -1,12 +1,9 @@
-import "steal-mocha";
-import mad from "mad"
-var expect = chai.expect;
-var assert = chai.assert;
+import "test/bootstrap";
 
 describe("mad.helper.Html", function(){
 
-	// Html helper test namespace.
-	mad.helper.test = mad.helper.test || {};
+    // Initialize the helper namespace for tests.
+    mad.test.helper = mad.test.helper || {};
 
 	it("create() should insert an HTML content and position it", function(){
 

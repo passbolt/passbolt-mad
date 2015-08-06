@@ -435,31 +435,7 @@
 
 		
 		<section class="description">
-			<p>// * Extract the model attributes functions of the given string following the definition of the
-// * models and submodels.
-// * By instance for ns.Model.Submodels.attribute you will get :
-// * @codestart
-// [
-// {
-//  name: ns.Model,
-//  label: 'ns.Model',
-//  multiple: false
-//},
-// {
-//  name: ns.SubModels,
-//  label: 'subModels',
-//  multiple: true
-//},
-// {
-//  name: attribute,
-//  multiple: false
-//}
-// ]
-// * @codeend
-// *
-// * @param {string} str The string to work on
-// * @return {array} Array of mad.model.Attribute
-//</p>
+			<p>Extract the model attributes from a reference doted string.</p>
 
 		</section>
 		
@@ -473,31 +449,7 @@
 				<h2 id="sig_">static.getModelAttributes(str)
 </h2>
 <div class="signature-wrapper">
-<p>// * Extract the model attributes functions of the given string following the definition of the
-// * models and submodels.
-// * By instance for ns.Model.Submodels.attribute you will get :
-// * @codestart
-// [
-// {
-//  name: ns.Model,
-//  label: 'ns.Model',
-//  multiple: false
-//},
-// {
-//  name: ns.SubModels,
-//  label: 'subModels',
-//  multiple: true
-//},
-// {
-//  name: attribute,
-//  multiple: false
-//}
-// ]
-// * @codeend
-// *
-// * @param {string} str The string to work on
-// * @return {array} Array of mad.model.Attribute
-//</p>
+<p>Extract the model attributes from a reference doted string.</p>
 
 
 	<h3>Parameters</h3>
@@ -506,7 +458,7 @@
 		
 		<li class="parameter">
 			<h4>str
-				<code>{*}</code></h4>
+				<code>{string}</code></h4>
 			<div class="description">
 				
 			</div>
@@ -518,6 +470,17 @@
 	</ol>
 
 
+	<h3>Returns</h3>
+	<div class="returns">
+		<h4><code>{<a href="array.html" >array</a> | <a href="mad.model.Attribute.html" >mad.model.Attribute</a>}</code></h4>
+		<div class="description">
+			
+		</div>
+		
+		
+	</div>
+	
+
 
 
 
@@ -528,6 +491,25 @@
 		
 		
 
+		
+		<section class="comment">
+			<p>By instance for <em>mad.model.MyModel.MySubModel.myAttribute</em> the function will return :</p>
+<pre><code>    [ {
+   name: 'mad.model.MyModel',
+   modelReference: mad.model.MyModel,
+   multiple: false
+}, {
+   name: 'MySubModel',
+   modelReference: mad.model.MySubModel,
+   multiple: true
+}, {
+   name: 'myAttribute',
+   modelReference: undefined
+   multiple: false
+} ]
+</code></pre>
+
+		</section>
 		
 		
 
@@ -553,7 +535,7 @@
 	
 	
 	<script type="text/javascript">
-		var docObject = {"type":"function","name":"mad.Model.static.getModelAttributes","params":[{"name":"str","types":[{"type":"*"}]}],"parent":"mad.Model.static","src":"src/model/model.js","line":108,"codeLine":134,"description":"<p>// * Extract the model attributes functions of the given string following the definition of the\n// * models and submodels.\n// * By instance for ns.Model.Submodels.attribute you will get :\n// * @codestart\n// [\n// {\n//  name: ns.Model,\n//  label: 'ns.Model',\n//  multiple: false\n//},\n// {\n//  name: ns.SubModels,\n//  label: 'subModels',\n//  multiple: true\n//},\n// {\n//  name: attribute,\n//  multiple: false\n//}\n// ]\n// * @codeend\n// *\n// * @param {string} str The string to work on\n// * @return {array} Array of mad.model.Attribute\n//</p>\n","dest":"/var/www/passbolt_mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/passbolt_mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
+		var docObject = {"type":"function","name":"mad.Model.static.getModelAttributes","params":[{"types":[{"type":"string"}],"name":"str","description":""}],"parent":"mad.Model.static","src":"src/model/model.js","line":101,"codeLine":124,"description":"<p>Extract the model attributes from a reference doted string.</p>\n","returns":{"types":[{"type":"array"},{"type":"mad.model.Attribute"}],"description":""},"dest":"/var/www/mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
 	</script>
 	
 	

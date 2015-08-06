@@ -1,4 +1,6 @@
 import mad from 'mad/util/util';
+
+// Initialize the helper namespaces.
 mad.helper = mad.helper || {};
 
 /**
@@ -59,10 +61,10 @@ var HtmlHelper = mad.helper.Html = can.Construct.extend('mad.helper.Html', /** @
 		var returnValue = $(content);
 
 		if (!(refElement instanceof jQuery)) {
-			throw new mad.Exception('The parameter refElement should be a jQuery object');
+			throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'refElement');
 		}
 		if (refElement.length == 0) {
-			throw new mad.Exception('The parameter refElement should be valid');
+            throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'refElement');
 		}
 
 		// insert the component functions of the reference element and the given position
@@ -87,10 +89,11 @@ var HtmlHelper = mad.helper.Html = can.Construct.extend('mad.helper.Html', /** @
 				returnValue = returnValue.insertAfter(refElement);
 				break;
 			default:
-				throw new mad.Exception('The parameter position is not valid');
+                throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'position');
+				//throw new mad.Exception('The parameter position is not valid');
 		}
 
 		return returnValue;
 	}
 
-}, /** @prototype */ { });
+}, /* @prototype */ { });
