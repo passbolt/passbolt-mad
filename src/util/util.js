@@ -1,5 +1,6 @@
 import can from 'can/can';
 import 'can/construct/super/super';
+import 'mad/util/string/uuid';
 
 // Define the global context.
 var glbl = typeof window !== "undefined" ? window : global,

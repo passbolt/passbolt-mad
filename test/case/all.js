@@ -3,7 +3,10 @@ import chai from "chai";
 
 import "test/case/component/component";
 import "test/case/component/tree";
+import "test/case/component/menu";
 import "test/case/component/grid";
+import "test/case/component/button";
+import "test/case/component/button_dropdown";
 
 import "test/case/control/control";
 
