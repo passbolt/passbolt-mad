@@ -1,11 +1,10 @@
 node_modules
 dist
+docs/*
 !docs/empty
-docs
 js/lib
 .idea
 .DS_Store
 ._*
 npm-debug.log
 .bowerrc
-!*/empty
