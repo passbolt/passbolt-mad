@@ -1,4 +1,6 @@
 import mad from 'mad/util/util';
+
+// Initialize the helper namespaces.
 mad.helper = mad.helper || {};
 
 /**

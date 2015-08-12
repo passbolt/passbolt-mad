@@ -435,11 +435,7 @@
 
 		
 		<section class="description">
-			<p>// * Check if an attribute is multiple or not. A multiple attribute is by definition
-// * a multiple association to another model
-// * @param {string} attrName The name of the attribute to test
-// * @return {boolean}
-//</p>
+			<p>Check if an attribute is a model attribute with a multiple cardinality.</p>
 
 		</section>
 		
@@ -450,14 +446,10 @@
 		
 		
 			<section class="signature">
-				<h2 id="sig_">static.isMultipleAttribute(attrName)
+				<h2 id="sig_">static.isMultipleAttribute(name)
 </h2>
 <div class="signature-wrapper">
-<p>// * Check if an attribute is multiple or not. A multiple attribute is by definition
-// * a multiple association to another model
-// * @param {string} attrName The name of the attribute to test
-// * @return {boolean}
-//</p>
+<p>Check if an attribute is a model attribute with a multiple cardinality.</p>
 
 
 	<h3>Parameters</h3>
@@ -465,10 +457,11 @@
 	<ol class="parameters">
 		
 		<li class="parameter">
-			<h4>attrName
-				<code>{*}</code></h4>
+			<h4>name
+				<code>{string}</code></h4>
 			<div class="description">
-				
+				<p>The name of the attribute to test</p>
+
 			</div>
 			
 			
@@ -477,6 +470,17 @@
 		
 	</ol>
 
+
+	<h3>Returns</h3>
+	<div class="returns">
+		<h4><code>{boolean}</code></h4>
+		<div class="description">
+			
+		</div>
+		
+		
+	</div>
+	
 
 
 
@@ -513,7 +517,7 @@
 	
 	
 	<script type="text/javascript">
-		var docObject = {"type":"function","name":"mad.Model.static.isMultipleAttribute","params":[{"name":"attrName","types":[{"type":"*"}]}],"parent":"mad.Model.static","src":"src/model/model.js","line":188,"codeLine":194,"description":"<p>// * Check if an attribute is multiple or not. A multiple attribute is by definition\n// * a multiple association to another model\n// * @param {string} attrName The name of the attribute to test\n// * @return {boolean}\n//</p>\n","dest":"/var/www/passbolt_mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/passbolt_mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
+		var docObject = {"type":"function","name":"mad.Model.static.isMultipleAttribute","params":[{"types":[{"type":"string"}],"name":"name","description":"<p>The name of the attribute to test</p>\n"}],"parent":"mad.Model.static","src":"src/model/model.js","line":180,"codeLine":188,"description":"<p>Check if an attribute is a model attribute with a multiple cardinality.</p>\n","returns":{"types":[{"type":"boolean"}],"description":""},"todo":"Rename this function","dest":"/var/www/mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
 	</script>
 	
 	
