@@ -15,8 +15,9 @@ import 'mad/view/template/component/button_dropdown/button_dropdown.ejs!';
  * @demo demo.html#button_dropdown/button_dropdown
  *
  * @constructor
- * Creates a new Button Drop down Controller Component
- * @param {HTMLElement} element the element this instance operates on.
+ * Creates a new Button Drop down Component
+ * @signature `new mad.Component.ButtonDropdown( element, options )`
+ * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
  * @param {Object} [options] option values for the controller.  These get added to
  * this.options and merged with defaults static variable
  *   * menu : the menu component
@@ -79,10 +80,12 @@ var ButtonDropdown = mad.component.ButtonDropdown = mad.component.Button.extend(
      * @param {boolean} go Enter or leave the state
      * @return {void}
      */
-    'stateDisabled': function (go) {
+    stateDisabled: function (go) {
         this._super(go);
         if (go) {
             this.view.close();
         }
     }
 });
+
+export default ButtonDropdown;

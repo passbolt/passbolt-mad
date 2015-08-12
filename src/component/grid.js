@@ -332,3 +332,5 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
         }
     }
 });
+
+export default Grid;

@@ -3,6 +3,7 @@ import 'mad/view/template/component/button/button.ejs!';
 
 /**
  * @parent Mad.components_api
+ * @class mad.component.Button
  * @inherits mad.Component
  * @group mad.component.Button.view_events 0 View Events
  * @group mad.component.Button.state_changes 1 State Listeners
@@ -14,7 +15,8 @@ import 'mad/view/template/component/button/button.ejs!';
  *
  * @constructor
  * Create a new Button Component.
- * @param {HTMLElement} element the element this instance operates on.
+ * @signature `new mad.Component.Button( element, options )`
+ * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
  * @param {Object} [options] option values for the component.  These get added to
  * this.options and merged with defaults static variable
  *   * value : value of the button
@@ -116,3 +118,5 @@ var Button = mad.component.Button = mad.Component.extend('mad.component.Button',
     }
   }
 });
+
+export default Button;

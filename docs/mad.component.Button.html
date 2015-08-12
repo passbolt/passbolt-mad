@@ -268,14 +268,10 @@
 
 		
 			
-		
-		
-		
-			<section class="signature">
-				<h2 id="sig_">new components_api.Button(element, options)
+				<section class="signature">
+					<h2 id="sig_newmad_Component_Button_element_options_">new mad.Component.Button( element, options )
 </h2>
 <div class="signature-wrapper">
-<p>The Button component is a simple button implementation.</p>
 
 
 	<h3>Parameters</h3>
@@ -283,12 +279,16 @@
 	<ol class="parameters">
 		
 		<li class="parameter">
-			<h4>element
-				<code>{HTMLElement}</code></h4>
+			<h4>el
+				<code>{HTMLElement | can.NodeList | CSSSelectorString}</code></h4>
 			<div class="description">
-				<p>the element this instance operates on.</p>
+				<p>The element the control will be created on</p>
 
 			</div>
+			
+			
+			
+			
 			
 			
 			
@@ -335,7 +335,10 @@ this.options and merged with defaults static variable</p>
 
 </div>
 
-			</section>
+				</section>
+			
+		
+		
 		
 		
 
@@ -371,7 +374,7 @@ this.options and merged with defaults static variable</p>
 	
 	
 	<script type="text/javascript">
-		var docObject = {"name":"mad.component.Button","inherits":"mad.Component","type":"constructor","src":"src/component/button.js","line":3,"codeLine":25,"description":"<p>The Button component is a simple button implementation.</p>\n","parent":"Mad.components_api","params":[{"types":[{"type":"HTMLElement"}],"name":"element","description":"<p>the element this instance operates on.</p>\n"},{"types":[{"type":"Object","options":[]}],"optional":true,"name":"options","description":"<p>option values for the component.  These get added to\nthis.options and merged with defaults static variable</p>\n<ul>\n<li>value : value of the button</li>\n<li>events : object that can contain\n<ul>\n<li>click : callback to be executed at click.</li>\n</ul></li>\n<li>tag : html tag to use.</li>\n</ul>\n"}],"returns":{"types":[{"type":"mad.component.Button"}],"description":""},"dest":"/var/www/passbolt_mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/passbolt_mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
+		var docObject = {"name":"mad.component.Button","inherits":"mad.Component","type":"constructor","src":"src/component/button.js","line":3,"codeLine":27,"description":"<p>The Button component is a simple button implementation.</p>\n","parent":"Mad.components_api","signatures":[{"code":"new mad.Component.Button( element, options )","description":"","params":[{"types":[{"type":"HTMLElement"},{"type":"can.NodeList"},{"type":"CSSSelectorString"}],"name":"el","description":"<p>The element the control will be created on</p>\n"},{"types":[{"type":"Object","options":[]}],"optional":true,"name":"options","description":"<p>option values for the component.  These get added to\nthis.options and merged with defaults static variable</p>\n<ul>\n<li>value : value of the button</li>\n<li>events : object that can contain\n<ul>\n<li>click : callback to be executed at click.</li>\n</ul></li>\n<li>tag : html tag to use.</li>\n</ul>\n"}],"returns":{"types":[{"type":"mad.component.Button"}],"description":""}}],"dest":"/var/www/passbolt_mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/passbolt_mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
 	</script>
 	
 	

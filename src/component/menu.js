@@ -6,20 +6,24 @@ import 'mad/view/template/component/menu/menu_item.ejs!';
 
 
 /**
+ * @parent Mad.components_api
  * @class mad.component.Menu
  * @inherits {mad.component.Tree}
- * @parent mad.component.component
+ * @group mad.component.Menu.view_events 0 View Events
+ *
+ * The menu component is a simple implementation of a menu composed of a list of items.
  *
  * ## Example
  * @demo demo.html#menu/menu
  *
  * @constructor
- * Instanciate a Menu Controller
- *
- * @param {HTMLElement} element the element this instance operates on.
- * @param {Object} [options] option values for the controller.  These get added to
+ * Instantiate a new Menu Component.
+ * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
+ * @param {Object} [options] option values for the component.  These get added to
  * this.options and merged with defaults static variable
- * @return {mad.controller.component.MenuController}
+ *   * itemClass : class to be used for the items composing the menu
+ *   * map : mapping object. (See mad.Map)
+ * @return {mad.component.Menu}
  */
 var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', {
 
@@ -79,6 +83,7 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
 
     /**
      * An item has been selected
+     * @parent mad.component.Menu.view_events
      * @param {HTMLElement} el The element the event occured on
      * @param {HTMLEvent} ev The event which occured
      * @param {string} item The selected item
@@ -94,3 +99,4 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
     }
 });
 
+export default Menu;

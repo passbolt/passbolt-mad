@@ -123,7 +123,7 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	position: function(options) {
-		mad.helper.HtmlHelper.position(this.element, options);
+		mad.helper.Html.position(this.element, options);
 	},
 
 	/**

@@ -11,6 +11,12 @@ var glbl = typeof window !== "undefined" ? window : global,
 glbl.mad = mad;
 mad.global = mad;
 
+// Global configuration. Can be overriden later by other components.
+mad.config = {
+    // Root element.
+    rootElement : $('body')
+};
+
 /**
  * All mad controllers instances are registered in mad._controls and can be retrieve with mad.getControl
  * until their destruction.

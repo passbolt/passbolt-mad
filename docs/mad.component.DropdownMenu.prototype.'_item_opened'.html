@@ -17,7 +17,7 @@
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
-	<title>Mad  - mad.component.ButtonDropdown.prototype.&#x27;stateDisabled&#x27;</title>
+	<title>Mad  - mad.component.DropdownMenu.prototype.&#x27; item_opened&#x27;</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 	
@@ -76,8 +76,8 @@
 		
 		
 			<li class="search-container active">
-			<a class="sidebar-title" href="mad.component.ButtonDropdown.html" data-search="mad.component.ButtonDropdown">
-				mad.component.ButtonDropdown
+			<a class="sidebar-title" href="mad.component.DropdownMenu.html" data-search="mad.component.DropdownMenu">
+				mad.component.DropdownMenu
 			</a>
 			
 	<ul>
@@ -94,8 +94,8 @@
 				
 				
 				<li class="search-container">
-					<a class="function" href="mad.component.ButtonDropdown.prototype.afterStart.html" data-search="mad.component.ButtonDropdown.prototype.afterStart">
-						afterStart
+					<a class="function" href="mad.component.DropdownMenu.prototype.close.html" data-search="mad.component.DropdownMenu.prototype.close">
+						close
 					</a>
 				</li>
 				
@@ -106,8 +106,8 @@
 				
 				
 				<li class="search-container">
-					<a class="function" href="mad.component.ButtonDropdown.prototype.setItemState.html" data-search="mad.component.ButtonDropdown.prototype.setItemState">
-						setItemState
+					<a class="function" href="mad.component.DropdownMenu.prototype.open.html" data-search="mad.component.DropdownMenu.prototype.open">
+						open
 					</a>
 				</li>
 				
@@ -128,16 +128,28 @@
 				
 					
 					<li class="heading search-container">
-						<span>State Changes</span>
+						<span>View Events</span>
 						
 	<ul>
 		
 			
 				
 				
+				<li class="search-container">
+					<a class="function" href="mad.component.DropdownMenu.prototype.&#x27;_item_closed&#x27;.html" data-search="mad.component.DropdownMenu.prototype.' item_closed'">
+						prototype.&#x27; item_closed&#x27;
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
 				<li class="search-container active">
-					<a class="function" href="mad.component.ButtonDropdown.prototype.&#x27;stateDisabled&#x27;.html" data-search="mad.component.ButtonDropdown.prototype.'stateDisabled'">
-						prototype.&#x27;stateDisabled&#x27;
+					<a class="function" href="mad.component.DropdownMenu.prototype.&#x27;_item_opened&#x27;.html" data-search="mad.component.DropdownMenu.prototype.' item_opened'">
+						prototype.&#x27; item_opened&#x27;
 					</a>
 				</li>
 				
@@ -172,7 +184,7 @@
 		
 		<section class="title">
 			<div class="heading">
-<h1>prototype.&#x27;stateDisabled&#x27;</h1>
+<h1>prototype.&#x27; item_opened&#x27;</h1>
 	<ul class="tags">
 		<li>function</li>
 	</ul>
@@ -207,7 +219,7 @@
 
 		
 		<section class="description">
-			<p>Listen to the change relative to the state Disabled</p>
+			<p>An item has been uncollapsed</p>
 
 		</section>
 		
@@ -218,10 +230,10 @@
 		
 		
 			<section class="signature">
-				<h2 id="sig_">state_changes.'stateDisabled'(go)
+				<h2 id="sig_">view_events.' item_opened'(el, ev, item)
 </h2>
 <div class="signature-wrapper">
-<p>Listen to the change relative to the state Disabled</p>
+<p>An item has been uncollapsed</p>
 
 
 	<h3>Parameters</h3>
@@ -229,10 +241,34 @@
 	<ol class="parameters">
 		
 		<li class="parameter">
-			<h4>go
-				<code>{boolean}</code></h4>
+			<h4>el
+				<code>{HTMLElement}</code></h4>
 			<div class="description">
-				<p>Enter or leave the state</p>
+				<p>The element the event occured on</p>
+
+			</div>
+			
+			
+			
+		</li>
+		
+		<li class="parameter">
+			<h4>ev
+				<code>{HTMLEvent}</code></h4>
+			<div class="description">
+				<p>The event which occured</p>
+
+			</div>
+			
+			
+			
+		</li>
+		
+		<li class="parameter">
+			<h4>item
+				<code>{mad.model.Model}</code></h4>
+			<div class="description">
+				<p>The target item</p>
 
 			</div>
 			
@@ -289,7 +325,7 @@
 	
 	
 	<script type="text/javascript">
-		var docObject = {"type":"function","name":"mad.component.ButtonDropdown.prototype.'stateDisabled'","params":[{"types":[{"type":"boolean"}],"name":"go","description":"<p>Enter or leave the state</p>\n"}],"parent":"mad.component.ButtonDropdown.state_changes","src":"src/component/button_dropdown.js","line":75,"codeLine":81,"description":"<p>Listen to the change relative to the state Disabled</p>\n","returns":{"types":[{"type":"void"}],"description":""},"dest":"/var/www/passbolt_mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/passbolt_mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
+		var docObject = {"type":"function","name":"mad.component.DropdownMenu.prototype.' item_opened'","params":[{"types":[{"type":"HTMLElement"}],"name":"el","description":"<p>The element the event occured on</p>\n"},{"types":[{"type":"HTMLEvent"}],"name":"ev","description":"<p>The event which occured</p>\n"},{"types":[{"type":"mad.model.Model"}],"name":"item","description":"<p>The target item</p>\n"}],"parent":"mad.component.DropdownMenu.view_events","src":"src/component/dropdown_menu.js","line":65,"codeLine":73,"description":"<p>An item has been uncollapsed</p>\n","returns":{"types":[{"type":"void"}],"description":""},"dest":"/var/www/passbolt_mad/docs","glob":{"pattern":"src/**/*.{js,md}","ignore":"{node_modules,bower_components}/**/*","cwd":"/var/www/passbolt_mad"},"generators":["html"],"docConfigDest":"../documentjs.json","project":{}};
 	</script>
 	
 	
