@@ -5,7 +5,7 @@ import "test/case/component/grid";
 import "test/case/component/button";
 import "test/case/component/button_dropdown";
 import "test/case/component/contextual_menu";
-
+import "test/case/component/dialog";
 import "test/case/control/control";
 
 //import "test/case/form/form";

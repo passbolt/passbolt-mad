@@ -1,6 +1,5 @@
 
-/*
- * @class mad.view.component.Dialog
+/**
  * @inherits mad.view.View
  */
 var Dialog = mad.view.component.Dialog = mad.View.extend('mad.view.component.Dialog', /* @static */ {}, /** @prototype */ {
