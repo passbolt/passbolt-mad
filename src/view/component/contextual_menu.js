@@ -1,7 +1,6 @@
 import 'mad/view/component/dropdown_menu';
 
 /**
- * @class mad.view.component.ContextualMenu
  * @inherits mad.view.component.DropdownMenu
  *
  * Our representation of the contexual menu

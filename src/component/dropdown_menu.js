@@ -4,7 +4,6 @@ import 'mad/view/template/component/dropdown_menu/dropdown_menu.ejs!';
 
 /**
  * @parent Mad.components_api
- * @class mad.component.DropdownMenu
  * @inherits {mad.component.Menu}
  * @group mad.component.DropdownMenu.view_events 0 View Events
  *

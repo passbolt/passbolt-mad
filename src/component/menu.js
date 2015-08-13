@@ -7,7 +7,6 @@ import 'mad/view/template/component/menu/menu_item.ejs!';
 
 /**
  * @parent Mad.components_api
- * @class mad.component.Menu
  * @inherits {mad.component.Tree}
  * @group mad.component.Menu.view_events 0 View Events
  *

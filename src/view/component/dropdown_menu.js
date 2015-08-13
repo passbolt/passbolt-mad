@@ -1,8 +1,6 @@
 import 'mad/view/component/tree';
 
-
 /**
- * @class mad.view.component.menu.DropDownMenu
  * @inherits mad.view.component.Tree
  *
  * Our representation of the drop down menu
