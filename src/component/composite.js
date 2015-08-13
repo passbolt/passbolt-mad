@@ -8,7 +8,7 @@ import 'mad/component/component';
  * The Composite component is a very simple component that allows to
  * use several components in the same component.
  */
-var Composite = mad.component.Composite = can.Control.extend('mad.component.Composite', /** @prototype */ {
+var Composite = mad.component.Composite = mad.Component.extend('mad.component.Composite', /** @prototype */ {
 
     'defaults': {
         'label': 'Composite Component Controller'

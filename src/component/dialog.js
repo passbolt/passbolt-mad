@@ -1,7 +1,7 @@
 import 'mad/component/component';
 import 'mad/component/free_composite';
 import 'mad/view/component/dialog';
-import 'mad/view/template/component/dialog.ejs!';
+import 'mad/view/template/component/dialog/dialog.ejs!';
 
 
 /**
@@ -23,11 +23,12 @@ import 'mad/view/template/component/dialog.ejs!';
  */
 var Dialog = mad.component.Dialog = mad.component.FreeComposite.extend('mad.component.Dialog', /** @static */ {
 
-    'defaults': {
-        'label': 'Dialog Controller',
-        'viewClass': mad.view.component.Dialog,
-        'cssClasses': ['dialog-wrapper'],
-        'tag': 'div'
+    defaults: {
+        label: 'Dialog Controller',
+        viewClass: mad.view.component.Dialog,
+        templateUri: 'mad/view/template/component/dialog/dialog.ejs',
+        cssClasses: ['dialog-wrapper'],
+        tag: 'div'
     },
 
     /**
@@ -48,7 +49,7 @@ var Dialog = mad.component.Dialog = mad.component.FreeComposite.extend('mad.comp
      */
     init: function(el, options) {
         // Create the DOM entry point for the dialog
-        var refElt = mad.app.element,
+        var refElt =  mad.config.rootElement,
             position = 'first';
 
         // If a dialog already exist, position the new one right after.
@@ -59,7 +60,7 @@ var Dialog = mad.component.Dialog = mad.component.FreeComposite.extend('mad.comp
         }
 
         // Insert the element in the page DOM.
-        var $el = mad.helper.HtmlHelper.create(refElt, position, '<div />');
+        var $el = mad.helper.Html.create(refElt, position, '<div />');
 
         // Changing the element force us to recall the setup which is called before all init functions
         // and make the magic things (bind event ...)
