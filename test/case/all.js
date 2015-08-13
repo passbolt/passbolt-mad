@@ -1,5 +1,6 @@
 import "test/case/component/component";
 import "test/case/component/tree";
+import "test/case/component/dynamic_tree";
 import "test/case/component/menu";
 import "test/case/component/grid";
 import "test/case/component/button";
