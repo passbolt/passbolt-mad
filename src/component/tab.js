@@ -68,7 +68,8 @@ var Tab = mad.component.Tab = mad.component.Composite.extend('mad.component.Tab'
     },
 
     /**
-     * A tab has been selected
+     * A tab has been selected (in case of automenu = true).
+     * @function mad.component.Tab.__item_selected
      * @return {void}
      */
     '{menu.element} item_selected': function (el, ev, item) {

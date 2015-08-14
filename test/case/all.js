@@ -8,6 +8,7 @@ import "test/case/component/button_dropdown";
 import "test/case/component/contextual_menu";
 import "test/case/component/dialog";
 import "test/case/component/tab";
+import "test/case/component/toggle_button";
 import "test/case/control/control";
 
 //import "test/case/form/form";
