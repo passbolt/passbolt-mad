@@ -19,7 +19,8 @@ import 'mad/view/template/component/free_composite/workspace.ejs!';
 var FreeComposite = mad.component.FreeComposite = mad.component.Composite.extend('mad.component.FreeComposite', /** @static */ {
 
     defaults: {
-        'label': 'WorkspaceController'
+        'label': 'WorkspaceController',
+        'templateUri' : 'mad/view/template/component/free_composite/workspace.ejs'
     }
 }, /** @prototype */ {
 
