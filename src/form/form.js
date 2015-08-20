@@ -1,19 +1,27 @@
 import 'mad/component/component';
 import 'mad/form/element';
+import 'mad/form/feedback';
 import 'mad/view/form/form';
 
 // Initialize the form namespaces.
 mad.form = mad.form || {};
 
 /**
-* @parent Mad.form_api
-* @inherits mad.Component
-* @group mad.Form.view_events 0 View Events
-*
-* The Form Component as for aim to manage forms.
-* @todo TBD
-*/
-var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
+ * @parent Mad.form_api
+ * @inherits mad.Component
+ * @group mad.Form.view_events 0 View Events
+ *
+ * The Form Component as for aim to manage forms.
+ * @todo TBD
+ *
+ * Tracks :
+ * If the form element is driven by a model reference :
+ * - The validation of the field will be automatically operated through the model reference
+ *   validation rule
+ * - The form will return its data formatted following the associated model reference. See
+ * the function [mad.Form::getData() getData()] function.
+ */
+var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
 
     defaults: {
         // Override the label option.
@@ -27,7 +35,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
         // Override the templateBased option.
         templateBased: false,
         // Override the viewClass option.
-        viewClass: mad.view.form.Form,
+        viewClass: mad.view.Form,
 
         // The callbacks the component offers to the dev to bind their code.
         callbacks: {
@@ -92,35 +100,22 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
     },
 
     /**
-     * Load the form with the given data
-     * @param {mixed} data The data to load the form element with
-     * @return {void}
+     * Load the form with the given data.
+     *
+     * @param {mixed} data The instance to use to initialize the form elements values with.
      */
     load: function (data) {
-        // load each element with the given data
+        // Initialize the form elements value with the value given in data.
         for (var eltId in this.elements) {
-            /*
-             * the form element is driven by an associated model reference :
-             * - The validation of the field will be automatically operated through the model reference
-             *   validation rule
-             * - The form will return its data formated following the associated model reference, by instance
-             *   for the associated model mad.model.MyModel.MyAssociatedModel.myFieldName, the form will return
-             *   {
-             * 	   mad.model.MyModel: {
-             * 	     MyAssociatedModel: {
-             * 	       myFieldName: MIXED // VALUE OF THE FORM ELEMENT
-             *       }
-             *     }
-             *   }
-             */
-            var eltModelRef = this.elements[eltId].getModelReference(),
+            var element = this.getElement(eltId),
+                eltModelRef = element.getModelReference(),
                 value = null;
 
-            // if a model reference has been associated to the form element
+            // If a model reference has been associated to the form element
             if (eltModelRef != null) {
-                // data has to be a model instance
+                // Data has to be a model instance
                 if (!(data instanceof mad.Model)) {
-                    throw new mad.error.WrongParametersException('data', mad.Model.fullName);
+                    throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'data');
                 }
                 value = mad.Model.getModelAttributeValue(eltModelRef, data);
             } else {
@@ -128,30 +123,33 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
             }
 
             // set the element value
-            this.elements[eltId].setValue(value);
+            element.setValue(value);
         }
     },
 
     /**
-     * Get an element
-     * @param {string} eltId The element Id
-     * @return the form element
+     * Get a form element that has been added to the form based on its id.
+     *
+     * @param {string} eltId The form element Id
+     *
+     * @return {mad.form.Element} The form element.
      */
     getElement: function (eltId) {
         return this.elements[eltId];
     },
 
     /**
-     * Add an element to the form and optionaly its associated feedback controller.
+     * Add a form element to the form.
+     * You can optionally associate a feedback element to this form element.
      * See the validate function to know more about the feedback controller.
-     * @param {mad.form.FormElement} element The element to add to the form
-     * @param {mad.form.element.FeddbackController} feedback The form feedback element to associate to the form element
-     * @exception mad.error.WrongParametersException
-     * @return {void}
+     *
+     * @param {mad.form.Element} element The form element to add.
+     * @param {mad.form.Feedback} feedback The form feedback element to associate to the form element.
      */
     addElement: function (element, feedback) {
+        // If the given form element is not inherited from the Class mad.form.Element.
         if (!(element instanceof mad.form.Element)) {
-            throw mad.Exception.get(mad.error.WRONG_PARAMETER, element);
+            throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'element');
         }
 
         // Get validation rules for this model if this is the first element using a model of this type.
@@ -194,128 +192,138 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
     },
 
     /**
-     * Remove an element from the form
-     * @param {mad.form.FormElement} element The element to remove from the form
-     * @exception mad.error.WrongParametersException
-     * @return {void}
+     * Remove an element from the form.
+     * The remove takes break the association between the form and the element, to remove the element
+     * from the DOM use the $.remove() function.
+     *
+     * @param {mad.form.Element} element The element to remove from the form
      */
     removeElement: function (element) {
-        if (!(element instanceof mad.form.FormElement) || element == null) {
-            throw new mad.error.WrongParametersException('element', 'mad.form.FormElement');
+        // The given element has to be inherited from the class mad.form.FormElement and not be null.
+        if (!(element instanceof mad.form.Element) || element == null) {
+            throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'element');
         }
-        var eltId = element.getId();
-        if (typeof this.elements[eltId] == 'undefined') {
-            throw new mad.error.Exception('The target element to remove does not exist');
+        // Check if the element has been added to the form.
+        var eltId = element.getId(),
+            element = this.getElement(eltId);
+        if (element == undefined) {
+            throw mad.Exception.get(mad.error.ELEMENT_NOT_FOUND, eltId);
         }
+        // Remove the association of the element with the form.
         delete this.elements[eltId];
+        // Remove the feedback association with the form.
         delete this.feedbackElements[eltId];
     },
 
     /**
-     * Extract the form data. The data will be formated functions of the form element
-     * name.
-     * <br/>
-     * By exemple for the following form
-     * @codestart
-     &lt;input type="text" id="field_id" name="mad.model.MyModel.id" />
-     &lt;input type="text" id="field_id" name="mad.model.MyModel.attr1" />
-     &lt;input type="text" id="field_id" name="mad.model.MyModel2.attr2" />
-     * @codeend
+     * Extract the data gathered by the form's elements.
      *
-     * The extract data function will return
-     * @codestart
+     * For the given form :
+     *
+     * ```
+     <form id="form" class="mad_form form mad_view ready">
+     <input id="textbox" type="text">
+     <div id="checkbox"></div>
+     </form>
+     * ```
+     *
+     * ```
+     var form = new mad.Form($('#form'), {});
+     form.start();
+
+     // Add a textbox to the form.
+     var $textbox = $('<input id="textbox" type="text"/>').appendTo($form);
+     var textbox = new mad.form.Textbox($textbox, {
+    modelReference: 'mad.test.model.TestModel.testModelAttribute'
+});
+     form.addElement(textbox.start());
+
+     // Add a checkbox to the form.
+     var $checkbox = $('<div id="checkbox></div>').appendTo($form);
+     var checkbox = new mad.form.Checkbox($checkbox, {
+    availableValues: {
+        'option_1': 'Option 1',
+        'option_2': 'Option 2',
+        'option_3': 'Option 3'
+    },
+    modelReference: 'mad.test.model.TestModel.TestModel1s.testModel1Attribute'
+});
+     form.addElement(checkbox.start());
+     * ```
+     *
+     * We expect get data to return values like :
+     * ```
      {
-         mad.model.MyModel : {
-             id: STRING,
-             attr1: STRING
-         },
-         mad.model.MyModel2 : {
-             attr2: STRING
+         'mad.test.model.TestModel' : {
+             'testModelAttribute': VALUE,
+             'TestModel1s': [
+                 {
+                     'testModel1Attribute': VALUE
+                 }, ...
+             ]
          }
      }
-     * @codeend
+     * ```
      *
      * @return {array}
      */
     getData: function () {
         var returnValue = {};
 
-        // Get the form elements value
+        // Foreach form elements.
         for (var eltId in this.elements) {
+            // The current form element.
+            var element = this.getElement(eltId),
+            // The current form element associated model reference.
+                eltModelRef = element.getModelReference(),
+            // The current form element value.
+                eltValue = element.getValue();
 
-            // Get the model references of the current element
-            var eltModelRef = this.elements[eltId].getModelReference(),
-            // the element value
-                eltValue = this.elements[eltId].getValue();
-
-            // If a model reference is associated to the current form element
-            if (eltModelRef != null) {
+            // If no model reference associated to the current form element.
+            if (eltModelRef == null || eltModelRef == undefined) {
+                returnValue[eltId] = eltValue;
+            }
+            // A model reference is associated to the current form element.
+            else {
+                // Get the form element model reference details.
                 var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
-                // the field attribute name
-                    attrName = fieldAttrs[fieldAttrs.length - 1].name;
+                // The pointer where to store the form element value in the return value variable.
+                    pointer = returnValue;
 
-                // if not exists, create the top model reference
-                if (!returnValue[fieldAttrs[0].name]) {
-                    returnValue[fieldAttrs[0].name] = {};
-                }
+                // Loop on the field attributes.
+                for (var i = 0; i < fieldAttrs.length; i++) {
+                    var eltSubModelRef = fieldAttrs[i].getModelReference();
 
-                // if there is only 2 field attributes
-                // and the last one is a scalar attribute
-                if (fieldAttrs.length <= 2 && fieldAttrs[fieldAttrs.length - 1].modelReference == null) {
-                    returnValue[fieldAttrs[0].name][attrName] = eltValue;
-                }
-                // if sub models
-                else {
-                    var leafValue = null,
-                        subModelPath = '';
-
-                    // if the last field attribute is a reference to a model
-                    // no extra transformation, the leaf value is equal to the elt value
-                    // the developper as to take care about what the form element is
-                    // returning
-                    if (fieldAttrs[fieldAttrs.length - 1].modelReference != null) {
-                        leafValue = eltValue;
-                        // extract the sub models path
-                        subModelPath = can.map(fieldAttrs, function (val, prop) {
-                            return val.name;
-                        })
-                            .slice(1, fieldAttrs.length)
-                            .join('.');
-                        // construct the return format functions of the sub models references
-                        can.getObject(subModelPath, returnValue[fieldAttrs[0].name], true, leafValue);
-
-                        // else the last field attribute is a scalar attribute
-                    } else {
-                        var leafSubModelRef = fieldAttrs[fieldAttrs.length - 2];
-                        // extract the sub models path
-                        var subModelPath = can.map(fieldAttrs, function (val, prop) {
-                            return val.name;
-                        })
-                            .slice(1, fieldAttrs.length - 1)
-                            .join('.');
-
-                        // format the element value following the leaf model multiplicity
-                        // * muliplicity
-                        if (leafSubModelRef.multiple) {
-                            eltValue = can.isArray(eltValue) ? eltValue : [eltValue];
-                            leafValue = [];
-                            can.each(eltValue, function (val, i) {
-                                var obj = {};
-                                obj[attrName] = val;
-                                leafValue.push(obj);
-                            });
-                            // construct the return format function of the sub models references
-                            can.getObject(subModelPath, returnValue[fieldAttrs[0].name], true, leafValue);
-                        } else {
-                            // construct the return format function of the sub models references
-                            can.getObject(subModelPath + '.' + attrName, returnValue[fieldAttrs[0].name], true, eltValue);
+                    // If the attribute reference a scalar (meaning: it is not a model reference).
+                    // Insert the value in the return value and go to the next form element treatment.
+                    if (eltSubModelRef == null || eltModelRef == undefined) {
+                        // If the parent attribute of the current one is a model with a cardinality multiple.
+                        // And the value is not null.
+                        if (fieldAttrs[i - 1].isMultiple()) {
+                            // If the element value is not null.
+                            if (eltValue != null) {
+                                // Add each value to the return value following the expected representation.
+                                can.each(eltValue, function (val, prop) {
+                                    var obj = {};
+                                    obj[fieldAttrs[i].getName()] = val;
+                                    pointer.push(obj);
+                                });
+                            }
                         }
+                        // If the parent attribute is not multiple.
+                        else {
+                            pointer[fieldAttrs[i].getName()] = eltValue;
+                        }
+                        // Break the attributes loop, the scalar attribute should be the one which carries the element value.
+                        break;
+                    } else {
+                        // Move the pointer forward.
+                        if (pointer[fieldAttrs[i].getName()] == undefined) {
+                            pointer[fieldAttrs[i].getName()] = [];
+                        }
+                        pointer = pointer[fieldAttrs[i].getName()];
                     }
                 }
-            }
-            // else if the element is not associated to a model attribute
-            else {
-                returnValue[eltId] = eltValue;
             }
         }
 
@@ -334,7 +342,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
             var eltModelRef = element.getModelReference();
             if (eltModelRef) {
                 var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
-                // model name
+                // model full name
                     modelFullName = fieldAttrs[fieldAttrs.length - 2].name,
                 // the attribute name
                     attrName = fieldAttrs[fieldAttrs.length - 1].name,
@@ -370,51 +378,57 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
     },
 
     /**
-     * validate an element functions of its associated model. If the element is invalid :
-     * <ul>
-     *    <li>switch the state of the element to error</li>
-     *    <li>switch the state of the associated feedback element to error and display
-     *    the mad.Model.validateAttribute message</li>
-     *    <li>return false</li>
-     * </ul>
+     * Validate a form element.
      *
-     * @see mad.Model
+     * If the form element has been associated to a model, validate the value of the form element
+     * with model attribute rule.
+     *
+     * If the form element has been associated to a custom validation function, use this function
+     * to validate the value of the form element. This case is executed in priority.
+     *
+     * If the element is invalid :
+     * * Switch the state of the element to error ;
+     * * Switch the state of the associated feedback element to error ;
+     * * Display an error message see [mad.Model.validateAttribute]
+     *
      * @return {boolean}
      */
     validateElement: function (element) {
         var returnValue = true,
-        // the element value is driven by an associated model
+            // The form element is driven by an associated model.
             eltModelRef = element.getModelReference(),
-        // the validation result
+            // By default the result value is true, if no rule found to validate the form element, the validation is a success.
             validationResult = true,
-        // the element's id
+            // The form element id.
             eltId = element.getId();
 
         // The element requires a validation.
         if (element.requireValidation()) {
             // Get the element value.
-            var value = element.getValue();
+            var value = element.getValue(),
+                // The direct validate function associated to the form element.
+                validateFunction = element.getValidateFunction();
 
-            // if a validation function is given directly in the element declaration, use this.
-            if (typeof element.options.validateFunction != 'undefined' && element.options.validateFunction != null) {
-                validationResult = element.options.validateFunction(value, {});
+            // A direct validate function is defined.
+            if (validateFunction != null) {
+                validationResult = validateFunction(value, {});
             }
-            // if the element is associated to a model reference
+            // If the element is referenced by a model reference.
             else if (eltModelRef != null) {
-                // the model references of the element
+                // Get the models & attribtues that define this model reference.
                 var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
-                // the leaf model reference
-                    model = fieldAttrs[fieldAttrs.length - 2].modelReference,
-                // the attribute name
-                    attrName = fieldAttrs[fieldAttrs.length - 1].name;
+                    // The model that own the attribute that represents the form element.
+                    model = fieldAttrs[fieldAttrs.length - 2].getModelReference(),
+                    // The attribute name
+                    attrName = _.last(fieldAttrs).getName();
 
-                // validate the attribute value
+                // Validate the attribute with the model attribute rule.
                 if (model.validateAttribute) {
                     validationResult = model.validateAttribute(attrName, value, {}, this.options.action);
                 }
             }
 
-            // the validation of the element failed
+            // The validation of the element failed.
             if (validationResult !== true) {
                 var eltStates = ['error'];
                 if (this.elements[eltId].state.is('hidden')) {
@@ -426,6 +440,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
                 if (this.feedbackElements[eltId]) {
                     this.feedbackElements[eltId]
                         .setMessage(validationResult)
+                        .setState([])
                         .setState('error');
                 }
                 // Update the view.
@@ -454,18 +469,20 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
     },
 
     /**
-     * Validate the form
+     * Validate the form.
      *
-     * @see mad.form.FormController.prototype.validateElement
      * @return {boolean}
      */
     validate: function () {
         var returnValue = true;
+
         for (var i in this.elements) {
             returnValue &= this.validateElement(this.elements[i]);
         }
+
         // Increment number of validations.
         this.validations++;
+
         return returnValue;
     },
 
@@ -474,6 +491,9 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
     /* ************************************************************** */
 
     /**
+     * @function mad.Form.__submit
+     * @parent mad.Form.view_events
+     *
      * Listen to any submit events on the associated HTML element
      *
      * @param {HTMLElement} el The element the event occured on
@@ -482,7 +502,8 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
      */
     ' submit': function (el, ev) {
         ev.preventDefault();
-        // Form data are valid
+
+        // Validate the form.
         if (this.validate()) {
             // if a submit callback is given, call it
             if (this.options.callbacks.submit) {
@@ -498,24 +519,31 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /** @static */ {
     },
 
     /**
+     * @function mad.Form.__changed
+     * @parent mad.Form.view_events
+     *
      * Listen to any changed event which occured on the form elements contained by
      * the form controller. If the validateOnChange option is set to true, validate
      * the target form element.
      *
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @param {mixed} data The new value of the component
-     * @return {void}
+     * @param {HTMLElement} el The element the event occurred on
+     * @param {HTMLEvent} ev The event that occurred
+     * @param {mixed} data The new data
      */
     ' changed': function (el, ev, data) {
+        // Should the form element be validated.
         var validateOnChange = this.options.validateOnChange === true
             || (this.options.validateOnChange === 'afterFirstValidation' && this.validations > 0);
+
+        // If the form should validate on change.
+        // Validate the element which has changed.
         if (validateOnChange) {
-            var formEltCtls = $(ev.target).controllers(mad.form.FormElement);
-            if (formEltCtls.length) {
-                this.validateElement(formEltCtls[0]);
-            } else {
-                throw new mad.error.Error();
+            var formElement = this.getElement(ev.target.id);
+            if (formElement) {
+                this.validateElement(formElement);
+            }
+            else {
+                throw mad.Exception.get('No form element found.');
             }
         }
     }

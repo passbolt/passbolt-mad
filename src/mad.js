@@ -10,6 +10,7 @@ import "mad/helper/html";
 import "mad/config/config";
 import "mad/util/array/array";
 import "mad/util/map/map";
+import "mad/util/validation";
 import "mad/model/model";
 import "mad/model/state";
 import "mad/model/attribute";

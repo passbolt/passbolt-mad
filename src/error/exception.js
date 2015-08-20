@@ -4,6 +4,7 @@ import mad from 'mad/util/util';
 mad.error = mad.error || {};
 mad.error.WRONG_PARAMETER = "Wrong parameter [%0]";
 mad.error.MISSING_OPTION = "The option [%0] should be defined";
+mad.error.ELEMENT_NOT_FOUND = "The element [%0] could not be found";
 
 var MadException = mad.Exception = function() {
 };

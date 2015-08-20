@@ -1,6 +1,4 @@
-import "steal-mocha";
-import chai from "chai";
-import mad from "mad"
+import "test/bootstrap";
 
 describe("mad.Map", function(){
 

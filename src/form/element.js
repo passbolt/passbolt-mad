@@ -10,7 +10,7 @@ mad.form = mad.form || {};
  * @group mad.form.Element.view_events 0 View Events
  * @group mad.form.Element.states_changes 0 State changes
  *
- * The Form Component as for aim to manage forms.
+ * The Form Element Component as for aim to manage form element.
  * @todo TBD
  */
 var Element = mad.form.Element = mad.Component.extend('mad.form.Element', /* @static */ {
@@ -63,6 +63,15 @@ var Element = mad.form.Element = mad.Component.extend('mad.form.Element', /* @st
      */
     getModelReference: function () {
         return this.options.modelReference;
+    },
+
+    /**
+     * Get the associated validate function
+     *
+     * @return {func}
+     */
+    getValidateFunction: function () {
+        return this.options.validateFunction;
     },
 
     /**

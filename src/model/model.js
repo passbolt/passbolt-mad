@@ -30,21 +30,21 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     //madStore: new can.Model.List(),
 
     /**
-    * The model validation rules.
-    * @protected
-    */
+     * The model validation rules.
+     * @protected
+     */
     validationRules: {},
 
     /**
-    * The model attributes validation rules defined on the server.
-    * @protected
-    */
+     * The model attributes validation rules defined on the server.
+     * @protected
+     */
     serverValidationRules: {},
 
     /**
-    * Check the server validation rules.
-    * @protected
-    */
+     * Check the server validation rules.
+     * @protected
+     */
     checkServerRules: false,
 
     ///**
@@ -81,13 +81,13 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
             pointer = instance;
 
         // Go trough the instance attributes and extract the vlaue pointed my the given reference.
-        for (var i = 1; i<attributes.length; i++) {
+        for (var i = 1; i < attributes.length; i++) {
             // If the attribute which owns this current attribute is a model and it is multiple.
             // Extract the attribute value of each instance of the list.
             // @todo this should be the latest attribute of the list.
-            if (attributes[i-1].isMultiple()) {
+            if (attributes[i - 1].isMultiple()) {
                 returnValue = [];
-                pointer.each(function(subInstance) {
+                pointer.each(function (subInstance) {
                     returnValue.push(subInstance[attributes[i].getName()]);
                 });
             } else {
@@ -243,89 +243,89 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     //},
 
     /**
-    * Get the model validation rules
+     * Get the model validation rules
      *
-    * @param {string} validationCase (optional) The target validation case.
+     * @param {string} validationCase (optional) The target validation case.
      *
-    * @return {array}
-    */
+     * @return {array}
+     */
     getValidationRules: function (validationCase) {
-    	var rules = {},
-    		self = this;
+        var rules = {},
+            self = this;
 
-    	// Validation case.
-    	if (typeof validationCase == 'undefined'
-    		|| validationCase == null) {
-    		validationCase = 'default';
-    	}
+        // Validation case.
+        if (typeof validationCase == 'undefined'
+            || validationCase == null) {
+            validationCase = 'default';
+        }
 
-    	// The model contains its own validation rules.
-    	if (this.validationRules.length > 0) {
-    		rules = this.validationRules;
-    	}
-    	// Else check if some server rules have been defined.
-    	else if (this.checkServerRules) {
-    		// If no rules have been defined for the current model.
-    		if(typeof this.serverValidationRules[this.shortName] == 'undefined') {
-    			this.serverValidationRules[this.shortName] = {};
-    		}
-    		// If no rules have been defined for the given case.
-    		if (typeof this.serverValidationRules[this.shortName][validationCase] == 'undefined') {
-    			// Build the url.
-    			var url = APP_URL + 'validation/' + this.shortName + '/' + validationCase + '.json';
-    			// Get the rules from the server.
-    			self.serverValidationRules[self.shortName][validationCase] = {};
-    			mad.net.Ajax.request({
-    				'async': false,
-    				'type': 'GET',
-    				'url': url
-    			}).then(function(data) {
-    				self.serverValidationRules[self.shortName][validationCase] = data;
-    			});
-    		}
-    		rules = this.serverValidationRules[this.shortName][validationCase];
-    	}
+        // The model contains its own validation rules.
+        if (this.validationRules != null) {
+            rules = this.validationRules;
+        }
+        // Else check if some server rules have been defined.
+        else if (this.checkServerRules) {
+            // If no rules have been defined for the current model.
+            if (typeof this.serverValidationRules[this.shortName] == 'undefined') {
+                this.serverValidationRules[this.shortName] = {};
+            }
+            // If no rules have been defined for the given case.
+            if (typeof this.serverValidationRules[this.shortName][validationCase] == 'undefined') {
+                // Build the url.
+                var url = APP_URL + 'validation/' + this.shortName + '/' + validationCase + '.json';
+                // Get the rules from the server.
+                self.serverValidationRules[self.shortName][validationCase] = {};
+                mad.net.Ajax.request({
+                    'async': false,
+                    'type': 'GET',
+                    'url': url
+                }).then(function (data) {
+                    self.serverValidationRules[self.shortName][validationCase] = data;
+                });
+            }
+            rules = this.serverValidationRules[this.shortName][validationCase];
+        }
 
-    	return rules;
-    }
+        return rules;
+    },
 
-    ///**
-    // * Is the field required
-    // * @param {string} attrName The name of the attribute to check for
-    // * @param {string} validationCase The validation case to check if the attribute is required
-    // * @return {bool}
-    // */
-    //isRequired: function (attrName, validationCase) {
-    //	var required = false;
-    //	var rules = this.getValidationRules(validationCase);
-    //
-    //	// The rule is not define as "fieldName" => "ruleName"
-    //	if (!$.isArray(rules[attrName])) {
-    //		// One rule defined.
-    //		if (typeof rules[attrName]['rule'] != 'undefined') {
-    //			// The case is specifically given as per the cakePHP style.
-    //			if (typeof(rules[attrName]['required']) != 'undefined'
-    //				&& (typeof(rules[attrName]['required']) === true
-    //				|| rules[attrName]['required'] === validationCase)) {
-    //				required = true;
-    //			}
-    //		}
-    //		// Multiple rules defined.
-    //		else {
-    //			for (var ruleLabel in rules[attrName]) {
-    //				// The case is specifically given as per the cakePHP style.
-    //				if (typeof(rules[attrName][ruleLabel]['required']) != 'undefined'
-    //					&& (typeof(rules[attrName][ruleLabel]['required']) === true
-    //					|| rules[attrName][ruleLabel]['required'] === validationCase)) {
-    //					required = true;
-    //				}
-    //			}
-    //		}
-    //	}
-    //
-    //	return required;
-    //},
-    //
+    /**
+     * Is the field required
+     * @param {string} attrName The name of the attribute to check for
+     * @param {string} validationCase The validation case to check if the attribute is required
+     * @return {bool}
+     */
+    isRequired: function (attrName, validationCase) {
+        var required = false;
+        var rules = this.getValidationRules(validationCase);
+
+        // The rule is not define as "fieldName" => "ruleName"
+        if (!$.isArray(rules[attrName])) {
+            // One rule defined.
+            if (typeof rules[attrName]['rule'] != 'undefined') {
+                // The case is specifically given as per the cakePHP style.
+                if (typeof(rules[attrName]['required']) != 'undefined'
+                    && (typeof(rules[attrName]['required']) === true
+                    || rules[attrName]['required'] === validationCase)) {
+                    required = true;
+                }
+            }
+            // Multiple rules defined.
+            else {
+                for (var ruleLabel in rules[attrName]) {
+                    // The case is specifically given as per the cakePHP style.
+                    if (typeof(rules[attrName][ruleLabel]['required']) != 'undefined'
+                        && (typeof(rules[attrName][ruleLabel]['required']) === true
+                        || rules[attrName][ruleLabel]['required'] === validationCase)) {
+                        required = true;
+                    }
+                }
+            }
+        }
+
+        return required;
+    },
+
     ///**
     // * Transform a nested model instance in flat list
     // * @param {mad.model.Model} instance The target model instance to transform
@@ -448,58 +448,60 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     //		return val.getYear() + "-" + (val.getMonth() + 1) + "-" + val.getDate() + " " + val.getHours() + ":" + val.getMinutes() + ":" + val.getMilliseconds();
     //	}
     //},
-    //
-    ///**
-    // * Validate an attribute
-    // * @param {string} attrName The attribute name
-    // * @param {mixed} value The attribute value
-    // * @param {array} values The model attributes values
-    // * @param {string} case The case to validate the attribute for
-    // * @return {boolean}
-    // */
-    //validateAttribute: function (attrName, value, values, validationCase) {
-    //	var returnValue = true;
-    //
-    //	if(typeof validationCase == 'undefined') {
-    //		validationCase = 'default';
-    //	}
-    //
-    //	var rules = this.getValidationRules(validationCase);
-    //	if (typeof rules[attrName] != 'undefined') {
-    //		// Is the field required?
-    //		var required = this.isRequired(attrName, validationCase);
-    //		// Is the field passing the required validation.
-    //		var requiredValidation = mad.model.ValidationRules.validate('required', value);
-    //
-    //		// If the field is required & doesn't pass the required validation return an error.
-    //		if (required && requiredValidation !== true) {
-    //			return requiredValidation;
-    //		}
-    //		// If the filed is not required and doesn't pass the required the validation
-    //		// the system won't process the other constraints.
-    //		else if (!required && requiredValidation !== true) {
-    //			return true;
-    //		}
-    //
-    //		// Otherwise execute all the constraints.
-    //		var attributeRules = rules[attrName];
-    //		// if ($.isArray(attributeRules)) {
-    //		for (var i in attributeRules) {
-    //			var validateResult = mad.model.ValidationRules.validate(attributeRules[i], value, values);
-    //			if (validateResult !== true) {
-    //				if (returnValue === true) {
-    //					returnValue = '';
-    //				}
-    //				returnValue += validateResult;
-    //			}
-    //		}
-    //		// } else {
-    //		// 	returnValue = mad.model.ValidationRules.validate(attributeRules, value, modelValues);
-    //		// }
-    //	}
-    //
-    //	return returnValue;
-    //}
+
+    /**
+     * Validate an attribute value with a model attribute rule.
+     *
+     * @param {string} attrName The attribute name
+     * @param {mixed} value The attribute value
+     * @param {array} values The model attributes values
+     * @param {string} case The case to validate the attribute for
+     *
+     * @return {boolean}
+     */
+    validateAttribute: function (attrName, value, values, validationCase) {
+        var returnValue = true;
+
+        if (typeof validationCase == 'undefined') {
+            validationCase = 'default';
+        }
+
+        var rules = this.getValidationRules(validationCase);
+        if (typeof rules[attrName] != 'undefined') {
+            // Is the field required?
+            var required = this.isRequired(attrName, validationCase);
+            // Is the field passing the required validation.
+            var requiredValidation = mad.Validation.validate('required', value);
+
+            // If the field is required & doesn't pass the required validation return an error.
+            if (required && requiredValidation !== true) {
+                return requiredValidation;
+            }
+            // If the filed is not required and doesn't pass the required the validation
+            // the system won't process the other constraints.
+            else if (!required && requiredValidation !== true) {
+                return true;
+            }
+
+            // Otherwise execute all the constraints.
+            var attributeRules = rules[attrName];
+            // if ($.isArray(attributeRules)) {
+            for (var i in attributeRules) {
+                var validateResult = mad.Validation.validate(attributeRules[i], value, values);
+                if (validateResult !== true) {
+                    if (returnValue === true) {
+                        returnValue = '';
+                    }
+                    returnValue += validateResult;
+                }
+            }
+            // } else {
+            // 	returnValue = mad.model.ValidationRules.validate(attributeRules, value, modelValues);
+            // }
+        }
+
+        return returnValue;
+    }
 
 }, /** @prototype */ {
 

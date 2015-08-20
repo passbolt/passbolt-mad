@@ -58,7 +58,7 @@ var Textbox = mad.view.form.Textbox = mad.view.form.Element.extend('mad.view.for
 
             // Plan a new firing of the changed event.
             this._changeTimeout = setTimeout(function () {
-                el.trigger('changed', {
+                self.element.trigger('changed', {
                     value: self.getValue()
                 });
             }, this.getController().options.onChangeTimeout);

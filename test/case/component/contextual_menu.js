@@ -1,8 +1,5 @@
-import "steal-mocha";
-import mad from "mad"
-import "mad/component/contextual_menu"
-var expect = chai.expect;
-var assert = chai.assert;
+import "test/bootstrap";
+import "mad/component/contextual_menu";
 
 describe("mad.component.ContextualMenu", function () {
 

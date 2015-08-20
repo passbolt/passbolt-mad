@@ -31,7 +31,8 @@ module.exports = function (grunt) {
             'can',
             'jquery',
             'steal',
-            'underscore'
+            'underscore',
+            'xregexp'
         ]
     };
 
