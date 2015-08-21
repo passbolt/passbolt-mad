@@ -1,19 +1,6 @@
 import 'mad/component/composite';
-import 'mad/view/template/component/workspace.ejs!';
+import 'mad/view/template/component/free_composite/workspace.ejs!';
 
-/*
- * @inherits mad.controller.CompositeController
- * @parent mad.controller.component
- *
- * Our implementation of a workspace controller. The component
- * is by definition an organized container which will carry other
- * components
- *
- * @constructor
- * Create a workspace controller
- * @param {array} options Optional parameters
- * @return {mad.controller.component.FreeCompositeController}
- */
 /**
  * @parent Mad.components_api
  * @inherits {mad.component.Composite}
@@ -32,7 +19,8 @@ import 'mad/view/template/component/workspace.ejs!';
 var FreeComposite = mad.component.FreeComposite = mad.component.Composite.extend('mad.component.FreeComposite', /** @static */ {
 
     defaults: {
-        'label': 'WorkspaceController'
+        'label': 'WorkspaceController',
+        'templateUri' : 'mad/view/template/component/free_composite/workspace.ejs'
     }
 }, /** @prototype */ {
 
@@ -47,7 +35,7 @@ var FreeComposite = mad.component.FreeComposite = mad.component.Composite.extend
         area = area || 'mad-container-main';
         var returnValue = null;
         var $area = $('.' + area, this.element);
-        var component = mad.helper.ComponentHelper.create($area, 'inside_replace', ComponentClass, componentOptions);
+        var component = mad.helper.Component.create($area, 'inside_replace', ComponentClass, componentOptions);
         return this._super(component);
     }
 });

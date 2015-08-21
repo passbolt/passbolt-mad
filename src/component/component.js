@@ -1,6 +1,7 @@
 import 'mad/control/control';
 import 'mad/view/view';
 import 'mad/model/state';
+import 'mad/view/template/component/default.ejs!';
 
 // Initialize the component namespaces.
 mad.component = mad.component || {};
@@ -34,7 +35,9 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		// The component's view controller used to drive the component's view.
 		viewClass: mad.View,
 		// the data used by the view
-		viewData: {}
+		viewData: {},
+        // Default template uri.
+        templateUri: 'mad/view/template/component/default.ejs'
 	}
 
 }, /** @prototype */ {
