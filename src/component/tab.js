@@ -73,7 +73,6 @@ var Tab = mad.component.Tab = mad.component.Composite.extend('mad.component.Tab'
      * @return {void}
      */
     '{menu.element} item_selected': function (el, ev, item) {
-        console.log('item selected');
         // If the tab controller generate is own menu to drive itself
         if(this.options.autoMenu) {
             var tabId = item.id.replace('js_tab_nav_', '');

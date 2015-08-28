@@ -1,4 +1,4 @@
-import 'mad/model/model';
+import 'mad/util/util';
 
 /**
  * @parent Mad.core_api
