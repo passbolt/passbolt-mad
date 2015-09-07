@@ -58,3 +58,4 @@ var Action = mad.model.Action = mad.Model.extend('mad.model.Action', /** @static
     }
 });
 
+export default Action;
