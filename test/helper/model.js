@@ -1,5 +1,40 @@
 import "mad/mad";
 
+var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
+    /**
+     * Attributes.
+     */
+    attributes: {
+        'id': 'string',
+        'username': 'string',
+        'email': 'string',
+        'active': 'string',
+        'Profile': 'mad.test.model.ProfileTestModel'
+    },
+
+    findAll: function (params, success, error) {
+        return mad.net.Ajax.request({
+            url: '/test_users',
+            type: 'GET',
+            params: params,
+            success: success,
+            error: error
+        });
+    }
+}, {});
+
+var ProfileTestModel = mad.Model.extend('mad.test.model.ProfileTestModel', {
+    /**
+     * Attributes.
+     */
+    attributes: {
+        'id': 'string',
+        'first_name': 'string',
+        'last_name': 'string'
+    }
+
+}, {});
+
 var TestModel2 = mad.Model.extend('mad.test.model.TestModel2', {
     attributes: {
         testModel2Attribute: 'string'

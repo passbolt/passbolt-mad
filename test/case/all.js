@@ -25,6 +25,7 @@ import "test/case/net/ajax";
 
 import "test/case/model/model";
 import "test/case/model/state";
+import "test/case/model/serializer/cake_serializer";
 
 import "test/case/util/i18n";
 import "test/case/util/map";
