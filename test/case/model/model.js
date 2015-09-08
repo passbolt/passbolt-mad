@@ -1,8 +1,5 @@
-import "steal-mocha";
-import chai from "chai";
-import mad from "mad"
+import "test/bootstrap";
 import "test/helper/model";
-
 
 describe("mad.Model", function () {
 
@@ -113,10 +110,6 @@ describe("mad.Model", function () {
     });
 
     it("getModelAttributeValue() extracts the model attributes value of an instance from a string path", function () {
-        var attributes = [],
-            instance = null,
-            value = null;
-
         var instance = new mad.test.model.TestModel({
             testModelAttribute: 'testModelAttributeValue',
             TestModel1: new mad.test.model.TestModel1({
@@ -127,7 +120,8 @@ describe("mad.Model", function () {
             }, {
                 myModel1Attribute: 'myModel1sAttributeValue2'
             }])
-        });
+        }),
+            value = null;
 
         // Test a simple value in a simple object.
         value = mad.Model.getModelAttributeValue('mad.test.model.TestModel.testModelAttribute', instance);
@@ -141,6 +135,51 @@ describe("mad.Model", function () {
         value = mad.Model.getModelAttributeValue('mad.test.model.TestModel.TestModel1s.myModel1Attribute', instance);
         var expectedArray = ['myModel1sAttributeValue1', 'myModel1sAttributeValue2'];
         expect(_.difference(value, expectedArray)).to.be.empty;
+    });
+
+    it("validateAttribute() should validate an attribute regarding the defined validation rules", function () {
+        var instance = new mad.test.model.TestModel({
+            testModelAttribute: 'testModelAttributeValue',
+            TestModel1: new mad.test.model.TestModel1({
+                myModel1Attribute: 'myModel1AttributeValue'
+            }),
+            TestModel1s: new mad.test.model.TestModel1.List([{
+                myModel1Attribute: 'myModel1sAttributeValue1'
+            }, {
+                myModel1Attribute: 'myModel1sAttributeValue2'
+            }])
+        }),
+            value = null,
+            isValid = null,
+            testModelValidationRules = mad.test.model.TestModel.validationRules;
+
+        //// The attribute can be empty.
+        value = '';
+        isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
+        expect(isValid).to.be.true;
+
+        // The attribute accept ASCII character.
+        value = 'ABCDE';
+        isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
+        expect(isValid).to.be.true;
+
+        // The textbox doesn't accept special character.
+        value = 'ABCDE&';
+        isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
+        expect(isValid).to.be.not.equal(true);
+        expect(isValid).to.contain(testModelValidationRules.testModelAttribute.alphaNumeric.message);
+
+        // The textbox value length cannot be smaller than 3.
+        value = 'AB';
+        isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
+        expect(isValid).to.be.not.equal(true);
+        expect(isValid).to.contain(testModelValidationRules.testModelAttribute.size.message);
+
+        // The textbox value length cannot be smaller than 3.
+        value = 'ABCDEFGHI';
+        isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
+        expect(isValid).to.be.not.equal(true);
+        expect(isValid).to.contain(testModelValidationRules.testModelAttribute.size.message);
     });
 
 });

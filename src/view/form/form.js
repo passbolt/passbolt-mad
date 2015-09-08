@@ -4,9 +4,9 @@ import 'mad/view/view';
 mad.view.form = mad.view.form || {};
 
 /**
-* @inherits mad.View
-*/
-var Form = mad.view.Form = mad.View.extend('mad.view.Form', /** @static */ {}, /** @prototype */ {
+ * @inherits mad.View
+ */
+var Form = mad.view.Form = mad.View.extend('mad.view.Form', /* @static */ {}, /** @prototype */ {
 
     /**
      * Set the state of an embedded element.
@@ -14,8 +14,8 @@ var Form = mad.view.Form = mad.View.extend('mad.view.Form', /** @static */ {}, /
      * @param element
      * @param state
      */
-    'setElementState': function (element, state) {
-        // elt's id
+    setElementState: function (element, state) {
+        // Element's id.
         var eltId = element.getId(),
             $label = $('label[for="' + eltId + '"]'),
             $wrapper = element.element.parent('.js_form_element_wrapper');

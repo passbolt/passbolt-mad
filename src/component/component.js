@@ -244,6 +244,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	 */
 	setState: function (statesName) {
 		this.state.setState(statesName);
+        return this;
 	},
 
 	/**
