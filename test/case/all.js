@@ -20,6 +20,8 @@ import "test/case/helper/control";
 import "test/case/helper/html";
 import "test/case/helper/component";
 
+import "test/case/net/ajax";
+
 import "test/case/model/model";
 import "test/case/model/state";
 
