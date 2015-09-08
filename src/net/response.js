@@ -1,7 +1,6 @@
 import 'mad/model/model';
 
-/*
- * @class mad.net.Response
+/**
  * @inherits mad.model.Model
  * @parent mad.net
  *

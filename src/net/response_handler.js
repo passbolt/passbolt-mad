@@ -1,7 +1,6 @@
 import 'can/construct/construct';
 
-/*
- * @class mad.net.ResponseHandler
+/**
  * @see mad.error.ErrorHandler
  * @inherits mad.core.Class
  * @parent mad.net
@@ -18,6 +17,10 @@ import 'can/construct/construct';
 var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.ResponseHandler', /** @static */ {
 
 }, /** @prototype */ {
+
+    defaults : {
+        defaultErrorHandlerClass : 'mad.error.ErrorHandler'
+    },
 
     /**
      * The server response to treat
@@ -36,6 +39,20 @@ var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.Re
      * @type {object}
      */
     'callback': null,
+
+    /**
+     * Get errorHandlerClass.
+     * @returns {string}
+     * @private
+     */
+    _getErrorHandlerClass: function() {
+        var ErrorHandlerClass = this.defaults.defaultErrorHandlerClass;
+        var configErrorHandler = mad.Config.read('net.ErrorHandlerClassName');
+        if (configErrorHandler !== undefined) {
+            ErrorHandlerClass = configErrorHandler;
+        }
+        return ErrorHandlerClass;
+    },
 
     // Constructor like
     init: function (response, request, callbacks) {
@@ -100,7 +117,8 @@ var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.Re
      */
     _error: function () {
         // notify the error handler
-        mad.Config.read('error.ErrorHandlerClass').handleError(
+        var ErrorHandlerClass = can.getObject(this._getErrorHandlerClass());
+        ErrorHandlerClass.handleError(
             this.response.getStatus(),
             this.response.getTitle(),
             this.response.getMessage(),
@@ -118,7 +136,8 @@ var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.Re
      */
     _notice: function () {
         // notify the error handler
-        mad.Config.read('error.ErrorHandlerClass').handleError(
+        var ErrorHandlerClass = can.getObject(this._getErrorHandlerClass());
+        ErrorHandlerClass.handleError(
             this.response.getStatus(),
             this.response.getTitle(),
             this.response.getMessage(),
@@ -136,7 +155,8 @@ var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.Re
      */
     _warning: function () {
         // notify the error handler
-        mad.Config.read('error.ErrorHandlerClass').handleError(
+        var ErrorHandlerClass = can.getObject(this._getErrorHandlerClass());
+        ErrorHandlerClass.handleError(
             this.response.getStatus(),
             this.response.getTitle(),
             this.response.getMessage(),

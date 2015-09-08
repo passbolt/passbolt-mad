@@ -7,8 +7,7 @@ import 'mad/net/response_handler'
  */
 mad.net = mad.net || {};
 
-/*
-* @class mad.net.Ajax
+/**
 * @inherits can.Construct
 * @see mad.net.Response
 * @see mad.net.ResponseHandler
@@ -23,10 +22,10 @@ mad.net.Ajax.request({
 'async': false,
 'dataType': 'passbolt.model.Resource.models',
 'success': function (request, response, body) {
-    ...
+...
 },
 'error': function (request, response) {
-    ...
+...
 }
 });
 *	@codeend
@@ -47,7 +46,7 @@ mad.net.Ajax.request({
 * * request (<a href="#!mad.net.Request">mad.net.Request</a>) : The original request setting
 * * response (<a href="#!mad.net.Response">mad.net.Response</a>) : The server answer
 *
-*/
+**/
 var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
 
     defaults : {

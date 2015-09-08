@@ -38,7 +38,7 @@ describe("mad.net.Ajax", function() {
         };
     });
 
-    it("test ajax", function(done) {
+    it("A successful ajax query should return a success status", function(done) {
         mad.net.Ajax.request({
             'type': 'POST',
             'url': '/ajax/request',
@@ -50,7 +50,7 @@ describe("mad.net.Ajax", function() {
         });
     });
 
-    it("test ajax server not reachable", function(done) {
+    it("An ajax query to an unreachable url should return an error", function(done) {
         mad.net.Ajax.request({
             'type': 'POST',
             'url': '/ajax/not_reachable',
@@ -59,9 +59,33 @@ describe("mad.net.Ajax", function() {
         }).then(function (data, response, request) {
             expect(false).to.be.ok;
             done();
-        }), function(jqXHR, status, response, request) {
-            console.log('got ajax');
-        };
+        }).fail(function(jqXHR, status, response, request) {
+            var unreachableResponse = mad.net.Response.getResponse('unreachable');
+            expect(true).to.be.ok;
+            expect(response).to.be.instanceOf(mad.net.Response);
+            expect(response.getStatus()).to.be.equal(mad.net.Response.STATUS_ERROR);
+            expect(response.getTitle()).to.be.equal(unreachableResponse.getTitle());
+            expect(response.getAction()).to.be.equal(unreachableResponse.getAction());
+            expect(response.getController()).to.be.equal(unreachableResponse.getController());
+            expect(response.getData()).to.be.equal(unreachableResponse.getData());
+            done();
+        });
     });
 
+    it("An ajax query to a url returning an error should return an error status", function(done) {
+        mad.net.Ajax.request({
+            'type': 'POST',
+            'url': '/ajax/server_error',
+            'async': false,
+            'dataType': 'json'
+        }).then(function (data, response, request) {
+            expect(false).to.be.ok;
+            done();
+        }).fail(function(jqXHR, status, response, request) {
+            expect(true).to.be.ok;
+            expect(response).to.be.instanceOf(mad.net.Response);
+            expect(response.getStatus()).to.be.equal(mad.net.Response.STATUS_ERROR);
+            done();
+        });
+    });
 });

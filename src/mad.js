@@ -4,6 +4,7 @@ import can from "can/can";
 
 import mad from "mad/util/util";
 import "mad/error/exception";
+import "mad/error/error_handler";
 import "mad/helper/component";
 import "mad/helper/control";
 import "mad/helper/html";
