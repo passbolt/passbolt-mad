@@ -1,6 +1,12 @@
 import mad from "mad/mad";
-//'mad/devel/devel.js',
-//'mad/event/eventBus.js',
+import "mad/net/ajax";
+import "mad/control/bus";
+import "mad/util/lang/i18n";
+import madConfig from "mad/config/config.json";
+
+// Load the default mad config.
+// See mad/config/config.json
+mad.Config.load(madConfig);
 
 /**
  * @inherits can.Construct
@@ -15,8 +21,8 @@ import mad from "mad/mad";
  * * The internationalization layer ;
  * * The application ;
  *
- *	##Example
- *	The bootstrap use by the demo found in the documentation
+ *    ##Example
+ *    The bootstrap use by the demo found in the documentation
  *
  * ```
  // Launch the application and its master pieces
@@ -26,35 +32,35 @@ import mad from "mad/mad";
  * ##Config Example
  *
  * ```
-{
-    "app": {
-    "url": "http://passbolt.local",
-        "controllerElt": "#js_app_controller",
-        "namespace": "passbolt",
-        "ControllerClassName": "passbolt.controller.AppController"
-},
-    "error": {
-    "ErrorHandlerClassName": "passbolt.helper.ErrorHandler"
-},
-    "event": {
-    "eventBusControllerElt": "#js_bus_controller"
-},
-    "i18n": {
-    "lang": "EN-en"
-},
-    "net": {
-    "ResponseHandlerClassName": "passbolt.net.ResponseHandler"
-},
-    "route": {
-    "defaultRoute": {
-        "extension": "passbolt",
-            "controller": "passwordWorkspace",
-            "action": "index"
-    }
-}
- *	```
- *
- * @constructor
+ {
+     "app": {
+     "url": "http://passbolt.local",
+         "controllerElt": "#js_app_controller",
+         "namespace": "passbolt",
+         "ControllerClassName": "passbolt.controller.AppController"
+ },
+     "error": {
+     "ErrorHandlerClassName": "passbolt.helper.ErrorHandler"
+ },
+     "event": {
+     "eventBusControllerElt": "#js_bus_controller"
+ },
+     "i18n": {
+     "lang": "EN-en"
+ },
+     "net": {
+     "ResponseHandlerClassName": "passbolt.net.ResponseHandler"
+ },
+     "route": {
+     "defaultRoute": {
+         "extension": "passbolt",
+             "controller": "passwordWorkspace",
+             "action": "index"
+     }
+ }
+  *	```
+  *
+  * @constructor
  * Creates a Application Bootstrap
  * @param {Array} options Array of options
  * @param {String} options.appControllerId Id of the application controller. A DOM element with this ID must
@@ -69,8 +75,6 @@ import mad from "mad/mad";
 var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static */ {
 
     defaults: {
-        // The config files to load.
-        config: ['mad/config/config.json'],
         // Callbacks.
         callbacks: {
             // The application is ready.
@@ -83,37 +87,24 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
     // constructor like
     init: function (options) {
         this.options = {};
+        options = options || {};
 
-        // Define the config variable by merging the config given in options with the default configuration of mad.
-        var configFiles = [];
-        $.merge($.merge(configFiles, mad.Bootstrap.defaults.config), options.config);
-        // extend default options with args options (merge manually array, extends override)
+        // Merge the default class options with the ones given in parameters.
         $.extend(true, this.options, mad.Bootstrap.defaults, options);
 
-        // load config files
-        for (var i in configFiles) {
-            mad.Config.loadFile(configFiles[i]);
-        }
-
-        // load cakephp config
-        if (typeof cakephpConfig != 'undefined') {
-            mad.Config.load(cakephpConfig);
-        }
-
-        // APP_URL super variable
+        // Check the application url.
         var appUrl = mad.Config.read('app.url');
         if (typeof appUrl == 'undefined') {
-            throw new mad.error.WrongConfigException('app.url');
+            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'app.url');
         }
-        APP_URL = appUrl;
-
-        // Check the configuration
+        // Set APP_URL as global variable.
+        mad.setGlobal('APP_URL', appUrl);
 
         // Define Error Handler Class
         var ErrorHandlerClass = can.getObject(mad.Config.read('error.ErrorHandlerClassName'));
         // Has to be a mad.error.ErrorHandler
         if (!ErrorHandlerClass) {
-            throw new mad.error.WrongConfigException('error.ErrorHandlerClassName');
+            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'error.ErrorHandlerClassName');
         }
         mad.Config.write('error.ErrorHandlerClass', ErrorHandlerClass);
 
@@ -121,7 +112,7 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
         var ResponseHandlerClass = can.getObject(mad.Config.read('net.ResponseHandlerClassName'));
         // Has to be a mad.net.ResponseHandler
         if (!ResponseHandlerClass) {
-            throw new mad.error.WrongConfigException('net.ResponseHandlerClassName');
+            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'net.ResponseHandlerClassName');
         }
         mad.Config.write('net.ResponseHandlerClass', ResponseHandlerClass);
 
@@ -129,19 +120,14 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
         var AppControllerClass = can.getObject(mad.Config.read('app.ControllerClassName'));
         // Has to be a mad.net.ResponseHandler
         if (!AppControllerClass) {
-            throw new mad.error.WrongConfigException('app.ControllerClassName');
+            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'app.ControllerClassName');
         }
         mad.Config.write('app.AppControllerClass', AppControllerClass);
-
-        // The app url has to be defined
-        if ($.trim(mad.Config.read('app.url')) === '') {
-            throw new mad.error.WrongConfigException('app.url');
-        }
 
         // The app controller element has to be defined, and to be a reference to
         // an existing DOM element
         if (!$(mad.Config.read('app.controllerElt')).length) {
-            throw new mad.error.WrongConfigException('app.controllerElt');
+            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'app.controllerElt');
         }
 
         // Reference the application namespace if it does not exist yet
@@ -160,7 +146,6 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
 
     /**
      * Initialize the internationalization service
-     * @return {void}
      */
     initInternationalization: function () {
         // Load the javascript dictionnary
@@ -171,7 +156,7 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
             'dataType': 'json',
             'success': function (request, response, data) {
                 // load the client dictionnary
-                mad.lang.I18n.loadDico(data);
+                mad.I18n.loadDico(data);
             },
             'error': function (request, response) {
                 steal.dev.warn('Unable to load the client dictionnary');
@@ -181,7 +166,6 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
 
     /**
      * Init application
-     * @return {void}
      */
     initAppController: function () {
         var self = this;
@@ -196,22 +180,20 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
     },
 
     /**
-     * Initialize the Application Event Bus Controller
-     * @return {void}
+     * Initialize the Application Event Bus Controller.
      */
     initEventBus: function () {
-        var elt = mad.helper.HtmlHelper.create(
+        var elt = mad.helper.Html.create(
             $(mad.Config.read('app.controllerElt')),
             'before',
             '<div/>'
         );
-        var eventBus = new mad.event.EventBus(elt);
+        var eventBus = new mad.Bus(elt);
         mad.bus = eventBus;
     },
 
     /**
      * Initialize the Application Development tools
-     * @return {void}
      */
     initDevel: function () {
         var elt = mad.helper.HtmlHelper.create(
@@ -221,53 +203,7 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
         );
         var dev = new mad.devel.Devel(elt);
         mad.dev = dev;
-    },
-
-    /**
-     * Initialize the route listener of the application. It will be in charge to listen any changes
-     * on the hash and use the function dispatch to perform the desired action.
-     * @return {void}
-     */
-    initRouteListener: function (routes) {
-        var self = this;
-        mad.bus.bind(mad.APP_NS_ID + '_route_change', function (event, route) {
-            self.dispatch(route);
-        });
-        new mad.route.RouteListener();
     }
-
-//		/**
-//		 * Dispatch to the right action following the hash url
-//		 * @param {mad.route.Route} route The route to dispatch to
-//		 * @see core.controller::getDispatcher()
-//		 * @return {void}
-//		 */
-//		'dispatch': function (route) {
-//			// check all required parameters are here
-//			if (typeof route.extension == 'undefined') {
-//				throw new Error('Bootstrap error : the url is not valid, extension missing');
-//			} else if (typeof route.controller == 'undefined') {
-//				throw new Error('Bootstrap error : the url is not valid, controller missing');
-//			} else if (typeof route.action == 'undefined') {
-//				throw new Error('Bootstrap error : the url is not valid, action missing');
-//			}
-//
-//			// get the target controller
-//			var controllerName = route.controller.charAt(0).toUpperCase() + route.controller.slice(1) + 'Controller';
-//			var appNs = mad.getGlobal('APP_NS');
-//			var controllerClass = null;
-//			if (route.extension == 'passbolt') {
-//				controllerClass = appNs.controller[controllerName];
-//			} else {
-//				controllerClass = appNs[route.extension].controller[controllerName];
-//			}
-//
-//
-//			// dispatch to the convenient action
-//			steal.dev.log('dispatch to extension:' + route.extension + ' controller:' + controllerName + ' action:' + route.action);
-//			this.options.dispatchOptions.ControllerClass = controllerClass;
-//			controllerClass.getDispatcher().dispatch(route, this.options.dispatchOptions);
-//		}
 });
 
 export default Boostrap;

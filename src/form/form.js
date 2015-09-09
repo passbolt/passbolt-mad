@@ -335,7 +335,6 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
      * @param errors
      */
     showErrors: function (errors) {
-        console.log(errors);
         for (var i in this.elements) {
             var element = this.elements[i];
             //console.log(element);

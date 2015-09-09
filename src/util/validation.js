@@ -44,7 +44,6 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
         }
 
         if (typeof mad.Validation[rule] == 'undefined') {
-            console.log(rule);
             throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'rule');
         }
 

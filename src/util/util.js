@@ -60,4 +60,17 @@ mad.unreferenceControl = function(control) {
 	delete(mad._controls[control.getId()]);
 };
 
+/**
+ * @parent Mad.core_tools
+ * @signature mad.setGlobal()
+ *
+ * Set a global variable.
+ *
+ * @param {mixed} name The variable name to set.
+ * @param {mixed} value The variable value to set.
+ */
+mad.setGlobal = function(name, value) {
+    glbl[name] = value;
+};
+
 export default mad;

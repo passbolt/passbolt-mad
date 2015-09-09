@@ -16,8 +16,6 @@ var ErrorHandler = mad.error.ErrorHandler = can.Construct.extend('mad.error.Erro
             title + ' ' +
             '(' + message + ')';
 
-        console.log(log);
-        console.log(data);
         steal.dev.warn(log);
         if (data) {
             steal.dev.warn(data);
