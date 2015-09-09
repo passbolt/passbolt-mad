@@ -1,4 +1,6 @@
 import mad from 'mad/util/util';
+import 'mad/model/list';
+import 'mad/model/serializer/cake_serializer';
 
 /**
  * The package that will contain all codes relative to Model.
@@ -17,17 +19,17 @@ mad.model = mad.model || {};
  */
 var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
 
-    ///**
-    // * Force the storing of this model's instances.
-    // * @protected
-    // */
-    //forceStore: false,
-    //
-    ///**
-    // * Store all the instance of this model in the local store.
-    // * @protected
-    // */
-    //madStore: new can.Model.List(),
+    /**
+    * Force the storing of this model's instances.
+    * @protected
+    */
+    forceStore: false,
+
+    /**
+    * Store all the instance of this model in the local store.
+    * @protected
+    */
+    madStore: new can.Model.List(),
 
     /**
      * The model validation rules.
@@ -190,57 +192,59 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
         return /models$/.test(this.attributes[name]);
     },
 
-    ///**
-    // * Override the can model class to manage our custom server response format
-    // * and the CakePHP format. The findAll ajax request is overrided by canJS to
-    // * use this function and map server response to the caller model.
-    // * @return {Array} a [can.Model.List] of instances. Each instance is created with
-    // * [mad.model.Model.model].
-    // */
-    //models: function (data) {
-    //	// if no data provided, make the models function returning an empty list of the target model
-    //	if(typeof data == 'undefined' || data == null) {
-    //		data = [];
-    //	}
-    //	// if the provided data are formated as ajax server response
-    //	if (mad.net.Response.isResponse(data)) {
-    //		return can.Model.models.call(this, mad.net.Response.getData(data));
-    //	}
-    //	return can.Model.models.call(this, data);
-    //},
-    //
-    ///**
-    // * Override the can model class to manage our custom server response format
-    // * and the cakePHP format. The findOne ajax request is overrided by canJS to
-    // * use this function and map server response to the caller model.
-    // * @return {mad.model.Model}
-    // */
-    //model: function (data) {
-    //	data = data || {};
-    //
-    //	// if the provided data are formated as ajax server response
-    //	if (mad.net.Response.isResponse(data)) {
-    //		data = mad.net.Response.getData(data);
-    //		// serialize the data from cake to can format
-    //		data = mad.model.serializer.CakeSerializer.from(data, this);
-    //	} else if (data[this.shortName]) {
-    //		// serialize the data from cake to can format
-    //		data = mad.model.serializer.CakeSerializer.from(data, this);
-    //	}
-    //
-    //	// Apply the can model func on the data.
-    //	var instance = can.Model.model.call(this, data);
-    //
-    //	// If we want to force the caching.
-    //	if (this.forceStore) {
-    //		var i = mad.model.List.indexOf(this.madStore, instance.id);
-    //		if (i == -1) {
-    //			this.madStore.push(instance);
-    //		}
-    //	}
-    //
-    //	return instance;
-    //},
+    /**
+    * Override the can model class to manage our custom server response format
+    * and the CakePHP format. The findAll ajax request is overrided by canJS to
+    * use this function and map server response to the caller model.
+    * @return {Array} a [can.Model.List] of instances. Each instance is created with
+    * [mad.model.Model.model].
+    */
+    parseModels: function (data, xhr) {
+    	// if no data provided, make the models function returning an empty list of the target model
+    	if(typeof data == 'undefined' || data == null) {
+    		data = [];
+    	}
+    	//// if the provided data are formated as ajax server response
+    	//if (mad.net.Response.isResponse(data)) {
+    	//	return can.Model.parseModels(mad.net.Response.getData(data), xhr);
+    	//}
+    	//return can.Model.parseModels(data, xhr);
+        return data;
+    },
+
+    /**
+    * Override the can model class to manage our custom server response format
+    * and the cakePHP format. The findOne ajax request is overridden by canJS to
+    * use this function and map server response to the caller model.
+    * @return {mad.model.Model}
+    */
+    parseModel: function (data, xhr) {
+    	data = data || {};
+
+    	// if the provided data are formated as ajax server response
+    	if (mad.net.Response.isResponse(data)) {
+    		data = mad.net.Response.getData(data);
+    		// serialize the data from cake to can format
+    		data = mad.model.serializer.CakeSerializer.from(data, this);
+    	} else if (data[this.shortName]) {
+    		// serialize the data from cake to can format
+    		data = mad.model.serializer.CakeSerializer.from(data, this);
+    	}
+
+    	//// Apply the can model func on the data.
+    	//var instance = can.Model.parseModel(data, xhr);
+        //
+    	//// If we want to force the caching.
+    	//if (this.forceStore) {
+    	//	var i = mad.model.List.indexOf(this.madStore, instance.id);
+    	//	if (i == -1) {
+    	//		this.madStore.push(instance);
+    	//	}
+    	//}
+        //
+    	//return instance;
+        return data;
+    },
 
     /**
      * Get the model validation rules

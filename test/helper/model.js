@@ -14,7 +14,16 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
 
     findAll: function (params, success, error) {
         return mad.net.Ajax.request({
-            url: '/test_users',
+            url: '/usertests',
+            type: 'GET',
+            params: params,
+            success: success,
+            error: error
+        });
+    },
+    findOne: function (params, success, error) {
+        return mad.net.Ajax.request({
+            url: '/usertests/view/0',
             type: 'GET',
             params: params,
             success: success,
