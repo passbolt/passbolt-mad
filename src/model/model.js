@@ -192,59 +192,74 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
         return /models$/.test(this.attributes[name]);
     },
 
-    /**
-    * Override the can model class to manage our custom server response format
-    * and the CakePHP format. The findAll ajax request is overrided by canJS to
-    * use this function and map server response to the caller model.
-    * @return {Array} a [can.Model.List] of instances. Each instance is created with
-    * [mad.model.Model.model].
-    */
-    parseModels: function (data, xhr) {
-    	// if no data provided, make the models function returning an empty list of the target model
-    	if(typeof data == 'undefined' || data == null) {
-    		data = [];
-    	}
-    	//// if the provided data are formated as ajax server response
-    	//if (mad.net.Response.isResponse(data)) {
-    	//	return can.Model.parseModels(mad.net.Response.getData(data), xhr);
-    	//}
-    	//return can.Model.parseModels(data, xhr);
-        return data;
-    },
-
-    /**
-    * Override the can model class to manage our custom server response format
-    * and the cakePHP format. The findOne ajax request is overridden by canJS to
-    * use this function and map server response to the caller model.
-    * @return {mad.model.Model}
-    */
     parseModel: function (data, xhr) {
-    	data = data || {};
+        data = data || {};
 
-    	// if the provided data are formated as ajax server response
-    	if (mad.net.Response.isResponse(data)) {
-    		data = mad.net.Response.getData(data);
-    		// serialize the data from cake to can format
-    		data = mad.model.serializer.CakeSerializer.from(data, this);
-    	} else if (data[this.shortName]) {
-    		// serialize the data from cake to can format
-    		data = mad.model.serializer.CakeSerializer.from(data, this);
-    	}
+        // if the provided data are formated as ajax server response
+        if (mad.net.Response.isResponse(data)) {
+            console.debug('mad.model.parseModel : mad.net.Response.isResponse == true');
+            data = mad.net.Response.getData(data);
+            // serialize the data from cake to can format
+            data = mad.model.serializer.CakeSerializer.from(data, this);
+        } else if (data[this.shortName]) {
+            // serialize the data from cake to can format
+            data = mad.model.serializer.CakeSerializer.from(data, this);
+        }
 
-    	//// Apply the can model func on the data.
-    	//var instance = can.Model.parseModel(data, xhr);
-        //
-    	//// If we want to force the caching.
-    	//if (this.forceStore) {
-    	//	var i = mad.model.List.indexOf(this.madStore, instance.id);
-    	//	if (i == -1) {
-    	//		this.madStore.push(instance);
-    	//	}
-    	//}
-        //
-    	//return instance;
         return data;
     },
+
+    ///**
+    // * Override the can model class to manage our custom server response format
+    // * and the CakePHP format. The findAll ajax request is overrided by canJS to
+    // * use this function and map server response to the caller model.
+    // * @return {Array} a [can.Model.List] of instances. Each instance is created with
+    // * [mad.model.Model.model].
+    // */
+    //'models': function (data) {
+    //    // if no data provided, make the models function returning an empty list of the target model
+    //    if(typeof data == 'undefined' || data == null) {
+    //        data = [];
+    //    }
+    //    // if the provided data are formated as ajax server response
+    //    if (mad.net.Response.isResponse(data)) {
+    //        return can.Model.models.call(this, mad.net.Response.getData(data));
+    //    }
+    //    return can.Model.models.call(this, data);
+    //},
+    //
+    ///**
+    // * Override the can model class to manage our custom server response format
+    // * and the cakePHP format. The findOne ajax request is overrided by canJS to
+    // * use this function and map server response to the caller model.
+    // * @return {mad.model.Model}
+    // */
+    //'model': function (data) {
+    //    data = data || {};
+    //
+    //    // if the provided data are formated as ajax server response
+    //    if (mad.net.Response.isResponse(data)) {
+    //        data = mad.net.Response.getData(data);
+    //        // serialize the data from cake to can format
+    //        data = mad.model.serializer.CakeSerializer.from(data, this);
+    //    } else if (data[this.shortName]) {
+    //        // serialize the data from cake to can format
+    //        data = mad.model.serializer.CakeSerializer.from(data, this);
+    //    }
+    //
+    //    // Apply the can model func on the data.
+    //    var instance = can.Model.model.call(this, data);
+    //
+    //    // If we want to force the caching.
+    //    if (this.forceStore) {
+    //        var i = mad.model.List.indexOf(this.madStore, instance.id);
+    //        if (i == -1) {
+    //            this.madStore.push(instance);
+    //        }
+    //    }
+    //
+    //    return instance;
+    //},
 
     /**
      * Get the model validation rules
@@ -381,59 +396,60 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     //	return returnValue;
     //},
     //
-    ///**
-    // * Get all model instances in an array which match the search paramaters
-    // * @param {array} data The array to search in
-    // * @param {string} key The key to search
-    // * @param {string} value The value of the key to search
-    // * @return {array}
-    // */
-    //search: function (data, key, value) {
-    //	var returnValue = [],
-    //		split = key.split('.'),
-    //		modelName = split[0],
-    //		attrName = split[1];
-    //
-    //	for (var i in data) {
-    //		if ($.isArray(data[i][modelName])) {
-    //			for (var j in data[i][modelName]) {
-    //				if (data[i][modelName][j][attrName] == value) {
-    //					returnValue.push(data[i]);
-    //				}
-    //			}
-    //		} else {
-    //			if (data[i][modelName][attrName] == value) {
-    //				returnValue.push(data[i]);
-    //			}
-    //		}
-    //		// search in children
-    //		if (data[i].children) {
-    //			var childrenSearch = mad.model.Model.search (data[i].children, key, value);
-    //			if (childrenSearch.length) {
-    //				returnValue = $.merge (returnValue, childrenSearch);
-    //			}
-    //		}
-    //	}
-    //	return returnValue;
-    //},
-    //
-    ///**
-    // * Get on model instance in an array which match the search parameters
-    // * and its value
-    // * @param {array} data The array to search in
-    // * @param {string} key The key to search
-    // * @param {string} value The value of the key to search
-    // * @return {mad.model.Model}
-    // */
-    //searchOne: function (data, key, value) {
-    //	var returnValue = null;
-    //	var searchResults = mad.model.Model.search(data, key, value);
-    //	if (searchResults.length) {
-    //		returnValue = searchResults[0];
-    //	}
-    //	return returnValue;
-    //},
-    //
+    /**
+    * Get all model instances in an array which match the search parameters.
+     *
+    * @param {array} data The array to search in
+    * @param {string} key The key to search
+    * @param {string} value The value of the key to search
+    * @return {array}
+    */
+    search: function (data, key, value) {
+    	var returnValue = [],
+    		split = key.split('.'),
+    		modelName = split[0],
+    		attrName = split[1];
+
+    	for (var i in data) {
+    		if ($.isArray(data[i][modelName])) {
+    			for (var j in data[i][modelName]) {
+    				if (data[i][modelName][j][attrName] == value) {
+    					returnValue.push(data[i]);
+    				}
+    			}
+    		} else {
+    			if (data[i][modelName][attrName] == value) {
+    				returnValue.push(data[i]);
+    			}
+    		}
+    		// search in children
+    		if (data[i].children) {
+    			var childrenSearch = mad.model.Model.search (data[i].children, key, value);
+    			if (childrenSearch.length) {
+    				returnValue = $.merge (returnValue, childrenSearch);
+    			}
+    		}
+    	}
+    	return returnValue;
+    },
+
+    /**
+    * Get on model instance in an array which match the search parameters
+    * and its value
+    * @param {array} data The array to search in
+    * @param {string} key The key to search
+    * @param {string} value The value of the key to search
+    * @return {mad.model.Model}
+    */
+    searchOne: function (data, key, value) {
+    	var returnValue = null;
+    	var searchResults = mad.Model.search(data, key, value);
+    	if (searchResults.length) {
+    		returnValue = searchResults[0];
+    	}
+    	return returnValue;
+    },
+
     ///**
     // * Override the serialize feature used when serializing model (server communication,
     // * backup) to support specific attributes format such as date.
