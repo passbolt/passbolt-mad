@@ -1,5 +1,6 @@
 import "test/bootstrap";
 import "test/helper/model";
+import "test/fixture/users";
 
 describe("mad.Model", function () {
 
@@ -182,4 +183,206 @@ describe("mad.Model", function () {
         expect(isValid).to.contain(testModelValidationRules.testModelAttribute.size.message);
     });
 
+    it("model's instances should be updated when findAll retrieves updated instances", function(done) {
+        // It'll be used to store the list of users.
+        var list = new can.List(),
+            updatedEventCount = 0,
+            updatedTarget = null;
+
+        // Listen to changes on the list.
+        list.bind('change', function(change) {
+            updatedEventCount ++;
+            updatedTarget = change.target;
+        });
+
+        mad.test.model.UserTestModel.findAll().then(function(data) {
+            // Store the retrieved instances in a list.
+            list.push.apply(list, data);
+
+            // A change on the list should have been caught.
+            expect(updatedEventCount).to.be.equal(1);
+            expect(updatedTarget.length).to.be.equal(3);
+
+            // Check that all elements have been retrieved.
+            expect(mad.model.List.indexOf(list, '50cdea9c-aa88-46cb-a09b-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, 'bbd56042-c5cd-11e1-a0c5-080027796c4e')).to.be.not.equal(-1);
+
+            // Check that all elements are well instances of mad.test.model.UserTestModel
+            list.each(function(el){
+                expect(el).to.be.instanceOf(mad.test.model.UserTestModel);
+            });
+
+            // Check that the findAll update well the instances which are already in use by others.
+            mad.test.model.UserTestModel.findAll({url:'/testuserscarolupdated'}).then(function(data) {
+                // A change on the list should have been caught.
+                expect(updatedEventCount).to.be.equal(2);
+                expect(updatedTarget.id).to.be.equal('50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce');
+
+                // Carol should have an updated email.
+                var index = mad.model.List.indexOf(list, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce'),
+                    instance = list[index],
+                    serverInstanceIndex = mad.model.List.indexOf(data, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce'),
+                    serverInstance = data[serverInstanceIndex];
+
+                // Check that the instance of carol returned by the server has an updated email.
+                expect(serverInstance.email).to.be.equal('carol_updated_email@passbolt.com');
+                // Check that the instance of carol stored in the list has well been updated.
+                expect(instance.email).to.be.equal('carol_updated_email@passbolt.com');
+                done();
+            });
+        }).fail(function(data) {
+            expect(false).to.be.true;
+        });
+    });
+
+    it("model's instances should be updated when findOne retrieves updated instances", function(done) {
+        // It'll be used to store the list of users.
+        var list = new can.List(),
+            updatedEventCount = 0,
+            updatedTarget = null;
+
+        // Listen to changes on the list.
+        list.bind('change', function(change) {
+            updatedEventCount ++;
+            updatedTarget = change.target;
+        });
+
+        mad.test.model.UserTestModel.findAll().then(function(data) {
+            // Store the retrieved instances in a list.
+            list.push.apply(list, data);
+
+            // A change on the list should have been caught.
+            expect(updatedEventCount).to.be.equal(1);
+            expect(updatedTarget.length).to.be.equal(3);
+
+            // Check that all elements have been retrieved.
+            expect(mad.model.List.indexOf(list, '50cdea9c-aa88-46cb-a09b-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, 'bbd56042-c5cd-11e1-a0c5-080027796c4e')).to.be.not.equal(-1);
+
+            // Check that all elements are well instances of mad.test.model.UserTestModel
+            list.each(function(el){
+                expect(el).to.be.instanceOf(mad.test.model.UserTestModel);
+            });
+
+            // Check that the findAll update well the instances which are already in use by others.
+            mad.test.model.UserTestModel.findOne({url:'/testusersupdated/{id}', id:'50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce'}).then(function(data) {
+                // A change on the list should have been caught.
+                expect(updatedEventCount).to.be.equal(2);
+                expect(updatedTarget.id).to.be.equal('50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce');
+
+                // Carol should have an updated email.
+                var index = mad.model.List.indexOf(list, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce'),
+                    instance = list[index];
+
+                // Check that the instance of carol returned by the server has an updated email.
+                expect(data.email).to.be.equal('carol_updated_email@passbolt.com');
+                // Check that the instance of carol stored in the list has well been updated.
+                expect(instance.email).to.be.equal('carol_updated_email@passbolt.com');
+                done();
+            });
+
+        }).fail(function(data) {
+            expect(false).to.be.true;
+        });
+
+    });
+
+    it("model's instances should be updated when an instance is updated.", function(done) {
+        // It'll be used to store the list of users.
+        var list = new can.List(),
+            updatedEventCount = 0,
+            updatedTarget = null;
+
+        // Listen to changes on the list.
+        list.bind('change', function(change) {
+            updatedEventCount ++;
+            updatedTarget = change.target;
+        });
+
+        mad.test.model.UserTestModel.findAll().then(function(data) {
+            // Store the retrieved instances in a list.
+            list.push.apply(list, data);
+
+            // A change on the list should have been caught.
+            expect(updatedEventCount).to.be.equal(1);
+            expect(updatedTarget.length).to.be.equal(3);
+
+            // Check that all elements have been retrieved.
+            expect(mad.model.List.indexOf(list, '50cdea9c-aa88-46cb-a09b-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, 'bbd56042-c5cd-11e1-a0c5-080027796c4e')).to.be.not.equal(-1);
+
+            // Check that all elements are well instances of mad.test.model.UserTestModel
+            list.each(function(el){
+                expect(el).to.be.instanceOf(mad.test.model.UserTestModel);
+            });
+
+            // Retrieve the carol instance.
+            var index = mad.model.List.indexOf(list, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce'),
+                instance = list[index];
+
+            // Update the email attribute, and check that the event is bound.
+            // Canjs triggers an event when an attribute of an instance is changed.
+            instance.attr('email', 'carol_updated_email_from_update_func@passbolt.com');
+
+            expect(updatedEventCount).to.be.equal(2);
+            expect(updatedTarget.id).to.be.equal('50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce');
+
+            instance.save().then(function(data) {
+                // A change on the list should have been caught.
+                expect(updatedEventCount).to.be.equal(3);
+                expect(updatedTarget.id).to.be.equal('50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce');
+                done();
+            });
+        }).fail(function(data) {
+            expect(false).to.be.true;
+        });
+
+    });
+
+    it("model's instances should be updated when an instance is retrieved with a custom find function and the recieved data contain a change.", function(done) {
+        // It'll be used to store the list of users.
+        var list = new can.List(),
+            updatedEventCount = 0,
+            updatedTarget = null;
+
+        // Listen to changes on the list.
+        list.bind('change', function(change) {
+            updatedEventCount ++;
+            updatedTarget = change.target;
+        });
+
+        mad.test.model.UserTestModel.findAll().then(function(data) {
+            // Store the retrieved instances in a list.
+            list.push.apply(list, data);
+
+            // A change on the list should have been caught.
+            expect(updatedEventCount).to.be.equal(1);
+            expect(updatedTarget.length).to.be.equal(3);
+
+            // Check that all elements have been retrieved.
+            expect(mad.model.List.indexOf(list, '50cdea9c-aa88-46cb-a09b-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce')).to.be.not.equal(-1);
+            expect(mad.model.List.indexOf(list, 'bbd56042-c5cd-11e1-a0c5-080027796c4e')).to.be.not.equal(-1);
+
+            // Check that all elements are well instances of mad.test.model.UserTestModel
+            list.each(function(el){
+                expect(el).to.be.instanceOf(mad.test.model.UserTestModel);
+            });
+
+            // Retrieve the carol instance with a custom find function.
+            mad.test.model.UserTestModel.findCustom().then(function (data) {
+                // A change on the list should have been caught.
+                expect(updatedEventCount).to.be.equal(2);
+                expect(updatedTarget.id).to.be.equal('50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce');
+                done();
+            });
+
+        }).fail(function(data) {
+            expect(false).to.be.true;
+        });
+
+    });
 });

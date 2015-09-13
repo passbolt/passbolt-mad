@@ -1,46 +1,15 @@
 import "test/bootstrap";
+import "test/fixture/users";
 import "test/helper/model";
 import "mad/model/serializer/cake_serializer";
 
 describe("mad.model.serializer.CakeSerializer", function () {
-    // Fixture for UserTestModel findAll.
-    can.fixture({
-        type: 'GET',
-        url: '/test_users'
-    }, function (original, settings, headers) {
-        return {
-            'header': {
-                'id': uuid(),
-                'status': mad.net.Response.STATUS_SUCCESS,
-                'title': 'success',
-                'message': '',
-                'controller': 'Users',
-                'action': 'index'
-            },
-            'body': [
-                {
-                    'UserTestModel' : {
-                        'id' : '533d37a0-bc80-4945-9b11-1663c0a895dc',
-                        'username' : 'kevin@passbolt.com',
-                        'email' : 'kevin@passbolt.com',
-                        'active' : '1',
-                        'testproperty' : '123'
-                    },
-                    'ProfileTestModel' : {
-                        'id' : '533d37a0-bc80-4945-9b11-1663c0a885dc',
-                        'first_name' : 'kevin',
-                        'last_name' : 'spacey'
-                    }
-                }
-            ]
-        };
-    });
 
     // Test CakeSerializer : From.
     it('test CakeSerializer : From', function (done) {
         mad.net.Ajax.request({
             'type': 'GET',
-            'url': '/test_users',
+            'url': '/testusers',
             'async': true,
             'dataType': 'json'
         }).then(function (data, response, request) {
@@ -84,7 +53,7 @@ describe("mad.model.serializer.CakeSerializer", function () {
     it('test CakeSerializer : To', function (done) {
         mad.net.Ajax.request({
             'type': 'GET',
-            'url': '/test_users',
+            'url': '/testusers',
             'async': true,
             'dataType': 'json'
         }).then(function (data, response, request) {

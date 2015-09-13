@@ -15,20 +15,20 @@ mad.net = mad.net || {};
 *
 * ## Simple Request Example
 *
-*	@codestart
+* ```
 mad.net.Ajax.request({
-'type': mad.net.Request.METHOD_POST,
-'url': APP_URL + '/resources/viewByCategory',
-'async': false,
-'dataType': 'passbolt.model.Resource.models',
-'success': function (request, response, body) {
-...
-},
-'error': function (request, response) {
-...
-}
+    'type': mad.net.Request.METHOD_POST,
+    'url': APP_URL + '/resources/viewByCategory',
+    'async': false,
+    'dataType': 'passbolt.model.Resource.models',
+    'success': function (request, response, body) {
+        ...
+    },
+    'error': function (request, response) {
+        ...
+    }
 });
-*	@codeend
+* ```
 *
 * *dataType* The dataType options allow you to define the format of the server result.
 * It gets the standart jQuery ajax setting option : xml, html, script, json, jsonp, test.
@@ -69,15 +69,16 @@ var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
      * @return {jQuery.deferred}
      */
     request: function (request) {
-        // Duplicate and store the original params in a variable
+        // Keep the original parameters.
         request.originParams = $.extend({}, request.params);
-        // Treat templated uri (like /controller/action/{id}
+        // Treat templated uris (e.g. /control/action/{id}).
         request.url = can.sub(request.url, request.params, true);
-        // By default we expect json data
+        // By default we expect the request to return json.
         request.dataType = request.dataType || 'json';
-        // Add the params left to the request
+        // Treat the request params as data
+        // @todo #Refactor
         request.data = request.params;
-        // Format request attribute.
+        // Treat the request method. By default GET.
         request.type = request.type ? request.type.toUpperCase() : 'GET';
 
         // The request will not display a loading feedback, default true.
@@ -88,10 +89,7 @@ var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
             }
         }
 
-        // Propagate an event on the bus to inform other components.
-        //mad.bus.trigger('passbolt_ajax_request_start', [request]);
-
-        // make the ajax request
+        // Perform the request.
         var returnValue = can.ajax(request)
             // pipe it to intercept server before any other treatments
             .pipe(
@@ -131,7 +129,9 @@ var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
                         if(typeof jqXHR.responseText != undefined) {
                             jsonData = $.parseJSON(jqXHR.responseText);
                         }
-                    } catch(e) {}
+                    } catch(e) {
+                        // @todo do something!
+                    }
 
                     // In case we've been able to parse the server answer.
                     if (jsonData != null && mad.net.Response.isResponse(jsonData)) {

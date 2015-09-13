@@ -11,14 +11,58 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
         'active': 'string',
         'Profile': 'mad.test.model.ProfileTestModel'
     },
-
     findAll: function (params, success, error) {
+        var url = '/testusers';
+        if (params && params.url) {
+            url = params.url;
+        }
         return mad.net.Ajax.request({
-            url: '/test_users',
+            url: url,
             type: 'GET',
             params: params,
             success: success,
             error: error
+        });
+    },
+    findOne: function (params, success, error) {
+        var url = '/testusers/{id}';
+        if (params && params.url) {
+            url = params.url;
+        }
+        return mad.net.Ajax.request({
+            url: url,
+            type: 'GET',
+            params: params,
+            success: success,
+            error: error
+        });
+    },
+    update: function (id, attrs, success, error) {
+        var url = '/testusers/' + id;
+        // format data as expected by cakePHP
+        var params = mad.model.serializer.CakeSerializer.to(attrs, this);
+        return mad.net.Ajax.request({
+            url: url,
+            type: 'PUT',
+            params: params,
+            success: success,
+            error: error
+        });
+    },
+    findCustom: function (params, success, error) {
+        var self = this;
+        return mad.net.Ajax.request({
+            url: '/testusers/custom/0',
+            type: 'GET',
+            params: params,
+            success: success,
+            error: error
+        }).pipe(function (data, textStatus, jqXHR) {
+            // pipe the result to convert cakephp response format into can format
+            var def = $.Deferred();
+            var instance = self.model(data);
+            def.resolveWith(this, [instance]);
+            return def;
         });
     }
 }, {});
