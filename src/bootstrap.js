@@ -8,6 +8,24 @@ import madConfig from "mad/config/config.json";
 // See mad/config/config.json
 mad.Config.load(madConfig);
 
+// If an url is given to load a dictionnary of translations.
+//var dictionnaryUrl = mad.Config.read("i18n.dictionnaryUrl");
+//console.log(dictionnaryUrl);
+//if (dictionnaryUrl) {
+    //mad.net.Ajax.request({
+    //    'url': url,
+    //    'async': false,
+    //    'dataType': 'json',
+    //    'success': function (request, response, data) {
+    //        // Load the dictionnary.
+    //        mad.I18n.loadDico(data);
+    //    },
+    //    'error': function (request, response) {
+    //        steal.dev.warn('Unable to load the client dictionnary');
+    //    }
+    //});
+//}
+
 /**
  * @inherits can.Construct
  * @parent Mad.core_api
@@ -136,32 +154,13 @@ var Boostrap = mad.Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static 
         // Load the required component
         var components = mad.Config.read('core.components');
         for (var i in components) {
+            console.debug('Bootstrap init component ' + components[i]);
             if (components[i] == 'Devel' && (mad.Config.read('app.debug') == null ||
                 mad.Config.read('app.debug') == 0)) {
                 continue;
             }
             this['init' + components[i]]();
         }
-    },
-
-    /**
-     * Initialize the internationalization service
-     */
-    initInternationalization: function () {
-        // Load the javascript dictionnary
-        mad.net.Ajax.request({
-            'type': 'GET',
-            'url': APP_URL + 'dictionaries/en-EN.json',
-            'async': false,
-            'dataType': 'json',
-            'success': function (request, response, data) {
-                // load the client dictionnary
-                mad.I18n.loadDico(data);
-            },
-            'error': function (request, response) {
-                steal.dev.warn('Unable to load the client dictionnary');
-            }
-        });
     },
 
     /**

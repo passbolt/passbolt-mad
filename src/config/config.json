@@ -2,12 +2,11 @@
   "core": {
     "components": [
       "EventBus",
-      "Internationalization",
-      "AppController",
-      "Devel"
+      "AppController"
     ]
   },
   "app": {
+    "debug": 1,
     "url": "http://localhost",
     "controllerElt": "body",
     "namespace": "app",
@@ -17,7 +16,7 @@
     "ErrorHandlerClassName": "mad.error.ErrorHandler"
   },
   "i18n": {
-    "lang": "EN-en"
+    "dictionnaryUrl": "dictionnaries/EN-en.json"
   },
   "net": {
     "ResponseHandlerClassName": "mad.net.ResponseHandler"
