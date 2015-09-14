@@ -35,9 +35,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		// The component's view controller used to drive the component's view.
 		viewClass: mad.View,
 		// the data used by the view
-		viewData: {},
-        // Default template uri.
-        templateUri: 'mad/view/template/component/default.ejs'
+		viewData: {}
 	}
 
 }, /** @prototype */ {
