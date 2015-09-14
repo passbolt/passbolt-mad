@@ -1,4 +1,8 @@
 import mad from 'mad/util/util';
+// Plugin which will help to take care of the association between the models.
+// Will be deprecated after canJs 3.0.
+// see: http://canjs.com/docs/can.Map.attributes.html
+import 'can/map/attributes/attributes';
 import 'mad/model/list';
 import 'mad/model/serializer/cake_serializer';
 
