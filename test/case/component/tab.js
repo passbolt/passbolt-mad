@@ -1,6 +1,6 @@
 import "steal-mocha";
-import mad from "mad"
-import "mad/component/tab"
+import mad from "mad";
+import "mad/component/tab";
 var expect = chai.expect;
 var assert = chai.assert;
 
@@ -36,30 +36,29 @@ describe("mad.component.Tab", function () {
 
     it("Tabs should appear and disappear on click", function () {
         var tabs = new mad.component.Tab('#tab', {
-            'autoMenu': true
+            autoMenu: true
         });
         tabs.start();
 
         // Tab 1.
         var tab1 = tabs.addComponent(mad.Component, {
-            'id' : 'free-composite-1',
-            'label': 'tab1',
-            'template': '<div class="free-composite"></div>'
+            id: 'free-composite-1',
+            label: 'tab1',
+            templateBased: false
         });
 
         // Tab2.
         var tab2 = tabs.addComponent(mad.Component, {
-            'id' : 'free-composite-2',
-            'label': 'tab2',
-            'template': '<div class="free-composite"></div>'
+            id: 'free-composite-2',
+            label: 'tab2',
+            templateBased: false
         });
         tabs.enableTab('free-composite-2');
         tabs.enableTab('free-composite-1');
 
         // Add text inside the tabs.
-        $('<p class="txt1">this is the content of tab 1</p>').appendTo('#free-composite-1 .component');
-        $('<p class="txt2">this is the content of tab 2</p>').appendTo('#free-composite-2 .component');
-
+        $('<p class="txt1">this is the content of tab 1</p>').appendTo('#free-composite-1');
+        $('<p class="txt2">this is the content of tab 2</p>').appendTo('#free-composite-2');
 
         expect($('.tabs-content p:visible').text()).to.equal('this is the content of tab 1');
         $('#js_tab_nav_free-composite-2 a').click();

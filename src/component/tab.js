@@ -3,7 +3,6 @@ import 'mad/component/menu';
 import 'mad/view/component/tab';
 import 'mad/view/template/component/tab/tab.ejs!';
 
-
 /**
  * @parent Mad.components_api
  * @inherits {mad.component.Composite}

@@ -1,5 +1,5 @@
 import "test/bootstrap";
-import "mad/component/menu"
+import "mad/component/menu";
 
 describe("mad.component.Menu", function () {
 

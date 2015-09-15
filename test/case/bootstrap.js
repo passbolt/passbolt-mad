@@ -4,7 +4,11 @@ import "mad/bootstrap";
 describe("mad.Bootstrap", function () {
 
     it("should inherit can.Construct", function () {
-        mad.Component.extend('mad.test.bootstrap.AppControl', {}, {});
+        var AppControl = mad.Component.extend('mad.test.bootstrap.AppControl', {
+            defaults: {
+                templateBased: false
+            }
+        }, { });
         mad.Config.write('app.controllerElt', '#test-html');
         mad.Config.write('app.ControllerClassName', 'mad.test.bootstrap.AppControl');
 

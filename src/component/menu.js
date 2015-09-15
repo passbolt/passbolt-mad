@@ -4,7 +4,6 @@ import 'mad/util/map/map';
 import 'mad/model/action';
 import 'mad/view/template/component/menu/menu_item.ejs!';
 
-
 /**
  * @parent Mad.components_api
  * @inherits {mad.component.Tree}
@@ -26,24 +25,24 @@ import 'mad/view/template/component/menu/menu_item.ejs!';
  */
 var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', {
 
-    'defaults': {
-        'label': 'Menu',
-        'cssClasses': ['menu'],
+    defaults: {
+        label: 'Menu',
+        cssClasses: ['menu'],
         // View class.
-        'viewClass': mad.view.component.Tree,
+        viewClass: mad.view.component.Tree,
         // The template to use to render each action.
-        'itemTemplateUri': 'mad/view/template/component/menu/menu_item.ejs',
+        itemTemplateUri: 'mad/view/template/component/menu/menu_item.ejs',
         // The class which represent the item.
-        'itemClass': mad.model.Action,
+        itemClass: mad.model.Action,
         // Mapping of the items for the view.
-        'map': new mad.Map({
-            'id': 'id',
-            'label': 'label',
+        map: new mad.Map({
+            id: 'id',
+            label: 'label',
             // @todo : be carefull, for now if no cssClasses defined while creating the action.
             // @todo : this mapping is not done, and the state is not added to css classes.
-            'cssClasses': {
-                'key': 'cssClasses',
-                'func': function(value, map, item, mappedValues) {
+            cssClasses: {
+                key: 'cssClasses',
+                func: function (value, map, item, mappedValues) {
                     var mappedValue = $.merge([], value);
                     // If a state is defined for the given item.
                     // Add the state to the css classes.
@@ -53,9 +52,9 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
                     return mappedValue.join(' ');
                 }
             },
-            'children': {
-                'key': 'children',
-                'func': mad.Map.mapObjects
+            children: {
+                key: 'children',
+                func: mad.Map.mapObjects
             }
         })
     }
@@ -67,8 +66,8 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
      * @param id The item id.
      * @param stateName The state to set.
      */
-    setItemState: function(id, stateName) {
-        for (i in this.options.items) {
+    setItemState: function (id, stateName) {
+        for (var i in this.options.items) {
             if (this.options.items[i].id == id) {
                 this.options.items[i].state.setState(stateName);
                 this.refreshItem(this.options.items[i]);
@@ -90,10 +89,10 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
      */
     ' item_selected': function (el, ev, item) {
         this._super(el, ev, item);
-        var action =  item.getAction();
+        var action = item.getAction();
         // If an action has been associated, and the item is not disabled.
-        if(action && !item.state.is('disabled')) {
-           action();
+        if (action && !item.state.is('disabled')) {
+            action();
         }
     }
 });
