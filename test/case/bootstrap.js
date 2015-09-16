@@ -14,6 +14,7 @@ describe("mad.Bootstrap", function () {
 
         var bootstrap = new mad.Bootstrap();
         expect(bootstrap).to.be.instanceOf(can.Construct);
+        mad.getControl('test-html', 'mad.test.bootstrap.AppControl').destroy();
     });
 
 });

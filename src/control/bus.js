@@ -46,14 +46,14 @@ import "mad/control/control";
  */
 var Bus = mad.Bus = mad.Control.extend('mad.Bus', /** @prototype */ {
 
-    // Constructor like.
-    init: function () {
-        // As the parent class is a mad.Control, and because all controls use the event
-        // bus during their instantiation to notify that they are alive. We should avoid
-        // the inheritance system to execute the parent constructor code, as it will try to
-        // work with an instance of the event bus not fully instantiated.
-        // @todo Define the limitation of this.
-    },
+    //// Constructor like.
+    //init: function () {
+    //    // As the parent class is a mad.Control, and because all controls use the event
+    //    // bus during their instantiation to notify that they are alive. We should avoid
+    //    // the inheritance system to execute the parent constructor code, as it will try to
+    //    // work with an instance of the event bus not fully instantiated.
+    //    // @todo Define the limitation of this.
+    //},
 
     /**
      * Trigger an event on the Event Bus.

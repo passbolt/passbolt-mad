@@ -34,12 +34,14 @@ mad._controls = {};
  * @return {mad.Control} The found controller or undefined.
  */
 mad.getControl = function (id, controlName) {
-    // If a controller class name is given, return precisely the control.
-    if (controlName != undefined) {
-        return mad._controls[id][controlName];
+    // If a controller class name is not given.
+    // Find the first one.
+    if (controlName == undefined) {
+        for (controlName in mad._controls[id]) {
+            break;
+        }
     }
-    // Otherwise return the first one.
-    return _.first(mad._controls[id]);
+    return mad._controls[id][controlName];
 };
 
 /**
@@ -67,7 +69,7 @@ mad.referenceControl = function (control) {
  * @param {mad.Control} control The controller to reference
  */
 mad.unreferenceControl = function (control) {
-    delete(mad._controls[control.getId()][control.constructor.fullName]);
+    delete mad._controls[control.getId()][control.constructor.fullName];
 };
 
 /**

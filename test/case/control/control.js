@@ -11,11 +11,11 @@ describe("mad.Control", function(){
 
 	it("should be referenced on instantiation and unreferenced on destroy", function() {
 		var control = new mad.Control($('#test-html'));
-		assert.isDefined(mad._controls['test-html']);
+		assert.isDefined(mad._controls['test-html']['mad.Control']);
 		var searchedControl = mad.getControl('test-html');
-		assert.isDefined(searchedControl);
+        expect(searchedControl).to.not.be.undefined;
 		control.destroy();
-		assert.isUndefined(mad._controls['test-html']);
+		expect(mad._controls['test-html']['mad.Control']).to.be.undefined;
 		var searchedControl = mad.getControl('test-html');
 		assert.isUndefined(searchedControl);
 	});
