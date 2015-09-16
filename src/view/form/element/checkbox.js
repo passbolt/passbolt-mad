@@ -50,7 +50,7 @@ var Checkbox = mad.view.form.Checkbox = mad.view.form.Element.extend('mad.view.f
     'input click': function (el, ev) {
         ev.stopPropagation();
 
-        if (el.attr('checked')) {
+        if (el.is(':checked')) {
             this.element.trigger('checked', el.val());
         }
         else {
