@@ -152,32 +152,47 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
             throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'element');
         }
 
-        // Get validation rules for this model if this is the first element using a model of this type.
-        // Check if element model is already present in the form.
-        var modelPresentInForm = false;
-        var modelAttr = mad.Model.getModelAttributes(element.getModelReference());
-        // Get model name.
-        var modelName = modelAttr[modelAttr.length - 2].name;
-        // Loop on the already added form elements.
-        for (var eltId in this.elements) {
-            // Get model name for current element.
-            var eltModelAttr = mad.Model.getModelAttributes(this.elements[eltId].getModelReference());
-            var eltModelName = modelAttr[eltModelAttr.length - 2].name;
-            // If we don't find in the form elements the same model as in the new element, then we note it.
-            if (modelName == eltModelName) {
-                modelPresentInForm = true;
-                break;
+        // If the element has been associated to a model reference.
+        // Try to define which model reference.
+        // If this is the first time the form is treating this model, get the validation rules associated to it.
+        var modelReference = element.getModelReference();
+
+        if (modelReference != null) {
+            // Check if an element of the form is already associated to this model.
+            var modelPresentInForm = false,
+            // The chain of models and models attributes representing this reference.
+                modelAttr = mad.Model.getModelAttributes(modelReference),
+            // The model name.
+                modelName = modelAttr[modelAttr.length - 2].name;
+
+            // Loop on the already added form elements.
+            for (var eltId in this.elements) {
+                // Get model name for current element.
+                var eltModelRef = this.elements[eltId].getModelReference();
+
+                if (eltModelRef != null) {
+                    var eltModelAttr = mad.Model.getModelAttributes(eltModelRef),
+                        eltModelName = modelAttr[eltModelAttr.length - 2].name;
+
+                    // If we don't find in the form elements the same model as in the new element, then we note it.
+                    if (modelName == eltModelName) {
+                        modelPresentInForm = true;
+                        break;
+                    }
+                }
+
             }
-        }
-        // If model is not already present in form.
-        // (means we don't know the validation rules yet).
-        if (!modelPresentInForm) {
-            // We get the validation rules.
-            // First, get the model.
-            var model = can.getObject(modelName);
-            if (model !== undefined) {
-                // Get the validation rules.
-                model.getValidationRules(this.options.action);
+
+            // If model is not already present in form.
+            // (means we don't know the validation rules yet).
+            if (!modelPresentInForm) {
+                // We get the validation rules.
+                // First, get the model.
+                var model = can.getObject(modelName);
+                if (model !== undefined) {
+                    // Get the validation rules.
+                    model.getValidationRules(this.options.action);
+                }
             }
         }
 
@@ -394,18 +409,18 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
      */
     validateElement: function (element) {
         var returnValue = true,
-            // The form element is driven by an associated model.
+        // The form element is driven by an associated model.
             eltModelRef = element.getModelReference(),
-            // By default the result value is true, if no rule found to validate the form element, the validation is a success.
+        // By default the result value is true, if no rule found to validate the form element, the validation is a success.
             validationResult = true,
-            // The form element id.
+        // The form element id.
             eltId = element.getId();
 
         // The element requires a validation.
         if (element.requireValidation()) {
             // Get the element value.
             var value = element.getValue(),
-                // The direct validate function associated to the form element.
+            // The direct validate function associated to the form element.
                 validateFunction = element.getValidateFunction();
 
             // A direct validate function is defined.
@@ -416,9 +431,9 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
             else if (eltModelRef != null) {
                 // Get the models & attribtues that define this model reference.
                 var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
-                    // The model that own the attribute that represents the form element.
+                // The model that own the attribute that represents the form element.
                     model = fieldAttrs[fieldAttrs.length - 2].getModelReference(),
-                    // The attribute name
+                // The attribute name
                     attrName = _.last(fieldAttrs).getName();
 
                 // Validate the attribute with the model attribute rule.

@@ -52,13 +52,22 @@ describe("mad.Form", function () {
         form.start();
 
         // Add a textbox to the form.
-        var $textbox = $('<input id="textbox"/>').appendTo($form);
-        var textbox = new mad.form.Textbox($textbox, {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
-        });
+        var $textbox = $('<input id="textbox"/>').appendTo($form),
+            textbox = new mad.form.Textbox($textbox, {});
 
         expect(function () {
             form.addElement(textbox.start());
+        }).not.to.throw(Error);
+
+        // Add a second textbox to the form.
+        // This textbox is associated to a model reference.
+        var $textboxWthModelRef = $('<input id="textbox-wth-model-ref"/>').appendTo($form),
+            textboxWthModelRef = new mad.form.Textbox($textboxWthModelRef, {
+                modelReference: 'mad.test.model.TestModel.testModelAttribute'
+            });
+
+        expect(function () {
+            form.addElement(textboxWthModelRef.start());
         }).not.to.throw(Error);
     });
 
