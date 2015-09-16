@@ -4,8 +4,8 @@ import 'mad/util/string/uuid';
 
 // Define the global context.
 var glbl = typeof window !== "undefined" ? window : global,
-	// Define the mad namespace.
-	mad = {};
+// Define the mad namespace.
+    mad = {};
 
 // Make mad global.
 glbl.mad = mad;
@@ -14,7 +14,7 @@ mad.global = mad;
 // Global configuration. Can be overriden later by other components.
 mad.config = {
     // Root element.
-    rootElement : $('body')
+    rootElement: $('body')
 };
 
 /**
@@ -30,10 +30,16 @@ mad._controls = {};
  * Get a mad controller instance based on its identifier.
  *
  * @param {string} id The controller identifier to find.
+ * @param {string} controlName The controller class name.
  * @return {mad.Control} The found controller or undefined.
  */
-mad.getControl = function(id) {
-	return mad._controls[id];
+mad.getControl = function (id, controlName) {
+    // If a controller class name is given, return precisely the control.
+    if (controlName != undefined) {
+        return mad._controls[id][controlName];
+    }
+    // Otherwise return the first one.
+    return _.first(mad._controls[id]);
 };
 
 /**
@@ -44,8 +50,12 @@ mad.getControl = function(id) {
  *
  * @param {mad.Control} control The controller to reference
  */
-mad.referenceControl = function(control) {
-	mad._controls[control.getId()] = control;
+mad.referenceControl = function (control) {
+    var id = control.getId();
+    if (mad._controls[id] == undefined) {
+        mad._controls[id] = {};
+    }
+    mad._controls[id][control.constructor.fullName] = control;
 };
 
 /**
@@ -56,8 +66,8 @@ mad.referenceControl = function(control) {
  *
  * @param {mad.Control} control The controller to reference
  */
-mad.unreferenceControl = function(control) {
-	delete(mad._controls[control.getId()]);
+mad.unreferenceControl = function (control) {
+    delete(mad._controls[control.getId()][control.constructor.fullName]);
 };
 
 /**
@@ -69,7 +79,7 @@ mad.unreferenceControl = function(control) {
  * @param {mixed} name The variable name to set.
  * @param {mixed} value The variable value to set.
  */
-mad.setGlobal = function(name, value) {
+mad.setGlobal = function (name, value) {
     glbl[name] = value;
 };
 

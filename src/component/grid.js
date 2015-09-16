@@ -13,7 +13,7 @@ import 'mad/view/template/component/grid/gridItem.ejs!';
  */
 var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
 
-    'defaults': {
+    defaults: {
         // Override the label option.
         label: 'Grid Component',
         // Override the cssClasses option.
@@ -68,7 +68,6 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
     getColumnModel: function () {
         return this.options.columnModel;
     },
-
 
     /**
      * Get the itemClass which represents the items managed by the component.
