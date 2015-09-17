@@ -55,7 +55,7 @@ var Tree = mad.view.component.Tree = mad.View.extend('mad.view.component.Tree', 
         control.setViewData('cssClasses', cssClasses);
 
         // Find the HTML reference Element.
-        if (refItem !== undefined) {
+        if (refItem !== undefined && refItem !== null) {
             $refElement = this.getItemElement(refItem);
             if (!$refElement.length) {
                 throw new mad.Exception.get('No HTMLElement found for the given item (%0).', [refItem.id]);
