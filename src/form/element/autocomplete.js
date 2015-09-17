@@ -22,7 +22,6 @@ var Autocomplete = mad.form.Autocomplete = mad.form.Textbox.extend('mad.form.Aut
         // Add an list component
         // This list will allow the autocomplete component to display the available choices
         var listOpts = {
-            viewClass: mad.view.component.tree.List,
             itemClass: mad.model.Model,
             cssClasses: ['autocomplete-content'],
             templateUri: 'mad/view/template/component/tree.ejs',
