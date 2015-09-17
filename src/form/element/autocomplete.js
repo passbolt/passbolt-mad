@@ -27,7 +27,7 @@ var Autocomplete = mad.form.Autocomplete = mad.form.Textbox.extend('mad.form.Aut
             templateUri: 'mad/view/template/component/tree.ejs',
             state: 'hidden',
             // The map to use to make jstree working with our category model
-            map: new mad.object.Map({
+            map: new mad.Map({
                 id: 'id',
                 label: 'label',
                 model: 'model'
