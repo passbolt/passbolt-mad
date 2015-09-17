@@ -12,7 +12,6 @@ var Autocomplete = mad.form.Autocomplete = mad.form.Textbox.extend('mad.form.Aut
 
     defaults: {
         label: 'Autocomplete Form Element Controller',
-        viewClass: mad.view.form.element.AutocompleteView,
         tag: 'input',
         list: null
     }
