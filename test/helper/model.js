@@ -98,13 +98,13 @@ var TestModel1 = mad.Model.extend('mad.test.model.TestModel1', {
                 'message': 'testModel1Attribute should only contain alphabets, numbers only and the special characters : - _'
             },
             'size': {
-                'rule': ['between', 3, 8],
+                'rule': ['lengthBetween', 3, 8],
                 'message': 'testModel1Attribute should be between %s and %s characters long'
             }
         },
         'TestModel2s': {
             'size': {
-                'rule': ['between', 1, 2],
+                'rule': ['lengthBetween', 1, 2],
                 'message': 'TestModel2s should be between %s and %s selected element'
             }
         }
@@ -124,7 +124,7 @@ var TestModel = mad.Model.extend('mad.test.model.TestModel', {
                 'message': 'testModelAttribute should only contain alphabets, numbers only and the special characters : - _'
             },
             'size': {
-                'rule': ['between', 3, 8],
+                'rule': ['lengthBetween', 3, 8],
                 'message': 'testModelAttribute should be between %s and %s characters long'
             }
         }

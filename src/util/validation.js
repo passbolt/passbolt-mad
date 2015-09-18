@@ -360,7 +360,7 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
      * @param {array} values The contextual values
      * @param {array} options Optional parameters
      */
-    between: function (value, values, options) {
+    lengthBetween: function (value, values, options) {
         value = value || '';
         options = options || [];
         var returnValue = true,

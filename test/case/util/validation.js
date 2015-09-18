@@ -231,28 +231,28 @@ describe("mad.Validation", function(){
         expect(mad.Validation.validate('date', samples['special'])).to.be.a('string');
     });
 
-    it('mad.Validation : between', function () {
+    it('mad.Validation : lengthBetween', function () {
         var str = '';
         ////////////////////////////////////////////////////////////////////////
         // Expect success
         ////////////////////////////////////////////////////////////////////////
         str = "abcd"
-        expect(mad.Validation.validate('between', str, null, {params:[3]})).to.be.true;
+        expect(mad.Validation.validate('lengthBetween', str, null, {params:[3]})).to.be.true;
         str = "ab"
-        expect(mad.Validation.validate('between', str, null, {params:[0, 3]})).to.be.true;
+        expect(mad.Validation.validate('lengthBetween', str, null, {params:[0, 3]})).to.be.true;
         str = "abcde"
-        expect(mad.Validation.validate('between', str, null, {params:[3, 8]})).to.be.true;
+        expect(mad.Validation.validate('lengthBetween', str, null, {params:[3, 8]})).to.be.true;
         ////////////////////////////////////////////////////////////////////////
         // Expect failure
         ////////////////////////////////////////////////////////////////////////
         str = "ab"
-        expect(mad.Validation.validate('between', str, null, {params:[3]})).to.be.a('string');
+        expect(mad.Validation.validate('lengthBetween', str, null, {params:[3]})).to.be.a('string');
         str = "abcd"
-        expect(mad.Validation.validate('between', str, null, {params:[0, 3]})).to.be.a('string');
+        expect(mad.Validation.validate('lengthBetween', str, null, {params:[0, 3]})).to.be.a('string');
         str = "ab"
-        expect(mad.Validation.validate('between', str, null, {params:[3, 8]})).to.be.a('string');
+        expect(mad.Validation.validate('lengthBetween', str, null, {params:[3, 8]})).to.be.a('string');
         str = "abcdefghi"
-        expect(mad.Validation.validate('between', str, null, {params:[3, 8]})).to.be.a('string');
+        expect(mad.Validation.validate('lengthBetween', str, null, {params:[3, 8]})).to.be.a('string');
     });
 
     it('mad.Validation : nospace', function () {
