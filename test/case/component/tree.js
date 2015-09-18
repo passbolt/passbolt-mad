@@ -82,6 +82,15 @@ describe("mad.component.Tree", function () {
         expect($tree.text()).to.contain(itemChildFirst.attr('label'));
         expect(tree.view.getItemElement(itemChildInside).prev().attr('id')).to.be.equal('item_child_first');
 
+        // Test inserting an element in first position without providing a refItem.
+        var itemFirst = new mad.Model({
+            id: 'item_first',
+            label: 'item first label'
+        });
+        tree.insertItem(itemFirst, null, 'first');
+        expect($tree.text()).to.contain(itemFirst.attr('label'));
+        expect(tree.view.getItemElement(itemBefore).prev().attr('id')).to.be.equal('item_first');
+
         tree.element.empty();
         tree.destroy();
     });
