@@ -109,12 +109,6 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		// Initialize the associated state instance. By default use the state variable defined in
 		// the component's options.
 		this.state = new mad.model.State();
-		// Observe any change on the state's current attribute
-		this.state.current.bind('change', function (ev, row, eventName, states) {
-			if (eventName == 'add') {
-				self._goNextStates();
-			}
-		});
 
 		// Add the optional css classes to the HTMLElement.
 		for (var i in options.cssClasses) {
@@ -242,6 +236,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	 */
 	setState: function (statesName) {
 		this.state.setState(statesName);
+        this._goNextStates();
         return this;
 	},
 

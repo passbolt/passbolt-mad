@@ -283,7 +283,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
         }
 
         // The model contains its own validation rules.
-        if (this.validationRules != null) {
+        if (!_.isEmpty(this.validationRules)) {
             rules = this.validationRules;
         }
         // Else check if some server rules have been defined.
