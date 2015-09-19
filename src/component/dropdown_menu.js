@@ -84,19 +84,6 @@ var DropdownMenu = mad.component.DropdownMenu = mad.component.Menu.extend('mad.c
      */
     ' item_closed': function (el, ev, item) {
         this.close(item);
-    },
-
-    /**
-     * An item has been selected
-     * @parent mad.component.DropdownMenu.view_events
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @param {string} item The selected item
-     * @return {void}
-     */
-    ' item_selected': function (el, ev, item) {
-        this.setState('hidden');
-        this._super(el, ev, item);
     }
 });
 
