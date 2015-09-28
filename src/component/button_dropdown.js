@@ -29,12 +29,12 @@ var ButtonDropdown = mad.component.ButtonDropdown = mad.component.Button.extend(
     defaults: {
         label: 'Button Dropdown Component',
         viewClass: mad.view.component.ButtonDropdown,
-        // The menu which is piloted by the component.
-        menu : null,
         // The menu items.
         items: null,
         // Customize the element which will carry the dropdown content
-        contentElement: null
+        contentElement: null,
+        // Close menu on item click.
+        closeOnItemClick: true
     }
 
 }, /** @prototype */ {
@@ -58,6 +58,7 @@ var ButtonDropdown = mad.component.ButtonDropdown = mad.component.Button.extend(
         this.options.menu = new mad.component.Menu($dropdownElement);
         this.options.menu.start();
         this.options.menu.load(this.options.items);
+        this.on();
     },
 
     /**
@@ -67,6 +68,18 @@ var ButtonDropdown = mad.component.ButtonDropdown = mad.component.Button.extend(
      */
     setItemState: function(id, stateName) {
         this.options.menu.setItemState(id, stateName);
+    },
+
+    /**
+     * Close menu when clicking on an item.
+     * @param el
+     * @param ev
+     * @param item
+     */
+    '{menu.element} item_selected': function(el, ev, item) {
+        if (this.options.closeOnItemClick === true) {
+            this.view.close();
+        }
     },
 
     /* ************************************************************** */
