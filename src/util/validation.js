@@ -1,6 +1,5 @@
 import 'mad/mad';
-import XRegExpLib from 'xregexp';
-var XRegExp = XRegExpLib.XRegExp;
+import XRegExp from 'xregexp';
 var __ = function(input){return input};
 
 /**
