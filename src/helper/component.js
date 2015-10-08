@@ -45,7 +45,8 @@ var ComponentHelper = mad.helper.Component = can.Construct.extend('mad.helper.Co
         }
 
         // Construct the html based on the component options.
-        html = '<' + ComponentClass.defaults.tag + ' id="' + (options.id || '') + '"';
+        var tag = options.tag || ComponentClass.defaults.tag;
+        html = '<' + tag + ' id="' + (options.id || '') + '"';
 
         // Add attributes to the generated html.
         for (var attrName in attributes) {
