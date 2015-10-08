@@ -94,7 +94,7 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
         var action = item.getAction();
         // If an action has been associated, and the item is not disabled.
         if (action && !item.state.is('disabled')) {
-            action();
+            action(this);
         }
     }
 });
