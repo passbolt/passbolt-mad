@@ -63,4 +63,39 @@ describe("mad.component.Menu", function () {
         $('#i1 a').click();
         expect($debugOutput.text()).to.contain('item 1 clicked');
     });
+
+    it("setItemState() should change the state of a menu item", function () {
+        var menu = new mad.component.Menu($menu);
+        menu.start();
+
+        var menuItems = [];
+        var menuItem1 = new mad.model.Action({
+            id: 'i1',
+            label: 'Item 1',
+            action: function () {
+                $debugOutput.html('item 1 clicked');
+            }
+        });
+        menuItems.push(menuItem1);
+        var menuItem2 = new mad.model.Action({
+            id: 'i2',
+            label: 'Item 2',
+            action: function () {
+                $debugOutput.html('item 2 clicked');
+            }
+        });
+        menuItems.push(menuItem2);
+        menu.load(menuItems);
+
+        expect(menuItem1.state.is('ready')).to.be.true;
+        expect(menuItem2.state.is('ready')).to.be.true;
+
+        menu.setItemState('i1', 'disabled');
+
+        expect(menuItem1.state.is('ready')).to.be.false;
+        expect(menuItem1.state.is('disabled')).to.be.true;
+        expect(menuItem2.state.is('ready')).to.be.true;
+
+        expect($('#i1.disabled').length).to.be.not.equal(0);
+    });
 });

@@ -132,6 +132,13 @@ var Tree = mad.view.component.Tree = mad.View.extend('mad.view.component.Tree', 
         var hasChildren = mappedItem.children && mappedItem.children.length ? true : false;
         control.setViewData('hasChildren', hasChildren);
 
+        // Retrieve custom item css classes.
+        var cssClasses = [];
+        if (typeof mappedItem['cssClasses'] != 'undefined') {
+            cssClasses = cssClasses.concat(mappedItem['cssClasses']);
+        }
+        control.setViewData('cssClasses', cssClasses);
+
         // Render the item.
         var itemRender = mad.View.render(control.options.itemTemplateUri, control.getViewData());
         // Replace the item row with its updated version.

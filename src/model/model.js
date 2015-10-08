@@ -292,6 +292,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
             if (typeof this.serverValidationRules[this.shortName] == 'undefined') {
                 this.serverValidationRules[this.shortName] = {};
             }
+
             // If no rules have been defined for the given case.
             if (typeof this.serverValidationRules[this.shortName][validationCase] == 'undefined') {
                 // Build the url.
@@ -299,9 +300,9 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
                 // Get the rules from the server.
                 self.serverValidationRules[self.shortName][validationCase] = {};
                 mad.net.Ajax.request({
-                    'async': false,
-                    'type': 'GET',
-                    'url': url
+                    async: false,
+                    type: 'GET',
+                    url: url
                 }).then(function (data) {
                     self.serverValidationRules[self.shortName][validationCase] = data;
                 });

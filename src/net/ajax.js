@@ -84,7 +84,7 @@ var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
         // The request will not display a loading feedback, default true.
         if (typeof request.silentLoading == 'undefined') {
             request.silentLoading = true;
-            if (request.type == 'POST' || request.type == 'DELETE' || request.type == 'PUTw') {
+            if (request.type == 'POST' || request.type == 'DELETE' || request.type == 'PUT') {
                 request.silentLoading = false;
             }
         }

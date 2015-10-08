@@ -71,8 +71,10 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
             if (this.options.items[i].id == id) {
                 this.options.items[i].state.setState(stateName);
                 this.refreshItem(this.options.items[i]);
+                return
             }
         }
+        throw mad.Exception.get('The item [%0] is not an item of the menu', [id]);
     },
 
     /* ************************************************************** */

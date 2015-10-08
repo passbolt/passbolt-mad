@@ -227,26 +227,29 @@ var Tree = mad.component.Tree = mad.Component.extend('mad.component.Tree', {
     /**
      * Load items into the tree.
      *
-     * @param {mad.Model.List} items The list of items to load into the tree
+     * @param {mad.Model.List} items The list of items to load into the tree.
+     *   Array are accepted.
      */
     load: function (items) {
-        var self = this;
-
         // If the provided items is null, treat them as empty.
-        if (items == null) {
-            items = new this.options.itemClass.List();
-        }
-        // If the provided items are not a List but an array, transform them.
-        else if (!(items instanceof can.Model.List) && $.isArray(items)) {
-            items = new this.options.itemClass.List(items);
+        if (typeof items == undefined || items == null ) {
+            return;
         }
 
-        // Add the new items to the list of watched items.
-        this.options.items = this.options.items.concat(items);
-        // Insert the items to the component.
-        can.each(this.options.items, function (item, i) {
-            self.insertItem(item);
-        });
+        // If the provided items parameter is a can.List.
+        // Transform it in array, dirty because attr() func doesn't keep the attribute model reference.
+        else if (items instanceof can.Model.List) {
+            var itemsList = items;
+            items = [];
+            itemsList.each(function(item) {
+               items.push(item);
+            });
+        }
+
+        for (var i in items) {
+            this.options.items.push(items[i]);
+            this.insertItem(items[i]);
+        }
     },
 
     /**
