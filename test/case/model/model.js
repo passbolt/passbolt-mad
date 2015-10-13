@@ -157,30 +157,30 @@ describe("mad.Model", function () {
         //// The attribute can be empty.
         value = '';
         isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
-        expect(isValid).to.be.true;
+        expect(isValid).to.be.empty;
 
         // The attribute accept ASCII character.
         value = 'ABCDE';
         isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
-        expect(isValid).to.be.true;
+        expect(isValid).to.be.empty;
 
         // The textbox doesn't accept special character.
         value = 'ABCDE&';
         isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
-        expect(isValid).to.be.not.equal(true);
-        expect(isValid).to.contain(testModelValidationRules.testModelAttribute.alphaNumeric.message);
+		expect(isValid).to.not.be.eql([]);
+        expect(isValid[0]).to.contain(testModelValidationRules.testModelAttribute.alphaNumeric.message);
 
         // The textbox value length cannot be smaller than 3.
         value = 'AB';
         isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
-        expect(isValid).to.be.not.equal(true);
-        expect(isValid).to.contain(testModelValidationRules.testModelAttribute.size.message);
+		expect(isValid).to.not.be.eql([]);
+        expect(isValid[0]).to.contain(testModelValidationRules.testModelAttribute.size.message);
 
         // The textbox value length cannot be smaller than 3.
         value = 'ABCDEFGHI';
         isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
-        expect(isValid).to.be.not.equal(true);
-        expect(isValid).to.contain(testModelValidationRules.testModelAttribute.size.message);
+        expect(isValid).to.not.be.eql([]);
+        expect(isValid[0]).to.contain(testModelValidationRules.testModelAttribute.size.message);
     });
 
     it("model's instances should be updated when findAll retrieves updated instances", function(done) {

@@ -106,7 +106,7 @@ module.exports = function (grunt) {
     // Register Tasks
 
     // Deploy libs
-    grunt.registerTask('mad-lib-deploy', ['clean:mad_lib', 'copy:mad_lib', 'shell:mad_lib_patch']);
+    grunt.registerTask('lib-deploy', ['clean:mad_lib', 'copy:mad_lib', 'shell:mad_lib_patch']);
 
     // Clean & generate the documentation
     grunt.registerTask('mad-doc', ['clean:doc', 'documentjs']);
