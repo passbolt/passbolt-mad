@@ -408,78 +408,81 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
      * @return {boolean}
      */
     validateElement: function (element) {
-        var returnValue = true,
-        // The form element is driven by an associated model.
-            eltModelRef = element.getModelReference(),
-        // By default the result value is true, if no rule found to validate the form element, the validation is a success.
-            validationResult = true,
-        // The form element id.
-            eltId = element.getId();
+		var returnValue = true,
+		// The form element is driven by an associated model.
+			eltModelRef = element.getModelReference(),
+		// By default the result value is true, if no rule found to validate the form element, the validation is a success.
+			validationResult = [],
+		// The form element id.
+			eltId = element.getId();
 
-        // The element requires a validation.
-        if (element.requireValidation()) {
-            // Get the element value.
-            var value = element.getValue(),
-            // The direct validate function associated to the form element.
-                validateFunction = element.getValidateFunction();
+		// The element requires a validation.
+		if (element.requireValidation()) {
+			// Get the element value.
+			var value = element.getValue(),
+			// The direct validate function associated to the form element.
+				validateFunction = element.getValidateFunction();
 
-            // A direct validate function is defined.
-            if (validateFunction != null) {
-                validationResult = validateFunction(value, {});
-            }
-            // If the element is referenced by a model reference.
-            else if (eltModelRef != null) {
-                // Get the models & attribtues that define this model reference.
-                var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
-                // The model that own the attribute that represents the form element.
-                    model = fieldAttrs[fieldAttrs.length - 2].getModelReference(),
-                // The attribute name
-                    attrName = _.last(fieldAttrs).getName();
+			// A direct validate function is defined.
+			if (validateFunction != null) {
+				var validateFuncResult = validateFunction(value, {});
+				if (validateFuncResult !== true) {
+					validationResult.push(validateFuncResult);
+				}
+			}
+			// If the element is referenced by a model reference.
+			else if (eltModelRef != null) {
+				// Get the models & attribtues that define this model reference.
+				var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
+				// The model that own the attribute that represents the form element.
+					model = fieldAttrs[fieldAttrs.length - 2].getModelReference(),
+				// The attribute name
+					attrName = _.last(fieldAttrs).getName();
 
-                // Validate the attribute with the model attribute rule.
-                if (model.validateAttribute) {
-                    validationResult = model.validateAttribute(attrName, value, {}, this.options.action);
-                }
-            }
+				// Validate the attribute with the model attribute rule.
+				if (model.validateAttribute) {
+					validationResult = model.validateAttribute(attrName, value, {}, this.options.action);
+				}
+			}
 
-            // The validation of the element failed.
-            if (validationResult !== true) {
-                var eltStates = ['error'];
-                if (this.elements[eltId].state.is('hidden')) {
-                    eltStates.push('hidden');
-                }
-                // switch the state of the element to error
-                this.elements[eltId].setState(eltStates);
-                // set the feedback message, and switch the feedback element state to error
-                if (this.feedbackElements[eltId]) {
-                    this.feedbackElements[eltId]
-                        .setMessage(validationResult)
-                        .setState([])
-                        .setState('error');
-                }
-                // Update the view.
-                this.view.setElementState(this.elements[eltId], 'error');
-                returnValue = false;
+			// The validation of the element failed.
+			if (validationResult.length > 0) {
+				var eltStates = ['error'];
+				if (this.elements[eltId].state.is('hidden')) {
+					eltStates.push('hidden');
+				}
+				// switch the state of the element to error
+				this.elements[eltId].setState(eltStates);
+				// set the feedback message, and switch the feedback element state to error
+				if (this.feedbackElements[eltId]) {
+					this.feedbackElements[eltId]
+						.setMessage(validationResult[0])
+						.setState([])
+						.setState('error');
+				}
+				// Update the view.
+				this.view.setElementState(this.elements[eltId], 'error');
+				returnValue = false;
 
-                // otherwise the validation is successful
-            } else {
-                var eltStates = ['success'];
-                if (this.elements[eltId].state.is('hidden')) {
-                    eltStates.push('hidden');
-                }
-                this.elements[eltId].setState(eltStates);
-                // set the feedback message, and switch the feedback element state to success
-                if (this.feedbackElements[eltId]) {
-                    this.feedbackElements[eltId]
-                        .setMessage('')
-                        .setState('success');
-                }
-                // Update the view.
-                this.view.setElementState(this.elements[eltId], 'success');
-            }
-        }
+				// otherwise the validation is successful
+			} else {
+				var eltStates = ['success'];
+				if (this.elements[eltId].state.is('hidden')) {
+					eltStates.push('hidden');
+				}
+				this.elements[eltId].setState(eltStates);
+				// set the feedback message, and switch the feedback element state to success
+				if (this.feedbackElements[eltId]) {
+					this.feedbackElements[eltId]
+						.setMessage('')
+						.setState('success');
+				}
+				// Update the view.
+				this.view.setElementState(this.elements[eltId], 'success');
+			}
+		}
 
-        return returnValue;
+		return returnValue;
     },
 
     /**

@@ -485,47 +485,42 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
      * @return {boolean}
      */
     validateAttribute: function (attrName, value, values, validationCase) {
-        var returnValue = true;
+		var returnValue = [];
 
-        if (typeof validationCase == 'undefined') {
-            validationCase = 'default';
-        }
+		if (typeof validationCase == 'undefined') {
+			validationCase = 'default';
+		}
 
-        var rules = this.getValidationRules(validationCase);
-        if (typeof rules[attrName] != 'undefined') {
-            // Is the field required?
-            var required = this.isRequired(attrName, validationCase);
-            // Is the field passing the required validation.
-            var requiredValidation = mad.Validation.validate('required', value);
+		var rules = this.getValidationRules(validationCase);
+		if (typeof rules[attrName] != 'undefined') {
+			// Is the field required?
+			var required = this.isRequired(attrName, validationCase);
+			// Is the field passing the required validation.
+			var requiredValidation = mad.Validation.validate('required', value);
 
-            // If the field is required & doesn't pass the required validation return an error.
-            if (required && requiredValidation !== true) {
-                return requiredValidation;
-            }
-            // If the filed is not required and doesn't pass the required the validation
-            // the system won't process the other constraints.
-            else if (!required && requiredValidation !== true) {
-                return true;
-            }
+			// If the field is required & doesn't pass the required validation return an error.
+			if (required && requiredValidation !== true) {
+				returnValue.push(requiredValidation);
+				return returnValue;
+			}
+			// If the filed is not required and doesn't pass the required the validation
+			// the system won't process the other constraints.
+			else if (!required && requiredValidation !== true) {
+				return returnValue;
+			}
 
-            // Otherwise execute all the constraints.
-            var attributeRules = rules[attrName];
-            // if ($.isArray(attributeRules)) {
-            for (var i in attributeRules) {
-                var validateResult = mad.Validation.validate(attributeRules[i], value, values);
-                if (validateResult !== true) {
-                    if (returnValue === true) {
-                        returnValue = '';
-                    }
-                    returnValue += validateResult;
-                }
-            }
-            // } else {
-            // 	returnValue = mad.model.ValidationRules.validate(attributeRules, value, modelValues);
-            // }
-        }
+			// Otherwise execute all the constraints.
+			var attributeRules = rules[attrName];
+			// if ($.isArray(attributeRules)) {
+			for (var i in attributeRules) {
+				var validateResult = mad.Validation.validate(attributeRules[i], value, values);
+				if (validateResult !== true) {
+					returnValue.push(validateResult);
+				}
+			}
+		}
 
-        return returnValue;
+		return returnValue;
     }
 
 }, /** @prototype */ {
