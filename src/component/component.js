@@ -34,8 +34,10 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		templateUri: null,
 		// The component's view controller used to drive the component's view.
 		viewClass: mad.View,
-		// the data used by the view
-		viewData: {}
+		// The data used by the view
+		viewData: {},
+		// Should the component notify others while it's loading.
+		silentLoading: true
 	}
 
 }, /** @prototype */ {
