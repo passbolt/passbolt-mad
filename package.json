@@ -6,9 +6,9 @@
   "directories": {},
   "author": "Passbolt",
   "dependencies": {
-    "steal": "^0.10.4",
-    "can": "^2.2.6",
-    "jquery": "^2.1.4",
+    "steal": "~0.10.4",
+    "can": "~2.2.6",
+    "jquery": "~2.1.4",
     "underscore": "~1.8.3",
     "xregexp": "~3.0.0"
   },
