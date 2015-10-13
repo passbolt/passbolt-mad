@@ -482,7 +482,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
      * @param {array} values The model attributes values
      * @param {string} case The case to validate the attribute for
      *
-     * @return {boolean}
+     * @return {array} list of error messages, or empty array if no validation error.
      */
     validateAttribute: function (attrName, value, values, validationCase) {
 		var returnValue = [];
