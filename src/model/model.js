@@ -330,7 +330,8 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
                 // The case is specifically given as per the cakePHP style.
                 if (typeof(rules[attrName]['required']) != 'undefined'
                     && (typeof(rules[attrName]['required']) === true
-                    || rules[attrName]['required'] === validationCase)) {
+                    || rules[attrName]['required'] === validationCase
+                    || rules[attrName]['allowEmpty'] === false )) {
                     required = true;
                 }
             }
@@ -340,13 +341,13 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
                     // The case is specifically given as per the cakePHP style.
                     if (typeof(rules[attrName][ruleLabel]['required']) != 'undefined'
                         && (typeof(rules[attrName][ruleLabel]['required']) === true
-                        || rules[attrName][ruleLabel]['required'] === validationCase)) {
+                        || rules[attrName][ruleLabel]['required'] === validationCase
+                        || rules[attrName][ruleLabel]['allowEmpty'] === false )) {
                         required = true;
                     }
                 }
             }
         }
-
         return required;
     },
 
