@@ -129,7 +129,7 @@ var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', 
         // Render the row with the row data.
         return mad.View.render(control.options.itemTemplateUri, {
             item: item,
-            id: mappedItem.id,
+            id: control.options.prefixItemId + mappedItem.id,
             columnModels: columnModels,
             values: values,
             titles: titles
@@ -143,7 +143,7 @@ var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', 
      * @return {jQuery}
      */
     getItemElement: function (item) {
-        return $('#' + item.id, this.element);
+        return $('#' + this.getController().options.prefixItemId + item.id, this.element);
     },
 
     /**
@@ -223,12 +223,13 @@ var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', 
      */
     'tbody tr click': function (el, ev) {
         var data = null,
-            itemClass = this.getController().getItemClass();
+            control = this.getController(),
+            itemClass = control.getItemClass();
 
         if (itemClass) {
             data = el.data(itemClass.fullName);
         } else {
-            data = el[0].id;
+            data = el[0].id.replace(control.options.prefixItemId, '');
         }
 
         this.element.trigger('item_selected', [data, ev]);
@@ -242,12 +243,13 @@ var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', 
      */
     'tbody tr hover': function (el, ev) {
         var data = null,
-            itemClass = this.getController().getItemClass();
+            control = this.getController(),
+            itemClass = control.getItemClass();
 
         if (itemClass) {
             data = el.data(itemClass.fullName);
         } else {
-            data = el[0].id;
+            data = el[0].id.replace(control.options.prefixItemId, '');
         }
 
         this.element.trigger('item_hovered', [data, ev]);

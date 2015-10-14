@@ -26,7 +26,8 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
         itemTemplateUri: 'mad/view/template/component/grid/gridItem.ejs',
         // Override the viewClass option.
         viewClass: mad.view.component.Grid,
-
+        // Prefix the id of each row.
+        prefixItemId: '',
         // The Model Class that defines the items displayed by the tree.
         itemClass: null,
         // the grid column model
@@ -200,7 +201,7 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
             var columnModel = columnModels[j];
 
             if (columnModel.cellAdapter) {
-                var itemId = mappedItem.id;
+                var itemId = self.options.prefixItemId + mappedItem.id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
                 var cellValue = mappedItem[columnModel.name];
                 columnModel.cellAdapter($cell, cellValue, mappedItem, item, columnModel);
@@ -213,7 +214,7 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
 
                 // Ok it is costing : + z*n (z #columWidget; n #items) with this
                 // part to insert the items and render widget if there is
-                var itemId = mappedItem[i].id;
+                var itemId = self.options.prefixItemId + mappedItem[i].id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
                 widgetOptions.value = mappedItem[i][columnModel.name];
                 $cell[widgetJQueryPlugin](widgetOptions);
@@ -239,7 +240,7 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
             var columnModel = columnModels[j];
 
             if (columnModel.cellAdapter) {
-                var itemId = mappedItem.id;
+                var itemId = self.options.prefixItemId + mappedItem.id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
                 var cellValue = mappedItem[columnModel.name];
                 columnModel.cellAdapter($cell, cellValue, mappedItem, item, columnModel);
@@ -252,7 +253,7 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
 
                 // Ok it's costly : + z*n (z #columWidget; n #items) with this
                 // part to insert the items and render widget if there is
-                var itemId = mappedItem[i].id;
+                var itemId = self.options.prefixItemId + mappedItem[i].id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
                 widgetOptions.value = mappedItem[i][columnModel.name];
                 $cell[widgetJQueryPlugin](widgetOptions);
