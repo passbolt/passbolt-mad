@@ -327,22 +327,26 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
         if (!$.isArray(rules[attrName])) {
             // One rule defined.
             if (typeof rules[attrName]['rule'] != 'undefined') {
-                // The case is specifically given as per the cakePHP style.
-                if (typeof(rules[attrName]['required']) != 'undefined'
+                var fieldRequiredForCase = typeof(rules[attrName]['required']) != 'undefined'
                     && (typeof(rules[attrName]['required']) === true
-                    || rules[attrName]['required'] === validationCase
-                    || rules[attrName]['allowEmpty'] === false )) {
+                    || rules[attrName]['required'] === validationCase);
+                var fieldAllowEmpty = typeof(rules[attrName]['allowEmpty']) != 'undefined' ?
+                    rules[attrName]['allowEmpty'] : true;
+                // The case is specifically given as per the cakePHP style.
+                if (fieldRequiredForCase === true || fieldAllowEmpty === false) {
                     required = true;
                 }
             }
             // Multiple rules defined.
             else {
                 for (var ruleLabel in rules[attrName]) {
-                    // The case is specifically given as per the cakePHP style.
-                    if (typeof(rules[attrName][ruleLabel]['required']) != 'undefined'
+                    var fieldRequiredForCase = typeof(rules[attrName][ruleLabel]['required']) != 'undefined'
                         && (typeof(rules[attrName][ruleLabel]['required']) === true
-                        || rules[attrName][ruleLabel]['required'] === validationCase
-                        || rules[attrName][ruleLabel]['allowEmpty'] === false )) {
+                        || rules[attrName][ruleLabel]['required'] === validationCase);
+                    var fieldAllowEmpty = typeof(rules[attrName][ruleLabel]['allowEmpty']) != 'undefined' ?
+                        rules[attrName][ruleLabel]['allowEmpty'] : true;
+                    // The case is specifically given as per the cakePHP style.
+                    if (fieldRequiredForCase === true || fieldAllowEmpty === false) {
                         required = true;
                     }
                 }
