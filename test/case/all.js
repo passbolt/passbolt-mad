@@ -11,6 +11,7 @@ import "test/case/component/contextual_menu";
 import "test/case/component/dialog";
 import "test/case/component/tab";
 import "test/case/component/toggle_button";
+import "test/case/component/confirm";
 
 import "test/case/control/bus";
 import "test/case/control/control";
