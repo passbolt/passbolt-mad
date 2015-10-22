@@ -44,13 +44,13 @@ describe("mad.component.DynamicTree", function () {
         }, {
             id: 'item_2',
             label: 'Item 2',
-            'children': [{
+            'children': new mad.Model.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {
                 id: 'item_22',
                 label: 'Item 22'
-            }]
+            }])
         }, {
             id: 'item_3',
             label: 'Item 3'
@@ -77,13 +77,13 @@ describe("mad.component.DynamicTree", function () {
         }, {
             id: 'item_2',
             label: 'Item 2',
-            'children': [{
+            'children': new mad.Model.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {
                 id: 'item_22',
                 label: 'Item 22'
-            }]
+            }])
         }, {
             id: 'item_3',
             label: 'Item 3'

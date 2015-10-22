@@ -44,6 +44,7 @@ describe("mad.component.Tree", function () {
         });
         tree.insertItem(itemInside);
         expect($('#test-html').text()).to.contain(itemInside.attr('label'));
+        expect(tree.options.items.length).to.be.equal(1);
 
         // Insert an item before the first one.
         var itemBefore = new mad.Model({
@@ -51,6 +52,7 @@ describe("mad.component.Tree", function () {
             label: 'item before label'
         });
         tree.insertItem(itemBefore, itemInside, 'before');
+        expect(tree.options.items.length).to.be.equal(2);
         expect($tree.text()).to.contain(itemBefore.attr('label'));
         expect(tree.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_before');
 
@@ -60,6 +62,7 @@ describe("mad.component.Tree", function () {
             label: 'item after label'
         });
         tree.insertItem(itemAfter, itemBefore, 'after');
+        expect(tree.options.items.length).to.be.equal(3);
         expect($tree.text()).to.contain(itemInside.attr('label'));
         expect(tree.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_after');
         expect(tree.view.getItemElement(itemBefore).next().attr('id')).to.be.equal('item_after');
@@ -70,6 +73,7 @@ describe("mad.component.Tree", function () {
             label: 'item child inside label'
         });
         tree.insertItem(itemChildInside, itemBefore, 'last');
+        expect(tree.options.items.length).to.be.equal(4);
         expect($tree.text()).to.contain(itemChildInside.attr('label'));
         expect(tree.view.getItemElement(itemBefore).find('ul:first').children().attr('id')).to.be.equal('item_child_inside');
 
@@ -79,6 +83,7 @@ describe("mad.component.Tree", function () {
             label: 'item child first label'
         });
         tree.insertItem(itemChildFirst, itemBefore, 'first');
+        expect(tree.options.items.length).to.be.equal(5);
         expect($tree.text()).to.contain(itemChildFirst.attr('label'));
         expect(tree.view.getItemElement(itemChildInside).prev().attr('id')).to.be.equal('item_child_first');
 
@@ -88,6 +93,7 @@ describe("mad.component.Tree", function () {
             label: 'item first label'
         });
         tree.insertItem(itemFirst, null, 'first');
+        expect(tree.options.items.length).to.be.equal(6);
         expect($tree.text()).to.contain(itemFirst.attr('label'));
         expect(tree.view.getItemElement(itemBefore).prev().attr('id')).to.be.equal('item_first');
 
@@ -107,18 +113,19 @@ describe("mad.component.Tree", function () {
         }, {
             id: 'item_2',
             label: 'Item 2',
-            'children': [{
+            children: new mad.Model.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {
                 id: 'item_22',
                 label: 'Item 22'
-            }]
+            }])
         }, {
             id: 'item_3',
             label: 'Item 3'
         }]);
         tree.load(items);
+        expect(tree.options.items.length).to.be.equal(5);
 
         expect($tree.text()).to.contain('Item 1');
         expect($tree.text()).to.contain('Item 2');
@@ -142,10 +149,12 @@ describe("mad.component.Tree", function () {
             });
             tree.insertItem(items[i]);
             expect($('#test-html').text()).to.contain(items[i].attr('label'));
+            expect(tree.options.items.length).to.be.equal(i+1);
         }
 
         // Remove an item.
         tree.removeItem(items[2]);
+        expect(tree.options.items.length).to.be.equal(4);
         // Check that the item we removed is not present anymore, but the other are still there.
         expect($('#test-html').text()).not.to.contain(items[2].attr('label'));
         expect($('#test-html').text()).to.contain(items[0].attr('label'));
@@ -186,8 +195,12 @@ describe("mad.component.Tree", function () {
             }
         }
 
+        var itemsCount = i + i * j;
+        expect(tree.options.items.length).to.be.equal(itemsCount);
+
         // Remove an item.
         tree.removeItem(subItems[2][2]);
+        expect(tree.options.items.length).to.be.equal(itemsCount - 1);
         // Check that the item we removed is not present anymore, but the other are still there.
         expect($('#test-html').text()).not.to.contain(subItems[2][2].attr('label'));
         expect($('#test-html').text()).to.contain(subItems[2][0].attr('label'));
@@ -206,6 +219,7 @@ describe("mad.component.Tree", function () {
 
         // Remove an item.
         tree.removeItem(items[4]);
+        expect(tree.options.items.length).to.be.equal(itemsCount - 2);
         // Check that the item we removed is not present anymore, but the other are still there.
         expect($('#test-html').text()).not.to.contain(subItems[2][2].attr('label'));
         expect($('#test-html').text()).to.contain(subItems[2][0].attr('label'));
@@ -243,10 +257,12 @@ describe("mad.component.Tree", function () {
             label: 'item inside label'
         });
         tree.insertItem(item);
+        expect(tree.options.items.length).to.be.equal(1);
         expect($('#test-html').text()).to.contain(item.attr('label'));
 
         item.attr('label', 'item inside updated label');
         tree.refreshItem(item);
+        expect(tree.options.items.length).to.be.equal(1);
         expect($('#test-html').text()).to.contain(item.attr('label'));
 
         tree.element.empty();
