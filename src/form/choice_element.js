@@ -13,7 +13,9 @@ var ChoiceElement = mad.form.ChoiceElement = mad.form.Element.extend('mad.form.C
 
     defaults: {
         // The form choice element available values.
-        availableValues: {}
+        availableValues: {},
+        // The class to put in the parent div, for each value
+        valueClasses: {}
     }
 
 }, /** @prototype */ {
