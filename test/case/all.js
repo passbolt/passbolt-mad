@@ -20,6 +20,7 @@ import "test/case/form/form";
 import "test/case/form/element";
 import "test/case/form/element/checkbox";
 import "test/case/form/element/textbox";
+import "test/case/form/element/dropdown";
 
 import "test/case/helper/control";
 import "test/case/helper/html";
