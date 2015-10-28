@@ -107,4 +107,15 @@ describe("mad.component.ContextualMenu", function () {
 
         menu.destroy();
     });
+
+    it("Contextual menu should be removed by calling remove static function", function () {
+        // Show contextual menu
+        showContextualMenu($menu);
+
+        // Remove contextual menu.
+        mad.component.ContextualMenu.remove();
+
+        // Expect contextual menu to have been removed.
+        expect($('#js_contextual_menu').length).to.equal(0);
+    });
 });
