@@ -385,7 +385,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
 
                 for (var j in errors) {
                     if (errors[modelName] != undefined && errors[modelName][attrName] != undefined) {
-                        var error = errors[j][modelName][attrName][0];
+                        var error = errors[modelName][attrName][0];
 
                         var eltStates = ['error'];
                         if (element.state.is('hidden')) {
