@@ -384,7 +384,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
                     eltId = element.getId();
 
                 for (var j in errors) {
-                    if (errors[j][modelName] != undefined && errors[j][modelName][attrName] != undefined) {
+                    if (errors[modelName] != undefined && errors[modelName][attrName] != undefined) {
                         var error = errors[j][modelName][attrName][0];
 
                         var eltStates = ['error'];
