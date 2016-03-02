@@ -19,7 +19,7 @@ var ContextualMenu = mad.view.component.ContextualMenu = mad.view.component.Drop
      * @param el
      * @param ev
      */
-    '{document} mousedown': function (el, ev) {
+    '{document} click': function (el, ev) {
         if (!this.element.is(el) && !$(this.getController().options.source).is(ev.target)) {
             this.element.remove();
         }
