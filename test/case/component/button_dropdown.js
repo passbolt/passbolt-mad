@@ -86,12 +86,52 @@ describe("mad.component.ButtonDropdown", function () {
         // Check whether elements are visible after clicking on the button.
         expect($('.dropdown-content').hasClass('visible')).to.equal(false);
 
-        // Click on an Item and observe that it triggers the action.
+        // Click on the button and observer that it opens the dropdown content.
         $buttonDropdown.click();
         expect($('.dropdown-content').hasClass('visible')).to.equal(true);
 
         // Click on an Item and observe that it triggers the action.
         $('#i1 a').click();
         expect($debugOutput.text()).to.contain('item 1 clicked');
+    });
+
+    it("buttonDropdown disabled item should not close dialog when clicked", function () {
+        var menuItems = [];
+        var menuItem = new mad.model.Action({
+            id: 'i1',
+            label: 'Item 1',
+            action: function () {
+                $debugOutput.html('item 1 clicked');
+            }
+        });
+        menuItems.push(menuItem);
+        var menuItem = new mad.model.Action({
+            id: 'i2',
+            label: 'Item 2',
+            action: function () {
+                $debugOutput.html('item 2 clicked');
+            }
+        });
+        menuItems.push(menuItem);
+        var buttonDropdown = new mad.component.ButtonDropdown($buttonDropdown, {
+            items:menuItems
+        });
+        buttonDropdown.start();
+
+        // Set action state to disabled.
+        buttonDropdown.setItemState('i2', 'disabled');
+
+        // Click on the button to open the content.
+        $buttonDropdown.click();
+        expect($('.dropdown-content').hasClass('visible')).to.equal(true);
+
+        // Check whether the element is disabled.
+        expect($('#i2').hasClass('disabled')).to.equal(true);
+
+        // Click on disabled element.
+        $('#i2 a').click();
+
+        // Observe that the dropdown content is still visible.
+        expect($('.dropdown-content').hasClass('visible')).to.equal(true);
     });
 });
