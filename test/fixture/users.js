@@ -90,6 +90,47 @@ can.fixture({
     };
 });
 
+// Fixture for UserTestModel created.
+can.fixture({
+    type: 'POST',
+    url: '/testusers'
+}, function (attrs, settings, headers) {
+    var data = attrs.data;
+    data['UserTestModel']['id'] = uuid();
+    store.push(data);
+    return {
+        'header': {
+            'id': uuid(),
+            'status': mad.net.Response.STATUS_SUCCESS,
+            'title': 'success',
+            'message': '',
+            'controller': 'Users',
+            'action': 'add'
+        },
+        'body': data
+    };
+});
+
+// Fixture for UserTestModel destroyed.
+can.fixture({
+    type: 'DELETE',
+    url: '/testusers/{id}'
+}, function (id, settings, headers) {
+    // @todo We don't really maintain a local storage. So we do nothin.
+    //       That means after a findAll the destroy item will appear again
+    return {
+        'header': {
+            'id': uuid(),
+            'status': mad.net.Response.STATUS_SUCCESS,
+            'title': 'success',
+            'message': '',
+            'controller': 'Users',
+            'action': 'delete'
+        },
+        'body': {}
+    };
+});
+
 // Fixture for UserTestModel updated.
 can.fixture({
     type: 'PUT',

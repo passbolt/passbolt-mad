@@ -1,5 +1,6 @@
 import "steal-mocha";
 import chai from "chai";
+import chaijq from "chai-jq";
 import mad from "mad";
 
 // Define the global context.
@@ -14,3 +15,6 @@ mad.test = mad.test || {};
 
 // Make a global reference to the root reference element.
 glbl.$rootElement = $('#test-html');
+
+// Load chai plugins
+chai.use(chaijq);

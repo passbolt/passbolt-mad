@@ -1,8 +1,5 @@
-import "steal-mocha";
-import mad from "mad"
+import "test/bootstrap";
 import "mad/component/dialog"
-var expect = chai.expect;
-var assert = chai.assert;
 
 describe("mad.component.Dialog", function () {
 

@@ -1,4 +1,6 @@
 import "test/bootstrap";
+import "test/helper/model";
+import "test/fixture/users";
 import "mad/component/grid";
 
 describe("mad.component.Grid", function () {
@@ -17,18 +19,18 @@ describe("mad.component.Grid", function () {
     });
 
     it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
-        var tree = new mad.component.Grid($grid, {
+        var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model
         });
 
         // Basic control of classes inheritance.
-        expect(tree).to.be.instanceOf(can.Control);
-        expect(tree).to.be.instanceOf(mad.Control);
-        expect(tree).to.be.instanceOf(mad.Component);
-        expect(tree).to.be.instanceOf(mad.component.Grid);
+        expect(grid).to.be.instanceOf(can.Control);
+        expect(grid).to.be.instanceOf(mad.Control);
+        expect(grid).to.be.instanceOf(mad.Component);
+        expect(grid).to.be.instanceOf(mad.component.Grid);
 
-        tree.start();
-        tree.destroy();
+        grid.start();
+        grid.destroy();
     });
 
     it("insertItem() requires the map option to be defined", function () {
@@ -47,6 +49,9 @@ describe("mad.component.Grid", function () {
         expect(function () {
             grid.insertItem(itemInside);
         }).to.throw(Error); // should work but doesn't : mad.Exception.get(mad.error.MISSING_OPTION, 'map')
+
+        grid.element.empty();
+        grid.destroy();
     });
 
     it("insertItem() should insert an item into the grid", function () {
@@ -166,6 +171,9 @@ describe("mad.component.Grid", function () {
         });
         grid.insertItem(itemInside);
         expect($('#test-html').text()).to.contain('value adapted : ' + itemInside.attr('label'));
+
+        grid.element.empty();
+        grid.destroy();
     });
 
     it("insertItem() should insert an item and apply a cell adapter on the target cell", function () {
@@ -208,6 +216,9 @@ describe("mad.component.Grid", function () {
         });
         grid.insertItem(itemInside);
         expect($('#test-html').text()).to.contain('Cell adapted applied : ' + itemInside.attr('label'));
+
+        grid.element.empty();
+        grid.destroy();
     });
 
     it('load() should insert several items in the grid', function () {
@@ -255,6 +266,10 @@ describe("mad.component.Grid", function () {
         expect($grid.text()).to.contain('Item 1');
         expect($grid.text()).to.contain('Item 2');
         expect($grid.text()).to.contain('Item 3');
+
+
+        grid.element.empty();
+        grid.destroy();
     });
 
     it("refreshItem() should refresh an item row with an updated items", function(){
@@ -298,6 +313,9 @@ describe("mad.component.Grid", function () {
         item.attr('label', 'updated item label');
         grid.refreshItem(item);
         expect($('#test-html').text()).to.contain('updated item label');
+
+        grid.element.empty();
+        grid.destroy();
     });
 
     it("removeItem() should remove an item from the grid", function(){
@@ -351,6 +369,61 @@ describe("mad.component.Grid", function () {
 
         grid.element.empty();
         grid.destroy();
+    });
+
+    it("destroying an item displayed by the grid should remove this item from the grid", function(done){
+        // Set the grid map that will be used to transform the data for the view.
+        var map = new mad.Map({
+            id: 'id',
+            label: 'username'
+        });
+        // Set the grid columns model.
+        var columnModel = [{
+            name: 'id',
+            index: 'id',
+            header: {
+                label: 'id',
+                css: []
+            }
+        }, {
+            name: 'label',
+            index: 'label',
+            header: {
+                label: 'label',
+                css: []
+            }
+        }];
+        var grid = new mad.component.Grid($grid, {
+            itemClass: mad.Model,
+            map: map,
+            columnModel: columnModel
+        });
+        grid.start();
+
+        // Insert items at root level.
+        var items = [],
+          savingDefs = [];
+
+        // Retrieve the items to insert into the grid.
+        mad.test.model.UserTestModel.findAll().then(function(items) {
+            // Insert all the items into the grid
+            can.each(items, function(item, i) {
+                grid.insertItem(item);
+                expect($('#test-html').text()).to.contain(item.attr('username'));
+            });
+
+            // Destroy an item.
+            var destroyDef = items[2].destroy();
+            $.when(destroyDef).then(function() {
+                // Check that the item we removed is not present anymore, but the other are still there.
+                expect($('#test-html').text()).not.to.contain(items[2].attr('username'));
+                expect($('#test-html').text()).to.contain(items[0].attr('username'));
+                expect($('#test-html').text()).to.contain(items[1].attr('username'));
+                grid.element.empty();
+                grid.destroy();
+                done();
+            });
+        });
     });
 
     it("selectItem() should select an item in the grid", function(){
@@ -466,6 +539,137 @@ describe("mad.component.Grid", function () {
         // Unselect all items.
         grid.unselectItem(item);
         expect($item.hasClass('selected')).to.be.false;
+
+        grid.element.empty();
+        grid.destroy();
+    });
+
+    it("filter() should filter the grid with the given items", function(){
+        // Set the grid map that will be used to transform the data for the view.
+        var map = new mad.Map({
+            id: 'id',
+            label: 'label'
+        });
+        // Set the grid columns model.
+        var columnModel = [{
+            name: 'id',
+            index: 'id',
+            header: {
+                label: 'id',
+                css: []
+            }
+        }, {
+            name: 'label',
+            index: 'label',
+            header: {
+                label: 'label',
+                css: []
+            }
+        }];
+        var grid = new mad.component.Grid($grid, {
+            itemClass: mad.Model,
+            map: map,
+            columnModel: columnModel
+        });
+        grid.start();
+
+        // Insert items at root level.
+        var items = [];
+        for (var i = 0; i<5; i++) {
+            items[i] = new mad.Model({
+                id: 'item_' + i,
+                label: 'item label ' + i
+            });
+            grid.insertItem(items[i]);
+            expect($('#test-html').text()).to.contain(items[i].attr('label'));
+        }
+
+        // Check that the grid is not filtered.
+        expect(grid.isFiltered()).to.be.false;
+
+        // Filter the grid
+        var filteredItems = new can.List([items[2], items[4]]);
+        grid.filter(filteredItems);
+
+        // Check that the grid is filtered.
+        expect(grid.isFiltered()).to.be.true;
+
+        // Check that the item we removed is not present anymore, but the other are still there.
+        expect(grid.view.getItemElement(items[0])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[1])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[2])).to.be.$visible;
+        expect(grid.view.getItemElement(items[3])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[4])).to.be.$visible;
+
+        grid.element.empty();
+        grid.destroy();
+    });
+
+    it("filterByKeywords() should filter the grid by keywords", function(){
+        // Set the grid map that will be used to transform the data for the view.
+        var map = new mad.Map({
+            id: 'id',
+            label: 'label'
+        });
+        // Set the grid columns model.
+        var columnModel = [{
+            name: 'id',
+            index: 'id',
+            header: {
+                label: 'id',
+                css: []
+            }
+        }, {
+            name: 'label',
+            index: 'label',
+            header: {
+                label: 'label',
+                css: []
+            }
+        }];
+        var grid = new mad.component.Grid($grid, {
+            itemClass: mad.Model,
+            map: map,
+            columnModel: columnModel
+        });
+        grid.start();
+
+        // Insert items at root level.
+        var items = [];
+        for (var i = 0; i<5; i++) {
+            items[i] = new mad.Model({
+                id: 'item_' + i,
+                label: 'item label ' + i,
+                hiddenField: 'hidden label ' + i
+            });
+            grid.insertItem(items[i]);
+            expect($('#test-html').text()).to.contain(items[i].attr('label'));
+        }
+
+        // Filter the grid on visible value
+        grid.filterByKeywords('_ item 2');
+
+        // Check that the item we removed is not present anymore, but the other are still there.
+        expect(grid.view.getItemElement(items[0])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[1])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[2])).to.be.$visible;
+        expect(grid.view.getItemElement(items[3])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[4])).to.be.$hidden;
+
+        // Filter the grid on items hidden field
+        var searchInFields = grid.options.map.getModelTargetFieldsNames()
+            .concat(['hiddenField']);
+
+        grid.filterByKeywords('hidden item 2', {
+            searchInFields: searchInFields
+        });
+
+        // Check that the item we removed is not present anymore, but the other are still there.
+        expect(grid.view.getItemElement(items[0])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[1])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[2])).to.be.$visible;
+        expect(grid.view.getItemElement(items[3])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[4])).to.be.$hidden;
 
         grid.element.empty();
         grid.destroy();

@@ -15,7 +15,7 @@ steal.config({
         "mocha": "node_modules/mocha/mocha.js",
         "mocha/mocha.css": "node_modules/mocha/mocha.css",
         "chai": "node_modules/chai/chai.js",
-        "chai-jquery": "node_modules/chai-jquery/chai-jquery.js",
+        "chai-jq": "node_modules/chai-jq/chai-jq.js",
         "xregexp": "js/lib/xregexp/xregexp-all.js"
     },
     "meta": {

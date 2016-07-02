@@ -37,6 +37,24 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
             error: error
         });
     },
+    create : function (attrs, success, error) {
+        var url = '/testusers';
+        var self = this;
+        var params = mad.model.serializer.CakeSerializer.to(attrs, this);
+        return mad.net.Ajax.request({
+            url: url,
+            type: 'POST',
+            params: params,
+            success: success,
+            error: error
+        }).pipe(function (data, textStatus, jqXHR) {
+            // pipe the result to convert cakephp response format into can format
+            // else the new attribute are not well placed
+            var def = $.Deferred();
+            def.resolveWith(this, [mad.model.serializer.CakeSerializer.from(data, self)]);
+            return def;
+        });
+    },
     update: function (id, attrs, success, error) {
         var url = '/testusers/' + id;
         // format data as expected by cakePHP
@@ -44,6 +62,17 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
         return mad.net.Ajax.request({
             url: url,
             type: 'PUT',
+            params: params,
+            success: success,
+            error: error
+        });
+    },
+    destroy : function (id, success, error) {
+        var params = {id:id};
+        var url = '/testusers/' + id;
+        return mad.net.Ajax.request({
+            url: url,
+            type: 'DELETE',
             params: params,
             success: success,
             error: error

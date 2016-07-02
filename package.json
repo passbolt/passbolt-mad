@@ -28,6 +28,7 @@
     "mocha": "^2.2.5",
     "steal-mocha": "^0.0.2",
     "chai": "^3.0.0",
+    "chai-jq": "^1.0.9",
     "sinon": "^1.16.1"
   },
   "scripts": {
