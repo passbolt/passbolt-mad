@@ -8,21 +8,19 @@ var map = new mad.Map({
     label: 'label'
 });
 // Set the grid columns model.
-var columnModel = [{
-    name: 'id',
-    index: 'id',
-    header: {
+var columnModel = [
+    new mad.model.GridColumn({
+        name: 'id',
+        index: 'id',
         label: 'id',
-        css: []
-    }
-}, {
-    name: 'label',
-    index: 'label',
-    header: {
+        sortable: true
+    }), new mad.model.GridColumn({
+        name: 'label',
+        index: 'label',
         label: 'label',
-        css: []
-    }
-}];
+        sortable: true
+    })
+];
 var grid = new mad.component.Grid($('#grid'), {
     itemClass: mad.Model,
     map: map,
@@ -39,6 +37,33 @@ var items = new mad.Model.List([{
 }, {
     id: 'item_3',
     label: 'Item 3'
+}, {
+    id: 'item_4',
+    label: 'Item 4'
+}, {
+    id: 'item_5',
+    label: 'Item 5'
+}, {
+    id: 'item_6',
+    label: 'Item 6'
+}, {
+    id: 'item_7',
+    label: 'Item 7'
+}, {
+    id: 'item_8',
+    label: 'Item 8'
+}, {
+    id: 'item_9',
+    label: 'Item 9'
+}, {
+    id: 'item_10',
+    label: 'Item 10'
+}, {
+    id: 'item_11',
+    label: 'Item 11'
+}, {
+    id: 'item_12',
+    label: 'Item 12'
 }]);
 
 grid.load(items);

@@ -61,21 +61,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -139,24 +133,18 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            },
+            label: 'label',
             valueAdapter: function(value, mappedItem, item, columnModel) {
                 return 'value adapted : ' + value;
             }
-        }];
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -183,25 +171,19 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            },
-            'cellAdapter': function (cellElement, cellValue, mappedItem, item, columnModel) {
+            label: 'label',
+            cellAdapter: function (cellElement, cellValue, mappedItem, item, columnModel) {
                 var html = '<p>Cell adapted applied : ' + cellValue + '</p>';
                 mad.helper.Html.create(cellElement, 'inside_replace', html);
             }
-        }];
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -228,21 +210,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -279,21 +255,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -325,21 +295,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -378,21 +342,15 @@ describe("mad.component.Grid", function () {
             label: 'username'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -433,21 +391,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -491,21 +443,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -551,21 +497,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -612,21 +552,15 @@ describe("mad.component.Grid", function () {
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [{
+        var columnModel = [new mad.model.GridColumn({
             name: 'id',
             index: 'id',
-            header: {
-                label: 'id',
-                css: []
-            }
-        }, {
+            label: 'id'
+        }), new mad.model.GridColumn({
             name: 'label',
             index: 'label',
-            header: {
-                label: 'label',
-                css: []
-            }
-        }];
+            label: 'label'
+        })];
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model,
             map: map,
@@ -670,6 +604,68 @@ describe("mad.component.Grid", function () {
         expect(grid.view.getItemElement(items[2])).to.be.$visible;
         expect(grid.view.getItemElement(items[3])).to.be.$hidden;
         expect(grid.view.getItemElement(items[4])).to.be.$hidden;
+
+        grid.element.empty();
+        grid.destroy();
+    });
+
+    it("sort() should sort the grid regarding a given column", function(){
+        // Set the grid map that will be used to transform the data for the view.
+        var map = new mad.Map({
+            id: 'id',
+            label: 'label'
+        });
+        // Set the grid columns model.
+        var columnModel = [new mad.model.GridColumn({
+            name: 'id',
+            index: 'id',
+            label: 'id'
+        }), new mad.model.GridColumn({
+            name: 'label',
+            index: 'label',
+            label: 'label',
+            sortable: true
+        })];
+        var grid = new mad.component.Grid($grid, {
+            itemClass: mad.Model,
+            map: map,
+            columnModel: columnModel
+        });
+        grid.start();
+
+        // Insert items at root level.
+        var items = [],
+            alphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''),
+            alphabetCopy = alphabet.slice();
+
+        for (var i = 0; i < alphabet.length; i++) {
+            var rand = Math.floor(Math.random() * alphabetCopy.length),
+                letter = alphabetCopy.splice(rand, 1);
+
+            items[i] = new mad.Model({
+                id: 'item_' + letter,
+                label: 'item label ' + letter
+            });
+            grid.insertItem(items[i]);
+        }
+
+        // Check that the grid is sorted ascendingly.
+        grid.sort(columnModel[1], true);
+        for (var i = 0; i < alphabet.length; i++) {
+            expect($('tbody tr', grid.element).eq(i).html()).to.contain('item label ' + alphabet[i]);
+        }
+
+        // Check that the grid is sorted descendingly.
+        grid.sort(columnModel[1], false);
+        for (var i = alphabet.length - 1, j=0; i >= 0; i--, j++) {
+            expect($('tbody tr', grid.element).eq(j).html()).to.contain('item label ' + alphabet[i]);
+        }
+
+        // Check that the grid is sorted ascendingly.
+        grid.sort(columnModel[1], true);
+        for (var i = 0; i < alphabet.length; i++) {
+            expect($('tbody tr', grid.element).eq(i).html()).to.contain('item label ' + alphabet[i]);
+        }
 
         grid.element.empty();
         grid.destroy();
