@@ -18,6 +18,22 @@ describe("mad.component.Grid", function () {
         $('#test-html').empty();
     });
 
+    /*
+     * Generate dummy items
+     */
+    var generate_dummy_items = function(n) {
+        n = n || 10;
+        var items = [];
+        for (var i = 0; i<n; i++) {
+            items[i] = new mad.Model({
+                id: 'item_' + i,
+                label: 'item label ' + i,
+                hiddenField: 'hidden label ' + i
+            });
+        }
+        return items;
+    };
+
     it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
         var grid = new mad.component.Grid($grid, {
             itemClass: mad.Model
@@ -226,22 +242,13 @@ describe("mad.component.Grid", function () {
         });
         grid.start();
 
-        var items = new mad.Model.List([{
-            id: 'item_1',
-            label: 'Item 1'
-        }, {
-            id: 'item_2',
-            label: 'Item 2'
-        }, {
-            id: 'item_3',
-            label: 'Item 3'
-        }]);
-
+        // Load items
+        var items = generate_dummy_items(3);
         grid.load(items);
 
-        expect($grid.text()).to.contain('Item 1');
-        expect($grid.text()).to.contain('Item 2');
-        expect($grid.text()).to.contain('Item 3');
+        expect($grid.text()).to.contain('item label 0');
+        expect($grid.text()).to.contain('item label 1');
+        expect($grid.text()).to.contain('item label 2');
 
 
         grid.element.empty();
@@ -311,16 +318,9 @@ describe("mad.component.Grid", function () {
         });
         grid.start();
 
-        // Insert items at root level.
-        var items = [];
-        for (var i = 0; i<5; i++) {
-            items[i] = new mad.Model({
-                id: 'item_' + i,
-                label: 'item label ' + i
-            });
-            grid.insertItem(items[i]);
-            expect($('#test-html').text()).to.contain(items[i].attr('label'));
-        }
+        // Load items.
+        var items = generate_dummy_items(5);
+        grid.load(items);
 
         // Remove an item.
         grid.removeItem(items[2]);
@@ -513,16 +513,9 @@ describe("mad.component.Grid", function () {
         });
         grid.start();
 
-        // Insert items at root level.
-        var items = [];
-        for (var i = 0; i<5; i++) {
-            items[i] = new mad.Model({
-                id: 'item_' + i,
-                label: 'item label ' + i
-            });
-            grid.insertItem(items[i]);
-            expect($('#test-html').text()).to.contain(items[i].attr('label'));
-        }
+        // Load items.
+        var items = generate_dummy_items(5);
+        grid.load(items);
 
         // Check that the grid is not filtered.
         expect(grid.isFiltered()).to.be.false;
@@ -568,17 +561,9 @@ describe("mad.component.Grid", function () {
         });
         grid.start();
 
-        // Insert items at root level.
-        var items = [];
-        for (var i = 0; i<5; i++) {
-            items[i] = new mad.Model({
-                id: 'item_' + i,
-                label: 'item label ' + i,
-                hiddenField: 'hidden label ' + i
-            });
-            grid.insertItem(items[i]);
-            expect($('#test-html').text()).to.contain(items[i].attr('label'));
-        }
+        // Load items.
+        var items = generate_dummy_items(5);
+        grid.load(items);
 
         // Filter the grid on visible value
         grid.filterByKeywords('_ item 2');
@@ -607,6 +592,55 @@ describe("mad.component.Grid", function () {
 
         grid.element.empty();
         grid.destroy();
+    });
+
+    it("sort() should mark a column as sorted", function() {
+        // Set the grid map that will be used to transform the data for the view.
+        var map = new mad.Map({
+            id: 'id',
+            label: 'label'
+        });
+        // Set the grid columns model.
+        var columnModel = [new mad.model.GridColumn({
+            name: 'id',
+            index: 'id',
+            label: 'id',
+            sortable: true
+        }), new mad.model.GridColumn({
+            name: 'label',
+            index: 'label',
+            label: 'label',
+            sortable: true
+        })];
+        var grid = new mad.component.Grid($grid, {
+            itemClass: mad.Model,
+            map: map,
+            columnModel: columnModel
+        });
+        grid.start();
+
+        // Sortable columns should be marked as sortable.
+        expect($('.js_grid_column_' + columnModel[0].name, grid.element)).to.have.$class('sortable');
+        expect($('.js_grid_column_' + columnModel[1].name, grid.element)).to.have.$class('sortable');
+
+        // Check that the grid is marked as sorted ascendingly when sorting ascendinly.
+        grid.sort(columnModel[1], true);
+        expect($('.js_grid_column_' + columnModel[1].name, grid.element)).to.have.$class('sorted')
+            .and.to.have.$class('sort-asc');
+
+        // Check that the grid is marked as sorted ascendingly when sorting descendingly.
+        grid.sort(columnModel[1], false);
+        expect($('.js_grid_column_' + columnModel[1].name, grid.element)).to.have.$class('sorted')
+            .and.to.have.$class('sort-desc')
+            .and.to.not.have.$class('sort-asc');
+
+        grid.sort(columnModel[0], true);
+        expect($('.js_grid_column_' + columnModel[0].name, grid.element)).to.have.$class('sorted')
+            .and.to.have.$class('sort-asc');
+        expect($('.js_grid_column_' + columnModel[1].name, grid.element))
+            .to.not.have.$class('sorted')
+            .and.to.not.have.$class('sort-desc')
+            .and.to.not.have.$class('sort-asc');
     });
 
     it("sort() should sort the grid regarding a given column", function(){
@@ -669,6 +703,49 @@ describe("mad.component.Grid", function () {
 
         grid.element.empty();
         grid.destroy();
+    });
+
+    it("sort() reloading should mark the grid as unsorted", function(){
+        // Set the grid map that will be used to transform the data for the view.
+        var map = new mad.Map({
+            id: 'id',
+            label: 'label'
+        });
+        // Set the grid columns model.
+        var columnModel = [new mad.model.GridColumn({
+            name: 'id',
+            index: 'id',
+            label: 'id'
+        }), new mad.model.GridColumn({
+            name: 'label',
+            index: 'label',
+            label: 'label',
+            sortable: true
+        })];
+        var grid = new mad.component.Grid($grid, {
+            itemClass: mad.Model,
+            map: map,
+            columnModel: columnModel
+        });
+        grid.start();
+
+        // Load items.
+        var items = generate_dummy_items(5);
+        grid.load(items);
+
+        // Check that the grid is marked as sorted ascendingly when sorting descendingly.
+        grid.sort(columnModel[1], false);
+        expect($('.js_grid_column_' + columnModel[1].name, grid.element))
+            .to.have.$class('sorted')
+            .and.to.have.$class('sort-desc');
+
+        // Reloading the grid should mark the grid as unsorted.
+        grid.load(items);
+        expect($('.js_grid_column_' + columnModel[1].name, grid.element))
+            .to.not.have.$class('sorted')
+            .and.to.not.have.$class('sort-desc')
+            .and.to.not.have.$class('sort-asc');
+
     });
 
 });

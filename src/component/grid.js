@@ -48,7 +48,9 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
         // The items the grid works with.
         items: new can.Model.List(),
         // Is the grid filtered.
-        isFiltered: false
+        isFiltered: false,
+        // Is the grid sorted.
+        isSorted: false
     }
 
 }, /** @prototype */ {
@@ -348,6 +350,8 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
 
         this.reset();
         this.options.isFiltered = false;
+        this.options.isSorted = false;
+        this.view.markAsUnsorted();
 
         can.each(items, function (item, i) {
             self.insertItem(item);
@@ -431,8 +435,10 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
      * @param sortAsc Should the sort be ascending. True by default.
      */
     sort: function (columnModel, sortAsc) {
+        this.options.isSorted = true;
+
         // Retrieve the mapped item attribute name.
-        var columnId = columnModel.index;
+        var columnId = columnModel.name;
         // Copy the mappedItems associativate array into array.
         var mappedItemsCopy = $.map(this.mappedItems, function(value, index) {
             value.id = index;
