@@ -60,6 +60,18 @@ module.exports = function (grunt) {
                     '(cd ./js/lib/can; patch -p1 < ../../../patches/can-util_string_get_object_set_object.patch;)',
                     '(cd ./node_modules/documentjs; patch -p1 < ../../patches/documentjs-demo_tag_url_and_sharp.patch;)'
                 ].join('&&')
+            },
+            publish: {
+                options: {
+                    stdout: true
+                },
+                command: [
+                    //'git commit -am \'<%= pkg.version %>\'',
+                    'git tag -a <%= pkg.version %> -m \'<%= pkg.version %>\'',
+                    'git push origin <%= pkg.version %>',
+                    'git push',
+                    'npm publish'
+                ].join('&&')
             }
         },
         copy: {
