@@ -123,6 +123,9 @@ module.exports = function (grunt) {
     // Clean & generate the documentation
     grunt.registerTask('mad-doc', ['clean:doc', 'documentjs']);
 
+    // Tag and publish
+    grunt.registerTask('publish', [ 'shell:publish']);
+
     // Build mad & all the demos apps to ensure that everything compile
     grunt.registerTask("build", ["steal-build"]);
 
