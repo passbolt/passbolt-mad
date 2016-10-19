@@ -16,7 +16,7 @@ describe("mad.Validation", function(){
         'float': '3.57',
         'special': '!@#$%^&*()_-+={}[]:";<>?,./\\|~',
         'null': null,
-        'email': 'passbolt_team-2012@passbolt_team-2012.com',
+        'email': 'passbolt_team-2016.ùnicôde@passbolt-team-2016.com',
         'date': '01/01/2012',
         'html': '<h1>La solution de gestion de mot de passe</h1> parfaite pour les <b>business</b> et les <span style="font-size:10px">petites</span> entreprises sans oublier les accents <span style="background: url()">indispensables</span> dans l\'alphabet latin ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÚÚÚÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ'
     };
@@ -148,13 +148,99 @@ describe("mad.Validation", function(){
     });
 
     it('mad.Validation : email', function () {
+
+        // List of valid cases.
+        var validEmails = [
+            'abc.efg@domain.com',
+            'efg@domain.com',
+            'abc-efg@domain.com',
+            'abc_efg@domain.com',
+            'raw@test.ra.ru',
+            'abc-efg@domain-hyphened.com',
+            "p.o'malley@domain.com",
+            'abc+efg@domain.com',
+            'abc&efg@domain.com',
+            'abc.efg@12345.com',
+            'abc.efg@12345.co.jp',
+            'abc@g.cn',
+            'abc@x.com',
+            'henrik@sbcglobal.net',
+            'sani@sbcglobal.net',
+            // all ICANN TLDs
+            'abc@example.aero',
+            'abc@example.asia',
+            'abc@example.biz',
+            'abc@example.cat',
+            'abc@example.com',
+            'abc@example.coop',
+            'abc@example.edu',
+            'abc@example.gov',
+            'abc@example.info',
+            'abc@example.int',
+            'abc@example.jobs',
+            'abc@example.mil',
+            'abc@example.mobi',
+            'abc@example.museum',
+            'abc@example.name',
+            'abc@example.net',
+            'abc@example.org',
+            'abc@example.pro',
+            'abc@example.tel',
+            'abc@example.travel',
+            'someone@st.t-com.hr',
+            // gTLD's
+            'example@host.local',
+            'example@x.org',
+            'example@host.xxx',
+            // strange, but technically valid email addresses
+            'S=postmaster/OU=rz/P=uni-frankfurt/A=d400/C=de@gateway.d400.de',
+            'customer/department=shipping@example.com',
+            '$A12345@example.com',
+            '!def!xyz%abc@example.com',
+            '_somename@example.com',
+            // Unicode
+            'some@eräume.foo',
+            'äu@öe.eräume.foo',
+            'Nyrée.surname@example.com'
+        ];
+
+        // List of invalid cases.
+        var invalidEmails = [
+            'abc@example',
+            'abc@example.c',
+            'abc@example.com.',
+            'abc.@example.com',
+            'abc@example..com',
+            'abc@example.com.a',
+            'abc;@example.com',
+            'abc@example.com;',
+            'abc@efg@example.com',
+            'abc@@example.com',
+            'abc efg@example.com',
+            'abc,efg@example.com',
+            'abc@sub,example.com',
+            "abc@sub'example.com",
+            'abc@sub/example.com',
+            'abc@yahoo!.com',
+            'abc@example_underscored.com',
+            'raw@test.ra.ru....com'
+        ];
+
         ////////////////////////////////////////////////////////////////////////
         // Expect success
         ////////////////////////////////////////////////////////////////////////
-        expect(mad.Validation.validate('email', samples['email'])).to.be.true;
+        //expect(mad.Validation.validate('email', samples['email'])).to.be.true;
+        for (var i in validEmails) {
+            expect(mad.Validation.validate('email', validEmails[i])).to.be.true;
+        }
         ////////////////////////////////////////////////////////////////////////
         // Expect failure
         ////////////////////////////////////////////////////////////////////////
+        for (var i in invalidEmails) {
+            expect(mad.Validation.validate('email', invalidEmails[i])).to.be.a('string');
+        }
+
+        // Other failure tests.
         expect(mad.Validation.validate('email', samples['alphaASCII'])).to.be.a('string');
         expect(mad.Validation.validate('email', samples['alphaASCIIUpper'])).to.be.a('string');
         expect(mad.Validation.validate('email', samples['alphaAccent'])).to.be.a('string');
