@@ -174,13 +174,11 @@ describe("mad.Model", function () {
         value = 'AB';
         isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
 		expect(isValid).to.not.be.eql([]);
-        expect(isValid[0]).to.contain(testModelValidationRules.testModelAttribute.size.message);
 
         // The textbox value length cannot be smaller than 3.
         value = 'ABCDEFGHI';
         isValid = mad.test.model.TestModel.validateAttribute('testModelAttribute', value);
         expect(isValid).to.not.be.eql([]);
-        expect(isValid[0]).to.contain(testModelValidationRules.testModelAttribute.size.message);
     });
 
     it("model's instances should be updated when findAll retrieves updated instances", function(done) {

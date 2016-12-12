@@ -319,12 +319,10 @@ describe("mad.Form", function () {
         // The textbox value length cannot be smaller than 3.
         textbox.setValue('AB');
         expect(form.validateElement(textbox)).to.be.not.equal(true);
-        expect($feedbackTxtBox.html()).to.contain(testModelValidationRules.testModelAttribute.size.message);
 
         // The textbox value length cannot be smaller than 8.
         textbox.setValue('ABCDEFGHI');
         expect(form.validateElement(textbox)).to.be.not.equal(true);
-        expect($feedbackTxtBox.html()).to.contain(testModelValidationRules.testModelAttribute.size.message);
     });
 
 });
