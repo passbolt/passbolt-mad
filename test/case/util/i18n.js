@@ -33,19 +33,4 @@ describe("mad.I18n", function(){
         expect(__('%s%s%s%s', 'HOOK1', 'HOOK2', 'HOOK3', 'HOOK4')).to.be.equal('HOOK1HOOK2HOOK3HOOK4');
     });
 
-    it("replaceHooks() should throw an exception when the parameters are not conformed", function() {
-        expect(function() {
-            __('my sentence without hook', 'HOOK');
-        }).to.throw(Error);
-        expect(function() {
-            __('my sentence with a final hook %s');
-        }).to.throw(Error);
-        expect(function() {
-            __('%s my sentence with a final hook %s', 'HOOK_START');
-        }).to.throw(Error);
-        expect(function() {
-            __('%s my sentence with a final hook %s', 'HOOK_START', 'HOOK_END', 'BILOUTE');
-        }).to.throw(Error);
-    });
-
 });
