@@ -31,7 +31,7 @@ describe("mad.component.Menu", function () {
         menu.destroy();
     });
 
-    it("menu items should trigger the right actions when clicked", function () {
+    it("item_selected() should execute the menu item action on click", function () {
         var menu = new mad.component.Menu($menu);
         menu.start();
 

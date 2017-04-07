@@ -335,7 +335,7 @@ describe("mad.component.Grid", function () {
         grid.destroy();
     });
 
-    it("destroying an item displayed by the grid should remove this item from the grid", function(done){
+    it("{items} remove() should catch when an items displayed by the list is destroyed and remove it from the grid", function(done){
         // Set the grid map that will be used to transform the data for the view.
         var map = new mad.Map({
             id: 'id',
