@@ -1,15 +1,13 @@
 {
   "name": "passbolt-mad",
-  "version": "1.0.16",
-  "main": "mad/mad",
-  "directories": {},
-  "license": "GPL",
-  "license_full": "@licstart  The following is the entire license notice for the \n*  JavaScript code in this page. *\n * Copyright (C) 2015  Bolt Software Pvt. Ltd. * * * The JavaScript code in this page is free software: you can * redistribute it and/or modify it under the terms of the GNU * General Public License (GNU GPL) as published by the Free Software * Foundation, either version 3 of the License, or (at your option) * any later version.  The code is distributed WITHOUT ANY WARRANTY; * without even the implied warranty of MERCHANTABILITY or FITNESS * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details. * * As additional permission under GNU GPL version 3 section 7, you * may distribute non-source (e.g., minimized or compacted) forms of * that code without the copy of the GNU GPL normally required by * section 4, provided you include this license notice and a URL * through which recipients can access the Corresponding Source. * * @licend  The above is the entire license notice * for the JavaScript code in this page.",
-  "copyright": "Copyright 2015, Bolt Software Private Ltd",
-  "description": "Mad is a layer developped upon Canjs which has for aim to ease front-end application development with high level components.",
+  "version": "2.0.0",
+  "author": "Passbolt SARL",
+  "license": "AGPL-3.0",
+  "description": "Passbolt javascript application library for the open source password manager for teams",
+  "main": "src/mad",
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:passbolt/mad.git"
+    "url": "git@bitbucket.org:passbolt/passbolt-mad.git"
   },
   "dependencies": {
     "steal": "~0.10.4",
@@ -21,7 +19,6 @@
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-copy": "^1.0.0",
     "grunt-shell": "^1.3.0",
     "documentjs": "^0.4.4",
     "steal-tools": "^0.16.5",
@@ -41,8 +38,7 @@
     "public": "npm publish"
   },
   "keywords": [
-    "mad",
-    "can"
-  ],
-  "author": "Passbolt"
+    "passbolt",
+    "passbolt-appjs"
+  ]
 }

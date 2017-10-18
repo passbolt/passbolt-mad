@@ -1,7 +1,18 @@
-import 'mad/component/component';
-import 'mad/view/component/tree';
-import 'mad/view/template/component/tree/tree.ejs!';
-import 'mad/view/template/component/tree/treeItem.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './component';
+import '../view/component/tree';
+import itemTemplate from '../view/template/component/tree/treeItem.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -21,15 +32,11 @@ var Tree = mad.component.Tree = mad.Component.extend('mad.component.Tree', {
         cssClasses: ['tree'],
         // Override the tag option.
         tag: 'ul',
-        // Override the templateUri option.
-        templateUri: 'mad/view/template/component/tree/tree.ejs',
-        // Override the templateBased option.
-        templateBased: false,
         // Override the viewClass option.
         viewClass: mad.view.component.Tree,
 
         // The template used to render the tree's items.
-        itemTemplateUri: 'mad/view/template/component/tree/treeItem.ejs',
+        itemTemplate: itemTemplate,
         // The Model Class that defines the items displayed by the tree.
         itemClass: mad.Model,
         // The list of objects displayed by the tree.
@@ -63,7 +70,7 @@ var Tree = mad.component.Tree = mad.Component.extend('mad.component.Tree', {
      *
      * See the parent class to see the inherited options.
      *
-     * ### itemTemplateUri {string}
+     * ### itemTemplate {string}
      * The template used to render the tree's items. By default mad/view/template/component/tree/treeItem.ejs.
      *
      * ### itemClass {mad.Model.constructor}

@@ -1,7 +1,19 @@
-import 'mad/component/component';
-import 'mad/component/free_composite';
-import 'mad/view/component/dialog';
-import 'mad/view/template/component/dialog/dialog.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './component';
+import './free_composite';
+import '../view/component/dialog';
+import template from '../view/template/component/dialog/dialog.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -24,7 +36,7 @@ var Dialog = mad.component.Dialog = mad.component.FreeComposite.extend('mad.comp
     defaults: {
         label: 'Dialog Controller',
         viewClass: mad.view.component.Dialog,
-        templateUri: 'mad/view/template/component/dialog/dialog.ejs',
+        template: template,
         cssClasses: ['dialog-wrapper'],
         tag: 'div'
     },

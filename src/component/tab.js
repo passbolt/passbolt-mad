@@ -1,7 +1,19 @@
-import 'mad/component/composite';
-import 'mad/component/menu';
-import 'mad/view/component/tab';
-import 'mad/view/template/component/tab/tab.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './composite';
+import './menu';
+import '../view/component/tab';
+import template from '../view/template/component/tab/tab.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -25,7 +37,7 @@ var Tab = mad.component.Tab = mad.component.Composite.extend('mad.component.Tab'
     defaults: {
         label: 'Tab Controller',
         viewClass: mad.view.component.Tab,
-        templateUri: 'mad/view/template/component/tab/tab.ejs',
+        template: template,
         // Generate a menu automatically.
         autoMenu: true
     }

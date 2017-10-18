@@ -1,12 +1,23 @@
-import "test/bootstrap";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import "../../bootstrap";
+import customTemplate from './component_custom_template.ejs!'
 
 describe("mad.Component", function(){
 
 	// Extend mad.Component for the needs of the tests.
 	var MyComponent = mad.Component.extend('MyComponent', {
-		'defaults': {
-			'templateBased': false
-		}
+		defaults: {}
 	}, {});
 
 	it("should inherit can.Control & mad.Control", function(){
@@ -62,9 +73,8 @@ describe("mad.Component", function(){
 
 	it("should be in the overridden default state after being started", function() {
 		var MyComponentOverriddenState = mad.Component.extend('MyComponentOverriddenState', {
-			'defaults': {
-				'state': 'disabled',
-				'templateBased': false
+			defaults: {
+				state: 'disabled',
 			}
 		}, {});
 
@@ -81,14 +91,14 @@ describe("mad.Component", function(){
 	});
 
 	it("should be rendered based on a custom template if defined", function() {
-		var MyComponentOverriddenTemplate = mad.Component.extend('MyComponentOverriddenTemplate', {
-			'defaults': {
-				'state': 'disabled',
-				'templateUri': 'test/case/component/my_component.tpl'
+		var CustomComponent = mad.Component.extend('MyComponentOverriddenTemplate', {
+			defaults: {
+				state: 'disabled',
+				template: customTemplate
 			}
 		}, {});
 
-		var component = new MyComponentOverriddenTemplate($('#test-html')),
+		var component = new CustomComponent($('#test-html')),
 			$elt = $(component.element);
 
 		component.start();

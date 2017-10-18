@@ -1,37 +1,49 @@
-import "test/case/bootstrap";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import "./bootstrap";
 
-import "test/case/component/component";
-import "test/case/component/tree";
-import "test/case/component/dynamic_tree";
-import "test/case/component/menu";
-import "test/case/component/grid";
-import "test/case/component/button";
-import "test/case/component/button_dropdown";
-import "test/case/component/contextual_menu";
-import "test/case/component/dialog";
-import "test/case/component/tab";
-import "test/case/component/toggle_button";
-import "test/case/component/confirm";
+import "./component/component";
+import "./component/tree";
+import "./component/dynamic_tree";
+import "./component/menu";
+import "./component/grid";
+import "./component/button";
+import "./component/button_dropdown";
+import "./component/contextual_menu";
+import "./component/dialog";
+import "./component/tab";
+import "./component/toggle_button";
+import "./component/confirm";
 
-import "test/case/control/bus";
-import "test/case/control/control";
+import "./control/bus";
+import "./control/control";
 
-import "test/case/form/form";
-import "test/case/form/element";
-import "test/case/form/element/checkbox";
-import "test/case/form/element/textbox";
-import "test/case/form/element/dropdown";
+import "./form/form";
+import "./form/element";
+import "./form/element/checkbox";
+import "./form/element/textbox";
+import "./form/element/dropdown";
 
-import "test/case/helper/control";
-import "test/case/helper/html";
-import "test/case/helper/component";
+import "./helper/control";
+import "./helper/html";
+import "./helper/component";
 
-import "test/case/net/ajax";
+import "./net/ajax";
 
-import "test/case/model/model";
-import "test/case/model/state";
-import "test/case/model/serializer/cake_serializer";
+import "./model/model";
+import "./model/state";
+import "./model/serializer/cake_serializer";
 
-import "test/case/util/i18n";
-import "test/case/util/map";
-import "test/case/util/validation";
+import "./util/i18n";
+import "./util/map";
+import "./util/validation";

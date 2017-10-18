@@ -1,25 +1,37 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
 import $ from "jquery";
 import _ from "underscore";
 import can from "can/can";
 import "can/map/define/define";
 
-import mad from "mad/util/util";
-import "mad/error/exception";
-import "mad/error/error_handler";
-import "mad/helper/component";
-import "mad/helper/control";
-import "mad/helper/html";
-import "mad/config/config";
-import "mad/util/array/array";
-import "mad/util/map/map";
-import "mad/util/validation";
-import "mad/util/lang/i18n";
-import "mad/model/model";
-import "mad/model/list";
-import "mad/model/state";
-import "mad/model/attribute";
-import "mad/control/control";
-import "mad/view/view";
-import "mad/component/component";
+import mad from "./util/util";
+import "./error/exception";
+import "./error/error_handler";
+import "./helper/component";
+import "./helper/control";
+import "./helper/html";
+import "./config/config";
+import "./util/array/array";
+import "./util/map/map";
+import "./util/validation";
+import "./util/lang/i18n";
+import "./model/model";
+import "./model/list";
+import "./model/state";
+import "./model/attribute";
+import "./control/control";
+import "./view/view";
+import "./component/component";
 
 export default mad;

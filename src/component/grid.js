@@ -1,9 +1,21 @@
-import 'mad/component/component';
-import 'mad/model/grid_column';
-import 'mad/view/component/grid';
-import 'mad/view/template/component/grid/grid.ejs!';
-import 'mad/view/template/component/grid/gridItem.ejs!';
-import 'mad/view/template/component/grid/gridColumnHeader.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './component';
+import '../model/grid_column';
+import '../view/component/grid';
+import template from '../view/template/component/grid/grid.ejs!';
+import itemTemplate from '../view/template/component/grid/gridItem.ejs!';
+import columnHeaderTemplate from '../view/template/component/grid/gridColumnHeader.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -22,10 +34,12 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
         cssClasses: ['tableview'],
         // Override the tag option.
         tag: 'div',
-        // Override the templateUri option.
-        templateUri: 'mad/view/template/component/grid/grid.ejs',
-        // The component deals with sub template to render the grid row.
-        itemTemplateUri: 'mad/view/template/component/grid/gridItem.ejs',
+        // Override the template option.
+        template: template,
+        // The component header column template.
+        columnHeaderTemplate: columnHeaderTemplate,
+        // The component item template.
+        itemTemplate: itemTemplate,
         // Override the viewClass option.
         viewClass: mad.view.component.Grid,
         // Prefix the id of each row.
@@ -97,6 +111,7 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
     beforeRender: function () {
         this._super();
         this.setViewData('columnModel', this.options.columnModel);
+        this.setViewData('columnHeaderTemplate', this.options.columnHeaderTemplate);
         this.setViewData('items', []);
     },
 

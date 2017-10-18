@@ -1,5 +1,17 @@
-import 'mad/component/component';
-import 'mad/view/template/component/button/button.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './component';
+import template from '../view/template/component/button/button.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -26,15 +38,14 @@ import 'mad/view/template/component/button/button.ejs!';
  */
 var Button = mad.component.Button = mad.Component.extend('mad.component.Button', {
 
-  'defaults': {
-    'label': 'Button Component',
-    'templateUri': 'mad/view/template/component/button.ejs',
-    'templateBased': false,
-    'value': null,
-    'events': {
-      'click': null
+  defaults: {
+    label: 'Button Component',
+    template: template,
+    value: null,
+    events: {
+      click: null
     },
-    'tag': 'button'
+    tag: 'button'
   }
 
 }, /** @prototype */ {
@@ -44,7 +55,7 @@ var Button = mad.component.Button = mad.Component.extend('mad.component.Button',
    * This value will be released as event parameter when an event occured
    * @type {string}
    */
-  'value': null,
+  value: null,
 
     /**
      * Constructor like.
@@ -84,7 +95,7 @@ var Button = mad.component.Button = mad.Component.extend('mad.component.Button',
    * Listen to the event click on the DOM button element
    * @return {void}
    */
-  'click': function (el, ev) {
+  click: function (el, ev) {
     // if the component is disabled, stop the propagation
     if (this.state.is('disabled')) {
       ev.stopImmediatePropagation();
@@ -107,7 +118,7 @@ var Button = mad.component.Button = mad.Component.extend('mad.component.Button',
    * @param {boolean} go Enter or leave the state
    * @return {void}
    */
-  'stateDisabled': function (go) {
+  stateDisabled: function (go) {
     if (go) {
       this.element.attr('disabled', 'disabled')
         .addClass('disabled');

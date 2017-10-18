@@ -1,7 +1,19 @@
-import 'mad/component/component';
-import 'mad/form/element';
-import 'mad/form/feedback';
-import 'mad/view/form/form';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import '../component/component';
+import './element';
+import './feedback';
+import '../view/form/form';
 
 // Initialize the form namespaces.
 mad.form = mad.form || {};
@@ -30,10 +42,6 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
         cssClasses: ['form'],
         // Override the tag option.
         tag: 'form',
-        // Override the templateUri option.
-        templateUri: null,
-        // Override the templateBased option.
-        templateBased: false,
         // Override the viewClass option.
         viewClass: mad.view.Form,
 

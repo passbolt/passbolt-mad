@@ -1,7 +1,19 @@
-import 'mad/control/control';
-import 'mad/view/view';
-import 'mad/model/state';
-import 'mad/view/template/component/default.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import '../control/control';
+import '../view/view';
+import '../model/state';
+import '../view/template/component/default.ejs!';
 
 // Initialize the component namespaces.
 mad.component = mad.component || {};
@@ -28,10 +40,8 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		// The default HTML Element the component will be wrapped by. Used especially when
 		// creating a component with the component helpers.
 		tag: 'div',
-		// Is the component based on a template. By default yes.
-		templateBased: true,
 		// Override the default template to use any other existing one.
-		templateUri: null,
+		template: null,
 		// The component's view controller used to drive the component's view.
 		viewClass: mad.View,
 		// The data used by the view
@@ -75,19 +85,8 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	 * The default HTML Element the component will be wrapped by. Used especially when
 	 * creating a component with the component helpers.
 	 *
-	 * ### templateBased {boolean}
-	 * Is the component template based? By default yes.
-	 *
-	 * Some component doesn't need to render any html, the only HTML Element they are created on
-	 * is enough. Complex components that are used most of the time need a template to express
-	 * themselves.
-	 *
-	 * ### templateUri {string}
-	 * The component's template used to render the component.
-	 *
-	 * By default (if templateBased is set at true) the system will look for a template
-	 * based on the Component Class name in the template folder. It can be overridden with this
-	 * options to use any other existing templates.
+	 * ### template {string}
+	 * The component's template used to render the component if any.
 	 *
 	 * ### viewClass {mad.View}
 	 * The component's view controller used to drive the component's view.
@@ -224,16 +223,6 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	},
 
 	/**
-	 * Set the template that will be used to render the component.
-	 * The template can also be set by defining the templateUri option.
-	 *
-	 * @param {string} templateUri The template uri
-	 */
-	setTemplateUri: function (templateUri) {
-		this.view.setTemplateUri(templateUri);
-	},
-
-	/**
 	 * Switch the component' state.
 	 * For more information about how a component deals with states, see _goNextStates() and mad.model.State.
 	 *
@@ -289,7 +278,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 			return;
 		}
 		this.element.empty();
-		if (this.options.templateBased) {
+		if (this.options.template && this.options.template != null) {
 			this.beforeRender();
 			var render = this.view.render();
 			render = this.afterRender(render);
@@ -316,7 +305,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		this.initView();
 
 		// If the component is template based, render it.
-		if (this.options.templateBased) {
+		if (this.options.template) {
 			this.beforeRender();
 			var render = this.view.render();
 			render = this.afterRender(render);
@@ -338,9 +327,8 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	initView: function () {
 		// Instantiate the component's View.
 		this.view = new this.options.viewClass(this.element, {
-			templateUri: this.options.templateUri,
+			template: this.options.template,
 			cssClasses: this.options.cssClasses,
-			templateBased: this.options.templateBased,
 			controller: this
 		});
 

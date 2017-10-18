@@ -1,6 +1,21 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
 import can from 'can/can';
+/* Override the can/util/string.js to use our patched version of the function getObject
+ * Our version allow to set a value in a nested object if required. (@todo remove this trick) */
+import '../lib/can/utilString';
 import 'can/construct/super/super';
-import 'mad/util/string/uuid';
+import './string/uuid';
 
 // Define the global context.
 var glbl = typeof window !== "undefined" ? window : global,

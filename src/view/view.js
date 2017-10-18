@@ -1,5 +1,17 @@
-import 'mad/control/control';
-import 'mad/helper/control';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import '../control/control';
+import '../helper/control';
 
 // Initialize the view namespaces.
 mad.view = mad.view || {};
@@ -16,14 +28,9 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 
 	defaults: {
 		/**
-		 * The associated template uri. If null, the templateUri will be defined based on the
-		 * Class name
+		 * The associated template.
 		 */
-		templateUri: null,
-		/**
-		 * The view is based on a template
-		 */
-		templateBased: true,
+		template: null,
 		/**
 		 * The DOM element associated to this view controller
 		 */
@@ -59,26 +66,6 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 	 */
 	addClass: function (className) {
 		this.element.addClass(className);
-	},
-
-	/**
-	 * Get the component's template. If the options.template has been defined
-	 * use this one. Else build the template uri functions of the component name.
-	 * @return {String} The component template uri
-	 */
-	getTemplate: function () {
-		var tpl = '';
-
-		// The template uri has been defined in the options
-		if(this.getTemplateUri() != null) {
-			tpl = this.getTemplateUri();
-		}
-		// Build the view path regarding the Controller class.
-		else {
-			tpl = mad.helper.Control.getViewPath(this.getController().getClass());
-		}
-
-		return tpl;
 	},
 
 	/**
@@ -133,7 +120,7 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 	 * @return {string} The rendered view
 	 */
 	render: function () {
-		return mad.View.render(this.getTemplate(), this.getController().getViewData());
+		return mad.View.render(this.options.template, this.getController().getViewData());
 	},
 
 	/**
@@ -143,23 +130,6 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 	 */
 	insertInDom: function(html) {
 		this.element.html(html);
-	},
-
-	/**
-	 * Get the view's template uri
-	 * @return {string}
-	 */
-	getTemplateUri: function () {
-		return this.options.templateUri;
-	},
-
-	/**
-	 * Set the view's template uri
-	 * @param {string} templateUri The template uri
-	 * @return {void}
-	 */
-	setTemplateUri: function (templateUri) {
-		this.options.templateUri = templateUri;
 	},
 
 	/**

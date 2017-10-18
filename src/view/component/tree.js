@@ -1,5 +1,17 @@
-import 'mad/view/view';
-import 'mad/helper/html';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import '../view';
+import '../../helper/html';
 
 /**
  * @inherits mad.View
@@ -95,7 +107,7 @@ var Tree = mad.view.component.Tree = mad.View.extend('mad.view.component.Tree', 
         }
 
         // Render the item.
-        itemRender = mad.View.render(control.options.itemTemplateUri, control.getViewData());
+        itemRender = mad.View.render(control.options.itemTemplate, control.getViewData());
         // Insert it in the DOM and position it.
         $item = mad.helper.Html.create($refElement, position, itemRender);
         // Associate to the item to the just created node
@@ -138,7 +150,7 @@ var Tree = mad.view.component.Tree = mad.View.extend('mad.view.component.Tree', 
         control.setViewData('cssClasses', cssClasses);
 
         // Render the item.
-        var itemRender = mad.View.render(control.options.itemTemplateUri, control.getViewData());
+        var itemRender = mad.View.render(control.options.itemTemplate, control.getViewData());
         // Replace the item row with its updated version.
         $item.replaceWith(itemRender);
         $item = this.getItemElement(item);

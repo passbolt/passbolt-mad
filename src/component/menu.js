@@ -1,8 +1,20 @@
-import 'mad/component/component';
-import 'mad/component/tree';
-import 'mad/util/map/map';
-import 'mad/model/action';
-import 'mad/view/template/component/menu/menu_item.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './component';
+import './tree';
+import '../util/map/map';
+import '../model/action';
+import itemTemplate from '../view/template/component/menu/menu_item.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -31,7 +43,7 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
         // View class.
         viewClass: mad.view.component.Tree,
         // The template to use to render each action.
-        itemTemplateUri: 'mad/view/template/component/menu/menu_item.ejs',
+        itemTemplate: itemTemplate,
         // The class which represent the item.
         itemClass: mad.model.Action,
         // Mapping of the items for the view.

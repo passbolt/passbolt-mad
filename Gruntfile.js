@@ -1,3 +1,15 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
 var childProcess = require('child_process'),
     fs = require('fs'),
     path = require('path');
@@ -23,17 +35,9 @@ module.exports = function (grunt) {
 
     var config = {
         path: {
-            apps: 'js/app',
-            lib: 'js/lib',
+            demo: 'demo',
             doc: 'docs'
-        },
-        lib: [
-            'can',
-            'jquery',
-            'steal',
-            'underscore',
-            'xregexp'
-        ]
+        }
     };
 
     // ========================================================================
@@ -43,24 +47,11 @@ module.exports = function (grunt) {
         config: config,
         pkg: grunt.file.readJSON('package.json'),
         clean: {
-            mad_lib: [
-                '<%= config.path.lib %>/*'
-            ],
             doc: [
                 '<%= config.path.doc %>/*'
             ]
         },
         shell: {
-            mad_lib_patch: {
-                options: {
-                    stderr: false
-                },
-                command: [
-                    '(cd ./js/lib/can; patch -p1 < ../../../patches/can-system_preload_template.patch;)',
-                    '(cd ./js/lib/can; patch -p1 < ../../../patches/can-util_string_get_object_set_object.patch;)',
-                    '(cd ./node_modules/documentjs; patch -p1 < ../../patches/documentjs-demo_tag_url_and_sharp.patch;)'
-                ].join('&&')
-            },
             publish: {
                 options: {
                     stdout: true
@@ -74,24 +65,12 @@ module.exports = function (grunt) {
                 ].join('&&')
             }
         },
-        copy: {
-            mad_lib: {
-                files: [{
-                    cwd: 'node_modules',
-                    src: config.lib.map(function (value) {
-                        return value + '/**';
-                    }),
-                    dest: '<%= config.path.lib %>',
-                    expand: true
-                }]
-            }
-        },
         "steal-build": {
             default: {
                 options: {
                     system: {
                         config: "stealconfig.js",
-                        main: getDemoApps(config.path.apps)
+                        main: getDemoApps(config.path.demo)
                     },
                     buildOptions: {
                         minify: false
@@ -110,15 +89,10 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-shell');
 
-    grunt.loadNpmTasks('grunt-contrib-copy');
-
     grunt.loadNpmTasks("steal-tools");
 
     // ========================================================================
     // Register Tasks
-
-    // Deploy libs
-    grunt.registerTask('lib-deploy', ['clean:mad_lib', 'copy:mad_lib', 'shell:mad_lib_patch']);
 
     // Clean & generate the documentation
     grunt.registerTask('mad-doc', ['clean:doc', 'documentjs']);

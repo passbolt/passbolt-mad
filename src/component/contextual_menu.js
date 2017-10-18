@@ -1,5 +1,17 @@
-import 'mad/component/dropdown_menu';
-import 'mad/view/component/contextual_menu';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './dropdown_menu';
+import '../view/component/contextual_menu';
 
 /**
  * @parent Mad.components_api
@@ -24,15 +36,15 @@ import 'mad/view/component/contextual_menu';
  */
 var ContextualMenu = mad.component.ContextualMenu = mad.component.DropdownMenu.extend('mad.component.ContextualMenu', {
 
-    'defaults': {
-        'viewClass': mad.view.component.ContextualMenu,
-        'cssClasses': ['contextual-menu'],
+    defaults: {
+        viewClass: mad.view.component.ContextualMenu,
+        cssClasses: ['contextual-menu'],
         // The element which requests the contextual menu.
-        'source': null,
+        source: null,
         // The coordinates you want to display the contextual menu.
-        'coordinates' : {
-            'x': null,
-            'y': null
+        coordinates : {
+            x: null,
+            y: null
         }
     },
 

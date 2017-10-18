@@ -1,6 +1,18 @@
-import 'mad/component/menu';
-import 'mad/view/component/dropdown_menu';
-import 'mad/view/template/component/dropdown_menu/dropdown_menu.ejs!';
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import './menu';
+import '../view/component/dropdown_menu';
+import itemTemplate from '../view/template/component/dropdown_menu/dropdown_menu.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -25,16 +37,15 @@ import 'mad/view/template/component/dropdown_menu/dropdown_menu.ejs!';
  */
 var DropdownMenu = mad.component.DropdownMenu = mad.component.Menu.extend('mad.component.DropdownMenu', {
 
-    'defaults': {
-        'label': 'Drop Down Menu Component',
-        'viewClass': mad.view.component.DropdownMenu,
-        'templateUri': 'mad/view/template/component/tree.ejs',
-        'itemTemplateUri': 'mad/view/template/component/dropdown_menu/dropdown_menu.ejs',
-        'cssClasses': ['dropdownmenu'],
-        'callbacks': {
-            'item_selected': null,
-            'item_right_selected': null,
-            'item_hovered': null
+    defaults: {
+        label: 'Drop Down Menu Component',
+        viewClass: mad.view.component.DropdownMenu,
+        itemTemplate: itemTemplate,
+        cssClasses: ['dropdownmenu'],
+        callbacks: {
+            item_selected: null,
+            item_right_selected: null,
+            item_hovered: null
         }
     }
 

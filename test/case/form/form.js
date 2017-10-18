@@ -1,10 +1,22 @@
-import "test/bootstrap";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ */
+import "../../bootstrap";
 import "can/util/object/object";
-import Form from "mad/form/form"
-import Tree from "mad/component/tree";
-import Textbox from "mad/form/element/textbox";
-import Checkbox from "mad/form/element/checkbox";
-import "test/helper/model";
+import Form from "../../../src/form/form"
+import Tree from "../../../src/component/tree";
+import Textbox from "../../../src/form/element/textbox";
+import Checkbox from "../../../src/form/element/checkbox";
+import "../../helper/model";
 
 describe("mad.Form", function () {
     // The HTMLElement which will carry the form component.
