@@ -13,10 +13,10 @@
 import $ from "jquery";
 import can from "can/can";
 import 'can/construct/super/super';
-import mad from "../../src/mad";
-import Tree from "../../src/component/tab";
-import FreeComposite from "../../src/component/component";
-import Button from "../../src/component/button";
+import mad from "passbolt-mad/passbolt-mad";
+import Tree from "passbolt-mad/component/tab";
+import FreeComposite from "passbolt-mad/component/component";
+import Button from "passbolt-mad/component/button";
 
 // Instantiate the main tabs controller
 var tabs = new mad.component.Tab('#tab', {

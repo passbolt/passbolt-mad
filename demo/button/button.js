@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Button from "../../src/component/button";
+import mad from "passbolt-mad/passbolt-mad";
+import Button from "passbolt-mad/component/button";
 
 var button = new mad.component.Button($('#button'), {
     value: 'The value of the simple button',

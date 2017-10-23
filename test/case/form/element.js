@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
-import "../../../src/form/element"
+import "passbolt-mad/test/bootstrap";
+import "passbolt-mad/form/element"
 
 describe("mad.form.Element", function () {
 

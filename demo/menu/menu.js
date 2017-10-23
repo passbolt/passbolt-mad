@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Menu from "../../src/component/menu";
-import Action from "../../src/model/action";
+import mad from "passbolt-mad/passbolt-mad";
+import Menu from "passbolt-mad/component/menu";
+import Action from "passbolt-mad/model/action";
 
 var menuSelector = 'ul#menu';
 var menu = new mad.component.Menu(menuSelector);

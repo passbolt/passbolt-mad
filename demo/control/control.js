@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
+import mad from "passbolt-mad/passbolt-mad";
 
 var OpenTheDoor = mad.Control.extend({
     'click': function () {

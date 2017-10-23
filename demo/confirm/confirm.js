@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Confirm from "../../src/component/confirm";
+import mad from "passbolt-mad/passbolt-mad";
+import Confirm from "passbolt-mad/component/confirm";
 
 $(function() {
     $('#show-confirm-dialog').click(function() {

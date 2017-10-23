@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
-import customTemplate from './component_custom_template.ejs!'
+import "passbolt-mad/test/bootstrap";
+import customTemplate from 'passbolt-mad/test/case/component/component_custom_template.ejs!'
 
 describe("mad.Component", function(){
 

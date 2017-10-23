@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../src/mad";
+import "passbolt-mad/passbolt-mad";
 
 var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
     /**

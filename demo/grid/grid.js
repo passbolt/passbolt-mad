@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Grid from "../../src/component/grid";
+import mad from "passbolt-mad/passbolt-mad";
+import Grid from "passbolt-mad/component/grid";
 
 // Set the grid map that will be used to transform the data for the view.
 var map = new mad.Map({

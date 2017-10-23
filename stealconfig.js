@@ -12,13 +12,14 @@
  */
 
 steal.config({
+    name: "passbolt-mad",
+    main: "passbolt-mad",
     map: {
-        "jquery/jquery": "jquery"
+        "jquery/jquery": "jquery",
     },
     paths: {
         "jquery": "node_modules/jquery/dist/jquery.js",
-        "steal-mocha": "node_modules/steal-mocha/steal-mocha.js",
-        "steal-mocha/*": "node_modules/steal-mocha/*.js",
+        "steal": "node_modules/steal/steal.js",
         "mocha": "node_modules/mocha/mocha.js",
         "mocha/mocha.css": "node_modules/mocha/mocha.css",
         "chai": "node_modules/chai/chai.js",
@@ -26,19 +27,20 @@ steal.config({
         "underscore": "node_modules/underscore/underscore.js",
         "xregexp": "node_modules/xregexp/xregexp-all.js",
         "can": "node_modules/can/can.js",
-        "can/*": "node_modules/can/*.js"
+        "can/*": "node_modules/can/*.js",
+        "passbolt-mad/*": "./*.js"
     },
-    "meta": {
+    meta: {
         "mocha": {
             "format": "global",
             "exports": "mocha",
             "deps": [
-                "steal-mocha/add-dom"
+                "test/lib/stealMochaAddDom"
             ]
         }
     },
-    "ext": {
-        "ejs": "src/lib/can/viewEjsSystem"
+    ext: {
+        "ejs": "lib/can/viewEjsSystem"
     }
 });
 System.config({

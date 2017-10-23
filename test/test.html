@@ -1,0 +1,29 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../node_modules/mocha/mocha.css"></link>
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+        // Determine the demo to load regarding the url #extra_parameter
+        var url = location.href;
+
+        // Define which test case load.
+        // By default load all test cases.
+        if(url.indexOf('#') != -1) {
+            testName = url.substring(url.indexOf('#') + 1);
+        }
+        else {
+            testName = 'case/all';
+        }
+
+        // Configure steal to user the given demo script as main
+        steal = { main: 'test/' + testName };
+    </script>
+    <script type="text/javascript" src="../node_modules/steal/steal.js" data-mocha="bdd" config-path="../stealconfig.js"></script>
+</head>
+<body>
+
+<div id="test-html">
+</div>
+
+</body>
+</html>

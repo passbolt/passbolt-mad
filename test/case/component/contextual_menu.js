@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
-import "../../../src/component/contextual_menu";
+import "passbolt-mad/test/bootstrap";
+import "passbolt-mad/component/contextual_menu";
 
 describe("mad.component.ContextualMenu", function () {
 

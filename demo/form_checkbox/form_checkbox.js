@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Checkbox from "../../src/form/element/checkbox";
+import mad from "passbolt-mad/passbolt-mad";
+import Checkbox from "passbolt-mad/form/element/checkbox";
 
 var checkbox = new mad.form.Checkbox($('#checkbox'), {
     availableValues: {

@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import "../../../src/bootstrap";
-import appConfig from "./config.json";
-import "./app";
+import "passbolt-mad/bootstrap";
+import appConfig from "passbolt-mad/demo/bootstrap/config.json";
+import "passbolt-mad/demo/bootstrap/app";
 
 // Load the application config.
 mad.Config.load(appConfig);

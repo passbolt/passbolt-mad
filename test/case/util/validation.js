@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../bootstrap";
-import Validation from "../../../src/util/validation";
+import "passbolt-mad/test/bootstrap";
+import Validation from "passbolt-mad/util/validation";
 
 describe("mad.Validation", function(){
 

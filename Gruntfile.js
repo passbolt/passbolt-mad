@@ -35,8 +35,7 @@ module.exports = function (grunt) {
 
     var config = {
         path: {
-            demo: 'demo',
-            doc: 'docs'
+            demo: 'demo'
         }
     };
 
@@ -46,25 +45,6 @@ module.exports = function (grunt) {
     grunt.initConfig({
         config: config,
         pkg: grunt.file.readJSON('package.json'),
-        clean: {
-            doc: [
-                '<%= config.path.doc %>/*'
-            ]
-        },
-        shell: {
-            publish: {
-                options: {
-                    stdout: true
-                },
-                command: [
-                    'git commit -am \'<%= pkg.version %>\'',
-                    'git tag -a <%= pkg.version %> -m \'<%= pkg.version %>\'',
-                    'git push origin <%= pkg.version %>',
-                    'git push',
-                    'npm publish'
-                ].join('&&')
-            }
-        },
         "steal-build": {
             default: {
                 options: {
@@ -83,8 +63,6 @@ module.exports = function (grunt) {
     // ========================================================================
     // Initialise
 
-    grunt.loadNpmTasks('documentjs');
-
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.loadNpmTasks('grunt-shell');
@@ -93,12 +71,6 @@ module.exports = function (grunt) {
 
     // ========================================================================
     // Register Tasks
-
-    // Clean & generate the documentation
-    grunt.registerTask('mad-doc', ['clean:doc', 'documentjs']);
-
-    // Tag and publish
-    grunt.registerTask('publish', [ 'shell:publish']);
 
     // Build mad & all the demos apps to ensure that everything compile
     grunt.registerTask("build", ["steal-build"]);

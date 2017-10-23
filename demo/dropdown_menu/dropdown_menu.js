@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Menu from "../../src/component/dropdown_menu";
-import Action from "../../src/model/action";
+import mad from "passbolt-mad/passbolt-mad";
+import Menu from "passbolt-mad/component/dropdown_menu";
+import Action from "passbolt-mad/model/action";
 
 // Add a link to filter on all items as first item.
 var menuItems = [];

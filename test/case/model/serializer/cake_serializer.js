@@ -10,10 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
-import "../../../fixture/users";
-import "../../../helper/model";
-import "../../../../src/model/serializer/cake_serializer";
+import "passbolt-mad/test/bootstrap";
+import "passbolt-mad/test/fixture/users";
+import "passbolt-mad/test/helper/model";
+import "passbolt-mad/model/serializer/cake_serializer";
 
 describe("mad.model.serializer.CakeSerializer", function () {
 

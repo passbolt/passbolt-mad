@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import ContextualMenu from "../../src/component/contextual_menu";
-import Action from "../../src/model/action";
+import mad from "passbolt-mad/passbolt-mad";
+import ContextualMenu from "passbolt-mad/component/contextual_menu";
+import Action from "passbolt-mad/model/action";
 
 /**
  * Show Contextual menu.

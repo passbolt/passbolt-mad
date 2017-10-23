@@ -10,13 +10,13 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
+import "passbolt-mad/test/bootstrap";
 import "can/util/object/object";
-import Form from "../../../src/form/form"
-import Tree from "../../../src/component/tree";
-import Textbox from "../../../src/form/element/textbox";
-import Checkbox from "../../../src/form/element/checkbox";
-import "../../helper/model";
+import Form from "passbolt-mad/form/form"
+import Tree from "passbolt-mad/component/tree";
+import Textbox from "passbolt-mad/form/element/textbox";
+import Checkbox from "passbolt-mad/form/element/checkbox";
+import "passbolt-mad/test/helper/model";
 
 describe("mad.Form", function () {
     // The HTMLElement which will carry the form component.

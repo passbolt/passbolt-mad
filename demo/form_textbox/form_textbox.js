@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Textbox from "../../src/form/element/textbox";
+import mad from "passbolt-mad/passbolt-mad";
+import Textbox from "passbolt-mad/form/element/textbox";
 
 var textbox = new mad.form.Textbox($('#textbox'), { });
 textbox.start();

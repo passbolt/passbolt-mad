@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
-import "../../../src/component/menu";
+import "passbolt-mad/test/bootstrap";
+import "passbolt-mad/component/menu";
 
 describe("mad.component.Menu", function () {
 

@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Tree from "../../src/component/tree";
+import mad from "passbolt-mad/passbolt-mad";
+import Tree from "passbolt-mad/component/tree";
 
 var tree = new mad.component.Tree($('#tree'), {
     itemClass: mad.Model

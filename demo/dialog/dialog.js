@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Dialog from "../../src/component/dialog";
+import mad from "passbolt-mad/passbolt-mad";
+import Dialog from "passbolt-mad/component/dialog";
 
 var dialog = new mad.component.Dialog(null, {label: 'Dialog Test'}).start();

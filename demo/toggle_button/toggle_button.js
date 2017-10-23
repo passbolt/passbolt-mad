@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import Button from "../../src/component/toggle_button";
+import mad from "passbolt-mad/passbolt-mad";
+import Button from "passbolt-mad/component/toggle_button";
 
 var button = new mad.component.ToggleButton($('#button'), {});
 button.start();

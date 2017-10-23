@@ -10,10 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "steal-mocha";
+import "passbolt-mad/test/lib/stealMocha.js";
 import chai from "chai";
 import chaijq from "chai-jq";
-import mad from "../src/mad";
+import mad from "passbolt-mad/passbolt-mad";
 
 // Define the global context.
 var glbl = typeof window !== "undefined" ? window : global;

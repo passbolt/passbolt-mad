@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../bootstrap";
-import "../../helper/model";
-import "../../fixture/users";
+import "passbolt-mad/test/bootstrap";
+import "passbolt-mad/test/helper/model";
+import "passbolt-mad/test/fixture/users";
 
 describe("mad.Model", function () {
 

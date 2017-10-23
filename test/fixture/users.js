@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../src/net/ajax";
+import "passbolt-mad/net/ajax";
 import "can/util/fixture/fixture";
 
 var store = [

@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
-import "../../../src/component/dynamic_tree"
+import "passbolt-mad/test/bootstrap";
+import "passbolt-mad/component/dynamic_tree"
 
 describe("mad.component.DynamicTree", function () {
 

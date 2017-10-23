@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import mad from "../../src/mad";
-import "../../src/form/form";
-import "../../src/form/element/textbox";
-import "../../src/form/element/checkbox";
-import "../../test/helper/model";
+import mad from "passbolt-mad/passbolt-mad";
+import "passbolt-mad/form/form";
+import "passbolt-mad/form/element/textbox";
+import "passbolt-mad/form/element/checkbox";
+import "passbolt-mad/test/helper/model";
 
 var form = new mad.Form($('#form'), {
     callbacks: {
