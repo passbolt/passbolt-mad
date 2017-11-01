@@ -54,35 +54,6 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     validationRules: {},
 
     /**
-     * The model attributes validation rules defined on the server.
-     * @protected
-     */
-    serverValidationRules: {},
-
-    /**
-     * Check the server validation rules.
-     * @protected
-     */
-    checkServerRules: false,
-
-    ///**
-    //* Get attribute description of this model
-    //* @param {string} name The name of the attribute
-    //* @return {mad.model.Attribute}
-    //*/
-    //getAttribute: function (name) {
-    //	var returnValue = null,
-    //		modelName = this.attributes[name].substr(0, this.attributes[name].lastIndexOf('.')),
-    //		model = $.String.getObject(modelName);
-    //	returnValue = new mad.model.Attribute({
-    //		'name': name,
-    //		'multiple': this.isMultipleAttribute(name),
-    //		'modelReference': model
-    //	});
-    //	return returnValue;
-    //},
-
-    /**
      * Extract a model attribute value from a reference doted string.
      *
      * By instance for *mad.model.MyModel.MySubModel.myAttribute* the function will go through
@@ -225,58 +196,6 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
         return data;
     },
 
-    ///**
-    // * Override the can model class to manage our custom server response format
-    // * and the CakePHP format. The findAll ajax request is overrided by canJS to
-    // * use this function and map server response to the caller model.
-    // * @return {Array} a [can.Model.List] of instances. Each instance is created with
-    // * [mad.model.Model.model].
-    // */
-    //'models': function (data) {
-    //    // if no data provided, make the models function returning an empty list of the target model
-    //    if(typeof data == 'undefined' || data == null) {
-    //        data = [];
-    //    }
-    //    // if the provided data are formated as ajax server response
-    //    if (mad.net.Response.isResponse(data)) {
-    //        return can.Model.models.call(this, mad.net.Response.getData(data));
-    //    }
-    //    return can.Model.models.call(this, data);
-    //},
-    //
-    ///**
-    // * Override the can model class to manage our custom server response format
-    // * and the cakePHP format. The findOne ajax request is overrided by canJS to
-    // * use this function and map server response to the caller model.
-    // * @return {mad.model.Model}
-    // */
-    //'model': function (data) {
-    //    data = data || {};
-    //
-    //    // if the provided data are formated as ajax server response
-    //    if (mad.net.Response.isResponse(data)) {
-    //        data = mad.net.Response.getData(data);
-    //        // serialize the data from cake to can format
-    //        data = mad.model.serializer.CakeSerializer.from(data, this);
-    //    } else if (data[this.shortName]) {
-    //        // serialize the data from cake to can format
-    //        data = mad.model.serializer.CakeSerializer.from(data, this);
-    //    }
-    //
-    //    // Apply the can model func on the data.
-    //    var instance = can.Model.model.call(this, data);
-    //
-    //    // If we want to force the caching.
-    //    if (this.forceStore) {
-    //        var i = mad.model.List.indexOf(this.madStore, instance.id);
-    //        if (i == -1) {
-    //            this.madStore.push(instance);
-    //        }
-    //    }
-    //
-    //    return instance;
-    //},
-
     /**
      * Get the model validation rules
      *
@@ -285,44 +204,14 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
      * @return {array}
      */
     getValidationRules: function (validationCase) {
-        var rules = {},
-            self = this;
-
         // Validation case.
+        // @todo not yet supported
         if (typeof validationCase == 'undefined'
             || validationCase == null) {
             validationCase = 'default';
         }
 
-        // The model contains its own validation rules.
-        if (!_.isEmpty(this.validationRules)) {
-            rules = this.validationRules;
-        }
-        // Else check if some server rules have been defined.
-        else if (this.checkServerRules) {
-            // If no rules have been defined for the current model.
-            if (typeof this.serverValidationRules[this.shortName] == 'undefined') {
-                this.serverValidationRules[this.shortName] = {};
-            }
-
-            // If no rules have been defined for the given case.
-            if (typeof this.serverValidationRules[this.shortName][validationCase] == 'undefined') {
-                // Build the url.
-                var url = APP_URL + 'validation/' + this.shortName + '/' + validationCase + '.json';
-                // Get the rules from the server.
-                self.serverValidationRules[self.shortName][validationCase] = {};
-                mad.net.Ajax.request({
-                    async: false,
-                    type: 'GET',
-                    url: url
-                }).then(function (data) {
-                    self.serverValidationRules[self.shortName][validationCase] = data;
-                });
-            }
-            rules = this.serverValidationRules[this.shortName][validationCase];
-        }
-
-        return rules;
+        return this.validationRules || {};
     },
 
     /**
@@ -336,88 +225,16 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
         var rules = this.getValidationRules(validationCase);
 
         // The rule is not define as "fieldName" => "ruleName"
-        if (!$.isArray(rules[attrName])) {
-            // One rule defined.
-            if (typeof rules[attrName]['rule'] != 'undefined') {
-                var fieldRequiredForCase = typeof(rules[attrName]['required']) != 'undefined'
-                    && (typeof(rules[attrName]['required']) === true
-                    || rules[attrName]['required'] === validationCase);
-                var fieldAllowEmpty = typeof(rules[attrName]['allowEmpty']) != 'undefined' ?
-                    rules[attrName]['allowEmpty'] : true;
-                // The case is specifically given as per the cakePHP style.
-                if (fieldRequiredForCase === true || fieldAllowEmpty === false) {
-                    required = true;
-                }
-            }
-            // Multiple rules defined.
-            else {
-                for (var ruleLabel in rules[attrName]) {
-                    var fieldRequiredForCase = typeof(rules[attrName][ruleLabel]['required']) != 'undefined'
-                        && (typeof(rules[attrName][ruleLabel]['required']) === true
-                        || rules[attrName][ruleLabel]['required'] === validationCase);
-                    var fieldAllowEmpty = typeof(rules[attrName][ruleLabel]['allowEmpty']) != 'undefined' ?
-                        rules[attrName][ruleLabel]['allowEmpty'] : true;
-                    // The case is specifically given as per the cakePHP style.
-                    if (fieldRequiredForCase === true || fieldAllowEmpty === false) {
-                        required = true;
-                    }
-                }
-            }
+        if ($.isArray(rules[attrName])) {
+            required = rules[attrName].reduce(function(carry, item) {
+                if (item.rule && item.rule == 'required') carry = true;
+                return carry;
+            }, false);
         }
+
         return required;
     },
 
-    ///**
-    // * Transform a nested model instance in flat list
-    // * @param {mad.model.Model} instance The target model instance to transform
-    // * @param {string} attrName The name of the attribute which store the nested data
-    // * @param {string} key (optional) If the key is defined the result will be filled with
-    // * the properties named with the key, else the result will be filled with the instance
-    // * @return {mad.model.Model.List}
-    // */
-    //nestedToList: function (instance, attrName, key, _loop) {
-    //	var returnValue = [];
-    //	key = (typeof key == 'undefined') ? null : key;
-    //
-    //	if (key != null){
-    //		returnValue.push(instance.attr(key));
-    //	} else {
-    //		returnValue.push(instance);
-    //	}
-    //
-    //	can.each(instance[attrName], function (subInstance, i) {
-    //		$.merge(returnValue, mad.model.Model.nestedToList(subInstance, attrName, key, true));
-    //	});
-    //
-    //	if (!_loop) {
-    //		var Class = instance.getClass();
-    //		returnValue = new Class.List(returnValue);
-    //	}
-    //	return returnValue;
-    //},
-    //
-    ///**
-    // * Transform a nested list of model instances in flat list
-    // * @param {mad.model.Model} instance The target model instances to transform
-    // * @param {string} attrName The name of the attribute which store the nested data
-    // * @return {mad.model.Model.List}
-    // */
-    //nestedListToList: function (instances, attrName) {
-    //	var returnValue = null,
-    //		data = [];
-    //	can.each(instances, function (instance, i) {
-    //		$.merge(data, mad.model.Model.nestedToList(instance, attrName, true));
-    //	});
-    //
-    //	// if the input is not empty, transform the output in list
-    //	if (instances.length) {
-    //		var Class = instances[0].getClass();
-    //		returnValue = new Class.List(data);
-    //	}
-    //
-    //	return returnValue;
-    //},
-    //
     /**
     * Get all model instances in an array which match the search parameters.
      *
@@ -471,25 +288,6 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     	}
     	return returnValue;
     },
-
-    ///**
-    // * Override the serialize feature used when serializing model (server communication,
-    // * backup) to support specific attributes format such as date.
-    // */
-    //serialize : {
-    //	/**
-    //	 * Support of the specific date format
-    //	 * @param {mixed} val The date to serialize
-    //	 * @param {string} type The data type (here date)
-    //	 * @return {string}
-    //	 */
-    //	date : function( val, type ){
-    //		if (typeof val == 'number' || typeof val == "string") {
-    //			val = new Date(val);
-    //		}
-    //		return val.getYear() + "-" + (val.getMonth() + 1) + "-" + val.getDate() + " " + val.getHours() + ":" + val.getMinutes() + ":" + val.getMilliseconds();
-    //	}
-    //},
 
     /**
      * Validate an attribute value with a model attribute rule.
