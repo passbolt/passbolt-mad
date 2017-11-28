@@ -31,7 +31,6 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
      * @param {array} options Optional parameters
      */
     validate: function (rule, value, values, options) {
-
         if (typeof rule == 'object') {
             options = rule;
 
@@ -111,6 +110,7 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
      * @param {array} options Optional parameters
      */
     notEmpty: function (value, values, options) {
+        options = options || {};
         if (typeof value == 'undefined'
             || value == null
             || ($.isArray(value) && !value.length)
@@ -141,7 +141,7 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
         var xregexp = new XRegExp(regexp);
 
         if (!xregexp.test(value)) {
-            return __('Not valid uuid');
+            return options.message || __('Not valid uuid');
         }
         return true;
     },
@@ -178,6 +178,53 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
     },
 
     /**
+     * Check that the input value is a utf8 string.
+     * This method will reject all non-string values.
+     *
+     * @param {mixed} value The value to validate
+     * @param {array} values The contextual values
+     * @param {array} options Optional parameters
+     */
+    utf8Extended: function (value, values, options) {
+        options = options || {};
+        var message = options.message || __('Only utf8 characters allowed.');
+
+        if (typeof value !== 'string') {
+            return message;
+        }
+
+        return true;
+    },
+
+    /**
+     * Check that the input value is a utf8 string.
+     * This method will reject all non-string values.
+     *
+     * Disallow bytes higher within the basic multilingual plane (Code up to U+FFFF).
+     * (emoticons + $ € £ ^ ...)
+     * MySQL's older utf8 encoding type does not allow characters above the basic multilingual plane.
+     *
+     * @param {mixed} value The value to validate
+     * @param {array} values The contextual values
+     * @param {array} options Optional parameters
+     */
+    utf8: function (value, values, options) {
+        options = options || {};
+        var message = options.message || __('Only utf8 characters allowed (except emoticons).');
+
+        if (typeof value !== 'string') {
+            return message;
+        }
+
+        var xregexp = XRegExp('\\pS', 'A');
+        if (xregexp.test(value)) {
+            return message;
+        }
+
+        return true;
+    },
+
+    /**
      * @param {mixed} value The value to validate
      * @param {array} values The contextual values
      * @param {array} options Optional parameters
@@ -195,10 +242,11 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
      * @param {array} values The contextual values
      * @param {array} options Optional parameters
      */
-    required: function (value) {
+    required: function (value, values, options) {
+        options = options || {};
         var xregexp = XRegExp("^[\s\n\t ]*$");
         if (typeof value == 'undefined' || value === null || xregexp.test(value)) {
-            return __('This information is required');
+            return options.message || __('This information is required');
         }
         return true;
     },
@@ -265,13 +313,15 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
      * @param {array} values The contextual values
      * @param {array} options Optional parameters
      */
-    email: function (value) {
+    email: function (value, values, options) {
+        options = options || {};
+
         // Regular expression for hostname.
         var hostnameRegexp = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
         var emailRegexp = "^[\\p{L}0-9!#$%&'*+\/=?^_`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_`{|}~-]+)*@" + hostnameRegexp + '$';
         var xregexp = XRegExp(emailRegexp);
         if (!xregexp.test(value)) {
-            return __('Only email format is allowed');
+            return options.message || __('Only email format is allowed');
         }
         return true;
     },

@@ -378,8 +378,8 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
     showErrors: function (errors) {
         for (var i in this.elements) {
             var element = this.elements[i];
-            //console.log(element);
             var eltModelRef = element.getModelReference();
+
             if (eltModelRef) {
                 var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
                 // model full name
@@ -393,7 +393,10 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
 
                 for (var j in errors) {
                     if (errors[modelName] != undefined && errors[modelName][attrName] != undefined) {
-                        var error = errors[modelName][attrName][0];
+                        var error = '';
+                        for (var errorRule in errors[modelName][attrName]) {
+                            error = errors[modelName][attrName][errorRule] + ' ';
+                        }
 
                         var eltStates = ['error'];
                         if (element.state.is('hidden')) {

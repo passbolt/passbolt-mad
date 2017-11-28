@@ -18,7 +18,7 @@
     "jquery": "~2.1.4",
     "steal": "~1.5.15",
     "underscore": "~1.8.3",
-    "xregexp": "~3.0.0"
+    "xregexp": "~3.2.0"
   },
   "devDependencies": {
     "chai": "^3.0.0",

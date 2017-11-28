@@ -215,24 +215,26 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     },
 
     /**
-     * Is the field required
+     * Get an attribute rule.
      * @param {string} attrName The name of the attribute to check for
-     * @param {string} validationCase The validation case to check if the attribute is required
+     * @param {string} ruleName The rule to search
+     * @param {string} validationCase The validation case
      * @return {bool}
      */
-    isRequired: function (attrName, validationCase) {
-        var required = false;
+    getAttributeRule: function (attrName, ruleName, validationCase) {
         var rules = this.getValidationRules(validationCase);
+        var rule = null;
 
         // The rule is not define as "fieldName" => "ruleName"
         if ($.isArray(rules[attrName])) {
-            required = rules[attrName].reduce(function(carry, item) {
-                if (item.rule && item.rule == 'required') carry = true;
-                return carry;
-            }, false);
+            for (var i in rules[attrName]) {
+                if (rules[attrName][i].rule && rules[attrName][i].rule == 'required') {
+                    rule = rules[attrName][i];
+                }
+            }
         }
 
-        return required;
+        return rule;
     },
 
     /**
@@ -308,25 +310,28 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
 
 		var rules = this.getValidationRules(validationCase);
 		if (typeof rules[attrName] != 'undefined') {
-			// Is the field required?
-			var required = this.isRequired(attrName, validationCase);
-			// Is the field passing the required validation.
-			var requiredValidation = mad.Validation.validate('required', value);
+			// Retrieve the required rule of the attribute if any.
+			var requiredRule = this.getAttributeRule(attrName, 'required', validationCase);
 
-			// If the field is required & doesn't pass the required validation return an error.
-			if (required && requiredValidation !== true) {
-				returnValue.push(requiredValidation);
-				return returnValue;
-			}
-			// If the filed is not required and doesn't pass the required the validation
-			// the system won't process the other constraints.
-			else if (!required && requiredValidation !== true) {
-				return returnValue;
-			}
+            // If the field is required & doesn't pass the required validation return an error.
+            if (requiredRule != null) {
+                var requiredResult = mad.Validation.validate(requiredRule, value);
+                if (requiredResult !== true) {
+                    returnValue.push(requiredResult);
+                    return returnValue;
+                }
+            }
+            // If the filed is not required and doesn't pass the required the validation
+            // the system won't process the other constraints.
+            else {
+                var requiredResult = mad.Validation.validate('required', value);
+                if (requiredResult !== true) {
+                    return returnValue;
+                }
+            }
 
 			// Otherwise execute all the constraints.
 			var attributeRules = rules[attrName];
-			// if ($.isArray(attributeRules)) {
 			for (var i in attributeRules) {
 				var validateResult = mad.Validation.validate(attributeRules[i], value, values);
 				if (validateResult !== true) {
