@@ -137,6 +137,14 @@ var Response = mad.Model.extend('mad.net.Response', /** @static */ {
 }, /** @prototype */ {
 
     /**
+     * Get the reponse code
+     * @return {string}
+     */
+    getCode: function () {
+        return this.attr('header').code;
+    },
+
+    /**
      * Get the response' status
      * @return {string}
      */
