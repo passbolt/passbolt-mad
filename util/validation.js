@@ -216,8 +216,8 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
             return message;
         }
 
-        var xregexp = XRegExp('\\pS', 'A');
-        if (xregexp.test(value)) {
+        // Check that there is no character from the extended range \u10000 to \u10FFFF
+        if (/[\u{10000}-\u{10FFFF}]/u.test(value)) {
             return message;
         }
 
