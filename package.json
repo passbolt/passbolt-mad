@@ -15,7 +15,7 @@
   "main": "passbolt-mad",
   "dependencies": {
     "can": "~2.3.33",
-    "jquery": "~2.1.4",
+    "jquery": "~2.2.4",
     "steal": "~1.6.2",
     "underscore": "~1.8.3",
     "xregexp": "~3.2.0"
