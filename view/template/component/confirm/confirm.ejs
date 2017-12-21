@@ -17,7 +17,7 @@
             <% } %>
             <p>
             <% if (typeof content == 'function') { %>
-                <%= _mad.View.render(content, this) %>
+                <%== _mad.View.render(content, this) %>
             <% } else { %>
                 <%= content %>
             <% } %>
