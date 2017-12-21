@@ -15,7 +15,15 @@
                 </strong>
             </p>
             <% } %>
-            <p><%= content %></p>
+            <p>
+            <% // A template is given as content
+            if (typeof content == 'function') { %>
+                <%= _mad.View.render(content, this) %>
+            <% } else {
+                // Otherwise display the content as it %>
+                <%= content %>
+            <% } %>
+            </p>
         </div>
     </div>
     <div class="submit-wrapper clearfix">

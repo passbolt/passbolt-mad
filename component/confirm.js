@@ -30,7 +30,8 @@ var Confirm = mad.component.Confirm = mad.component.Dialog.extend('mad.component
         },
         content: '',
         closeAfterAction: true,
-        action: null
+        action: null,
+        viewData: {}
     }
 
 
@@ -43,9 +44,13 @@ var Confirm = mad.component.Confirm = mad.component.Dialog.extend('mad.component
      */
     init: function(el, options) {
         this._super(el, options);
+        var self = this;
         this.setViewData('content', this.options.content);
         this.setViewData('subtitle', this.options.subtitle);
         this.setViewData('submitButton', this.options.submitButton);
+        for (var i in this.options.viewData) {
+            self.setViewData(i, this.options.viewData[i]);
+        }
     },
 
     /**

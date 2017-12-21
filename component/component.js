@@ -337,6 +337,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		this.setViewData('icon', this.options.icon);
 		this.setViewData('label', this.options.label);
 		this.setViewData('view', this.view);
+		this.setViewData('_mad', mad);
 	},
 
 	/**
