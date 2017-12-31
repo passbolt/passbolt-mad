@@ -10,10 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
-
-// Initialize the form namespaces.
-mad.form = mad.form || {};
+import Component from 'passbolt-mad/component/component';
 
 /**
  * @parent Mad.form_api
@@ -23,7 +20,7 @@ mad.form = mad.form || {};
  * The Form Feedback component as for aim to manage forms element validation feedback.
  * @todo TBD
  */
-var Feedback = mad.form.Feedback = mad.Component.extend('mad.form.Feedback', /* @static */ {
+var Feedback = Component.extend('mad.form.Feedback', /* @static */ {
 
     defaults: {
         // Override the label option.
@@ -83,3 +80,5 @@ var Feedback = mad.form.Feedback = mad.Component.extend('mad.form.Feedback', /* 
     }
 
 });
+
+export default Feedback;

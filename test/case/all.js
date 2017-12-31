@@ -42,6 +42,7 @@ import "passbolt-mad/test/case/net/ajax";
 
 import "passbolt-mad/test/case/model/model";
 import "passbolt-mad/test/case/model/state";
+import "passbolt-mad/test/case/model/attribute";
 import "passbolt-mad/test/case/model/serializer/cake_serializer";
 
 import "passbolt-mad/test/case/util/i18n";

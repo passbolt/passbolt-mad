@@ -18,7 +18,7 @@
  * Common error handler.
  * Use the console as logger.
  */
-var ErrorHandler = mad.error.ErrorHandler = can.Construct.extend('mad.error.ErrorHandler', /** @static */ {
+var ErrorHandler = can.Construct.extend('mad.error.ErrorHandler', /** @static */ {
 
     /**
      * Log the error or exception

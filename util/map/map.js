@@ -19,7 +19,7 @@ import 'passbolt-mad/util/util';
  * The aim of the object Map is to help developers to transform an object into another, by mapping
  * its fields following another structure.
  */
-var Map = mad.Map = can.Construct.extend('mad.Map', /** @static */ {
+var MadMap = can.Construct.extend('mad.Map', /** @static */ {
 
 	/**
 	 * @deprecated {0.0.2} Please call the function mapObject directly on the map object.
@@ -163,4 +163,4 @@ var Map = mad.Map = can.Construct.extend('mad.Map', /** @static */ {
 
 });
 
-export default Map;
+export default MadMap;

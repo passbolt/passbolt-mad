@@ -10,9 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/composite';
-import 'passbolt-mad/component/menu';
-import 'passbolt-mad/view/component/tab';
+import Action from 'passbolt-mad/model/action';
+import ComponentHelper from 'passbolt-mad/helper/component';
+import CompositeComponent from 'passbolt-mad/component/composite';
+import MenuComponent from 'passbolt-mad/component/menu';
+import TabView from 'passbolt-mad/view/component/tab';
 import template from 'passbolt-mad/view/template/component/tab/tab.ejs!';
 
 /**
@@ -32,11 +34,11 @@ import template from 'passbolt-mad/view/template/component/tab/tab.ejs!';
  *   * autoMenu : should the menu be generated automatically ?
  * @return {mad.component.Tab}
  */
-var Tab = mad.component.Tab = mad.component.Composite.extend('mad.component.Tab',  /** @static */ {
+var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
 
     defaults: {
         label: 'Tab Controller',
-        viewClass: mad.view.component.Tab,
+        viewClass: TabView,
         template: template,
         // Generate a menu automatically.
         autoMenu: true
@@ -72,7 +74,7 @@ var Tab = mad.component.Tab = mad.component.Composite.extend('mad.component.Tab'
     afterStart: function() {
         // Instantiate the menu which will rule the tabs container
         if (this.options.autoMenu) {
-            this.options.menu = new mad.component.Menu($('.js_tabs_nav', this.element));
+            this.options.menu = new MenuComponent($('.js_tabs_nav', this.element));
             this.options.menu.start();
         }
         this.on();
@@ -139,7 +141,7 @@ var Tab = mad.component.Tab = mad.component.Composite.extend('mad.component.Tab'
 
         // insert the associated menu entry
         if (this.options.autoMenu) {
-            var menuEntry = new mad.model.Action({
+            var menuEntry = new Action({
                 'id': 'js_tab_nav_' + options.id,
                 'label': options.label
             });
@@ -153,7 +155,7 @@ var Tab = mad.component.Tab = mad.component.Composite.extend('mad.component.Tab'
             options.cssClasses = defaultTabCss;
         }
 
-        var component = mad.helper.Component.create(
+        var component = ComponentHelper.create(
             $('.js_tabs_content', this.element),
             'last',
             Class,

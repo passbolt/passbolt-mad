@@ -10,8 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/button';
-import 'passbolt-mad/view/template/component/button/button.ejs!';
+import ButtonComponent from 'passbolt-mad/component/button';
 
 /**
  * @parent Mad.components_api
@@ -32,10 +31,7 @@ import 'passbolt-mad/view/template/component/button/button.ejs!';
  * this.options and merged with defaults static variable
  * @return {mad.component.ToggleButton}
  */
-var ToggleButton = mad.component.ToggleButton = mad.component.Button.extend('mad.component.ToggleButton', /** @static */ {
-
-    'defaults': {
-    }
+var ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @static */ {
 
 }, /** @prototype */ {
 
@@ -77,3 +73,5 @@ var ToggleButton = mad.component.ToggleButton = mad.component.Button.extend('mad
         }
     }
 });
+
+export default ToggleButton;

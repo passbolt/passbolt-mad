@@ -10,10 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/button';
-import 'passbolt-mad/component/menu';
-import 'passbolt-mad/view/component/button_dropdown';
-import 'passbolt-mad/view/template/component/button_dropdown/button_dropdown.ejs!';
+import ButtonComponent from 'passbolt-mad/component/button';
+import MenuComponent from 'passbolt-mad/component/menu';
+import ButtonDropdownView from 'passbolt-mad/view/component/button_dropdown';
+
+import template from 'passbolt-mad/view/template/component/button_dropdown/button_dropdown.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -36,23 +37,25 @@ import 'passbolt-mad/view/template/component/button_dropdown/button_dropdown.ejs
  *   * contentElement : the element where the subitems will be displayed.
  * @return {mad.component.ButtonDropdown}
  */
-var ButtonDropdown = mad.component.ButtonDropdown = mad.component.Button.extend('mad.component.ButtonDropdown', {
+var ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
 
     defaults: {
         label: 'Button Dropdown Component',
-        viewClass: mad.view.component.ButtonDropdown,
+        viewClass: ButtonDropdownView,
         // The menu items.
         items: null,
         // Customize the element which will carry the dropdown content
         contentElement: null,
         // Close menu on item click.
-        closeOnItemClick: true
+        closeOnItemClick: true,
+        // Template
+        template: template
     }
 
 }, /** @prototype */ {
 
     /**
-     * After start. Populate the dropdown menu.
+     * @inheritdoc
      */
     afterStart: function() {
         var $dropdownElement = null;
@@ -67,9 +70,10 @@ var ButtonDropdown = mad.component.ButtonDropdown = mad.component.Button.extend(
         }
 
         // Create and render dropdown content.
-        this.options.menu = new mad.component.Menu($dropdownElement);
-        this.options.menu.start();
-        this.options.menu.load(this.options.items);
+        var menu = new MenuComponent($dropdownElement);
+        menu.start();
+        menu.load(this.options.items);
+        this.options.menu = menu;
         this.on();
     },
 

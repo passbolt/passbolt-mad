@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import 'can/construct/construct';
-import 'passbolt-mad/model/model';
+import Model from 'passbolt-mad/model/model';
 
 mad.model = mad.model || {};
 
@@ -19,7 +19,7 @@ mad.model = mad.model || {};
  * @inherits jQuery.Class
  * @parent mad.model
  */
-var List = mad.model.List = can.Construct.extend('mad.model.List', /** @static */ {
+var List = can.Construct.extend('mad.model.List', /** @static */ {
 
     /**
      * IndexOf a reccord
@@ -29,7 +29,7 @@ var List = mad.model.List = can.Construct.extend('mad.model.List', /** @static *
      */
     indexOf: function (list, item) {
         var returnValue = -1;
-        var itemId = item instanceof mad.Model ? item.id : item;
+        var itemId = item instanceof Model ? item.id : item;
         can.each(list, function (raw, i) {
             if (raw.id == itemId) {
                 returnValue = i;
@@ -46,7 +46,7 @@ var List = mad.model.List = can.Construct.extend('mad.model.List', /** @static *
      * @return {array}
      */
     remove: function (list, item) {
-        var i = mad.model.List.indexOf(list, item);
+        var i = List.indexOf(list, item);
         if (i!=-1) {
             list.splice(i, 1);
             return true;

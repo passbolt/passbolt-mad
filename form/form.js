@@ -10,13 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
-import 'passbolt-mad/form/element';
-import 'passbolt-mad/form/feedback';
-import 'passbolt-mad/view/form/form';
-
-// Initialize the form namespaces.
-mad.form = mad.form || {};
+import Attribute from 'passbolt-mad/model/attribute';
+import Component from 'passbolt-mad/component/component';
+import FormElement from 'passbolt-mad/form/element';
+import FormFeedback from 'passbolt-mad/form/feedback';
+import FormView from 'passbolt-mad/view/form/form';
+import Model from 'passbolt-mad/model/model';
 
 /**
  * @parent Mad.form_api
@@ -33,7 +32,7 @@ mad.form = mad.form || {};
  * - The form will return its data formatted following the associated model reference. See
  * the function [mad.Form::getData() getData()] function.
  */
-var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
+var Form = Component.extend('mad.Form', /* @static */ {
 
     defaults: {
         // Override the label option.
@@ -43,7 +42,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
         // Override the tag option.
         tag: 'form',
         // Override the viewClass option.
-        viewClass: mad.view.Form,
+        viewClass: FormView,
 
         // The callbacks the component offers to the dev to bind their code.
         callbacks: {
@@ -138,10 +137,10 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
             // If a model reference has been associated to the form element
             if (eltModelRef != null) {
                 // Data has to be a model instance
-                if (!(data instanceof mad.Model)) {
+                if (!(data instanceof Model)) {
                     throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'data');
                 }
-                value = mad.Model.getModelAttributeValue(eltModelRef, data);
+                value = Attribute.getModelAttributeValue(eltModelRef, data);
             } else {
                 value = data[eltId];
             }
@@ -187,7 +186,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
             // Check if an element of the form is already associated to this model.
             var modelPresentInForm = false,
             // The chain of models and models attributes representing this reference.
-                modelAttr = mad.Model.getModelAttributes(modelReference),
+                modelAttr = Attribute.getModelAttributes(modelReference),
             // The model name.
                 modelName = modelAttr[modelAttr.length - 2].name;
 
@@ -197,7 +196,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
                 var eltModelRef = this.elements[eltId].getModelReference();
 
                 if (eltModelRef != null) {
-                    var eltModelAttr = mad.Model.getModelAttributes(eltModelRef),
+                    var eltModelAttr = Attribute.getModelAttributes(eltModelRef),
                         eltModelName = modelAttr[eltModelAttr.length - 2].name;
 
                     // If we don't find in the form elements the same model as in the new element, then we note it.
@@ -241,7 +240,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
      */
     removeElement: function (element) {
         // The given element has to be inherited from the class mad.form.FormElement and not be null.
-        if (!(element instanceof mad.form.Element) || element == null) {
+        if (!(element instanceof FormElement) || element == null) {
             throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'element');
         }
         // Check if the element has been added to the form.
@@ -327,7 +326,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
             // A model reference is associated to the current form element.
             else {
                 // Get the form element model reference details.
-                var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
+                var fieldAttrs = Attribute.getModelAttributes(eltModelRef),
                 // The pointer where to store the form element value in the return value variable.
                     pointer = returnValue;
 
@@ -381,7 +380,7 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
             var eltModelRef = element.getModelReference();
 
             if (eltModelRef) {
-                var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
+                var fieldAttrs = Attribute.getModelAttributes(eltModelRef),
                 // model full name
                     modelFullName = fieldAttrs[fieldAttrs.length - 2].name,
                 // the attribute name
@@ -462,11 +461,11 @@ var Form = mad.Form = mad.Component.extend('mad.Form', /* @static */ {
 			// If the element is referenced by a model reference.
 			else if (eltModelRef != null) {
 				// Get the models & attribtues that define this model reference.
-				var fieldAttrs = mad.Model.getModelAttributes(eltModelRef),
+				var fieldAttrs = Attribute.getModelAttributes(eltModelRef),
 				// The model that own the attribute that represents the form element.
 					model = fieldAttrs[fieldAttrs.length - 2].getModelReference(),
 				// The attribute name
-					attrName = _.last(fieldAttrs).getName();
+					attrName = fieldAttrs[fieldAttrs.length - 1].getName();
 
 				// Validate the attribute with the model attribute rule.
 				if (model.validateAttribute) {

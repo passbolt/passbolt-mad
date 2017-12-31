@@ -10,9 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/util/map/map';
-import 'passbolt-mad/component/tree';
-import 'passbolt-mad/view/component/dynamic_tree';
+import TreeComponent from 'passbolt-mad/component/tree';
+import DynamicTreeView from 'passbolt-mad/view/component/dynamic_tree';
 import itemTemplate from 'passbolt-mad/view/template/component/dynamic_tree/dynamic_tree.ejs!';
 
 /**
@@ -34,11 +33,11 @@ import itemTemplate from 'passbolt-mad/view/template/component/dynamic_tree/dyna
  * this.options and merged with defaults static variable
  * @return {mad.component.DynamicTree}
  */
-var DynamicTree = mad.component.DynamicTree = mad.component.Tree.extend('mad.component.DynamicTree', {
+var DynamicTree = TreeComponent.extend('mad.component.DynamicTree', {
 
     defaults: {
         label: 'Dynamic Tree Component',
-        viewClass: mad.view.component.DynamicTree,
+        viewClass: DynamicTreeView,
         itemTemplate: itemTemplate,
         map: null,
         callbacks: {

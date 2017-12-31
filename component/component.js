@@ -10,14 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/control/control';
-import 'passbolt-mad/view/view';
-import 'passbolt-mad/model/state';
-import 'passbolt-mad/view/template/component/default.ejs!';
-
-// Initialize the component namespaces.
-mad.component = mad.component || {};
-mad.view.component = mad.view.component || {};
+import ArrayUtil from 'passbolt-mad/util/array/array';
+import Control from 'passbolt-mad/control/control';
+import State from 'passbolt-mad/model/state';
+import View from 'passbolt-mad/view/view';
 
 /**
  * @parent Mad.core_api
@@ -26,7 +22,7 @@ mad.view.component = mad.view.component || {};
  * The component controller is our representation of a component.
  * @todo complete the documentation
  */
-var Component = mad.Component = mad.Control.extend('mad.Component', /* @static */{
+var Component = Control.extend('mad.Component', /* @static */{
 
 	defaults: {
 		// The component's icon.
@@ -43,7 +39,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		// Override the default template to use any other existing one.
 		template: null,
 		// The component's view controller used to drive the component's view.
-		viewClass: mad.View,
+		viewClass: View,
 		// The data used by the view
 		viewData: {},
 		// Should the component notify others while it's loading.
@@ -99,17 +95,16 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	 * mad.View Control as View's controller.
 	 */
 	init: function (el, options) {
-		var self = this;
 		this._super(el, options);
 
 		// If the view class parameter has been overridden. Check that it inherits mad.View
-		if (!this.options.viewClass instanceof mad.View) {
+		if (!this.options.viewClass instanceof View) {
 			throw new mad.error.WrongParameter('options.viewClass', 'mad.View');
 		}
 
 		// Initialize the associated state instance. By default use the state variable defined in
 		// the component's options.
-		this.state = new mad.model.State();
+		this.state = new State();
 
 		// Add the optional css classes to the HTMLElement.
 		for (var i in options.cssClasses) {
@@ -120,7 +115,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	},
 
 	/**
-	 * Override parent::destroy().
+	 * @inheritdoc
 	 */
 	destroy: function () {
 		// If the component is destroyed whereas he is loading.
@@ -184,7 +179,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 			// List of previous states.
 			current = this.state.current.attr(),
 			// List of changes the component is staying on.
-			staying = mad.array.intersect(previous, current);
+			staying = ArrayUtil.intersect(previous, current);
 
 		// Check which states the component is leaving.
 		leaving = previous.filter(function(item) {
@@ -277,14 +272,18 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 			console.warn('Try to refresh a component which doesn\'t have a DOM element.')
 			return;
 		}
+
 		this.element.empty();
+
 		if (this.options.template && this.options.template != null) {
 			this.beforeRender();
 			var render = this.view.render();
 			render = this.afterRender(render);
 			this.view.insertInDom(render);
 		}
+
 		this.afterStart();
+
 		// Switch the element in its default state
 		this.setState(this.options.state);
 
@@ -292,7 +291,7 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 	},
 
 	/**
-	 * Override parent::start().
+	 * @inheritdoc
 	 */
 	start: function () {
 		// Shift the component into its loading state.
@@ -337,7 +336,6 @@ var Component = mad.Component = mad.Control.extend('mad.Component', /* @static *
 		this.setViewData('icon', this.options.icon);
 		this.setViewData('label', this.options.label);
 		this.setViewData('view', this.view);
-		this.setViewData('_mad', mad);
 	},
 
 	/**

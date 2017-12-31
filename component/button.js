@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
+import Component from 'passbolt-mad/component/component';
 
 /**
  * @parent Mad.components_api
@@ -35,7 +35,7 @@ import 'passbolt-mad/component/component';
  *   * tag : html tag to use.
  * @return {mad.component.Button}
  */
-var Button = mad.component.Button = mad.Component.extend('mad.component.Button', {
+var Button = Component.extend('mad.component.Button', {
 
   defaults: {
     label: 'Button Component',
@@ -56,11 +56,9 @@ var Button = mad.component.Button = mad.Component.extend('mad.component.Button',
    */
   value: null,
 
-    /**
-     * Constructor like.
-     * @param el
-     * @param options
-     */
+  /**
+   * @inheritdoc
+   */
   init: function (el, options) {
     this._super(el, options);
     this.value = options.value;

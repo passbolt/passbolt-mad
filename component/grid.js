@@ -10,12 +10,14 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
-import 'passbolt-mad/model/grid_column';
-import 'passbolt-mad/view/component/grid';
+import Component from 'passbolt-mad/component/component';
+import GridColumn from 'passbolt-mad/model/grid_column';
+import GridView from 'passbolt-mad/view/component/grid';
+import View from 'passbolt-mad/view/view';
+
+import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.ejs!';
 import template from 'passbolt-mad/view/template/component/grid/grid.ejs!';
 import itemTemplate from 'passbolt-mad/view/template/component/grid/gridItem.ejs!';
-import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.ejs!';
 
 /**
  * @parent Mad.components_api
@@ -25,7 +27,7 @@ import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/grid
  * The Grid Component as for aim to display a data grid.
  * @todo TBD
  */
-var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
+var Grid = Component.extend('mad.component.Grid', {
 
     defaults: {
         // Override the label option.
@@ -41,13 +43,13 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
         // The component item template.
         itemTemplate: itemTemplate,
         // Override the viewClass option.
-        viewClass: mad.view.component.Grid,
+        viewClass: GridView,
         // Prefix the id of each row.
         prefixItemId: '',
         // The Model Class that defines the items displayed by the grud.
         itemClass: null,
         // The Map Class used to defined the column model.
-        columnModelClass: mad.model.GridColumn,
+        columnModelClass: GridColumn,
         // the grid column model
         columnModel: [],
         // The map used to transform the raw data into expected view format.
@@ -290,6 +292,17 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
         for (var j in columnModels) {
             var columnModel = columnModels[j];
 
+            if (columnModel.template) {
+                var itemId = self.options.prefixItemId + mappedItem.id;
+                var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
+                var data = {
+                    cellValue: mappedItem[columnModel.name],
+                    mappedItem: mappedItem,
+                    item: item,
+                    columnModel: columnModel
+                };
+                $cell.html(View.render(columnModel.template, data));
+            }
             if (columnModel.cellAdapter) {
                 var itemId = self.options.prefixItemId + mappedItem.id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
@@ -333,6 +346,17 @@ var Grid = mad.component.Grid = mad.Component.extend('mad.component.Grid', {
         for (var j in columnModels) {
             var columnModel = columnModels[j];
 
+            if (columnModel.template) {
+                var itemId = self.options.prefixItemId + mappedItem.id;
+                var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
+                var data = {
+                    cellValue: mappedItem[columnModel.name],
+                    mappedItem: mappedItem,
+                    item: item,
+                    columnModel: columnModel
+                };
+                $cell.html(View.render(columnModel.template, data));
+            }
             if (columnModel.cellAdapter) {
                 var itemId = self.options.prefixItemId + mappedItem.id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');

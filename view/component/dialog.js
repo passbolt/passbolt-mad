@@ -10,11 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import View from 'passbolt-mad/view/view';
 
 /**
  * @inherits mad.view.View
  */
-var Dialog = mad.view.component.Dialog = mad.View.extend('mad.view.component.Dialog', /* @static */ {}, /** @prototype */ {
+var Dialog = View.extend('mad.view.component.Dialog', /* @static */ {}, /** @prototype */ {
 
     /**
      * Set the title

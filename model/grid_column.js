@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/model/model';
+import 'can/map/map';
 
 /**
  * @inherits mad.model.Model
@@ -23,7 +23,7 @@ import 'passbolt-mad/model/model';
  * @param {array} options
  * @return {mad.model.GridColumn}
  */
-var GridColumn = mad.model.GridColumn = can.Map.extend('mad.model.GridColumn', /** @prototype */ {
+var GridColumn = can.Map.extend('mad.model.GridColumn', /** @prototype */ {
 
     define: {
         // Name of the column
@@ -42,7 +42,8 @@ var GridColumn = mad.model.GridColumn = can.Map.extend('mad.model.GridColumn', /
         },
         // Label of the column.
         label: {
-            type: 'string'
+            // @todo a label can be template or a string
+            //type: 'string'
         },
         // CSS classes to add to the column header element (th).
         css: {

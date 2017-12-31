@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
-import 'passbolt-mad/component/free_composite';
-import 'passbolt-mad/view/component/dialog';
+import DialogView from 'passbolt-mad/view/component/dialog';
+import FreeCompositeComponent from 'passbolt-mad/component/free_composite';
+import HtmlHelper from 'passbolt-mad/helper/html';
 import template from 'passbolt-mad/view/template/component/dialog/dialog.ejs!';
 
 /**
@@ -31,11 +31,11 @@ import template from 'passbolt-mad/view/template/component/dialog/dialog.ejs!';
  * this.options and merged with defaults static variable
  * @return {mad.component.Dialog}
  */
-var Dialog = mad.component.Dialog = mad.component.FreeComposite.extend('mad.component.Dialog', /** @static */ {
+var Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static */ {
 
     defaults: {
         label: 'Dialog Controller',
-        viewClass: mad.view.component.Dialog,
+        viewClass: DialogView,
         template: template,
         cssClasses: ['dialog-wrapper'],
         tag: 'div'
@@ -70,7 +70,7 @@ var Dialog = mad.component.Dialog = mad.component.FreeComposite.extend('mad.comp
         }
 
         // Insert the element in the page DOM.
-        var $el = mad.helper.Html.create(refElt, position, '<div />');
+        var $el = HtmlHelper.create(refElt, position, '<div />');
 
         // Changing the element force us to recall the setup which is called before all init functions
         // and make the magic things (bind event ...)

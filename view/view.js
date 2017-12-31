@@ -10,11 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/control/control';
-import 'passbolt-mad/helper/control';
-
-// Initialize the view namespaces.
-mad.view = mad.view || {};
+import Control from 'passbolt-mad/control/control';
+import HtmlHelper from 'passbolt-mad/helper/html';
 
 /**
  * @parent Mad.core_api
@@ -24,7 +21,7 @@ mad.view = mad.view || {};
  * @todo complete the documentation
  * @todo a control variable should be available to the devs.
  */
-var View = mad.View = mad.Control.extend('mad.View', /** @static */{
+var View = Control.extend('mad.View', /** @static */{
 
 	defaults: {
 		/**
@@ -46,6 +43,8 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 	 * @return {string}
 	 */
 	render: function (uri, data) {
+		data = data || {};
+		data['_mad'] = mad;
 		return can.view.render(uri, data);
 	}
 
@@ -111,7 +110,7 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	position: function(options) {
-		mad.helper.Html.position(this.element, options);
+		HtmlHelper.position(this.element, options);
 	},
 
 	/**
@@ -120,7 +119,7 @@ var View = mad.View = mad.Control.extend('mad.View', /** @static */{
 	 * @return {string} The rendered view
 	 */
 	render: function () {
-		return mad.View.render(this.options.template, this.getController().getViewData());
+		return View.render(this.options.template, this.getController().getViewData());
 	},
 
 	/**

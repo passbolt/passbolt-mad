@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
+import Component from 'passbolt-mad/component/component';
 
 /**
  * @parent Mad.components_api
@@ -19,10 +19,10 @@ import 'passbolt-mad/component/component';
  * The Composite component is a very simple component that allows to
  * use several components in the same component.
  */
-var Composite = mad.component.Composite = mad.Component.extend('mad.component.Composite', /** @prototype */ {
+var Composite = Component.extend('mad.component.Composite', /** @prototype */ {
 
-    'defaults': {
-        'label': 'Composite Component Controller'
+    defaults: {
+        label: 'Composite Component Controller'
     }
 
 }, /** @prototype */ {

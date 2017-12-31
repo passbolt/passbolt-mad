@@ -23,7 +23,7 @@ mad.config = mad.config || {};
  *
  * The mad config tool as for aim to centralize the configuration of the application.
  */
-var MadConfig = mad.Config = can.Construct.extend('mad.Config', /** @static */ {
+var MadConfig = can.Construct.extend('mad.Config', /** @static */ {
 
 	/**
 	 * Load a config file

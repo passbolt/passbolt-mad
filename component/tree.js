@@ -10,8 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
-import 'passbolt-mad/view/component/tree';
+import Component from 'passbolt-mad/component/component';
+import MadMap from 'passbolt-mad/util/map/map'
+import Model from 'passbolt-mad/model/model';
+import TreeView from 'passbolt-mad/view/component/tree';
 import itemTemplate from 'passbolt-mad/view/template/component/tree/treeItem.ejs!';
 
 /**
@@ -23,7 +25,7 @@ import itemTemplate from 'passbolt-mad/view/template/component/tree/treeItem.ejs
  * @todo TBD
  */
 
-var Tree = mad.component.Tree = mad.Component.extend('mad.component.Tree', {
+var Tree = Component.extend('mad.component.Tree', {
 
     defaults: {
         // Override the label option.
@@ -33,12 +35,12 @@ var Tree = mad.component.Tree = mad.Component.extend('mad.component.Tree', {
         // Override the tag option.
         tag: 'ul',
         // Override the viewClass option.
-        viewClass: mad.view.component.Tree,
+        viewClass: TreeView,
 
         // The template used to render the tree's items.
         itemTemplate: itemTemplate,
         // The Model Class that defines the items displayed by the tree.
-        itemClass: mad.Model,
+        itemClass: Model,
         // The list of objects displayed by the tree.
         items: new can.Model.List(),
         // The map used to transform the raw data into expected view format.
@@ -154,7 +156,7 @@ var Tree = mad.component.Tree = mad.Component.extend('mad.component.Tree', {
      * @return {mad.Map}
      */
     _getDefaultMap: function () {
-        return new mad.Map({
+        return new MadMap({
             id: 'id',
             label: {
                 key: 'id',
@@ -171,7 +173,7 @@ var Tree = mad.component.Tree = mad.Component.extend('mad.component.Tree', {
             },
             children: {
                 key: 'children',
-                func: mad.Map.mapObjects
+                func: MadMap.mapObjects
             }
         });
     },

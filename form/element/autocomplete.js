@@ -10,8 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/form/choice_element';
-import 'passbolt-mad/view/form/element/textbox';
+import ChoiceElement from 'passbolt-mad/form/choice_element';
+import ComponentHelper from 'passbolt-mad/helper/component';
+import Model from 'passbolt-mad/model/model';
+import TextBox from 'passbolt-mad/view/form/element/textbox';
 
 /**
  * @parent Mad.form_api
@@ -20,7 +22,7 @@ import 'passbolt-mad/view/form/element/textbox';
  * The Autocomplete Form Element
  * @todo TBD
  */
-var Autocomplete = mad.form.Autocomplete = mad.form.Textbox.extend('mad.form.Autocomplete', /* @static */ {
+var Autocomplete = TextBox.extend('mad.form.Autocomplete', /* @static */ {
 
     defaults: {
         label: 'Autocomplete Form Element Controller',
@@ -33,7 +35,7 @@ var Autocomplete = mad.form.Autocomplete = mad.form.Textbox.extend('mad.form.Aut
         // Add an list component
         // This list will allow the autocomplete component to display the available choices
         var listOpts = {
-            itemClass: mad.Model,
+            itemClass: Model,
             cssClasses: ['autocomplete-content'],
             state: 'hidden',
             // The map to use to make jstree working with our category model
@@ -43,7 +45,7 @@ var Autocomplete = mad.form.Autocomplete = mad.form.Textbox.extend('mad.form.Aut
                 model: 'model'
             })
         };
-        this.options.list = mad.helper.Component.create(this.element, 'after', mad.component.Tree, listOpts);
+        this.options.list = ComponentHelper.create(this.element, 'after', mad.component.Tree, listOpts);
         this.options.list.start();
         this.on();
     },

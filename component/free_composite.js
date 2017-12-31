@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/composite';
+import ComponentHelper from 'passbolt-mad/helper/component';
+import CompositeComponent from 'passbolt-mad/component/composite';
 import template from 'passbolt-mad/view/template/component/free_composite/workspace.ejs!';
 
 /**
@@ -28,7 +29,7 @@ import template from 'passbolt-mad/view/template/component/free_composite/worksp
  * this.options and merged with defaults static variable
  * @return {mad.component.FreeComposite}
  */
-var FreeComposite = mad.component.FreeComposite = mad.component.Composite.extend('mad.component.FreeComposite', /** @static */ {
+var FreeComposite = CompositeComponent.extend('mad.component.FreeComposite', /** @static */ {
 
     defaults: {
         label: 'WorkspaceController',
@@ -45,9 +46,8 @@ var FreeComposite = mad.component.FreeComposite = mad.component.Composite.extend
      */
     addComponent: function (ComponentClass, componentOptions, area) {
         area = area || 'mad-container-main';
-        var returnValue = null;
         var $area = $('.' + area, this.element);
-        var component = mad.helper.Component.create($area, 'inside_replace', ComponentClass, componentOptions);
+        var component = ComponentHelper.create($area, 'inside_replace', ComponentClass, componentOptions);
         return this._super(component);
     }
 });

@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/model/model';
-import 'passbolt-mad/model/state';
+import Model from 'passbolt-mad/model/model';
+import State from 'passbolt-mad/model/state';
 
 /**
  * @inherits mad.model.Model
@@ -24,7 +24,7 @@ import 'passbolt-mad/model/state';
  * @param {array} options
  * @return {mad.model.Action}
  */
-var Action = mad.model.Action = mad.Model.extend('mad.model.Action', /** @static */{
+var Action = Model.extend('mad.model.Action', /** @static */{
 
     /**
      * Define attributes of the model

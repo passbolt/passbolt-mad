@@ -30,7 +30,7 @@ describe("mad.component.ButtonDropdown", function () {
         $('#test-html').empty();
     });
 
-    it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
+    it("constructed instance should inherit mad.component.Button & the inherited parent classes", function () {
         var buttonDropdown = new mad.component.ButtonDropdown($buttonDropdown);
 
         // Basic control of classes inheritance.

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import XRegExp from 'xregexp';
-import 'passbolt-mad/util/lang/i18n';
+import I18n from 'passbolt-mad/util/lang/i18n';
 
 /**
 * @parent Mad.core_api
@@ -20,7 +20,7 @@ import 'passbolt-mad/util/lang/i18n';
 * The aim of the object Validation is to offer to developers a way to validate their
 * data. This utility is massively used by the mad.Form component.
 */
-var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @static */ {
+var Validation = can.Construct.extend('mad.Validation', /** @static */ {
 
     /**
      * Validate a value following a given rule. This model helper is used by the
@@ -52,11 +52,11 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
             }
         }
 
-        if (typeof mad.Validation[rule] == 'undefined') {
+        if (typeof Validation[rule] == 'undefined') {
             throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'rule');
         }
 
-        return mad.Validation[rule](value, values, options);
+        return Validation[rule](value, values, options);
     },
 
     // get alpha condition
@@ -153,7 +153,7 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
      */
     alphaNumeric: function (value, values, options) {
         options = options || {};
-        var alphaRegExp = mad.Validation._getAlphaRegExp(options.type);
+        var alphaRegExp = Validation._getAlphaRegExp(options.type);
         var xregexp = new XRegExp("^[" + alphaRegExp + " \'0-9]*$");
 
         if (!xregexp.test(value)) {
@@ -169,7 +169,7 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
      */
     alpha: function (value, values, options) {
         options = options || {};
-        var alphaRegExp = mad.Validation._getAlphaRegExp(options.type);
+        var alphaRegExp = Validation._getAlphaRegExp(options.type);
         var xregexp = XRegExp("^[" + alphaRegExp + " \']*$");
         if (!xregexp.test(value)) {
             return __('Only ' + options.type + ' characters allowed');
@@ -457,7 +457,7 @@ var Validation = mad.Validation = can.Construct.extend('mad.Validation', /** @st
         if (options.model && options.model.validateRules && options.attribute) {
             for (var i in options.model.validateRules[options.attribute]) {
                 var rule = options.model.validateRules[options.attribute][i];
-                var foreignReturnValue = mad.Validation.validate(rule, value);
+                var foreignReturnValue = Validation.validate(rule, value);
                 if (foreignReturnValue !== true) {
                     returnValue = foreignReturnValue;
                     break;

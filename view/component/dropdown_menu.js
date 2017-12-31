@@ -23,11 +23,6 @@ import 'passbolt-mad/view/component/tree';
  */
 var DropdownMenu = mad.view.component.DropdownMenu = mad.view.component.Tree.extend('mad.view.component.DropdownMenu', /* @static */ {}, /** @prototype */ {
 
-    // Constructor like
-    init: function (controller, options) {
-        this._super(controller, options);
-    },
-
     /**
      * Open an item
      * @param {mad.model.Model} item The target item to open
@@ -100,3 +95,5 @@ var DropdownMenu = mad.view.component.DropdownMenu = mad.view.component.Tree.ext
     }
 
 });
+
+export default DropdownMenu;

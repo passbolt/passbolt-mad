@@ -10,15 +10,15 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/dialog';
-import 'passbolt-mad/view/component/confirm';
+import DialogComponent from 'passbolt-mad/component/dialog';
+import ConfirmView from 'passbolt-mad/view/component/confirm';
 import template from 'passbolt-mad/view/template/component/confirm/confirm.ejs!';
 
-var Confirm = mad.component.Confirm = mad.component.Dialog.extend('mad.component.Confirm', /** @static */ {
+var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
 
     defaults: {
         label: 'Confirm component',
-        viewClass: mad.view.component.Confirm,
+        viewClass: ConfirmView,
         template: template,
         subtitle: null,
         submitButton: {

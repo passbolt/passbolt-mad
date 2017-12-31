@@ -10,10 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from 'passbolt-mad/util/util';
-
-// Initialize the helper namespaces.
-mad.helper = mad.helper || {};
+import 'can/construct/construct';
+import HtmlHelper from 'passbolt-mad/helper/html';
 
 /**
  * @parent Mad.core_helper_api
@@ -21,7 +19,7 @@ mad.helper = mad.helper || {};
  *
  * A set of tools to help developer with Components.
  */
-var ComponentHelper = mad.helper.Component = can.Construct.extend('mad.helper.Component', /** @static */ {
+var ComponentHelper = can.Construct.extend('mad.helper.Component', /** @static */ {
 
     /**
      * A factory to create and insert components.
@@ -69,7 +67,7 @@ var ComponentHelper = mad.helper.Component = can.Construct.extend('mad.helper.Co
         html += '/>';
 
         // Insert the HTML Element which will carry the component in the DOM.
-        $component = mad.helper.Html.create(refElement, position, html);
+        $component = HtmlHelper.create(refElement, position, html);
 
         // Instantiate the component and return it.
         return new ComponentClass($component, options);

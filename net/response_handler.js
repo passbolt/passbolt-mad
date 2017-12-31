@@ -11,6 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import 'can/construct/construct';
+import Config from 'passbolt-mad/config/config';
+import Response from 'passbolt-mad/net/response';
 
 /**
  * @see mad.error.ErrorHandler
@@ -21,12 +23,12 @@ import 'can/construct/construct';
  *
  * @constructor
  * Creates a new ajax server response handler
- * @param {mad.net.Response} response The server response
+ * @param {Response} response The server response
  * @param {object} request The request parameters
  * @param {object} callbacks The optional callbacks to push on if existing
- * @return {mad.net.ResponseHandler}
+ * @return {ResponseHandler}
  */
-var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.ResponseHandler', /** @static */ {
+var ResponseHandler = can.Construct.extend('mad.net.ResponseHandler', /** @static */ {
 
 }, /** @prototype */ {
 
@@ -36,7 +38,7 @@ var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.Re
 
     /**
      * The server response to treat
-     * @type {mad.net.Response}
+     * @type {Response}
      */
     'response': null,
 
@@ -59,7 +61,7 @@ var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.Re
      */
     _getErrorHandlerClass: function() {
         var ErrorHandlerClass = this.defaults.defaultErrorHandlerClass;
-        var configErrorHandler = mad.Config.read('net.ErrorHandlerClassName');
+        var configErrorHandler = Config.read('net.ErrorHandlerClassName');
         if (configErrorHandler !== undefined) {
             ErrorHandlerClass = configErrorHandler;
         }
@@ -82,16 +84,16 @@ var ResponseHandler = mad.net.ResponseHandler = can.Construct.extend('mad.net.Re
         this._log();
         // Dispatch the response function of the response status
         switch (this.response.getStatus('status')) {
-        case mad.net.Response.STATUS_ERROR:
+        case Response.STATUS_ERROR:
             this._error();
             break;
-        case mad.net.Response.STATUS_NOTICE:
+        case Response.STATUS_NOTICE:
             this._notice();
             break;
-        case mad.net.Response.STATUS_SUCCESS:
+        case Response.STATUS_SUCCESS:
             this._success();
             break;
-        case mad.net.Response.STATUS_WARNING:
+        case Response.STATUS_WARNING:
             this._warning();
             break;
         }

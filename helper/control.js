@@ -10,10 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from 'passbolt-mad/util/util';
-
-// Initialize the helper namespaces.
-mad.helper = mad.helper || {};
+import 'can/control/control';
+import Config from 'passbolt-mad/config/config';
 
 /**
  * @parent Mad.core_helper_api
@@ -21,7 +19,7 @@ mad.helper = mad.helper || {};
  *
  * A set of tools to help developer with Controllers.
  */
-var ControlHelper = mad.helper.Control = can.Control.extend('mad.helper.Control', /** @static */ {
+var ControlHelper = can.Control.extend('mad.helper.Control', /** @static */ {
 
 	/**
 	 * Get view path of a Control class.
@@ -68,12 +66,12 @@ var ControlHelper = mad.helper.Control = can.Control.extend('mad.helper.Control'
 				path += 'mad/view/template/';
 				break;
 			// The Control is an application controller.
-			case mad.Config.read('app.namespace'):
-				path += mad.Config.read('app.namespace') + '/view/template/';
+			case Config.read('app.namespace'):
+				path += Config.read('app.namespace') + '/view/template/';
 				break;
 			// We are in another case, use the app.
 			default:
-				path += mad.Config.read('app.namespace') + '/view/template/' + root + '/';
+				path += Config.read('app.namespace') + '/view/template/' + root + '/';
 				break;
 		}
 

@@ -32,7 +32,7 @@ import mad from 'passbolt-mad/util/util';
  * This is just another example of section.
  *
  */
-var Control = mad.Control = can.Control.extend('mad.Control', /** @prototype */ {
+var Control = can.Control.extend('mad.Control', /** @prototype */ {
 
 	/**
 	 * Constructor.

@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/model/model';
+import Model from 'passbolt-mad/model/model';
 
 /**
  * @parent Mad.core_api
@@ -21,7 +21,7 @@ import 'passbolt-mad/model/model';
  *
  * This state model is used by the mad.Component.
  */
-var State = mad.model.State = mad.Model.extend('mad.model.State', /** @static */{
+var State = Model.extend('mad.model.State', /** @static */{
 
 	attributes: {
 		// previous states

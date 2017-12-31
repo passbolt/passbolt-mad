@@ -11,15 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import 'can/construct/construct';
-import 'passbolt-mad/model/serializer/serializer';
-
-mad.model.serializer = mad.model.serializer || {};
 
 /**
  * @inherits jQuery.Class
  * @parent mad.core
  */
-var CakeSerializer = mad.model.serializer.CakeSerializer = can.Construct.extend('mad.model.serializer.CakeSerializer', /** @static */ {
+var CakeSerializer = can.Construct.extend('mad.model.serializer.CakeSerializer', /** @static */ {
     from: function (data, Class) {
         var returnValue = {};
         returnValue = $.extend(true, {}, data, data[Class.shortName]);

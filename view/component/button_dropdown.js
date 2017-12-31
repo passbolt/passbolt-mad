@@ -10,15 +10,14 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/view';
-import 'passbolt-mad/helper/html';
+import View from 'passbolt-mad/view/view';
 
 /**
  * @inherits mad.View
  * @group mad.component.ButtonDropdown.view_events 0 View Events
  */
-var ButtonDropdown = mad.view.component.ButtonDropdown = mad.View.extend('mad.view.component.ButtonDropdown', /* @static */{
-    'defaults': {}
+var ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @static */{
+
 }, /** @prototype */ {
 
     /**
@@ -105,3 +104,5 @@ var ButtonDropdown = mad.view.component.ButtonDropdown = mad.View.extend('mad.vi
     }
 
 });
+
+export default ButtonDropdown;

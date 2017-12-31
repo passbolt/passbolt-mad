@@ -10,13 +10,13 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/view';
-import 'passbolt-mad/helper/html';
+import View from 'passbolt-mad/view/view';
+import HtmlHelper from 'passbolt-mad/helper/html';
 
 /**
  * @inherits mad.View
  */
-var Tree = mad.view.component.Tree = mad.View.extend('mad.view.component.Tree', /** @static */ {}, /** @prototype */ {
+var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @prototype */ {
 
     /**
      * Get the HtmlElement that has been drawn for an item.
@@ -107,9 +107,9 @@ var Tree = mad.view.component.Tree = mad.View.extend('mad.view.component.Tree', 
         }
 
         // Render the item.
-        itemRender = mad.View.render(control.options.itemTemplate, control.getViewData());
+        itemRender = View.render(control.options.itemTemplate, control.getViewData());
         // Insert it in the DOM and position it.
-        $item = mad.helper.Html.create($refElement, position, itemRender);
+        $item = HtmlHelper.create($refElement, position, itemRender);
         // Associate to the item to the just created node
         can.data($item, control.getItemClass().fullName, item);
 
@@ -150,7 +150,7 @@ var Tree = mad.view.component.Tree = mad.View.extend('mad.view.component.Tree', 
         control.setViewData('cssClasses', cssClasses);
 
         // Render the item.
-        var itemRender = mad.View.render(control.options.itemTemplate, control.getViewData());
+        var itemRender = View.render(control.options.itemTemplate, control.getViewData());
         // Replace the item row with its updated version.
         $item.replaceWith(itemRender);
         $item = this.getItemElement(item);

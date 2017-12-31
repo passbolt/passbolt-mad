@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/form/choice_element';
-import '../../view/form/element/checkbox';
-import template from '../../view/template/form/checkbox.ejs!';
+import ChoiceElement from 'passbolt-mad/form/choice_element';
+import CheckboxView from 'passbolt-mad/view/form/element/checkbox';
+import template from 'passbolt-mad/view/template/form/checkbox.ejs!';
 
 /**
  * @parent Mad.form_api
@@ -21,7 +21,7 @@ import template from '../../view/template/form/checkbox.ejs!';
  * The Checkbox Form Element
  * @todo TBD
  */
-var Checkbox = mad.form.Checkbox = mad.form.ChoiceElement.extend('mad.form.Checkbox', /* @static */ {
+var Checkbox = ChoiceElement.extend('mad.form.Checkbox', /* @static */ {
 
     defaults: {
         // Override the label option.
@@ -31,7 +31,7 @@ var Checkbox = mad.form.Checkbox = mad.form.ChoiceElement.extend('mad.form.Check
         // Override the template option.
         template: template,
         // Override the viewClass option.
-        viewClass: mad.view.form.Checkbox
+        viewClass: CheckboxView
     }
 
 }, /** @prototype */ {});

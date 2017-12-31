@@ -1,10 +1,14 @@
 <th class="js_grid_column js_grid_column_<%= columnModel.name %> cell_<%= columnModel.name %> <%= columnModel.css.join(' ') %>">
 
-<% if(columnModel.sortable) { %>
+<% if (columnModel.sortable) { %>
     <a>
 <% } %>
 
-    <%== columnModel.label %>
+<% if (typeof columnModel.label == 'function') { %>
+        <%== _mad.View.render(columnModel.label, this) %>
+<% } else { %>
+        <%= columnModel.label %>
+<% } %>
 
 <% if(columnModel.sortable) { %>
     </a>

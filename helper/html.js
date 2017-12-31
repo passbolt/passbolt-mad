@@ -10,10 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from 'passbolt-mad/util/util';
-
-// Initialize the helper namespaces.
-mad.helper = mad.helper || {};
+import 'can/construct/construct';
 
 /**
  * @parent Mad.core_helper_api
@@ -21,7 +18,7 @@ mad.helper = mad.helper || {};
  *
  * A set of tools to help developer with Html.
  */
-var HtmlHelper = mad.helper.Html = can.Construct.extend('mad.helper.Html', /** @static */ {
+var HtmlHelper = can.Construct.extend('mad.helper.Html', /** @static */ {
 
 	/**
 	 * Position an element
@@ -109,3 +106,5 @@ var HtmlHelper = mad.helper.Html = can.Construct.extend('mad.helper.Html', /** @
 	}
 
 }, /* @prototype */ { });
+
+export default HtmlHelper;

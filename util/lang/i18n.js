@@ -24,7 +24,7 @@ var glbl = typeof window !== "undefined" ? window : global
 var __ = function (str) {
     // Extract variables from arguments.
     var args = Array.prototype.slice.call(arguments, 1);
-    return mad.I18n.translate(str, args);
+    return I18n.translate(str, args);
 };
 glbl.__ = __;
 
@@ -40,7 +40,7 @@ glbl.__ = __;
  * ```
  *
  */
-var I18n = mad.I18n = can.Construct.extend('mad.I18n', /** @static */ {
+var I18n = can.Construct.extend('mad.I18n', /** @static */ {
 
     /**
      * The dictionary in use.
@@ -57,7 +57,7 @@ var I18n = mad.I18n = can.Construct.extend('mad.I18n', /** @static */ {
      */
     translate: function (str, vars) {
         var vars = typeof vars != 'undefined' ? vars : [];
-        return mad.I18n.replaceHooks(this.getEntry(str), vars);
+        return I18n.replaceHooks(this.getEntry(str), vars);
     },
 
     /**
@@ -67,7 +67,7 @@ var I18n = mad.I18n = can.Construct.extend('mad.I18n', /** @static */ {
      */
     loadDico: function (dico) {
         for (var i in dico) {
-            mad.I18n.dico[i] = dico[i]; //make a copy of the data to be sure there will be existing in the app scope
+            I18n.dico[i] = dico[i]; //make a copy of the data to be sure there will be existing in the app scope
         }
     },
 
@@ -110,8 +110,8 @@ var I18n = mad.I18n = can.Construct.extend('mad.I18n', /** @static */ {
      * @return {string}
      */
     getEntry: function (str) {
-        if (typeof mad.I18n.dico[str] != 'undefined' && this.dico[str] != '') {
-            return mad.I18n.dico[str];
+        if (typeof I18n.dico[str] != 'undefined' && this.dico[str] != '') {
+            return I18n.dico[str];
         }
         return str;
     }

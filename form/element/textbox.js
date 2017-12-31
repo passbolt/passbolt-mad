@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/form/element';
-import 'passbolt-mad/view/form/element/textbox';
+import Element from 'passbolt-mad/form/element';
+import TextboxView from 'passbolt-mad/view/form/element/textbox';
 
 /**
  * @parent Mad.form_api
@@ -20,7 +20,7 @@ import 'passbolt-mad/view/form/element/textbox';
  * The Textbox Form Element
  * @todo TBD
  */
-var Textbox = mad.form.Textbox = mad.form.Element.extend('mad.form.Textbox', /* @static */ {
+var Textbox = Element.extend('mad.form.Textbox', /* @static */ {
 
     defaults: {
         // Override the label option.
@@ -28,7 +28,7 @@ var Textbox = mad.form.Textbox = mad.form.Element.extend('mad.form.Textbox', /* 
         // Override the tag option.
         tag: 'input',
         // Override the viewClass option.
-        viewClass: mad.view.form.Textbox,
+        viewClass: TextboxView,
 
         // Add a period of time before firing the changed event.
         // By instance while typing into a textbox, you'd like to be notified that the value

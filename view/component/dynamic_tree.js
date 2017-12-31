@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import TreeView from 'passbolt-mad/view/component/tree';
 
 /**
  * @inherits mad.view.component.Tree
@@ -20,14 +21,9 @@
  * Instanciate a new Dynamic Tree view
  * @return {mad.view.component.tree.Jstree}
  */
-var DynamicTree = mad.view.component.DynamicTree = mad.view.component.Tree.extend('mad.view.component.DynamicTree', /** @static */ {
+var DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static */ {
 
 }, /** @prototype */ {
-
-    // Constructor like
-    'init': function (controller, options) {
-        this._super(controller, options);
-    },
 
     /**
      * Open an item

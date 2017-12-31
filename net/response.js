@@ -10,10 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/model/model';
+import Model from 'passbolt-mad/model/model';
 
 /**
- * @inherits mad.model.Model
+ * @inherits can.Model
  * @parent mad.net
  *
  * Our ajax response model
@@ -22,57 +22,57 @@ import 'passbolt-mad/model/model';
  * Creates a new ajax response
  * @return {mad.net.Response}
  */
-var Response = mad.Model.extend('mad.net.Response', /** @static */ {
+var Response = Model.extend('mad.net.Response', /** @static */ {
 
     attributes: {
         /**
          * Passbolt response Header
          * @type {object}
          */
-        'header': 'json',
+        header: 'json',
         /**
          * Passbolt response Body
          * @type {mixed}
          */
-        'body': 'json'
+        body: 'json'
     },
 
     /**
      * Status error
      * @type {string}
      */
-    'STATUS_ERROR': 'error',
+    STATUS_ERROR: 'error',
     /**
      * Status notice
      * @type {string}
      */
-    'STATUS_NOTICE': 'notice',
+    STATUS_NOTICE: 'notice',
     /**
      * Status success
      * @type {string}
      */
-    'STATUS_SUCCESS': 'success',
+    STATUS_SUCCESS: 'success',
     /**
      * Status warning
      * @type {string}
      */
-    'STATUS_WARNING': 'warning',
+    STATUS_WARNING: 'warning',
 
     /**
      * Not response id defined
      * @type {string}
      */
-    'RESPONSE_ID_UNDEFINED': 'undefined',
+    RESPONSE_ID_UNDEFINED: 'undefined',
     /**
      * Not response controller defined
      * @type {string}
      */
-    'RESPONSE_CONTROLLER_UNDEFINED': 'undefined',
+    RESPONSE_CONTROLLER_UNDEFINED: 'undefined',
     /**
      * Not response action defined
      * @type {string}
      */
-    'RESPONSE_ACTION_UNDEFINED': 'undefined',
+    RESPONSE_ACTION_UNDEFINED: 'undefined',
 
     /**
      * Response function factory. Build a response function of a predefined type
@@ -89,19 +89,19 @@ var Response = mad.Model.extend('mad.net.Response', /** @static */ {
         switch (type) {
             case 'unreachable':
                 header = {
-                    'id': mad.net.Response.RESPONSE_ID_UNDEFINED,
-                    'status': mad.net.Response.STATUS_ERROR,
-                    'controller': mad.net.Response.RESPONSE_CONTROLLER_UNDEFINED,
-                    'action': mad.net.Response.RESPONSE_ACTION_UNDEFINED,
-                    'title': __('Unable to reach the server'),
-                    'message': __('The url is probably incorrectly formatted')
+                    id: Response.RESPONSE_ID_UNDEFINED,
+                    status: Response.STATUS_ERROR,
+                    controller: Response.RESPONSE_CONTROLLER_UNDEFINED,
+                    action: Response.RESPONSE_ACTION_UNDEFINED,
+                    title: __('Unable to reach the server'),
+                    message: __('The url is probably incorrectly formatted')
                 };
                 body = data;
             break;
         }
 
         // build the response to return
-        returnValue = new mad.net.Response({
+        returnValue = new Response({
             header: header,
             body: body
         });

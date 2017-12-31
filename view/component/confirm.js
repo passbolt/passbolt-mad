@@ -10,11 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import DialogView from 'passbolt-mad/view/component/dialog';
 
 /**
  * @inherits mad.view.View
  */
-var ConfirmView = mad.view.component.Confirm = mad.view.component.Dialog.extend('mad.view.component.Confirm', /* @static */ {}, /** @prototype */ {
+var ConfirmView = DialogView.extend('mad.view.component.Confirm', /* @static */ {}, /** @prototype */ {
 
     /**
      * Set the content

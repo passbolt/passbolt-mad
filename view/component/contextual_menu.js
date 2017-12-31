@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/component/dropdown_menu';
+import DropdownMenuView from 'passbolt-mad/view/component/dropdown_menu';
 
 /**
  * @inherits mad.view.component.DropdownMenu
@@ -21,7 +21,7 @@ import 'passbolt-mad/view/component/dropdown_menu';
  * Instantiate a new Contextual Menu view
  * @return {mad.view.component.ContextualMenu}
  */
-var ContextualMenu = mad.view.component.ContextualMenu = mad.view.component.DropdownMenu.extend('mad.view.component.ContextualMenu', /* @static */ {}, /** @prototype */ {
+var ContextualMenu = DropdownMenuView.extend('mad.view.component.ContextualMenu', /* @static */ {}, /** @prototype */ {
 
     /**
      * Intercept global click event.

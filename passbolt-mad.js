@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from "jquery";
-import _ from "underscore";
 import can from "can/can";
 import "can/map/define/define";
 

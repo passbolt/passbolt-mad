@@ -10,13 +10,13 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/view';
-import 'passbolt-mad/helper/html';
+import View from 'passbolt-mad/view/view';
+import HtmlHelper from 'passbolt-mad/helper/html';
 
 /**
  * @inherits mad.View
  */
-var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototype */ {
+var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototype */ {
 
     /**
      * Flush the grid
@@ -159,7 +159,7 @@ var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', 
         }
 
         // Render the row with the row data.
-        return mad.View.render(control.options.itemTemplate, {
+        return View.render(control.options.itemTemplate, {
             item: item,
             id: control.options.prefixItemId + mappedItem.id,
             columnModels: columnModels,
@@ -220,7 +220,7 @@ var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', 
         row = this._renderRow(item);
 
         // Insert the row html fragment in the grid.
-        $item = mad.helper.Html.create($refElement, position, row);
+        $item = HtmlHelper.create($refElement, position, row);
         // Associate to the item to the just created node
         can.data($item, control.getItemClass().fullName, item);
 
@@ -239,7 +239,7 @@ var Grid = mad.view.component.Grid = mad.View.extend('mad.view.component.Grid', 
         var row = this._renderRow(item);
 
         // Replace the previous row with the new one.
-        var $item = mad.helper.Html.create($current, 'replace_with', row);
+        var $item = HtmlHelper.create($current, 'replace_with', row);
         // Associate to the item to the just created node
         can.data($item, this.getController().getItemClass().fullName, item);
     },

@@ -10,10 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
-import 'passbolt-mad/component/tree';
-import 'passbolt-mad/util/map/map';
-import 'passbolt-mad/model/action';
+import Action from 'passbolt-mad/model/action';
+import MadMap from 'passbolt-mad/util/map/map';
+import TreeComponent from 'passbolt-mad/component/tree';
+import TreeView from 'passbolt-mad/view/component/tree';
+
 import itemTemplate from 'passbolt-mad/view/template/component/menu/menu_item.ejs!';
 
 /**
@@ -35,19 +36,19 @@ import itemTemplate from 'passbolt-mad/view/template/component/menu/menu_item.ej
  *   * map : mapping object. (See mad.Map)
  * @return {mad.component.Menu}
  */
-var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', {
+var Menu = TreeComponent.extend('mad.component.Menu', {
 
     defaults: {
         label: 'Menu',
         cssClasses: ['menu'],
         // View class.
-        viewClass: mad.view.component.Tree,
+        viewClass: TreeView,
         // The template to use to render each action.
         itemTemplate: itemTemplate,
         // The class which represent the item.
-        itemClass: mad.model.Action,
+        itemClass: Action,
         // Mapping of the items for the view.
-        map: new mad.Map({
+        map: new MadMap({
             id: 'id',
             label: 'label',
             // @todo : be carefull, for now if no cssClasses defined while creating the action.
@@ -66,7 +67,7 @@ var Menu = mad.component.Menu = mad.component.Tree.extend('mad.component.Menu', 
             },
             children: {
                 key: 'children',
-                func: mad.Map.mapObjects
+                func: MadMap.mapObjects
             }
         })
     }

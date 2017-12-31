@@ -10,8 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/form/element';
-import 'passbolt-mad/view/form/element';
+import Element from 'passbolt-mad/form/element';
 
 /**
  * @parent Mad.form_api
@@ -21,7 +20,7 @@ import 'passbolt-mad/view/form/element';
  * This form element shouldn't be instantiated.
  * @todo TBD
  */
-var ChoiceElement = mad.form.ChoiceElement = mad.form.Element.extend('mad.form.ChoiceElement', /* @static */ {
+var ChoiceElement = Element.extend('mad.form.ChoiceElement', /* @static */ {
 
     defaults: {
         // The form choice element available values.

@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/menu';
-import 'passbolt-mad/view/component/dropdown_menu';
+import MenuComponent from 'passbolt-mad/component/menu';
+import DropdownMenuView from 'passbolt-mad/view/component/dropdown_menu';
 import itemTemplate from 'passbolt-mad/view/template/component/dropdown_menu/dropdown_menu.ejs!';
 
 /**
@@ -35,11 +35,11 @@ import itemTemplate from 'passbolt-mad/view/template/component/dropdown_menu/dro
  *      * item_hovered : triggered when an item is hovered.
  * @return {mad.component.DropdownMenu}
  */
-var DropdownMenu = mad.component.DropdownMenu = mad.component.Menu.extend('mad.component.DropdownMenu', {
+var DropdownMenu = MenuComponent.extend('mad.component.DropdownMenu', {
 
     defaults: {
         label: 'Drop Down Menu Component',
-        viewClass: mad.view.component.DropdownMenu,
+        viewClass: DropdownMenuView,
         itemTemplate: itemTemplate,
         cssClasses: ['dropdownmenu'],
         callbacks: {

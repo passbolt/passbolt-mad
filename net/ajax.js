@@ -11,13 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import 'can/construct/construct';
-import 'passbolt-mad/net/response';
-import 'passbolt-mad/net/response_handler'
-
-/**
- * Our net component.
- */
-mad.net = mad.net || {};
+import Config from 'passbolt-mad/config/config';
+import Response from 'passbolt-mad/net/response';
+import ResponseHandler from 'passbolt-mad/net/response_handler'
 
 /**
 * @inherits can.Construct
@@ -59,7 +55,7 @@ mad.net.Ajax.request({
 * * response (<a href="#!mad.net.Response">mad.net.Response</a>) : The server answer
 *
 **/
-var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
+var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
 
     defaults : {
         defaultResponseHandlerClass : 'mad.net.ResponseHandler'
@@ -67,7 +63,7 @@ var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
 
     _getResponseHandlerClass: function() {
         var ResponseHandlerClass = this.defaults.defaultResponseHandlerClass;
-        var configHandler = mad.Config.read('net.ResponseHandlerClassName');
+        var configHandler = Config.read('net.ResponseHandlerClassName');
         if (configHandler !== undefined) {
             ResponseHandlerClass = configHandler;
         }
@@ -113,14 +109,14 @@ var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
 
                 // the request has been performed sucessfully
                 function (data, textStatus, jqXHR) {
-                    var response = new mad.net.Response(data),
+                    var response = new Response(data),
                         // the deferred to return
                         deferred = null;
 
                     // @todo check the response format is valid
 
                     // the server returns an error
-                    if (response.getStatus() == mad.net.Response.STATUS_ERROR) {
+                    if (response.getStatus() == Response.STATUS_ERROR) {
                         deferred = $.Deferred();
                         deferred.rejectWith(this, [jqXHR, 'error', response]);
                         return deferred;
@@ -151,12 +147,12 @@ var Ajax = mad.net.Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
                     }
 
                     // In case we've been able to parse the server answer.
-                    if (mad.net.Response.isResponse(jsonData)) {
-                        response = new mad.net.Response(jsonData);
+                    if (Response.isResponse(jsonData)) {
+                        response = new Response(jsonData);
                     }
                     // Otherwise treat a default unreacheable server answer.
                     else {
-                        response = mad.net.Response.getResponse('unreachable');
+                        response = Response.getResponse('unreachable');
                     }
 
                     var deferred = $.Deferred();

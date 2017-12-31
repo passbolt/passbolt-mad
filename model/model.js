@@ -10,18 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from 'passbolt-mad/util/util';
-// Plugin which will help to take care of the association between the models.
-// Will be deprecated after canJs 3.0.
-// see: http://canjs.com/docs/can.Map.attributes.html
-import 'can/map/attributes/attributes';
-import 'passbolt-mad/model/list';
-import 'passbolt-mad/model/serializer/cake_serializer';
 
-/**
- * The package that will contain all codes relative to Model.
- */
-mad.model = mad.model || {};
+import 'can/model/model';
+import 'can/map/attributes/attributes';
+import CakeSerializer from 'passbolt-mad/model/serializer/cake_serializer';
+import List from 'passbolt-mad/model/list';
+import Validation from 'passbolt-mad/util/validation';
 
 /**
  * @parent Mad.core_api
@@ -33,7 +27,7 @@ mad.model = mad.model || {};
  * @constructor mad.Model
  * @inherits can.Model
  */
-var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
+var Model = can.Model.extend('mad.Model', /** @static */ {
 
     /**
     * Force the storing of this model's instances.
@@ -52,110 +46,6 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
      * @protected
      */
     validationRules: {},
-
-    /**
-     * Extract a model attribute value from a reference doted string.
-     *
-     * By instance for *mad.model.MyModel.MySubModel.myAttribute* the function will go through
-     * each given instance attributes and will extract the leaf value.
-     *
-     * @param {string} modelRef
-     * @param {mad.model.Model} instance
-     *
-     * @return {mixed}
-     */
-    getModelAttributeValue: function (modelRef, instance) {
-        var returnValue = [],
-            attributes = mad.Model.getModelAttributes(modelRef),
-            pointer = instance;
-
-        // Go trough the instance attributes and extract the vlaue pointed my the given reference.
-        for (var i = 1; i < attributes.length; i++) {
-            // If the attribute which owns this current attribute is a model and it is multiple.
-            // Extract the attribute value of each instance of the list.
-            // @todo this should be the latest attribute of the list.
-            if (attributes[i - 1].isMultiple()) {
-                returnValue = [];
-                pointer.each(function (subInstance) {
-                    returnValue.push(subInstance[attributes[i].getName()]);
-                });
-            } else {
-                pointer = can.getObject(attributes[i].getName(), pointer);
-                returnValue = pointer;
-            }
-        }
-
-        return returnValue;
-    },
-
-    /**
-     * Extract the model attributes from a reference doted string.
-     *
-     * By instance for *mad.model.MyModel.MySubModel.myAttribute* the function will return :
-     * ```
-     [ {
-    name: 'mad.model.MyModel',
-    modelReference: mad.model.MyModel,
-    multiple: false
-}, {
-    name: 'MySubModel',
-    modelReference: mad.model.MySubModel,
-    multiple: true
-}, {
-    name: 'myAttribute',
-    modelReference: undefined
-    multiple: false
-} ]
-     * ```
-     *
-     * @param {string} str
-     * @return {array|mad.model.Attribute}
-     */
-    getModelAttributes: function (str) {
-        var returnValue = [];
-
-        // Find the root model.
-        var matches = str.match(/[\.]?[A-Z][^.]*/),
-            modelName = str.substr(0, matches.index + matches[0].length),
-            subAttributesStr = str.substr(modelName.length + 1),
-            model = can.getObject(modelName);
-
-        returnValue.push(new mad.model.Attribute({
-            name: modelName,
-            multiple: false,
-            modelReference: model
-        }));
-
-        // Find the sub-models.
-        var subsplit = subAttributesStr.split('.');
-        for (var i in subsplit) {
-            // Extract the attribute type of the chained attribute in the previously discovered model.
-            var attributeType = model.attributes[subsplit[i]],
-                name = '',
-                multiple = false;
-
-            // The attribute type is a reference to a model.
-            if (/models?$/.test(attributeType)) {
-                // Extract the model full name.
-                var matches = attributeType.match(/(.*)\.models?$/);
-                name = subsplit[i];
-                model = can.getObject(matches[1]);
-                multiple = /models$/.test(attributeType);
-            }
-            else {
-                name = subsplit[i];
-                model = undefined;
-            }
-
-            returnValue.push(new mad.model.Attribute({
-                name: name,
-                multiple: multiple,
-                modelReference: model
-            }));
-        }
-
-        return returnValue;
-    },
 
     /**
      * Check if an attribute is a model attribute.
@@ -182,15 +72,14 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     parseModel: function (data, xhr) {
         data = data || {};
 
-        // if the provided data are formated as ajax server response
-        if (mad.net.Response.isResponse(data)) {
-            console.debug('mad.model.parseModel : mad.net.Response.isResponse == true');
-            data = mad.net.Response.getData(data);
+        // if the provided data are formatted as an ajax server response
+        if (typeof data.header != 'undefined') {
+            data = data.body;
             // serialize the data from cake to can format
-            data = mad.model.serializer.CakeSerializer.from(data, this);
+            data = CakeSerializer.from(data, this);
         } else if (data[this.shortName]) {
             // serialize the data from cake to can format
-            data = mad.model.serializer.CakeSerializer.from(data, this);
+            data = CakeSerializer.from(data, this);
         }
 
         return data;
@@ -265,7 +154,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     		}
     		// search in children
     		if (data[i].children) {
-    			var childrenSearch = mad.model.Model.search (data[i].children, key, value);
+    			var childrenSearch = Model.search (data[i].children, key, value);
     			if (childrenSearch.length) {
     				returnValue = $.merge (returnValue, childrenSearch);
     			}
@@ -284,7 +173,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
     */
     searchOne: function (data, key, value) {
     	var returnValue = null;
-    	var searchResults = mad.Model.search(data, key, value);
+    	var searchResults = Model.search(data, key, value);
     	if (searchResults.length) {
     		returnValue = searchResults[0];
     	}
@@ -315,7 +204,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
 
             // If the field is required & doesn't pass the required validation return an error.
             if (requiredRule != null) {
-                var requiredResult = mad.Validation.validate(requiredRule, value);
+                var requiredResult = Validation.validate(requiredRule, value);
                 if (requiredResult !== true) {
                     returnValue.push(requiredResult);
                     return returnValue;
@@ -324,7 +213,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
             // If the filed is not required and doesn't pass the required the validation
             // the system won't process the other constraints.
             else {
-                var requiredResult = mad.Validation.validate('required', value);
+                var requiredResult = Validation.validate('required', value);
                 if (requiredResult !== true) {
                     return returnValue;
                 }
@@ -333,7 +222,7 @@ var Model = mad.Model = can.Model.extend('mad.Model', /** @static */ {
 			// Otherwise execute all the constraints.
 			var attributeRules = rules[attrName];
 			for (var i in attributeRules) {
-				var validateResult = mad.Validation.validate(attributeRules[i], value, values);
+				var validateResult = Validation.validate(attributeRules[i], value, values);
 				if (validateResult !== true) {
 					returnValue.push(validateResult);
 				}

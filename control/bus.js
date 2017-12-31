@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/control/control";
+import Control from "passbolt-mad/control/control";
 
 /**
  * @parent Mad.core_api
@@ -56,7 +56,7 @@ import "passbolt-mad/control/control";
  * by the function which takes care of the request.
  *
  */
-var Bus = mad.Bus = mad.Control.extend('mad.Bus', /** @prototype */ {
+var Bus = Control.extend('mad.Bus', /** @prototype */ {
 
     //// Constructor like.
     //init: function () {

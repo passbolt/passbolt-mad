@@ -10,11 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/component';
-import 'passbolt-mad/view/form/element';
-
-// Initialize the form namespaces.
-mad.form = mad.form || {};
+import Component from 'passbolt-mad/component/component';
+import ElementView from 'passbolt-mad/view/form/element';
 
 /**
  * @parent Mad.form_api
@@ -25,7 +22,7 @@ mad.form = mad.form || {};
  * The Form Element Component as for aim to manage form element.
  * @todo TBD
  */
-var Element = mad.form.Element = mad.Component.extend('mad.form.Element', /* @static */ {
+var Element = Component.extend('mad.form.Element', /* @static */ {
 
     defaults: {
         // Override the label option.
@@ -35,7 +32,7 @@ var Element = mad.form.Element = mad.Component.extend('mad.form.Element', /* @st
         // Override the tag option.
         tag: null,
         // Override the viewClass option.
-        viewClass: mad.view.form.Element,
+        viewClass: ElementView,
 
         // The model the form element represents.
         modelReference: null,

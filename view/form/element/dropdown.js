@@ -10,12 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/form/element';
+import FormElementView from 'passbolt-mad/view/form/element';
 
 /**
  * @inherits mad.view.form.Element
  */
-var Dropdown = mad.view.form.Dropdown = mad.view.form.Element.extend('mad.view.form.Dropdown', /* @static */ {}, /** @prototype */ {
+var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}, /** @prototype */ {
 
     /**
      * Get the value of the dropdown form element

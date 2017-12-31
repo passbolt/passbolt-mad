@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import View from 'passbolt-mad/view/view';
 
 /**
  * @inherits jQuery.View
@@ -18,7 +19,7 @@
  *
  * @return {mad.view.component.Tab}
  */
-var Tab = mad.view.component.Tab = mad.View.extend('mad.view.component.Tab', /** @static */ { }, /** @prototype */ {
+var Tab = View.extend('mad.view.component.Tab', /** @static */ { }, /** @prototype */ {
 
     /**
      * Select a tab

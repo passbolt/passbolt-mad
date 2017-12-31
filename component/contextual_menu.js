@@ -10,8 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/component/dropdown_menu';
-import 'passbolt-mad/view/component/contextual_menu';
+import ContextualMenuView from 'passbolt-mad/view/component/contextual_menu';
+import DropdownMenuComponent from 'passbolt-mad/component/dropdown_menu';
+import HtmlHelper from 'passbolt-mad/helper/html';
 
 /**
  * @parent Mad.components_api
@@ -34,10 +35,10 @@ import 'passbolt-mad/view/component/contextual_menu';
  *   * coordinates [ x, y ] : coordinates where you want to display the contextual menu.
  * @return {mad.component.ContextualMenu}
  */
-var ContextualMenu = mad.component.ContextualMenu = mad.component.DropdownMenu.extend('mad.component.ContextualMenu', {
+var ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMenu', {
 
     defaults: {
-        viewClass: mad.view.component.ContextualMenu,
+        viewClass: ContextualMenuView,
         cssClasses: ['contextual-menu'],
         // The element which requests the contextual menu.
         source: null,
@@ -78,7 +79,7 @@ var ContextualMenu = mad.component.ContextualMenu = mad.component.DropdownMenu.e
             }
 
             // Create the DOM entry point for the contextual menu.
-            var $el = mad.helper.Html.create(
+            var $el = HtmlHelper.create(
                 mad.config.rootElement,
                 'first',
                 '<ul id="js_contextual_menu" />'

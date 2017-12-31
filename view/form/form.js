@@ -10,15 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/view';
-
-// Initialize the view form namespaces.
-mad.view.form = mad.view.form || {};
+import View from 'passbolt-mad/view/view';
 
 /**
  * @inherits mad.View
  */
-var Form = mad.view.Form = mad.View.extend('mad.view.Form', /* @static */ {}, /** @prototype */ {
+var Form = View.extend('mad.view.Form', /* @static */ {}, /** @prototype */ {
 
     /**
      * Set the state of an embedded element.

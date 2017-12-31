@@ -10,12 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/form/element';
+import FormElementView from 'passbolt-mad/view/form/element';
 
 /**
  * @inherits mad.view.form.Element
  */
-var Textbox = mad.view.form.Textbox = mad.view.form.Element.extend('mad.view.form.Textbox', /* @static */ {
+var Textbox = FormElementView.extend('mad.view.form.Textbox', /* @static */ {
 
 }, /** @prototype */ {
 

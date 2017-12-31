@@ -11,19 +11,21 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/bootstrap";
+import CanConstruct from "can/construct/construct";
+import Bootstrap from "passbolt-mad/bootstrap";
+import Component from "passbolt-mad/component/component";
 
 describe("mad.Bootstrap", function () {
 
     it("should inherit can.Construct", function () {
-        var AppControl = mad.Component.extend('mad.test.bootstrap.AppControl', {
+        var AppControl = Component.extend('mad.test.bootstrap.AppControl', {
             defaults: {}
         }, { });
         mad.Config.write('app.controllerElt', '#test-html');
         mad.Config.write('app.ControllerClassName', 'mad.test.bootstrap.AppControl');
 
-        var bootstrap = new mad.Bootstrap();
-        expect(bootstrap).to.be.instanceOf(can.Construct);
+        var bootstrap = new Bootstrap();
+        expect(bootstrap).to.be.instanceOf(CanConstruct);
         mad.getControl('test-html', 'mad.test.bootstrap.AppControl').destroy();
     });
 

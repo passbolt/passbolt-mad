@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/form/choice_element';
-import 'passbolt-mad/view/form/element/dropdown';
+import ChoiceElement from 'passbolt-mad/form/choice_element';
+import DropdownView from 'passbolt-mad/view/form/element/dropdown';
 import template from 'passbolt-mad/view/template/form/dropdown.ejs!';
 
 /**
@@ -21,7 +21,7 @@ import template from 'passbolt-mad/view/template/form/dropdown.ejs!';
  * The Dropdown Form Element
  * @todo TBD
  */
-var Dropdown = mad.form.Dropdown = mad.form.ChoiceElement.extend('mad.form.Dropdown', /* @static */ {
+var Dropdown = ChoiceElement.extend('mad.form.Dropdown', /* @static */ {
 
     defaults: {
         // Override the label option.
@@ -31,7 +31,7 @@ var Dropdown = mad.form.Dropdown = mad.form.ChoiceElement.extend('mad.form.Dropd
         // Override the template option.
         template: template,
         // Override the viewClass option.
-        viewClass: mad.view.form.Dropdown,
+        viewClass: DropdownView,
         // Allow empty value.
         emptyValue: true
 
