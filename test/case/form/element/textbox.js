@@ -11,7 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/form/element/textbox"
+import CanControl from "can/control/control";
+import TextboxFormElement from "passbolt-mad/form/element/textbox"
+import Component from 'passbolt-mad/component/component';
+import FormElement from 'passbolt-mad/form/element';
+import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.form.element.Textbox", function () {
 
@@ -29,19 +33,19 @@ describe("mad.form.element.Textbox", function () {
     });
 
     it("constructed instance should inherit mad.form.Element & the inherited parent classes", function () {
-        var textbox = new mad.form.Textbox($textbox, {});
+        var textbox = new TextboxFormElement($textbox, {});
 
         // Basic control of classes inheritance.
-        expect(textbox).to.be.instanceOf(can.Control);
-        expect(textbox).to.be.instanceOf(mad.Component);
-        expect(textbox).to.be.instanceOf(mad.form.Element);
+        expect(textbox).to.be.instanceOf(CanControl);
+        expect(textbox).to.be.instanceOf(Component);
+        expect(textbox).to.be.instanceOf(FormElement);
 
         textbox.destroy();
     });
 
     it("getValue() should return the value of the textbox", function (done) {
         var firedChanged = false,
-            textbox = new mad.form.Textbox($textbox, {});
+            textbox = new TextboxFormElement($textbox, {});
 
         textbox.start();
 
@@ -59,8 +63,8 @@ describe("mad.form.element.Textbox", function () {
     it("getValue() should return the value of the textbox for several textboxes", function (done) {
         var firedChanged = false,
             $textbox2 = $('<input id="textbox2" type="text" />').appendTo($('#test-html')),
-            textbox = new mad.form.Textbox($textbox, {}).start(),
-            textbox2 = new mad.form.Textbox($textbox2, {}).start();
+            textbox = new TextboxFormElement($textbox, {}).start(),
+            textbox2 = new TextboxFormElement($textbox2, {}).start();
 
         // Simulate a keypress
         $textbox.val('abc').trigger('input');
@@ -78,7 +82,7 @@ describe("mad.form.element.Textbox", function () {
 
     it("Changing the value of the textbox should fire the changed event", function (done) {
         var firedChanged = false,
-            textbox = new mad.form.Textbox($textbox, {});
+            textbox = new TextboxFormElement($textbox, {});
 
         // While the textbox value change.
         $textbox.on('changed', function () {
@@ -103,7 +107,7 @@ describe("mad.form.element.Textbox", function () {
 
     it("With onChangeAfterLength changing the value of the textbox should fire the changed event after the value length limit has been reached", function (done) {
         var firedChanged = false,
-            textbox = new mad.form.Textbox($textbox, {
+            textbox = new TextboxFormElement($textbox, {
                 onChangeAfterLength: 3
             });
 
@@ -138,7 +142,7 @@ describe("mad.form.element.Textbox", function () {
 
     it("With onChangeTimeout changing the value of the textbox should fire the changed event after a period of time", function (done) {
         var firedChanged = false,
-            textbox = new mad.form.Textbox($textbox, {
+            textbox = new TextboxFormElement($textbox, {
                 onChangeTimeout: 100
             });
 

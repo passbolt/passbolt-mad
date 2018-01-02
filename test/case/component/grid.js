@@ -13,7 +13,14 @@
 import "passbolt-mad/test/bootstrap";
 import "passbolt-mad/test/helper/model";
 import "passbolt-mad/test/fixture/users";
-import "passbolt-mad/component/grid";
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import GridColumn from 'passbolt-mad/model/grid_column';
+import GridComponent from "passbolt-mad/component/grid";
+import HtmlHelper from 'passbolt-mad/helper/html';
+import MadControl from 'passbolt-mad/control/control';
+import MadMap from 'passbolt-mad/util/map/map';
+import Model from 'passbolt-mad/model/model';
 
 describe("mad.component.Grid", function () {
 
@@ -37,7 +44,7 @@ describe("mad.component.Grid", function () {
         n = n || 10;
         var items = [];
         for (var i = 0; i<n; i++) {
-            items[i] = new mad.Model({
+            items[i] = new Model({
                 id: 'item_' + i,
                 label: 'item label ' + i,
                 hiddenField: 'hidden label ' + i
@@ -47,28 +54,28 @@ describe("mad.component.Grid", function () {
     };
 
     it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model
+        var grid = new GridComponent($grid, {
+            itemClass: Model
         });
 
         // Basic control of classes inheritance.
-        expect(grid).to.be.instanceOf(can.Control);
-        expect(grid).to.be.instanceOf(mad.Control);
-        expect(grid).to.be.instanceOf(mad.Component);
-        expect(grid).to.be.instanceOf(mad.component.Grid);
+        expect(grid).to.be.instanceOf(CanControl);
+        expect(grid).to.be.instanceOf(MadControl);
+        expect(grid).to.be.instanceOf(Component);
+        expect(grid).to.be.instanceOf(GridComponent);
 
         grid.start();
         grid.destroy();
     });
 
     it("insertItem() requires the map option to be defined", function () {
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model
+        var grid = new GridComponent($grid, {
+            itemClass: Model
         });
         grid.start();
 
         // Insert a first item.
-        var itemInside = new mad.Model({
+        var itemInside = new Model({
             id: 'item_inside',
             label: 'item inside label'
         });
@@ -84,29 +91,29 @@ describe("mad.component.Grid", function () {
 
     it("insertItem() should insert an item into the grid", function () {
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Insert a first item.
-        var itemInside = new mad.Model({
+        var itemInside = new Model({
             id: 'item_inside',
             label: 'item inside label'
         });
@@ -114,7 +121,7 @@ describe("mad.component.Grid", function () {
         expect($('#test-html').text()).to.contain(itemInside.attr('label'));
 
         // Insert an item before the first one.
-        var itemBefore = new mad.Model({
+        var itemBefore = new Model({
             id: 'item_before',
             label: 'item before label'
         });
@@ -123,7 +130,7 @@ describe("mad.component.Grid", function () {
         expect(grid.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_before');
 
         // Insert an item after the before one.
-        var itemAfter = new mad.Model({
+        var itemAfter = new Model({
             id: 'item_after',
             label: 'item after label'
         });
@@ -133,7 +140,7 @@ describe("mad.component.Grid", function () {
         expect(grid.view.getItemElement(itemBefore).next().attr('id')).to.be.equal('item_after');
 
         // Insert an item in first.
-        var itemFirst = new mad.Model({
+        var itemFirst = new Model({
             id: 'item_first',
             label: 'item first label'
         });
@@ -142,7 +149,7 @@ describe("mad.component.Grid", function () {
         expect(grid.view.getItemElement(itemBefore).prev().attr('id')).to.be.equal('item_first');
 
         // Insert an item in last.
-        var itemLast = new mad.Model({
+        var itemLast = new Model({
             id: 'item_last',
             label: 'item last label'
         });
@@ -156,16 +163,16 @@ describe("mad.component.Grid", function () {
 
     it("insertItem() should insert an item and apply a value adapter on its fields", function () {
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label',
@@ -173,15 +180,15 @@ describe("mad.component.Grid", function () {
                 return 'value adapted : ' + value;
             }
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Insert the item.
-        var itemInside = new mad.Model({
+        var itemInside = new Model({
             id: 'item',
             label: 'item label'
         });
@@ -194,33 +201,33 @@ describe("mad.component.Grid", function () {
 
     it("insertItem() should insert an item and apply a cell adapter on the target cell", function () {
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label',
             cellAdapter: function (cellElement, cellValue, mappedItem, item, columnModel) {
                 var html = '<p>Cell adapted applied : ' + cellValue + '</p>';
-                mad.helper.Html.create(cellElement, 'inside_replace', html);
+                HtmlHelper.create(cellElement, 'inside_replace', html);
             }
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Insert the item.
-        var itemInside = new mad.Model({
+        var itemInside = new Model({
             id: 'item',
             label: 'item label'
         });
@@ -233,22 +240,22 @@ describe("mad.component.Grid", function () {
 
     it('load() should insert several items in the grid', function () {
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
@@ -269,29 +276,29 @@ describe("mad.component.Grid", function () {
 
     it("refreshItem() should refresh an item row with an updated items", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Insert a first item.
-        var item = new mad.Model({
+        var item = new Model({
             id: 'item',
             label: 'item label'
         });
@@ -309,22 +316,22 @@ describe("mad.component.Grid", function () {
 
     it("removeItem() should remove an item from the grid", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
@@ -349,22 +356,22 @@ describe("mad.component.Grid", function () {
 
     it("{items} remove() should catch when an items displayed by the list is destroyed and remove it from the grid", function(done){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'username'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
@@ -398,22 +405,22 @@ describe("mad.component.Grid", function () {
 
     it("selectItem() should select an item in the grid", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel,
             callbacks: {
@@ -425,7 +432,7 @@ describe("mad.component.Grid", function () {
         grid.start();
 
         // Insert a first item.
-        var item = new mad.Model({
+        var item = new Model({
             id: 'item_inside',
             label: 'item inside label'
         });
@@ -450,22 +457,22 @@ describe("mad.component.Grid", function () {
 
     it("selectItem() should select an item in the grid after refresh", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel,
             callbacks: {
@@ -477,7 +484,7 @@ describe("mad.component.Grid", function () {
         grid.start();
 
         // Insert a first item.
-        var item = new mad.Model({
+        var item = new Model({
             id: 'item_inside',
             label: 'item inside label'
         });
@@ -504,22 +511,22 @@ describe("mad.component.Grid", function () {
 
     it("filter() should filter the grid with the given items", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
@@ -552,22 +559,22 @@ describe("mad.component.Grid", function () {
 
     it("filterByKeywords() should filter the grid by keywords", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label'
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
@@ -608,24 +615,24 @@ describe("mad.component.Grid", function () {
 
     it("sort() should mark a column as sorted", function() {
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id',
             sortable: true
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label',
             sortable: true
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
@@ -657,23 +664,23 @@ describe("mad.component.Grid", function () {
 
     it("sort() should sort the grid regarding a given column", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label',
             sortable: true
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });
@@ -688,7 +695,7 @@ describe("mad.component.Grid", function () {
             var rand = Math.floor(Math.random() * alphabetCopy.length),
                 letter = alphabetCopy.splice(rand, 1);
 
-            items[i] = new mad.Model({
+            items[i] = new Model({
                 id: 'item_' + letter,
                 label: 'item label ' + letter
             });
@@ -719,23 +726,23 @@ describe("mad.component.Grid", function () {
 
     it("sort() reloading should mark the grid as unsorted", function(){
         // Set the grid map that will be used to transform the data for the view.
-        var map = new mad.Map({
+        var map = new MadMap({
             id: 'id',
             label: 'label'
         });
         // Set the grid columns model.
-        var columnModel = [new mad.model.GridColumn({
+        var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
             label: 'id'
-        }), new mad.model.GridColumn({
+        }), new GridColumn({
             name: 'label',
             index: 'label',
             label: 'label',
             sortable: true
         })];
-        var grid = new mad.component.Grid($grid, {
-            itemClass: mad.Model,
+        var grid = new GridComponent($grid, {
+            itemClass: Model,
             map: map,
             columnModel: columnModel
         });

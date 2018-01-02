@@ -11,7 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/dialog"
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import CompositeComponent from "passbolt-mad/component/composite";
+import DialogComponent from "passbolt-mad/component/dialog"
+import FreeCompositeComponent from "passbolt-mad/component/free_composite";
+import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.component.Dialog", function () {
 
@@ -21,21 +26,21 @@ describe("mad.component.Dialog", function () {
     });
 
     it("constructed instance should inherit mad.component.FreeComposite & the inherited parent classes", function () {
-        var dialog = new mad.component.Dialog(null, {label: 'Dialog Test'}).start();
+        var dialog = new DialogComponent(null, {label: 'Dialog Test'}).start();
 
         // Basic control of classes inheritance.
-        expect(dialog).to.be.instanceOf(can.Control);
-        expect(dialog).to.be.instanceOf(mad.Control);
-        expect(dialog).to.be.instanceOf(mad.Component);
-        expect(dialog).to.be.instanceOf(mad.component.Composite);
-        expect(dialog).to.be.instanceOf(mad.component.FreeComposite);
+        expect(dialog).to.be.instanceOf(CanControl);
+        expect(dialog).to.be.instanceOf(MadControl);
+        expect(dialog).to.be.instanceOf(Component);
+        expect(dialog).to.be.instanceOf(CompositeComponent);
+        expect(dialog).to.be.instanceOf(FreeCompositeComponent);
 
         dialog.start();
     });
 
     it("Dialog should be visible in the dom after start", function () {
         expect($('.dialog-wrapper').length).to.equal(0);
-        var dialog = new mad.component.Dialog(null, {label: 'Dialog Test'}).start();
+        var dialog = new DialogComponent(null, {label: 'Dialog Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
 
         expect($('.dialog').html()).to.contain('Dialog Test');
@@ -43,7 +48,7 @@ describe("mad.component.Dialog", function () {
     });
 
     it("Dialog should be hidden after clicking on close", function () {
-        var dialog = new mad.component.Dialog(null, {label: 'Dialog Test'}).start();
+        var dialog = new DialogComponent(null, {label: 'Dialog Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
         $('a.dialog-close').click();
         expect($('.dialog').length).to.equal(0);

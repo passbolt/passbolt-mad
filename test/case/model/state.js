@@ -11,17 +11,20 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import CanModel from 'can/model/model';
+import Model from 'passbolt-mad/model/model';
+import State from 'passbolt-mad/model/state';
 
 describe("mad.model.State", function(){
 
 	it("should inherit can.Model & mad.Model", function(){
-		var state = new mad.model.State();
-		expect(state).to.be.instanceOf(can.Model);
-		expect(state).to.be.instanceOf(mad.Model);
+		var state = new State();
+		expect(state).to.be.instanceOf(CanModel);
+		expect(state).to.be.instanceOf(Model);
 	});
 
 	it("setState() should change the current state(s)", function(){
-		var state = new mad.model.State();
+		var state = new State();
 		expect(state.previous.length).to.be.equal(0);
 		expect(state.current.length).to.be.equal(0);
 
@@ -48,7 +51,7 @@ describe("mad.model.State", function(){
 	});
 
 	it("add() & remove() states", function(){
-		var state = new mad.model.State();
+		var state = new State();
 
 		// Set the state to A.
 		state.addState('A');

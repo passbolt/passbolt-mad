@@ -11,7 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/toggle_button";
+import ButtonComponent from 'passbolt-mad/component/button';
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import MadControl from 'passbolt-mad/control/control';
+import ToggleButtonComponent from "passbolt-mad/component/toggle_button";
 
 describe("mad.component.ToggleButton", function () {
 
@@ -28,22 +32,22 @@ describe("mad.component.ToggleButton", function () {
         $('#test-html').empty();
     });
 
-    it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
-        var button = new mad.component.ToggleButton($button);
+    it("constructed instance should inherit mad.component.Button & the inherited parent classes", function () {
+        var button = new ToggleButtonComponent($button);
 
         // Basic control of classes inheritance.
-        expect(button).to.be.instanceOf(can.Control);
-        expect(button).to.be.instanceOf(mad.Control);
-        expect(button).to.be.instanceOf(mad.Component);
-        expect(button).to.be.instanceOf(mad.component.Button);
-        expect(button).to.be.instanceOf(mad.component.ToggleButton);
+        expect(button).to.be.instanceOf(CanControl);
+        expect(button).to.be.instanceOf(MadControl);
+        expect(button).to.be.instanceOf(Component);
+        expect(button).to.be.instanceOf(ButtonComponent);
+        expect(button).to.be.instanceOf(ToggleButtonComponent);
 
         button.start();
         button.destroy();
     });
 
     it("a click on button should put it in pressed position", function () {
-        var button = new mad.component.ToggleButton($button, {});
+        var button = new ToggleButtonComponent($button, {});
         button.start();
 
         $button.click();

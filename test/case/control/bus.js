@@ -11,25 +11,27 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/control/bus";
+import MadBus from "passbolt-mad/control/bus";
 
 describe("mad.Bus", function(){
 
     it("should inherit can.Control & mad.Control", function(){
-        var bus = new mad.Bus($('#test-html'));
+        var $busElement = $('<div/>').prepend('#test-html');
+        var bus = MadBus.singleton($busElement);
         expect(bus).to.be.instanceOf(can.Control);
         expect(bus).to.be.instanceOf(mad.Control);
-        bus.destroy();
+        MadBus.destroy();
     });
 
     it("trigger() & bind(): should help to broadcast & intercept message on the bus", function() {
         var caught = false;
-        var bus = new mad.Bus($('#test-html'));
-        bus.bind('event_name', function() {
+        var $busElement = $('<div/>').prepend('#test-html');
+        MadBus.singleton($busElement);
+        MadBus.bind('event_name', function() {
             caught = true;
         });
-        bus.trigger('event_name');
+        MadBus.trigger('event_name');
         expect(caught).to.be.true;
-        bus.destroy();
+        MadBus.destroy();
     });
 });

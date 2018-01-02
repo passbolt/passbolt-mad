@@ -11,14 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import Attribute from 'passbolt-mad/model/attribute';
 import "passbolt-mad/test/helper/model";
 import "passbolt-mad/test/fixture/users";
 
 describe("mad.model.Attribute", function () {
 
-    it("should inherit mad.model.Attribute", function () {
-        var attribute = new mad.model.Attribute();
-        expect(attribute).to.be.instanceOf(mad.model.Attribute);
+    it("should inherit Attribute", function () {
+        var attribute = new Attribute();
+        expect(attribute).to.be.instanceOf(Attribute);
         expect(attribute).to.be.instanceOf(mad.Model);
     });
 
@@ -27,7 +28,7 @@ describe("mad.model.Attribute", function () {
             instance = null;
 
         // Check simple model attribute
-        attributes = mad.model.Attribute.getModelAttributes('mad.test.model.TestModel.testModelAttribute');
+        attributes = Attribute.getModelAttributes('mad.test.model.TestModel.testModelAttribute');
 
         expect(attributes[0].isMultiple()).to.be.false;
         expect(attributes[0].getName()).to.be.equal('mad.test.model.TestModel');
@@ -39,7 +40,7 @@ describe("mad.model.Attribute", function () {
         expect(attributes[1].getModelReference()).to.be.undefined;
 
         // Check nested model attribute
-        attributes = mad.model.Attribute.getModelAttributes('mad.test.model.TestModel.TestModel1.myModel1Attribute');
+        attributes = Attribute.getModelAttributes('mad.test.model.TestModel.TestModel1.myModel1Attribute');
 
         expect(attributes[0].isMultiple()).to.be.false;
         expect(attributes[0].getName()).to.be.equal('mad.test.model.TestModel');
@@ -56,7 +57,7 @@ describe("mad.model.Attribute", function () {
         expect(attributes[2].getModelReference()).to.be.undefined;
 
         // Check nested models attribute
-        attributes = mad.model.Attribute.getModelAttributes('mad.test.model.TestModel.TestModel1s.myModel1Attribute');
+        attributes = Attribute.getModelAttributes('mad.test.model.TestModel.TestModel1s.myModel1Attribute');
 
         expect(attributes[0].isMultiple()).to.be.false;
         expect(attributes[0].getName()).to.be.equal('mad.test.model.TestModel');
@@ -73,7 +74,7 @@ describe("mad.model.Attribute", function () {
         expect(attributes[2].getModelReference()).to.be.undefined;
 
         // Check multiple nested models attribute
-        attributes = mad.model.Attribute.getModelAttributes('mad.test.model.TestModel.TestModel1.TestModel2.myModel2Attribute');
+        attributes = Attribute.getModelAttributes('mad.test.model.TestModel.TestModel1.TestModel2.myModel2Attribute');
 
         expect(attributes[0].isMultiple()).to.be.false;
         expect(attributes[0].getName()).to.be.equal('mad.test.model.TestModel');
@@ -110,15 +111,15 @@ describe("mad.model.Attribute", function () {
             value = null;
 
         // Test a simple value in a simple object.
-        value = mad.model.Attribute.getModelAttributeValue('mad.test.model.TestModel.testModelAttribute', instance);
+        value = Attribute.getModelAttributeValue('mad.test.model.TestModel.testModelAttribute', instance);
         expect(value).to.be.equal('testModelAttributeValue');
 
         // Test a simple value in a nested object.
-        value = mad.model.Attribute.getModelAttributeValue('mad.test.model.TestModel.TestModel1.myModel1Attribute', instance);
+        value = Attribute.getModelAttributeValue('mad.test.model.TestModel.TestModel1.myModel1Attribute', instance);
         expect(value).to.be.equal('myModel1AttributeValue');
 
         // Test a multiple value in a nested object.
-        value = mad.model.Attribute.getModelAttributeValue('mad.test.model.TestModel.TestModel1s.myModel1Attribute', instance);
+        value = Attribute.getModelAttributeValue('mad.test.model.TestModel.TestModel1s.myModel1Attribute', instance);
         var expectedArray = ['myModel1sAttributeValue1', 'myModel1sAttributeValue2'];
         expect(value.sort()).to.be.deep.equal(expectedArray.sort());
     });

@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import HtmlHelper from 'passbolt-mad/helper/html';
 
 describe("mad.helper.Html", function(){
 
@@ -24,7 +25,7 @@ describe("mad.helper.Html", function(){
 			position = 'inside_replace',
 			id = "inside_replace_element",
 			content = '<div id="' + id + '"/>';
-		var $component = mad.helper.Html.create(refElement, position, content);
+		var $component = HtmlHelper.create(refElement, position, content);
 		expect($('#' + id).length).to.be.not.equal(0);
 		expect($('#test-html').children().length).to.be.equal(1);
 
@@ -33,7 +34,7 @@ describe("mad.helper.Html", function(){
 			position = 'before',
 			id = "before_element",
 			content = '<div id="' + id + '"/>';
-		var $component = mad.helper.Html.create(refElement, position, content);
+		var $component = HtmlHelper.create(refElement, position, content);
 		expect($('#' + id).length).to.be.not.equal(0);
 		expect($('#test-html').children().length).to.be.equal(2);
 		expect(refElement.prev().attr('id')).to.be.equal(id);
@@ -43,7 +44,7 @@ describe("mad.helper.Html", function(){
 			position = 'after',
 			id = "after_element",
 			content = '<div id="' + id + '"/>';
-		var $component = mad.helper.Html.create(refElement, position, content);
+		var $component = HtmlHelper.create(refElement, position, content);
 		expect($('#' + id).length).to.be.not.equal(0);
 		expect($('#test-html').children().length).to.be.equal(3);
 		expect(refElement.next().attr('id')).to.be.equal(id);
@@ -53,7 +54,7 @@ describe("mad.helper.Html", function(){
 			position = 'first',
 			id = "first_element",
 			content = '<div id="' + id + '"/>';
-		var $component = mad.helper.Html.create(refElement, position, content);
+		var $component = HtmlHelper.create(refElement, position, content);
 		expect($('#' + id).length).to.be.not.equal(0);
 		expect($('#test-html').children().length).to.be.equal(4);
 		expect(refElement.children().first().attr('id')).to.be.equal(id);
@@ -63,7 +64,7 @@ describe("mad.helper.Html", function(){
 			position = 'last',
 			id = "last_element",
 			content = '<div id="' + id + '"/>';
-		var $component = mad.helper.Html.create(refElement, position, content);
+		var $component = HtmlHelper.create(refElement, position, content);
 		expect($('#' + id).length).to.be.not.equal(0);
 		expect($('#test-html').children().length).to.be.equal(5);
 		expect(refElement.children().last().attr('id')).to.be.equal(id);

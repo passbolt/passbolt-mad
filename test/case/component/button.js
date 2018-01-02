@@ -11,7 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/button";
+import ButtonComponent from "passbolt-mad/component/button";
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.component.Button", function () {
 
@@ -31,13 +34,13 @@ describe("mad.component.Button", function () {
     });
 
     it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
-        var button = new mad.component.Button($button);
+        var button = new ButtonComponent($button);
 
         // Basic control of classes inheritance.
-        expect(button).to.be.instanceOf(can.Control);
-        expect(button).to.be.instanceOf(mad.Control);
-        expect(button).to.be.instanceOf(mad.Component);
-        expect(button).to.be.instanceOf(mad.component.Button);
+        expect(button).to.be.instanceOf(CanControl);
+        expect(button).to.be.instanceOf(MadControl);
+        expect(button).to.be.instanceOf(Component);
+        expect(button).to.be.instanceOf(ButtonComponent);
 
         button.start();
         button.destroy();
@@ -45,7 +48,7 @@ describe("mad.component.Button", function () {
 
     it("a click on button should trigger the associated function", function () {
         var valueTest = 'k3d';
-        var button = new mad.component.Button($button, {
+        var button = new ButtonComponent($button, {
             value: valueTest,
             events: {
                 'click': function (el, ev, value) {
@@ -62,7 +65,7 @@ describe("mad.component.Button", function () {
     });
 
     it("state disabled should be intercepted", function () {
-        var button = new mad.component.Button($button);
+        var button = new ButtonComponent($button);
         button.start();
 
         button.setState('disabled');
@@ -73,7 +76,7 @@ describe("mad.component.Button", function () {
 
     it("click should not be executed if the state is disabled", function () {
         var valueTest = 'k3d';
-        var button = new mad.component.Button($button, {
+        var button = new ButtonComponent($button, {
             value: valueTest,
             events: {
                 'click': function (el, ev, value) {

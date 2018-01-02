@@ -10,8 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/construct/construct';
+import Construct from   'can/construct/construct';
 import Config from 'passbolt-mad/config/config';
+import MadBus from 'passbolt-mad/control/bus';
 import Response from 'passbolt-mad/net/response';
 import ResponseHandler from 'passbolt-mad/net/response_handler'
 
@@ -99,7 +100,7 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
 
         // Notify other components that an ajax request has been fired.
         if (typeof(mad.bus) != 'undefined') {
-            mad.bus.trigger('mad_ajax_request_start', request);
+            MadBus.trigger('mad_ajax_request_start', request);
         }
 
         // Perform the request.
@@ -167,7 +168,7 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
         returnValue.then(function (data, response, request) {
             // Notify other components that the ajax request has been completed.
             if (typeof(mad.bus) != 'undefined') {
-                mad.bus.trigger('mad_ajax_request_complete', request);
+                MadBus.trigger('mad_ajax_request_complete', request);
             }
             var ResponseHandlerClass = self._getResponseHandlerClass();
             var ResponseHandlerClass = can.getObject(ResponseHandlerClass);
@@ -179,7 +180,7 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
         returnValue.fail(function (jqXHR, textStatus, response) {
             // Notify other components that the ajax request has been completed.
             if (typeof(mad.bus) != 'undefined') {
-                mad.bus.trigger('mad_ajax_request_complete', request);
+                MadBus.trigger('mad_ajax_request_complete', request);
             }
             var ResponseHandlerClass = self._getResponseHandlerClass();
             var ResponseHandlerClass = can.getObject(ResponseHandlerClass);

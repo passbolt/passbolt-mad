@@ -11,7 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import Tree from "passbolt-mad/component/tree";
+import ComponentHelper from 'passbolt-mad/helper/component';
+import Model from 'passbolt-mad/model/model'
+import TreeComponent from "passbolt-mad/component/tree";
 
 describe("mad.helper.Component", function(){
 
@@ -24,19 +26,19 @@ describe("mad.helper.Component", function(){
 
     it("create() should initialize and insert a new Component", function() {
         // Use a helper to insert a component.
-        var component = mad.helper.Component.create(
+        var component = ComponentHelper.create(
             $rootElement,
             'last',
-            mad.component.Tree
+            TreeComponent
         );
-        expect(component instanceof mad.component.Tree).to.be.true;
+        expect(component instanceof TreeComponent).to.be.true;
 
         // The component has been well inserted.
         component.start();
         expect($('.mad_component_tree').length).to.be.equal(1);
 
         // Quick check that everything is working fine with the primitive of the component.
-        var items = new mad.Model.List([{
+        var items = new Model.List([{
             id: 'item_1',
             label: 'Item 1'
         }, {

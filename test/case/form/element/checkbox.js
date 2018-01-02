@@ -11,7 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/form/element/checkbox"
+import CanControl from "can/control/control";
+import CheckboxFormElement from "passbolt-mad/form/element/checkbox"
+import Component from 'passbolt-mad/component/component';
+import FormElement from 'passbolt-mad/form/element';
+import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.form.element.Checkbox", function () {
 
@@ -29,19 +33,19 @@ describe("mad.form.element.Checkbox", function () {
     });
 
     it("constructed instance should inherit mad.form.Element & the inherited parent classes", function () {
-        var checkbox = new mad.form.Checkbox($checkbox, {});
+        var checkbox = new CheckboxFormElement($checkbox, {});
 
         // Basic control of classes inheritance.
-        expect(checkbox).to.be.instanceOf(can.Control);
-        expect(checkbox).to.be.instanceOf(mad.Component);
-        expect(checkbox).to.be.instanceOf(mad.form.Element);
+        expect(checkbox).to.be.instanceOf(CanControl);
+        expect(checkbox).to.be.instanceOf(Component);
+        expect(checkbox).to.be.instanceOf(FormElement);
 
         checkbox.destroy();
     });
 
     it("Changing the value of the checkbox should fire the changed event", function () {
         var firedChanged = false,
-            checkbox = new mad.form.Checkbox($checkbox, {
+            checkbox = new CheckboxFormElement($checkbox, {
                 availableValues: {
                     'option_1': 'Option 1',
                     'option_2': 'Option 2',

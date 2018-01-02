@@ -11,22 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import MadControl from 'passbolt-mad/control/control';
+
 import customTemplate from 'passbolt-mad/test/case/component/component_custom_template.ejs!'
 
 describe("mad.Component", function(){
 
-	// Extend mad.Component for the needs of the tests.
-	var MyComponent = mad.Component.extend('MyComponent', {
+	// Extend Component for the needs of the tests.
+	var MyComponent = Component.extend('MyComponent', {
 		defaults: {}
 	}, {});
 
 	it("should inherit can.Control & mad.Control", function(){
-		var component = new mad.Component($('#test-html'));
+		var component = new Component($('#test-html'));
 
 		// Basic control of classes inheritance.
-		expect(component).to.be.instanceOf(can.Control);
-		expect(component).to.be.instanceOf(mad.Control);
-		expect(component).to.be.instanceOf(mad.Component);
+		expect(component).to.be.instanceOf(CanControl);
+		expect(component).to.be.instanceOf(MadControl);
+		expect(component).to.be.instanceOf(Component);
 
 		component.destroy();
 	});
@@ -72,7 +76,7 @@ describe("mad.Component", function(){
 	});
 
 	it("should be in the overridden default state after being started", function() {
-		var MyComponentOverriddenState = mad.Component.extend('MyComponentOverriddenState', {
+		var MyComponentOverriddenState = Component.extend('MyComponentOverriddenState', {
 			defaults: {
 				state: 'disabled',
 			}
@@ -91,7 +95,7 @@ describe("mad.Component", function(){
 	});
 
 	it("should be rendered based on a custom template if defined", function() {
-		var CustomComponent = mad.Component.extend('MyComponentOverriddenTemplate', {
+		var CustomComponent = Component.extend('MyComponentOverriddenTemplate', {
 			defaults: {
 				state: 'disabled',
 				template: customTemplate

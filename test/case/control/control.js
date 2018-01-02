@@ -11,18 +11,20 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import CanControl from "can/control/control";
+import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.Control", function(){
 
 	it("should inherit can.Control & mad.Control", function(){
-		var control = new mad.Control($('#test-html'));
-		expect(control).to.be.instanceOf(can.Control);
-		expect(control).to.be.instanceOf(mad.Control);
+		var control = new MadControl($('#test-html'));
+		expect(control).to.be.instanceOf(CanControl);
+		expect(control).to.be.instanceOf(MadControl);
 		control.destroy();
 	});
 
 	it("should be referenced on instantiation and unreferenced on destroy", function() {
-		var control = new mad.Control($('#test-html'));
+		var control = new MadControl($('#test-html'));
 		assert.isDefined(mad._controls['test-html']['mad.Control']);
 		var searchedControl = mad.getControl('test-html');
         expect(searchedControl).to.not.be.undefined;

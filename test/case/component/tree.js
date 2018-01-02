@@ -11,7 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/tree"
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import MadControl from 'passbolt-mad/control/control';
+import Model from 'passbolt-mad/model/model';
+import TreeComponent from "passbolt-mad/component/tree"
 
 describe("mad.component.Tree", function () {
 
@@ -28,29 +32,29 @@ describe("mad.component.Tree", function () {
         $('#test-html').empty();
     });
 
-    it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+    it("constructed instance should inherit TreeComponent & the inherited parent classes", function () {
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
 
         // Basic control of classes inheritance.
-        expect(tree).to.be.instanceOf(can.Control);
-        expect(tree).to.be.instanceOf(mad.Control);
-        expect(tree).to.be.instanceOf(mad.Component);
-        expect(tree).to.be.instanceOf(mad.component.Tree);
+        expect(tree).to.be.instanceOf(CanControl);
+        expect(tree).to.be.instanceOf(MadControl);
+        expect(tree).to.be.instanceOf(Component);
+        expect(tree).to.be.instanceOf(TreeComponent);
 
         tree.start();
         tree.destroy();
     });
 
     it("insertItem() should insert an item into the tree", function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
         // Insert a first item.
-        var itemInside = new mad.Model({
+        var itemInside = new Model({
             id: 'item_inside',
             label: 'item inside label'
         });
@@ -59,7 +63,7 @@ describe("mad.component.Tree", function () {
         expect(tree.options.items.length).to.be.equal(1);
 
         // Insert an item before the first one.
-        var itemBefore = new mad.Model({
+        var itemBefore = new Model({
             id: 'item_before',
             label: 'item before label'
         });
@@ -69,7 +73,7 @@ describe("mad.component.Tree", function () {
         expect(tree.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_before');
 
         // Insert an item after the before one.
-        var itemAfter = new mad.Model({
+        var itemAfter = new Model({
             id: 'item_after',
             label: 'item after label'
         });
@@ -80,7 +84,7 @@ describe("mad.component.Tree", function () {
         expect(tree.view.getItemElement(itemBefore).next().attr('id')).to.be.equal('item_after');
 
         // Insert a child.
-        var itemChildInside = new mad.Model({
+        var itemChildInside = new Model({
             id: 'item_child_inside',
             label: 'item child inside label'
         });
@@ -90,7 +94,7 @@ describe("mad.component.Tree", function () {
         expect(tree.view.getItemElement(itemBefore).find('ul:first').children().attr('id')).to.be.equal('item_child_inside');
 
         // Insert a child in first position.
-        var itemChildFirst = new mad.Model({
+        var itemChildFirst = new Model({
             id: 'item_child_first',
             label: 'item child first label'
         });
@@ -100,7 +104,7 @@ describe("mad.component.Tree", function () {
         expect(tree.view.getItemElement(itemChildInside).prev().attr('id')).to.be.equal('item_child_first');
 
         // Test inserting an element in first position without providing a refItem.
-        var itemFirst = new mad.Model({
+        var itemFirst = new Model({
             id: 'item_first',
             label: 'item first label'
         });
@@ -114,18 +118,18 @@ describe("mad.component.Tree", function () {
     });
 
     it('load() should insert several items in the tree', function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
-        var items = new mad.Model.List([{
+        var items = new Model.List([{
             id: 'item_1',
             label: 'Item 1'
         }, {
             id: 'item_2',
             label: 'Item 2',
-            children: new mad.Model.List([{
+            children: new Model.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {
@@ -147,15 +151,15 @@ describe("mad.component.Tree", function () {
     });
 
     it("removeItem() should remove an item from the tree - root level", function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
         // Insert items at root level.
         var items = [];
         for (var i = 0; i < 5; i++) {
-            items[i] = new mad.Model({
+            items[i] = new Model({
                 id: 'item_inside_' + i,
                 label: 'item inside label ' + i
             });
@@ -179,8 +183,8 @@ describe("mad.component.Tree", function () {
     });
 
     it("removeItem() should remove an item from the tree - nested levels", function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
@@ -188,7 +192,7 @@ describe("mad.component.Tree", function () {
         var items = [];
         var subItems = [];
         for (var i = 0; i < 5; i++) {
-            items[i] = new mad.Model({
+            items[i] = new Model({
                 id: 'item_inside_' + i,
                 label: 'item inside label ' + i
             });
@@ -198,7 +202,7 @@ describe("mad.component.Tree", function () {
             // Insert nested element.
             subItems[i] = [];
             for (var j = 0; j < 5; j++) {
-                subItems[i][j] = new mad.Model({
+                subItems[i][j] = new Model({
                     id: 'sub_item_inside_' + i + '_' + j,
                     label: 'sub item label ' + i + ' ' + j
                 });
@@ -258,13 +262,13 @@ describe("mad.component.Tree", function () {
     });
 
     it("refreshItem() should refresh an item in the tree", function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
         // Insert a first item.
-        var item = new mad.Model({
+        var item = new Model({
             id: 'item_inside',
             label: 'item inside label'
         });
@@ -282,13 +286,13 @@ describe("mad.component.Tree", function () {
     });
 
     it("selectItem() should select an item in the tree", function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
         // Insert an item.
-        var item = new mad.Model({
+        var item = new Model({
             id: 'item',
             label: 'item label'
         });
@@ -315,13 +319,13 @@ describe("mad.component.Tree", function () {
     });
 
     it("selectItem() should select an item in the tree after refresh", function () {
-        var tree = new mad.component.Tree($tree, {
-            itemClass: mad.Model
+        var tree = new TreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
         // Insert an item.
-        var item = new mad.Model({
+        var item = new Model({
             id: 'item',
             label: 'item label'
         });

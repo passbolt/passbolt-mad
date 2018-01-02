@@ -11,7 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/contextual_menu";
+import Action from "passbolt-mad/model/action";
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import ContextualMenuComponent from "passbolt-mad/component/contextual_menu";
+import DropdownMenuComponent from 'passbolt-mad/component/dropdown_menu';
+import MadControl from 'passbolt-mad/control/control';
+import MenuComponent from 'passbolt-mad/component/menu';
 
 describe("mad.component.ContextualMenu", function () {
 
@@ -34,10 +40,10 @@ describe("mad.component.ContextualMenu", function () {
         var item_offset = $item.offset();
 
         // Instantiate the contextual menu menu.
-        var contextualMenu = new mad.component.ContextualMenu(null, {
-            'state': 'hidden',
-            'source': $item[0],
-            'coordinates': {
+        var contextualMenu = new ContextualMenuComponent(null, {
+            state: 'hidden',
+            source: $item[0],
+            coordinates: {
                 x: item_offset.left,
                 y: item_offset.top
             }
@@ -46,7 +52,7 @@ describe("mad.component.ContextualMenu", function () {
 
         // Add a link to filter on all items as first item.
         var menuItems = [];
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'el1',
             label: 'Item 1',
             action: function () {
@@ -54,7 +60,7 @@ describe("mad.component.ContextualMenu", function () {
             }
         });
         contextualMenu.insertItem(menuItem);
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'el2',
             label: 'Item 2',
             action: function () {
@@ -68,7 +74,7 @@ describe("mad.component.ContextualMenu", function () {
     }
 
     it("constructed instance should inherit mad.component.DropdownMenu & the inherited parent classes", function () {
-        var menu = new mad.component.ContextualMenu(null, {
+        var menu = new ContextualMenuComponent(null, {
             'state': 'hidden',
             'source': $menu,
             'coordinates': {
@@ -78,11 +84,11 @@ describe("mad.component.ContextualMenu", function () {
         });
 
         // Basic control of classes inheritance.
-        expect(menu).to.be.instanceOf(can.Control);
-        expect(menu).to.be.instanceOf(mad.Control);
-        expect(menu).to.be.instanceOf(mad.Component);
-        expect(menu).to.be.instanceOf(mad.component.Menu);
-        expect(menu).to.be.instanceOf(mad.component.DropdownMenu);
+        expect(menu).to.be.instanceOf(CanControl);
+        expect(menu).to.be.instanceOf(MadControl);
+        expect(menu).to.be.instanceOf(Component);
+        expect(menu).to.be.instanceOf(MenuComponent);
+        expect(menu).to.be.instanceOf(DropdownMenuComponent);
 
         menu.start();
         menu.destroy();
@@ -125,7 +131,7 @@ describe("mad.component.ContextualMenu", function () {
         showContextualMenu($menu);
 
         // Remove contextual menu.
-        mad.component.ContextualMenu.remove();
+        ContextualMenuComponent.remove();
 
         // Expect contextual menu to have been removed.
         expect($('#js_contextual_menu').length).to.equal(0);

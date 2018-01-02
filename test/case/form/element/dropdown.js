@@ -11,7 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/form/element/dropdown"
+import CanControl from "can/control/control";
+import ChoiceFormElement from 'passbolt-mad/form/choice_element';
+import DropdownFormElement from "passbolt-mad/form/element/dropdown"
+import Component from 'passbolt-mad/component/component';
+import FormElement from 'passbolt-mad/form/element';
+import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.form.element.Dropdown", function () {
 
@@ -29,19 +34,19 @@ describe("mad.form.element.Dropdown", function () {
     });
 
     it("constructed instance should inherit mad.form.Element & the inherited parent classes", function () {
-        var dropdown = new mad.form.Dropdown($dropdown, {});
+        var dropdown = new DropdownFormElement($dropdown, {});
 
         // Basic control of classes inheritance.
-        expect(dropdown).to.be.instanceOf(can.Control);
-        expect(dropdown).to.be.instanceOf(mad.Component);
-        expect(dropdown).to.be.instanceOf(mad.form.Element);
-        expect(dropdown).to.be.instanceOf(mad.form.ChoiceElement);
+        expect(dropdown).to.be.instanceOf(CanControl);
+        expect(dropdown).to.be.instanceOf(Component);
+        expect(dropdown).to.be.instanceOf(FormElement);
+        expect(dropdown).to.be.instanceOf(ChoiceFormElement);
 
         dropdown.destroy();
     });
 
     it("getValue() should return the value of the dropdown", function (done) {
-        var dropdown = new mad.form.Dropdown($dropdown, {
+        var dropdown = new DropdownFormElement($dropdown, {
                 availableValues: {
                     ID_1: 'VALUE 1',
                     ID_2: 'VALUE 2',
@@ -60,7 +65,7 @@ describe("mad.form.element.Dropdown", function () {
 
     it("Changing the value of the dropdown should fire the changed event", function (done) {
         var firedChanged = false,
-            dropdown = new mad.form.Dropdown($dropdown, {
+            dropdown = new DropdownFormElement($dropdown, {
             availableValues: {
                 ID_1: 'VALUE 1',
                 ID_2: 'VALUE 2',

@@ -11,7 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/tab";
+import Action from "passbolt-mad/model/action";
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import CompositeComponent from 'passbolt-mad/component/composite';
+import MadControl from 'passbolt-mad/control/control';
+import TabComponent from "passbolt-mad/component/tab";
 
 describe("mad.component.Tab", function () {
 
@@ -29,34 +34,34 @@ describe("mad.component.Tab", function () {
     });
 
 
-    it("constructed instance should inherit mad.component.Tab & the inherited parent classes", function () {
-        var tabs = new mad.component.Tab('#tab');
+    it("constructed instance should inherit TabComponent & the inherited parent classes", function () {
+        var tabs = new TabComponent('#tab');
 
         // Basic control of classes inheritance.
-        expect(tabs).to.be.instanceOf(can.Control);
-        expect(tabs).to.be.instanceOf(mad.Control);
-        expect(tabs).to.be.instanceOf(mad.Component);
-        expect(tabs).to.be.instanceOf(mad.component.Composite);
-        expect(tabs).to.be.instanceOf(mad.component.Tab);
+        expect(tabs).to.be.instanceOf(CanControl);
+        expect(tabs).to.be.instanceOf(MadControl);
+        expect(tabs).to.be.instanceOf(Component);
+        expect(tabs).to.be.instanceOf(CompositeComponent);
+        expect(tabs).to.be.instanceOf(TabComponent);
 
         tabs.start();
         tabs.destroy();
     });
 
     it("Tabs should appear and disappear on click", function () {
-        var tabs = new mad.component.Tab('#tab', {
+        var tabs = new TabComponent('#tab', {
             autoMenu: true
         });
         tabs.start();
 
         // Tab 1.
-        var tab1 = tabs.addComponent(mad.Component, {
+        var tab1 = tabs.addComponent(Component, {
             id: 'free-composite-1',
             label: 'tab1'
         });
 
         // Tab2.
-        var tab2 = tabs.addComponent(mad.Component, {
+        var tab2 = tabs.addComponent(Component, {
             id: 'free-composite-2',
             label: 'tab2'
         });

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/util/lang/i18n";
+import I18n from "passbolt-mad/util/lang/i18n";
 
 // Sample of dictionary
 var dico = {
@@ -25,14 +25,14 @@ var dico = {
 describe("mad.I18n", function(){
 
 	it("should inherit can.Construct", function() {
-		var i18n = new mad.I18n();
+		var i18n = new I18n();
 		expect(i18n).to.be.instanceOf(can.Construct);
 	});
 
 	it("loadDico() should load a dictionary of sentences", function() {
-        mad.I18n.loadDico(dico);
+        I18n.loadDico(dico);
         for (var key in dico) {
-            expect(dico[key]).to.be.equal(mad.I18n.dico[key]);
+            expect(dico[key]).to.be.equal(I18n.dico[key]);
         }
 	});
 

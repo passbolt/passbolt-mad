@@ -11,15 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import Ajax from 'passbolt-mad/net/ajax';
 import "passbolt-mad/test/fixture/users";
 import "passbolt-mad/test/helper/model";
-import "passbolt-mad/model/serializer/cake_serializer";
+import CakeSerializer from "passbolt-mad/model/serializer/cake_serializer";
 
 describe("mad.model.serializer.CakeSerializer", function () {
 
     // Test CakeSerializer : From.
     it('test CakeSerializer : From', function (done) {
-        mad.net.Ajax.request({
+        Ajax.request({
             'type': 'GET',
             'url': '/testusers',
             'async': true,
@@ -31,7 +32,7 @@ describe("mad.model.serializer.CakeSerializer", function () {
             // Test result.
             var user = data[0];
             var Class = mad.test.model.UserTestModel;
-            var s = mad.model.serializer.CakeSerializer.from(user, Class);
+            var s = CakeSerializer.from(user, Class);
 
             for (var attrName in Class.attributes) {
                 if (!Class.isModelAttribute(attrName)) {
@@ -63,7 +64,7 @@ describe("mad.model.serializer.CakeSerializer", function () {
 
     // Test CakeSerializer : To.
     it('test CakeSerializer : To', function (done) {
-        mad.net.Ajax.request({
+        Ajax.request({
             'type': 'GET',
             'url': '/testusers',
             'async': true,
@@ -71,7 +72,7 @@ describe("mad.model.serializer.CakeSerializer", function () {
         }).then(function (data, response, request) {
             var user = data[0];
             var Class = mad.test.model.UserTestModel;
-            var s = mad.model.serializer.CakeSerializer.to(user, Class);
+            var s = CakeSerializer.to(user, Class);
 
             expect(true).to.be.ok;
 

@@ -11,7 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/button_dropdown"
+import Action from "passbolt-mad/model/action";
+import ButtonComponent from "passbolt-mad/component/button";
+import ButtonDropdownComponent from "passbolt-mad/component/button_dropdown"
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.component.ButtonDropdown", function () {
 
@@ -31,13 +36,13 @@ describe("mad.component.ButtonDropdown", function () {
     });
 
     it("constructed instance should inherit mad.component.Button & the inherited parent classes", function () {
-        var buttonDropdown = new mad.component.ButtonDropdown($buttonDropdown);
+        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown);
 
         // Basic control of classes inheritance.
-        expect(buttonDropdown).to.be.instanceOf(can.Control);
-        expect(buttonDropdown).to.be.instanceOf(mad.Control);
-        expect(buttonDropdown).to.be.instanceOf(mad.Component);
-        expect(buttonDropdown).to.be.instanceOf(mad.component.Button);
+        expect(buttonDropdown).to.be.instanceOf(CanControl);
+        expect(buttonDropdown).to.be.instanceOf(MadControl);
+        expect(buttonDropdown).to.be.instanceOf(Component);
+        expect(buttonDropdown).to.be.instanceOf(ButtonComponent);
 
         buttonDropdown.start();
         buttonDropdown.destroy();
@@ -47,7 +52,7 @@ describe("mad.component.ButtonDropdown", function () {
         expect($buttonDropdown.parent().text()).to.not.contain('Item 1');
 
         var menuItems = [];
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i1',
             label: 'Item 1',
             action: function () {
@@ -55,7 +60,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i2',
             label: 'Item 2',
             action: function () {
@@ -63,7 +68,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var buttonDropdown = new mad.component.ButtonDropdown($buttonDropdown, {
+        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown, {
             items:menuItems
         });
         buttonDropdown.start();
@@ -74,7 +79,7 @@ describe("mad.component.ButtonDropdown", function () {
 
     it("buttonDropdown items should be visible after the button is clicked", function () {
         var menuItems = [];
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i1',
             label: 'Item 1',
             action: function () {
@@ -82,7 +87,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i2',
             label: 'Item 2',
             action: function () {
@@ -90,7 +95,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var buttonDropdown = new mad.component.ButtonDropdown($buttonDropdown, {
+        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown, {
             items:menuItems
         });
         buttonDropdown.start();
@@ -109,7 +114,7 @@ describe("mad.component.ButtonDropdown", function () {
 
     it("buttonDropdown disabled item should not close dialog when clicked", function () {
         var menuItems = [];
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i1',
             label: 'Item 1',
             action: function () {
@@ -117,7 +122,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i2',
             label: 'Item 2',
             action: function () {
@@ -125,7 +130,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var buttonDropdown = new mad.component.ButtonDropdown($buttonDropdown, {
+        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown, {
             items:menuItems
         });
         buttonDropdown.start();

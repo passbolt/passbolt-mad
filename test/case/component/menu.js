@@ -11,7 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/menu";
+import Action from "passbolt-mad/model/action";
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import MadControl from 'passbolt-mad/control/control';
+import MenuComponent from 'passbolt-mad/component/menu';
 
 describe("mad.component.Menu", function () {
 
@@ -31,26 +35,26 @@ describe("mad.component.Menu", function () {
     });
 
     it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
-        var menu = new mad.component.Menu($menu);
+        var menu = new MenuComponent($menu);
 
         // Basic control of classes inheritance.
-        expect(menu).to.be.instanceOf(can.Control);
-        expect(menu).to.be.instanceOf(mad.Control);
-        expect(menu).to.be.instanceOf(mad.Component);
-        expect(menu).to.be.instanceOf(mad.component.Menu);
+        expect(menu).to.be.instanceOf(CanControl);
+        expect(menu).to.be.instanceOf(MadControl);
+        expect(menu).to.be.instanceOf(Component);
+        expect(menu).to.be.instanceOf(MenuComponent);
 
         menu.start();
         menu.destroy();
     });
 
     it("item_selected() should execute the menu item action on click", function () {
-        var menu = new mad.component.Menu($menu);
+        var menu = new MenuComponent($menu);
         menu.start();
 
         expect($menu.text()).to.not.contain('Item 1');
 
         var menuItems = [];
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i1',
             label: 'Item 1',
             action: function () {
@@ -58,7 +62,7 @@ describe("mad.component.Menu", function () {
             }
         });
         menuItems.push(menuItem);
-        var menuItem = new mad.model.Action({
+        var menuItem = new Action({
             id: 'i2',
             label: 'Item 2',
             action: function () {
@@ -77,11 +81,11 @@ describe("mad.component.Menu", function () {
     });
 
     it("setItemState() should change the state of a menu item", function () {
-        var menu = new mad.component.Menu($menu);
+        var menu = new MenuComponent($menu);
         menu.start();
 
         var menuItems = [];
-        var menuItem1 = new mad.model.Action({
+        var menuItem1 = new Action({
             id: 'i1',
             label: 'Item 1',
             action: function () {
@@ -89,7 +93,7 @@ describe("mad.component.Menu", function () {
             }
         });
         menuItems.push(menuItem1);
-        var menuItem2 = new mad.model.Action({
+        var menuItem2 = new Action({
             id: 'i2',
             label: 'Item 2',
             action: function () {

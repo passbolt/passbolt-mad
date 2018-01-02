@@ -10,13 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from "passbolt-mad/passbolt-mad";
 import Config from 'passbolt-mad/config/config';
 import HtmlHelper from 'passbolt-mad/helper/html';
-import "passbolt-mad/net/ajax";
-import "passbolt-mad/control/bus";
-import "passbolt-mad/util/lang/i18n";
+import MadBus from "passbolt-mad/control/bus";
+import I18n from "passbolt-mad/util/lang/i18n";
 import ResponseHander from 'passbolt-mad/net/response_handler';
+
 import madConfig from "passbolt-mad/config/config.json";
 
 // Load the default mad config.
@@ -164,7 +163,7 @@ var Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static */ {
      */
     initAppController: function () {
         var self = this;
-        mad.bus.bind('app_ready', function () {
+        MadBus.bind('app_ready', function () {
             if (self.options.callbacks.ready) {
                 self.options.callbacks.ready();
             }
@@ -183,8 +182,8 @@ var Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static */ {
             'before',
             '<div/>'
         );
-        var eventBus = new mad.Bus(elt);
-        mad.bus = eventBus;
+        var bus = MadBus.singleton(elt);
+        mad.bus = bus;
     },
 
     /**

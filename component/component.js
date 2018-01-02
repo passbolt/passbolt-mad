@@ -12,6 +12,7 @@
  */
 import ArrayUtil from 'passbolt-mad/util/array/array';
 import Control from 'passbolt-mad/control/control';
+import MadBus from 'passbolt-mad/control/bus';
 import State from 'passbolt-mad/model/state';
 import View from 'passbolt-mad/view/view';
 
@@ -121,7 +122,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// If the component is destroyed whereas he is loading.
 		// Complete the loading.
 		if (this.state.is('loading')) {
-			mad.bus.trigger('passbolt_component_loading_complete', [this]);
+			MadBus.trigger('passbolt_component_loading_complete', [this]);
 		}
 
 		// Unbind the state's label attribute observer.
@@ -425,16 +426,16 @@ var Component = Control.extend('mad.Component', /* @static */{
 		if (go) {
 			// Broadcast an event on the application event bus to notify all other components.
 			// @todo The event name shouldn't start by passbolt
-			if (mad.bus) {
-				mad.bus.trigger('passbolt_component_loading_start', [this]);
+			if (MadBus.bus) {
+				MadBus.trigger('passbolt_component_loading_start', [this]);
 			}
 		}
 		// Leaving the loading state.
 		else {
 			// Broadcast an event on the application event bus to notify all other components.
 			// @todo The event name shouldn't start by passbolt
-			if (mad.bus) {
-				mad.bus.trigger('passbolt_component_loading_complete', [this]);
+			if (MadBus.bus) {
+				MadBus.trigger('passbolt_component_loading_complete', [this]);
 			}
 		}
 	},

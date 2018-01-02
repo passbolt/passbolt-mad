@@ -11,7 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/component/dynamic_tree"
+import CanControl from "can/control/control";
+import Component from "passbolt-mad/component/component";
+import DynamicTreeComponent from "passbolt-mad/component/dynamic_tree"
+import MadControl from 'passbolt-mad/control/control';
+import Model from 'passbolt-mad/model/model';
+import TreeComponent from 'passbolt-mad/component/tree';
 
 describe("mad.component.DynamicTree", function () {
 
@@ -29,34 +34,34 @@ describe("mad.component.DynamicTree", function () {
     });
 
     it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
-        var tree = new mad.component.DynamicTree($tree, {
-            itemClass: mad.Model
+        var tree = new DynamicTreeComponent($tree, {
+            itemClass: Model
         });
 
         // Basic control of classes inheritance.
-        expect(tree).to.be.instanceOf(can.Control);
-        expect(tree).to.be.instanceOf(mad.Control);
-        expect(tree).to.be.instanceOf(mad.Component);
-        expect(tree).to.be.instanceOf(mad.component.Tree);
-        expect(tree).to.be.instanceOf(mad.component.DynamicTree);
+        expect(tree).to.be.instanceOf(CanControl);
+        expect(tree).to.be.instanceOf(MadControl);
+        expect(tree).to.be.instanceOf(Component);
+        expect(tree).to.be.instanceOf(TreeComponent);
+        expect(tree).to.be.instanceOf(DynamicTreeComponent);
 
         tree.start();
         tree.destroy();
     });
 
     it('open() and close() should open and close the corresponding sections of the tree', function () {
-        var tree = new mad.component.DynamicTree($tree, {
-            itemClass: mad.Model
+        var tree = new DynamicTreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
-        var items = new mad.Model.List([{
+        var items = new Model.List([{
             id: 'item_1',
             label: 'Item 1'
         }, {
             id: 'item_2',
             label: 'Item 2',
-            'children': new mad.Model.List([{
+            'children': new Model.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {
@@ -78,18 +83,18 @@ describe("mad.component.DynamicTree", function () {
     });
 
     it('Clicking on the open/close trigger should open and close the corresponding section of the tree', function () {
-        var tree = new mad.component.DynamicTree($tree, {
-            itemClass: mad.Model
+        var tree = new DynamicTreeComponent($tree, {
+            itemClass: Model
         });
         tree.start();
 
-        var items = new mad.Model.List([{
+        var items = new Model.List([{
             id: 'item_1',
             label: 'Item 1'
         }, {
             id: 'item_2',
             label: 'Item 2',
-            'children': new mad.Model.List([{
+            'children': new Model.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {

@@ -11,11 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import MadMap from 'passbolt-mad/util/map/map';
 
 describe("mad.Map", function(){
 
 	it("should inherit can.Construct", function() {
-		var map = new mad.Map();
+		var map = new MadMap();
 		expect(map).to.be.instanceOf(can.Construct);
 	});
 
@@ -25,7 +26,7 @@ describe("mad.Map", function(){
 			'key2': 'value2',
 			'key3': 'value3'
 		};
-		var map = new mad.Map({
+		var map = new MadMap({
 			'key1': 'key2',
 			'key2': 'key3',
 			'key3': 'key1'
@@ -42,7 +43,7 @@ describe("mad.Map", function(){
 			'key2': 'value2',
 			'key3': 'value3'
 		};
-		var map = new mad.Map({
+		var map = new MadMap({
 			'key1.sub1': 'key2',
 			'key2.sub2.sub21': 'key3',
 			'key3.sub3.sub31.sub32': 'key1'
@@ -59,7 +60,7 @@ describe("mad.Map", function(){
 			'key2': 'value2',
 			'key3': 'value3'
 		};
-		var map = new mad.Map({
+		var map = new MadMap({
 			'key1.sub1': 'key2',
 			'key2.sub2.sub21': 'key3',
 			'key3.sub3.sub31.sub32': {
@@ -81,7 +82,7 @@ describe("mad.Map", function(){
 			'key2': 'value2',
 			'key3': 'value3'
 		};
-		var map = new mad.Map({
+		var map = new MadMap({
 			'key1': 'key2',
 			'key2': 'key3',
 			'key3': 'key1'

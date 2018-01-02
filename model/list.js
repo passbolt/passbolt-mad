@@ -13,8 +13,6 @@
 import 'can/construct/construct';
 import Model from 'passbolt-mad/model/model';
 
-mad.model = mad.model || {};
-
 /*
  * @inherits jQuery.Class
  * @parent mad.model

@@ -25,7 +25,7 @@ import Control from "passbolt-mad/control/control";
  * mechanism to carry the transmissions.
  *
  * To trigger an event you have to call the mad.bus functions directly
- * mad.bus.trigger('EVT_NAME', EventOptsArray);
+ * MadBus.trigger('EVT_NAME', EventOptsArray);
  *
  * To observe an event it exists several solutions.
  *
@@ -36,21 +36,21 @@ import Control from "passbolt-mad/control/control";
  * '{mad.bus} EVT_NAME': function(evtOpts) { ... }
  *
  * 3) By using the bind function of the class
- * mad.bus.bind('EVT_NAME', function(evtOpts) { ... });
+ * MadBus.bind('EVT_NAME', function(evtOpts) { ... });
  *
  * To trigger a request you have to call the mad.bus functions directly
- * mad.bus.triggerRequest('RQST_NAME', RqstOptsArray);
+ * MadBus.triggerRequest('RQST_NAME', RqstOptsArray);
  *
  * To observe a request it exists several solutions.
  *
  * 1) By using jQuery :
- * $(mad.bus).on('RQST_NAME', function(promise, evtOpts) { ... });
+ * $(mad.bus.element).on('RQST_NAME', function(promise, evtOpts) { ... });
  *
  * 2) By using the magic binding functions (templated) of canJS
- * '{mad.bus} RQST_NAME': function(el, ev, promis, evtOpts) { ... }
+ * '{mad.bus.element} RQST_NAME': function(el, ev, promis, evtOpts) { ... }
  *
  * 3) By using the bind function of the class
- * mad.bus.bind('RQST_NAME', function(promise, evtOpts) { ... });
+ * MadBus.bind('RQST_NAME', function(promise, evtOpts) { ... });
  *
  * A promise is always passed as parameter of the observer function and has to be completed
  * by the function which takes care of the request.
@@ -58,14 +58,31 @@ import Control from "passbolt-mad/control/control";
  */
 var Bus = Control.extend('mad.Bus', /** @prototype */ {
 
-    //// Constructor like.
-    //init: function () {
-    //    // As the parent class is a mad.Control, and because all controls use the event
-    //    // bus during their instantiation to notify that they are alive. We should avoid
-    //    // the inheritance system to execute the parent constructor code, as it will try to
-    //    // work with an instance of the event bus not fully instantiated.
-    //    // @todo Define the limitation of this.
-    //},
+    /**
+     * Instance of Bus.
+     */
+    bus: null,
+
+    /**
+     * Instantiate or retrieve an existing bus.
+     */
+    singleton: function(el) {
+        if (Bus.bus) {
+            return Bus.bus;
+        }
+        var bus = new Bus(el);
+        Bus.bus = bus;
+        Bus.element = bus.element;
+        return bus;
+    },
+
+    /**
+     * Destroy the bus
+     */
+    destroy: function() {
+        Bus.bus.destroy();
+        Bus.bus = null;
+    },
 
     /**
      * Trigger an event on the Event Bus.
@@ -76,9 +93,10 @@ var Bus = Control.extend('mad.Bus', /** @prototype */ {
      */
     trigger: function (eventName, eventData) {
         var data = typeof eventData != 'undefined' ? eventData : [];
+        var element = Bus.element;
 
         // Trigger the event on the bus.
-        this.element.trigger(eventName, data);
+        element.trigger(eventName, data);
 
         // Make the an eventual plugin able to catch the application event.
         // Rhino does not understand these primitives.
@@ -99,8 +117,8 @@ var Bus = Control.extend('mad.Bus', /** @prototype */ {
      * @return {jQuery.Deferred.Promise} Return a promise to the caller.
      */
     triggerRequest: function (rqstName, rqstData) {
-        var data = [],
-            deferred = $.Deferred();
+        var data = [];
+        var deferred = $.Deferred();
 
         // The request data are in the expected format.
         if (Object.prototype.toString.call(rqstData) == "[object Array]") {
@@ -115,7 +133,7 @@ var Bus = Control.extend('mad.Bus', /** @prototype */ {
         data.unshift(deferred);
 
         // Trigger the request on the Event Bus.
-        this.trigger(rqstName, data);
+        Bus.bus.trigger(rqstName, data);
 
         // Return the promise to the caller.
         return deferred.promise();
@@ -129,14 +147,18 @@ var Bus = Control.extend('mad.Bus', /** @prototype */ {
      * @return {void}
      */
     bind: function (eventName, func) {
-        this.element.bind(eventName, func);
+        var element = Bus.element;
+        element.bind(eventName, func);
     }
+
+
+}, /** @prototype */ {
 
 });
 
 // Observe the addon-message and forward them to the eventBus.
 window.addEventListener("addon-message", function (event) {
-    mad.bus.element.trigger(event.detail.event, event.detail.data);
+    Bus.trigger(event.detail.event, event.detail.data);
 }, false);
 
 export default Bus;
