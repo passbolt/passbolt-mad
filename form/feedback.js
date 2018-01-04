@@ -35,48 +35,11 @@ var Feedback = Component.extend('mad.form.Feedback', /* @static */ {
      * Set the feedback component controller message
      *
      * @param {string} message The message to display
-     *
      * @return {mad.form.Feedback}
      */
     setMessage: function (message) {
-        this.message = message;
+        this.element.text(message);
         return this;
-    },
-
-    /* ************************************************************** */
-    /* LISTEN TO THE STATE CHANGES */
-    /* ************************************************************** */
-
-    /**
-     * @function mad.form.Feedback.stateSuccess
-     * @parent mad.form.Feedback.states_changes
-     *
-     * Listen to the change relative to the state Success
-     *
-     * @param {boolean} go Enter or leave the state
-     * @todo clean what should be moved in view
-     */
-    stateSuccess: function (go) {
-        if (go) {
-            this.element.html(this.message);
-            this.element.removeClass('error');
-        }
-    },
-
-    /**
-     * @function mad.form.Feedback.stateError
-     * @parent mad.form.Feedback.states_changes
-     *
-     * Listen to the change relative to the state Error
-     *
-     * @param {boolean} go Enter or leave the state
-     * @todo clean what should be moved in view
-     */
-    stateError: function (go) {
-        if (go) {
-            this.element.html(this.message);
-            this.element.addClass('error');
-        }
     }
 
 });
