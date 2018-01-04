@@ -13,6 +13,8 @@
 import View from 'passbolt-mad/view/view';
 import HtmlHelper from 'passbolt-mad/helper/html';
 
+import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.ejs!';
+
 /**
  * @inherits mad.View
  */
@@ -118,53 +120,15 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
     _renderRow: function (item) {
         var control = this.getController(),
             columnModels = control.getColumnModel(),
-            mappedItem = control.getMap().mapObject(item),
-        // The cells data (columnName -> value)
-            values = [],
-        // The cells titles data (columnName -> value)
-            titles = [];
-
-        // Build the row data.
-        for (var i in columnModels) {
-            var columnModel = columnModels[i],
-                cellValue = null,
-                titleValue = null;
-
-            // Build the cell value.
-            // A value adapter is provided for this cell.
-            if (columnModel.valueAdapter) {
-                cellValue = columnModel.valueAdapter(mappedItem[columnModel.name], mappedItem, item, columnModel);
-            }
-            // A widget adapter is provided for this cell, do nothing.
-            // The widget will be applied on the cell once the row will be inserted in the DOM.
-            else if (columnModel.widget || columnModel.cellAdapter) {
-                cellValue = '';
-            }
-            // No transformer provided, use the mapped item data.
-            else {
-                cellValue = mappedItem[columnModel.name];
-            }
-            values[columnModel.name] = cellValue;
-
-            // Build the title value.
-            // A value adapter is provided for this title cell.
-            if (columnModel.titleAdapter) {
-                titleValue = columnModel.titleAdapter(mappedItem[columnModel.name], mappedItem, item, columnModel);
-            }
-            // No transformer provided, use the cell value as title value.
-            else {
-                titleValue = cellValue;
-            }
-            titles[columnModel.name] = titleValue;
-        }
+            mappedItem = control.getMap().mapObject(item);
 
         // Render the row with the row data.
         return View.render(control.options.itemTemplate, {
             item: item,
             id: control.options.prefixItemId + mappedItem.id,
             columnModels: columnModels,
-            values: values,
-            titles: titles
+            mappedItem: mappedItem,
+            cellTemplate: cellTemplate
         });
     },
 
@@ -192,7 +156,6 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
         position = position || 'last';
         var $item = null,
             $refElement = null,
-            itemRender = '',
             row = '',
             control = this.getController();
 

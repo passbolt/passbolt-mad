@@ -288,40 +288,16 @@ var Grid = Component.extend('mad.component.Grid', {
         // insert the item in the view
         this.view.insertItem(item, refItem, position);
 
-        // Apply widgets to the cells following the definition in the columns model.
+        // Post rendering process.
         for (var j in columnModels) {
             var columnModel = columnModels[j];
 
-            if (columnModel.template) {
-                var itemId = self.options.prefixItemId + mappedItem.id;
-                var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
-                var data = {
-                    cellValue: mappedItem[columnModel.name],
-                    mappedItem: mappedItem,
-                    item: item,
-                    columnModel: columnModel
-                };
-                $cell.html(View.render(columnModel.template, data));
-            }
-            if (columnModel.cellAdapter) {
+            // Execute post cell rendered function if any.
+            if (columnModel.afterRender) {
                 var itemId = self.options.prefixItemId + mappedItem.id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
                 var cellValue = mappedItem[columnModel.name];
-                columnModel.cellAdapter($cell, cellValue, mappedItem, item, columnModel);
-            }
-            // @todo Cell adapter replace widget, remove this part if not usefull
-            if (columnModel.widget) {
-                var widgetClass = columnModel.widget.clazz,
-                    widgetJQueryPlugin = widgetClass._fullName,
-                    widgetOptions = columnModel.widget.options;
-
-                // Ok it is costing : + z*n (z #columWidget; n #items) with this
-                // part to insert the items and render widget if there is
-                var itemId = self.options.prefixItemId + mappedItem[i].id;
-                var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
-                widgetOptions.value = mappedItem[i][columnModel.name];
-                $cell[widgetJQueryPlugin](widgetOptions);
-                $cell[widgetJQueryPlugin]('render');
+                columnModel.afterRender($cell, cellValue, mappedItem, item, columnModel);
             }
         }
     },
@@ -346,36 +322,12 @@ var Grid = Component.extend('mad.component.Grid', {
         for (var j in columnModels) {
             var columnModel = columnModels[j];
 
-            if (columnModel.template) {
-                var itemId = self.options.prefixItemId + mappedItem.id;
-                var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
-                var data = {
-                    cellValue: mappedItem[columnModel.name],
-                    mappedItem: mappedItem,
-                    item: item,
-                    columnModel: columnModel
-                };
-                $cell.html(View.render(columnModel.template, data));
-            }
-            if (columnModel.cellAdapter) {
+            // Execute post cell rendered function if any.
+            if (columnModel.afterRender) {
                 var itemId = self.options.prefixItemId + mappedItem.id;
                 var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
                 var cellValue = mappedItem[columnModel.name];
-                columnModel.cellAdapter($cell, cellValue, mappedItem, item, columnModel);
-            }
-            // @todo Cell adapter replace widget, remove this part if not usefull
-            if (columnModel.widget) {
-                var widgetClass = columnModel.widget.clazz,
-                    widgetJQueryPlugin = widgetClass._fullName,
-                    widgetOptions = columnModel.widget.options;
-
-                // Ok it's costly : + z*n (z #columWidget; n #items) with this
-                // part to insert the items and render widget if there is
-                var itemId = self.options.prefixItemId + mappedItem[i].id;
-                var $cell = $('#' + itemId + ' .js_grid_column_' + columnModel.name + ' div');
-                widgetOptions.value = mappedItem[i][columnModel.name];
-                $cell[widgetJQueryPlugin](widgetOptions);
-                $cell[widgetJQueryPlugin]('render');
+                columnModel.afterRender($cell, cellValue, mappedItem, item, columnModel);
             }
         }
     },
