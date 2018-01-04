@@ -101,6 +101,14 @@ var Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static *
      */
     setTitle: function(title) {
         this.view.setTitle(title);
+    },
+
+    /**
+     * Set the subtitle
+     * @param {string} subtitle The new subtitle
+     */
+    setSubtitle: function(subtitle) {
+        this.view.setSubtitle(subtitle);
     }
 });
 
