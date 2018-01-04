@@ -16,6 +16,7 @@ import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
 import Model from 'passbolt-mad/model/model';
 import TreeComponent from "passbolt-mad/component/tree"
+import xss from 'passbolt-mad/test/fixture/xss';
 
 describe("mad.component.Tree", function () {
 
@@ -351,6 +352,36 @@ describe("mad.component.Tree", function () {
 
         tree.element.empty();
         tree.destroy();
+    });
+
+    /*
+     * Ensure the grid is not vulnerable to xss.
+     * - When inserting an item, take care of:
+     *   - The attribute id of the li row which is based by the item id property
+     *   - The cell value which is based on the mapped value, here the property label
+     * - Check the item selection
+     */
+    it.only("Xss vulnerability check", function(){
+        for (var rule in xss) {
+            var tree = new TreeComponent($tree, {
+                itemClass: Model
+            });
+            tree.start();
+
+            var item = new Model({
+                id: xss[rule],
+                label: xss[rule]
+            });
+
+            // No Xss when inserting the item
+            tree.insertItem(item);
+
+            // No Xss when clicking on the row which as the id attribute
+            $('#tree li').trigger('click');
+
+            tree.element.empty();
+            tree.destroy();
+        }
     });
 
 });
