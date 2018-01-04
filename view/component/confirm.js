@@ -18,14 +18,6 @@ import DialogView from 'passbolt-mad/view/component/dialog';
 var ConfirmView = DialogView.extend('mad.view.component.Confirm', /* @static */ {}, /** @prototype */ {
 
     /**
-     * Set the content
-     * @param {string} title The new content
-     */
-    setContent: function (content) {
-        $('.dialog-content .form-content', this.element).html(content);
-    },
-
-    /**
      * Listen to click on the confirm link
      * @param {HTMLElement} el The element the event occured on
      * @param {HTMLEvent} ev The event which occured

@@ -110,9 +110,5 @@ describe("mad.component.Confirm", function () {
         ).start();
         expect($('.dialog').length).to.not.equal(0);
         expect($('.dialog-content').text()).to.contain('Content of the confirm box');
-
-        // Test function set content.
-        confirm.setContent('new content of the confirm box');
-        expect($('.dialog-content').text()).to.contain('new content of the confirm box');
     });
 });

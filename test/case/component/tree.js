@@ -361,7 +361,7 @@ describe("mad.component.Tree", function () {
      *   - The cell value which is based on the mapped value, here the property label
      * - Check the item selection
      */
-    it.only("Xss vulnerability check", function(){
+    it("Xss vulnerability check", function(){
         for (var rule in xss) {
             var tree = new TreeComponent($tree, {
                 itemClass: Model
