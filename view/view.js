@@ -123,7 +123,9 @@ var View = Control.extend('mad.View', /** @static */{
 	},
 
 	/**
-	 * Insert the given string in the dom
+	 * Insert the given html in the dom.
+	 * Ensure the provided html is safe.
+	 *
 	 * @param {string} html The html to insert in the DOM element the view is build upon
 	 * @return {void}
 	 */

@@ -70,7 +70,7 @@ var Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static *
         }
 
         // Insert the element in the page DOM.
-        var $el = HtmlHelper.create(refElt, position, '<div />');
+        var $el = HtmlHelper.create(refElt, position, '<div/>');
 
         // Changing the element force us to recall the setup which is called before all init functions
         // and make the magic things (bind event ...)
