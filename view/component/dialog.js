@@ -22,7 +22,15 @@ var Dialog = View.extend('mad.view.component.Dialog', /* @static */ {}, /** @pro
      * @param {string} title The new title
      */
     setTitle: function (title) {
-        $('.dialog-header h2', this.element).html(title);
+        $('.dialog-header h2 .dialog-header-title', this.element).text(title);
+    },
+
+    /**
+     * Set the subtitle
+     * @param {string} subtitle The new subtitle
+     */
+    setSubtitle: function (subTitle) {
+        $('.dialog-header h2 .dialog-header-subtitle', this.element).text(subTitle);
     },
 
     /* ************************************************************** */

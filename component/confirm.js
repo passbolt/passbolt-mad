@@ -54,14 +54,6 @@ var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
     },
 
     /**
-     * Set the content
-     * @param {string} content the new Content
-     */
-    setContent: function(content) {
-        this.view.setContent(content);
-    },
-
-    /**
      * confirm_clicked event
      * thrown when the user has clicked on confirm.
      */

@@ -142,8 +142,8 @@ var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
         // insert the associated menu entry
         if (this.options.autoMenu) {
             var menuEntry = new Action({
-                'id': 'js_tab_nav_' + options.id,
-                'label': options.label
+                id: 'js_tab_nav_' + options.id,
+                label: options.label
             });
             this.options.menu.insertItem(menuEntry);
         }

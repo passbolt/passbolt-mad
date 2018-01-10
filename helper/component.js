@@ -12,6 +12,9 @@
  */
 import 'can/construct/construct';
 import HtmlHelper from 'passbolt-mad/helper/html';
+import View from 'passbolt-mad/view/view';
+
+import componentTagTemplate from 'passbolt-mad/view/template/helper/componentTag.ejs!';
 
 /**
  * @parent Mad.core_helper_api
@@ -33,14 +36,8 @@ var ComponentHelper = can.Construct.extend('mad.helper.Component', /** @static *
      * @return {mad.Component}
      */
     create: function (refElement, position, ComponentClass, options) {
-        // The HTML Element that will carry the component.
-        var $component = null,
-        // The Html that will be used to render the HTML Element.
-            html = '',
         // The options to pass to the Component Class constructor.
-            options = options || {},
-        // Id of the component, if defined.
-            id = (options.id || '');
+        options = options || {};
 
         // class attributes options.
         var classAttributes = {};
@@ -55,19 +52,14 @@ var ComponentHelper = can.Construct.extend('mad.helper.Component', /** @static *
         }
 
         // Construct the html based on the component options.
-        var tag = options.tag || ComponentClass.defaults.tag;
-        html = '<' + tag + ' id="' + (options.id || '') + '"';
-
-        // Add attributes to the generated html.
-        for (var attrName in attributes) {
-            html += ' ' + attrName + '="' + attributes[attrName] + '"';
-        }
-
-        // End of the component html construction.
-        html += '/>';
+        var componentHtml = View.render(componentTagTemplate, {
+            id: options.id || '',
+            tag: options.tag || ComponentClass.defaults.tag,
+            attributes: attributes
+        });
 
         // Insert the HTML Element which will carry the component in the DOM.
-        $component = HtmlHelper.create(refElement, position, html);
+        var $component = HtmlHelper.create(refElement, position, componentHtml);
 
         // Instantiate the component and return it.
         return new ComponentClass($component, options);

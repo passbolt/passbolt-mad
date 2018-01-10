@@ -21,6 +21,7 @@ import HtmlHelper from 'passbolt-mad/helper/html';
 import MadControl from 'passbolt-mad/control/control';
 import MadMap from 'passbolt-mad/util/map/map';
 import Model from 'passbolt-mad/model/model';
+import xss from 'passbolt-mad/test/fixture/xss';
 
 describe("mad.component.Grid", function () {
 
@@ -161,7 +162,7 @@ describe("mad.component.Grid", function () {
         grid.destroy();
     });
 
-    it("insertItem() should insert an item and apply a value adapter on its fields", function () {
+    it("insertItem() should insert an item and execute the post rendering function", function () {
         // Set the grid map that will be used to transform the data for the view.
         var map = new MadMap({
             id: 'id',
@@ -176,45 +177,7 @@ describe("mad.component.Grid", function () {
             name: 'label',
             index: 'label',
             label: 'label',
-            valueAdapter: function(value, mappedItem, item, columnModel) {
-                return 'value adapted : ' + value;
-            }
-        })];
-        var grid = new GridComponent($grid, {
-            itemClass: Model,
-            map: map,
-            columnModel: columnModel
-        });
-        grid.start();
-
-        // Insert the item.
-        var itemInside = new Model({
-            id: 'item',
-            label: 'item label'
-        });
-        grid.insertItem(itemInside);
-        expect($('#test-html').text()).to.contain('value adapted : ' + itemInside.attr('label'));
-
-        grid.element.empty();
-        grid.destroy();
-    });
-
-    it("insertItem() should insert an item and apply a cell adapter on the target cell", function () {
-        // Set the grid map that will be used to transform the data for the view.
-        var map = new MadMap({
-            id: 'id',
-            label: 'label'
-        });
-        // Set the grid columns model.
-        var columnModel = [new GridColumn({
-            name: 'id',
-            index: 'id',
-            label: 'id'
-        }), new GridColumn({
-            name: 'label',
-            index: 'label',
-            label: 'label',
-            cellAdapter: function (cellElement, cellValue, mappedItem, item, columnModel) {
+            afterRender: function (cellElement, cellValue, mappedItem, item, columnModel) {
                 var html = '<p>Cell adapted applied : ' + cellValue + '</p>';
                 HtmlHelper.create(cellElement, 'inside_replace', html);
             }
@@ -767,4 +730,58 @@ describe("mad.component.Grid", function () {
 
     });
 
+    /*
+     * Ensure the grid is not vulnerable to xss.
+     * - When inserting an item, take care of:
+     *   - The attribute id of the tr row which is given by the item id property
+     *   - The cell value which is based on the mapped value, here the property exploit
+     *   - The cell title which is based on the mapped column value, here the property exploit
+     * - Check the row selection
+     * - Check the cell selection
+     */
+    it("Xss vulnerability check", function(){
+        // Set the grid map that will be used to transform the data for the view.
+        var map = new MadMap({
+            id: 'id',
+            rule: 'rule',
+            exploit: 'exploit'
+        });
+        // Set the grid columns model.
+        var columnModel = [new GridColumn({
+            name: 'rule',
+            index: 'rule',
+            label: 'rule'
+        }), new GridColumn({
+            name: 'exploit',
+            index: 'exploit',
+            label: 'exploit'
+        })];
+
+        for (var rule in xss) {
+            var grid = new GridComponent($grid, {
+                itemClass: Model,
+                map: map,
+                columnModel: columnModel
+            });
+            grid.start();
+
+            var item = new Model({
+                id: xss[rule],
+                rule: rule,
+                exploit: xss[rule]
+            });
+
+            // No Xss when inserting the item
+            grid.insertItem(item);
+
+            // No Xss when clicking on the row which as the id attribute
+            $('#grid tr').trigger('click');
+
+            // No Xss when clicking on the cell which contain the value
+            $('#grid td.js_grid_column_exploit div').trigger('click');
+
+            grid.element.empty();
+            grid.destroy();
+        }
+    });
 });
