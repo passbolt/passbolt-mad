@@ -110,6 +110,7 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
 
                 // the request has been performed sucessfully
                 function (data, textStatus, jqXHR) {
+                    data.code = jqXHR.status;
                     var response = new Response(data),
                         // the deferred to return
                         deferred = null;
@@ -139,7 +140,7 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
                     var response = null;
                     // In case of error the reponse is not automatically parsed.
                     // Try to parse it, in case the server return an understable message.
-                    try{
+                    try {
                         if(typeof jqXHR.responseText != undefined) {
                             jsonData = $.parseJSON(jqXHR.responseText);
                         }
@@ -149,6 +150,7 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
 
                     // In case we've been able to parse the server answer.
                     if (Response.isResponse(jsonData)) {
+                        jsonData.code = jqXHR.status;
                         response = new Response(jsonData);
                     }
                     // Otherwise treat a default unreacheable server answer.

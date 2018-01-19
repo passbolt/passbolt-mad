@@ -79,12 +79,13 @@ var Response = Model.extend('mad.net.Response', /** @static */ {
      * the response factory is able to build
      * @param {string} type The desired type of response (server
      * @param {object} data The server response
+     * @param {object} jqXHR The request raw object
      * @return {mad.net.Response}
      */
     getResponse: function (type, data) {
-        var returnValue = null,
-            header = {},
-            body = null;
+        var header = {},
+            body = null,
+            code = null;
 
         switch (type) {
             case 'unreachable':
@@ -96,16 +97,16 @@ var Response = Model.extend('mad.net.Response', /** @static */ {
                     title: __('Unable to reach the server'),
                     message: __('The url is probably incorrectly formatted')
                 };
+                code = 0;
                 body = data;
             break;
         }
 
-        // build the response to return
-        returnValue = new Response({
+        return new Response({
             header: header,
-            body: body
+            body: body,
+            code: code
         });
-        return returnValue;
     },
 
     /**
@@ -141,7 +142,7 @@ var Response = Model.extend('mad.net.Response', /** @static */ {
      * @return {string}
      */
     getCode: function () {
-        return this.attr('header').code;
+        return this.attr('code');
     },
 
     /**
