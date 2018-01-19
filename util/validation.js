@@ -452,6 +452,24 @@ var Validation = can.Construct.extend('mad.Validation', /** @static */ {
      * @param {array} values The contextual values
      * @param {array} options Optional parameters
      */
+    maxLength: function (value, values, options) {
+        value = value || '';
+        options = options || [];
+        var returnValue = true,
+            max = options.params[0] || null;
+
+        if (value.length > max) {
+            returnValue = options.message ? __(options.message, max) : __('The length should be maximum %s characters long', max);
+        }
+
+        return returnValue;
+    },
+
+    /**
+     * @param {mixed} value The value to validate
+     * @param {array} values The contextual values
+     * @param {array} options Optional parameters
+     */
     foreignRule: function (value, options) {
         var returnValue = true;
         if (options.model && options.model.validateRules && options.attribute) {
