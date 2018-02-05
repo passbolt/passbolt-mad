@@ -11,13 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import Construct from 'can-construct';
 import MadMap from 'passbolt-mad/util/map/map';
 
 describe("mad.Map", function(){
 
 	it("should inherit can.Construct", function() {
 		var map = new MadMap();
-		expect(map).to.be.instanceOf(can.Construct);
+		expect(map).to.be.instanceOf(Construct);
 	});
 
 	it("mapObject() should map simple objects", function() {
@@ -89,7 +90,7 @@ describe("mad.Map", function(){
 		});
 		var arr = [object, object, object];
 		var mappedObjects = map.mapObjects(arr);
-		expect(mappedObjects).to.be.array;
+		expect(Array.isArray(mappedObjects)).to.be.true;
 		expect(mappedObjects.length).not.to.be.equal(0);
 
 		for (var i in mappedObjects) {

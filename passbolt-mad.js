@@ -21,7 +21,6 @@ import "passbolt-mad/helper/component";
 import "passbolt-mad/helper/control";
 import "passbolt-mad/helper/html";
 import "passbolt-mad/config/config";
-import "passbolt-mad/util/array/array";
 import "passbolt-mad/util/map/map";
 import "passbolt-mad/util/validation";
 import "passbolt-mad/util/lang/i18n";

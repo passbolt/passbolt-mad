@@ -12,7 +12,7 @@
  */
 import ChoiceElement from 'passbolt-mad/form/choice_element';
 import DropdownView from 'passbolt-mad/view/form/element/dropdown';
-import template from 'passbolt-mad/view/template/form/dropdown.ejs!';
+import template from 'passbolt-mad/view/template/form/dropdown.stache!';
 
 /**
  * @parent Mad.form_api

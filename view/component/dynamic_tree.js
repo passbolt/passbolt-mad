@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import DomData from 'can-util/dom/data/data';
 import TreeView from 'passbolt-mad/view/component/tree';
 
 /**
@@ -61,21 +62,22 @@ var DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static 
         ev.stopPropagation();
         ev.preventDefault();
         var data = null,
-            li = el.parents('li');
+            li = $(el).parents('li'),
+            itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = li.data(this.getController().getItemClass().fullName);
+            data = DomData.get.call(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }
 
         // if the element is closed, open it
         if (li.hasClass('close')) {
-            this.element.trigger('item_opened', data);
+            $(this.element).trigger('item_opened', data);
         }
         // otherwise close it
         else {
-            this.element.trigger('item_closed', data);
+            $(this.element).trigger('item_closed', data);
         }
     },
 
@@ -89,15 +91,16 @@ var DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static 
         ev.stopPropagation();
         ev.preventDefault();
         var data = null,
-            li = el.parents('li');
+            li = $(el).parents('li'),
+            itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = li.data(this.getController().getItemClass().fullName);
+            data = DomData.get.call(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }
 
-        this.element.trigger('item_right_selected', [data, ev]);
+        $(this.element).trigger('item_right_selected', [data, ev]);
     }
 });
 

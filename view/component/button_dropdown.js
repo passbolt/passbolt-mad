@@ -33,7 +33,7 @@ var ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @stati
         }
         // otherwise the element next to this element is the dropdown content element
         else {
-            return this.element.next();
+            return $(this.element).next();
         }
     },
 
@@ -43,7 +43,7 @@ var ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @stati
      * @return {void}
      */
     open: function () {
-        this.element.addClass('pressed');
+        $(this.element).addClass('pressed');
         var $contentElement = this.getDropdownContentElement();
         $contentElement.addClass('visible');
         this.getController().state.addState('open');
@@ -55,7 +55,7 @@ var ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @stati
      * @return {void}
      */
     close: function () {
-        this.element.removeClass('pressed');
+        $(this.element).removeClass('pressed');
         var $contentElement = this.getDropdownContentElement();
         $contentElement.removeClass('visible');
         if (this.getController().state.is('open'))
@@ -98,7 +98,7 @@ var ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @stati
      * @param ev
      */
     '{document} click': function (el, ev) {
-        if (!this.element.is(el)) {
+        if (!$(this.element).is(el)) {
             this.close();
         }
     }

@@ -10,8 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import XRegExp from 'xregexp';
+import Construct from 'can-construct';
 import I18n from 'passbolt-mad/util/lang/i18n';
+import XRegExp from 'xregexp';
 
 /**
 * @parent Mad.core_api
@@ -20,7 +21,7 @@ import I18n from 'passbolt-mad/util/lang/i18n';
 * The aim of the object Validation is to offer to developers a way to validate their
 * data. This utility is massively used by the mad.Form component.
 */
-var Validation = can.Construct.extend('mad.Validation', /** @static */ {
+var Validation = Construct.extend('mad.Validation', /** @static */ {
 
     /**
      * Validate a value following a given rule. This model helper is used by the

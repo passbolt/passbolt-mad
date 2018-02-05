@@ -25,7 +25,7 @@ var ConfirmView = DialogView.extend('mad.view.component.Confirm', /* @static */ 
      */
     ' .js-dialog-confirm click': function (el, ev) {
         ev.preventDefault();
-        this.element.trigger('confirm_clicked');
+        $(this.element).trigger('confirm_clicked');
     }
 });
 

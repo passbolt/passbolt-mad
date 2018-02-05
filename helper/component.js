@@ -10,11 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/construct/construct';
+import Construct from 'can-construct';
 import HtmlHelper from 'passbolt-mad/helper/html';
 import View from 'passbolt-mad/view/view';
 
-import componentTagTemplate from 'passbolt-mad/view/template/helper/componentTag.ejs!';
+import componentTagTemplate from 'passbolt-mad/view/template/helper/componentTag.stache!';
 
 /**
  * @parent Mad.core_helper_api
@@ -22,7 +22,7 @@ import componentTagTemplate from 'passbolt-mad/view/template/helper/componentTag
  *
  * A set of tools to help developer with Components.
  */
-var ComponentHelper = can.Construct.extend('mad.helper.Component', /** @static */ {
+var ComponentHelper = Construct.extend('mad.helper.Component', /** @static */ {
 
     /**
      * A factory to create and insert components.
@@ -52,17 +52,28 @@ var ComponentHelper = can.Construct.extend('mad.helper.Component', /** @static *
         }
 
         // Construct the html based on the component options.
-        var componentHtml = View.render(componentTagTemplate, {
-            id: options.id || '',
-            tag: options.tag || ComponentClass.defaults.tag,
-            attributes: attributes
-        });
+        var tag = options.tag || ComponentClass.defaults.tag;
+        var componentHtml = this._renderTag(tag, options.id, attributes);
 
         // Insert the HTML Element which will carry the component in the DOM.
         var $component = HtmlHelper.create(refElement, position, componentHtml);
 
         // Instantiate the component and return it.
-        return new ComponentClass($component, options);
+        return new ComponentClass($component[0], options);
+    },
+
+    /**
+     * Render a tag.
+     */
+    _renderTag: function(tag, id, attributes) {
+        var componentHtml = '<' + tag;
+        componentHtml += ' ' + View.render(componentTagTemplate, {
+            id: id || '',
+            attributes: attributes
+        });
+        componentHtml += '/>';
+
+        return componentHtml;
     }
 
 }, /* @prototype */ {});

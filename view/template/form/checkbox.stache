@@ -1,0 +1,6 @@
+{{#each(availableValues)}}
+<div class="input checkbox">
+	<input type="checkbox" value="{{scope.key}}" id="checkbox_{{../id}}_{{hash(scope.key)}}"/>
+	<label for="checkbox_{{../id}}_{{hash(scope.key)}}">{{this}}</label>
+</div>
+{{/each}}

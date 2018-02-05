@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/construct/construct';
+import Construct from 'can-construct';
+import $ from 'can-jquery';
 
 /**
  * @parent Mad.core_helper_api
@@ -18,7 +19,7 @@ import 'can/construct/construct';
  *
  * A set of tools to help developer with Html.
  */
-var HtmlHelper = can.Construct.extend('mad.helper.Html', /** @static */ {
+var HtmlHelper = Construct.extend('mad.helper.Html', /** @static */ {
 
 	/**
 	 * Position an element
@@ -67,11 +68,9 @@ var HtmlHelper = can.Construct.extend('mad.helper.Html', /** @static */ {
 	 * @return {HTMLElement} The inserted element
 	 */
 	create: function (refElement, position, content) {
-		var returnValue = $(content);
+		var returnValue = null;
+		var element = $(content);
 
-		if (!(refElement instanceof jQuery)) {
-			throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'refElement');
-		}
 		if (refElement.length == 0) {
             throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'refElement');
 		}
@@ -80,22 +79,23 @@ var HtmlHelper = can.Construct.extend('mad.helper.Html', /** @static */ {
 		switch (position) {
 			case 'inside_replace':
 				refElement.empty();
-				returnValue = returnValue.prependTo(refElement);
+				returnValue = element.prependTo(refElement);
 				break;
 			case 'replace_with':
-				refElement.replaceWith(returnValue);
+				refElement.replaceWith(element);
+				returnValue = element;
 				break;
 			case 'first':
-				returnValue = returnValue.prependTo(refElement);
+				returnValue = element.prependTo(refElement);
 				break;
 			case 'last':
-				returnValue = returnValue.appendTo(refElement);
+				returnValue = element.appendTo(refElement);
 				break;
 			case 'before':
-				returnValue = returnValue.insertBefore(refElement);
+				returnValue = element.insertBefore(refElement);
 				break;
 			case 'after':
-				returnValue = returnValue.insertAfter(refElement);
+				returnValue = element.insertAfter(refElement);
 				break;
 			default:
                 throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'position');

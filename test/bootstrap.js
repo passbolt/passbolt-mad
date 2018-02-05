@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from "can-jquery";
 import "passbolt-mad/test/lib/stealMocha.js";
 import chai from "chai";
-import chaijq from "chai-jq";
 
 // Define the global context.
 var glbl = typeof window !== "undefined" ? window : global;
@@ -24,5 +24,3 @@ glbl.assert = chai.assert;
 // Make a global reference to the root reference element.
 glbl.$rootElement = $('#test-html');
 
-// Load chai plugins
-chai.use(chaijq);

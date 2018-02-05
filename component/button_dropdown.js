@@ -14,7 +14,7 @@ import ButtonComponent from 'passbolt-mad/component/button';
 import MenuComponent from 'passbolt-mad/component/menu';
 import ButtonDropdownView from 'passbolt-mad/view/component/button_dropdown';
 
-import template from 'passbolt-mad/view/template/component/button_dropdown/button_dropdown.ejs!';
+import template from 'passbolt-mad/view/template/component/button_dropdown/button_dropdown.stache!';
 
 /**
  * @parent Mad.components_api
@@ -70,7 +70,7 @@ var ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
         }
 
         // Create and render dropdown content.
-        var menu = new MenuComponent($dropdownElement);
+        var menu = new MenuComponent($dropdownElement[0]);
         menu.start();
         menu.load(this.options.items);
         this.options.menu = menu;

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import ChoiceFormElement from 'passbolt-mad/form/choice_element';
 import DropdownFormElement from "passbolt-mad/form/element/dropdown"
 import Component from 'passbolt-mad/component/component';
@@ -34,7 +34,7 @@ describe("mad.form.element.Dropdown", function () {
     });
 
     it("constructed instance should inherit mad.form.Element & the inherited parent classes", function () {
-        var dropdown = new DropdownFormElement($dropdown, {});
+        var dropdown = new DropdownFormElement('#dropdown', {});
 
         // Basic control of classes inheritance.
         expect(dropdown).to.be.instanceOf(CanControl);
@@ -46,7 +46,7 @@ describe("mad.form.element.Dropdown", function () {
     });
 
     it("getValue() should return the value of the dropdown", function (done) {
-        var dropdown = new DropdownFormElement($dropdown, {
+        var dropdown = new DropdownFormElement('#dropdown', {
                 availableValues: {
                     ID_1: 'VALUE 1',
                     ID_2: 'VALUE 2',
@@ -65,7 +65,7 @@ describe("mad.form.element.Dropdown", function () {
 
     it("Changing the value of the dropdown should fire the changed event", function (done) {
         var firedChanged = false,
-            dropdown = new DropdownFormElement($dropdown, {
+            dropdown = new DropdownFormElement('#dropdown', {
             availableValues: {
                 ID_1: 'VALUE 1',
                 ID_2: 'VALUE 2',

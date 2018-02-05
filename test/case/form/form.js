@@ -11,18 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "can/util/object/object";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import CheckboxFormElement from 'passbolt-mad/form/element/checkbox';
 import Component from "passbolt-mad/component/component";
 import FeedbackFormElement from 'passbolt-mad/form/feedback';
 import Form from "passbolt-mad/form/form"
-import Tree from "passbolt-mad/component/tree";
-import Textbox from "passbolt-mad/form/element/textbox";
-import Checkbox from "passbolt-mad/form/element/checkbox";
-import "passbolt-mad/test/helper/model";
 import Model from 'passbolt-mad/model/model';
+import TestModel from 'passbolt-mad/test/model/testModel';
+import TestModel1 from 'passbolt-mad/test/model/testModel1';
+import TestModel2 from 'passbolt-mad/test/model/testModel2';
 import TextboxFormElement from 'passbolt-mad/form/element/textbox';
+import Tree from "passbolt-mad/component/tree";
 import TreeComponent from 'passbolt-mad/component/tree';
 
 describe("mad.Form", function () {
@@ -40,7 +39,7 @@ describe("mad.Form", function () {
     });
 
     it("constructed instance should inherit Form & the inherited parent classes", function () {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
 
         // Basic control of classes inheritance.
         expect(form).to.be.instanceOf(CanControl);
@@ -51,12 +50,12 @@ describe("mad.Form", function () {
     });
 
     it("addElement() should not associate not form element to the form", function () {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Try to add a tree to the form.
         $form.append('<ul id="tree"></ul>');
-        var tree = new TreeComponent($('#tree'), {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         expect(function () {
@@ -67,12 +66,12 @@ describe("mad.Form", function () {
     });
 
     it("addElement() should associate form elements to the form", function () {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo($form),
-            textbox = new TextboxFormElement($textbox, {});
+            textbox = new TextboxFormElement('#textbox', {});
 
         expect(function () {
             form.addElement(textbox.start());
@@ -80,8 +79,8 @@ describe("mad.Form", function () {
 
         // Add a second textbox to the form.
         // This textbox is associated to a model reference.
-        var $textboxWthModelRef = $('<input id="textbox-wth-model-ref"/>').appendTo($form),
-            textboxWthModelRef = new TextboxFormElement($textboxWthModelRef, {
+        $('<input id="textbox-wth-model-ref"/>').appendTo($form);
+        var textboxWthModelRef = new TextboxFormElement('#textbox-wth-model-ref', {
                 modelReference: 'mad.test.model.TestModel.testModelAttribute'
             });
 
@@ -91,12 +90,12 @@ describe("mad.Form", function () {
     });
 
     it("getElement() should return a form element based on its id", function () {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
-        var $textbox = $('<input id="textbox"/>').appendTo($form);
-        var textbox = new TextboxFormElement($textbox, {
+        var $textbox = $('<input id="textbox"/>').appendTo('#form');
+        var textbox = new TextboxFormElement('#textbox', {
             modelReference: 'mad.test.model.TestModel.testModelAttribute'
         });
 
@@ -107,16 +106,16 @@ describe("mad.Form", function () {
         form.addElement(textbox.start());
         var gotTextbox = form.getElement(textbox.getId());
         expect(gotTextbox).not.to.be.undefined;
-        expect(can.Object.same(textbox, gotTextbox)).to.be.true;
+        expect(Object.is(textbox, gotTextbox)).to.be.true;
     });
 
     it("removeElement() should remove an element from the form", function () {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo($form);
-        var textbox = new TextboxFormElement($textbox, {
+        var textbox = new TextboxFormElement('#textbox', {
             modelReference: 'mad.test.model.TestModel.testModelAttribute'
         });
 
@@ -128,12 +127,12 @@ describe("mad.Form", function () {
     });
 
     it("getData() should return the data the form elements gathered", function (done) {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo($form);
-        var textbox = new TextboxFormElement($textbox, {
+        var textbox = new TextboxFormElement('#textbox', {
             modelReference: 'mad.test.model.TestModel.testModelAttribute'
         });
         form.addElement(textbox.start());
@@ -161,19 +160,19 @@ describe("mad.Form", function () {
     });
 
     it("getData() should return the data the form elements gathered for a complex nested model representation", function (done) {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo($form);
-        var textbox = new TextboxFormElement($textbox, {
+        var textbox = new TextboxFormElement('#textbox', {
             modelReference: 'mad.test.model.TestModel.testModelAttribute'
         });
         form.addElement(textbox.start());
 
         // Add a second textbox to the form.
         var $textbox2 = $('<input id="textbox2"/>').appendTo($form);
-        var textbox2 = new TextboxFormElement($textbox2, {
+        var textbox2 = new TextboxFormElement('#textbox2', {
             modelReference: 'mad.test.model.TestModel.TestModel1.testModel1Attribute'
         });
         form.addElement(textbox2.start());
@@ -205,19 +204,19 @@ describe("mad.Form", function () {
     });
 
     it("getData() should return the data the form elements gathered for a complex nested multiple model representation", function (done) {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox" type="text"/>').appendTo($form);
-        var textbox = new TextboxFormElement($textbox, {
+        var textbox = new TextboxFormElement('#textbox', {
             modelReference: 'mad.test.model.TestModel.testModelAttribute'
         });
         form.addElement(textbox.start());
 
         // Add a checkbox to the form.
         var $checkbox = $('<div id="checkbox"></div>').appendTo($form);
-        var checkbox = new CheckboxFormElement($checkbox, {
+        var checkbox = new CheckboxFormElement('#checkbox', {
             availableValues: {
                 'option_1': 'Option 1',
                 'option_2': 'Option 2',
@@ -256,19 +255,19 @@ describe("mad.Form", function () {
     });
 
     it("load() should load the form with an instance of Model object", function () {
-        var form = new Form($form, {});
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox" type="text"/>').appendTo($form);
-        var textbox = new TextboxFormElement($textbox, {
+        var textbox = new TextboxFormElement('#textbox', {
             modelReference: 'mad.test.model.TestModel.testModelAttribute'
         });
         form.addElement(textbox.start());
 
         // Add a checkbox to the form.
         var $checkbox = $('<div id="checkbox"></div>').appendTo($form);
-        var checkbox = new CheckboxFormElement($checkbox, {
+        var checkbox = new CheckboxFormElement('#checkbox', {
             availableValues: {
                 'option_1': 'Option 1',
                 'option_2': 'Option 2',
@@ -278,9 +277,9 @@ describe("mad.Form", function () {
         });
         form.addElement(checkbox.start());
 
-        var testInstance = new mad.test.model.TestModel({
+        var testInstance = new TestModel({
             testModelAttribute: 'test model attribute value',
-            TestModel1s: new mad.test.model.TestModel1.List([{
+            TestModel1s: new TestModel1.List([{
                 testModel1Attribute: 'option_1'
             }, {
                 testModel1Attribute: 'option_2'
@@ -296,22 +295,22 @@ describe("mad.Form", function () {
     });
 
     it("validateElement() should validate an element", function() {
-        var testModelValidationRules = mad.test.model.TestModel.validationRules;
-        var form = new Form($form, {});
+        var testModelValidationRules = TestModel.validationRules;
+        var form = new Form('#form', {});
         form.start();
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox" type="text"/>').appendTo($form);
-        var textbox = new TextboxFormElement($textbox, {
+        var textbox = new TextboxFormElement('#textbox', {
             modelReference: 'mad.test.model.TestModel.testModelAttribute'
         });
         var $feedbackTxtBox = $('<span id="feedback_txtbox" for="textbox" />').appendTo($form);
-        var feedbackTxtBox = new FeedbackFormElement($feedbackTxtBox, {});
+        var feedbackTxtBox = new FeedbackFormElement('#feedback_txtbox', {});
         form.addElement(textbox.start(), feedbackTxtBox.start());
 
         // Add a checkbox to the form.
         var $checkbox = $('<div id="checkbox"></div>').appendTo($form);
-        var checkbox = new CheckboxFormElement($checkbox, {
+        var checkbox = new CheckboxFormElement('#checkbox', {
             availableValues: {
                 'option_1': 'Option 1',
                 'option_2': 'Option 2',

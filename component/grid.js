@@ -10,14 +10,17 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import CanList from 'can-list';
 import Component from 'passbolt-mad/component/component';
+import DomData from 'can-util/dom/data/data';
+import getObject from 'can-util/js/get/get';
 import GridColumn from 'passbolt-mad/model/grid_column';
 import GridView from 'passbolt-mad/view/component/grid';
 import View from 'passbolt-mad/view/view';
 
-import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.ejs!';
-import template from 'passbolt-mad/view/template/component/grid/grid.ejs!';
-import itemTemplate from 'passbolt-mad/view/template/component/grid/gridItem.ejs!';
+import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.stache!';
+import template from 'passbolt-mad/view/template/component/grid/grid.stache!';
+import itemTemplate from 'passbolt-mad/view/template/component/grid/gridItem.stache!';
 
 /**
  * @parent Mad.components_api
@@ -62,7 +65,7 @@ var Grid = Component.extend('mad.component.Grid', {
             item_hovered: null
         },
         // The items the grid works with.
-        items: new can.Model.List(),
+        items: null,
         // Is the grid filtered.
         isFiltered: false,
         // Is the grid sorted.
@@ -80,8 +83,8 @@ var Grid = Component.extend('mad.component.Grid', {
      * @return {mad.component.Grid}
      */
     init: function(el, options) {
+        options.items = options.itemClass.List();
         this._super(el, options);
-        this.options.items = new can.Model.List();
 
         // Keep a trace of the items after mapping.
         // This data will be used for post rendering treatments :
@@ -100,8 +103,8 @@ var Grid = Component.extend('mad.component.Grid', {
         // Associate columnModel definitions to corresponding DOM elements th column header.
         // It will be used by the view to retrieve associated column model definition.
         for (var i in columnModel) {
-            var el = $('th.js_grid_column_' + columnModel[i].name, this.element);
-            can.data(el, this.getColumnModelClass().fullName, columnModel[i]);
+            var $el = $('th.js_grid_column_' + columnModel[i].name, this.element);
+            DomData.set.call($el[0], this.getColumnModelClass().constructor.shortName, columnModel[i]);
         }
 
         this._super();
@@ -266,10 +269,11 @@ var Grid = Component.extend('mad.component.Grid', {
         var self = this,
             map = this.getMap(),
             mappedItem = null,
-            columnModels = this.getColumnModel();
+            columnModels = this.getColumnModel(),
+            itemClass = this.getItemClass();
 
         // An item should be given as parameter and valid.
-        if (this.getItemClass() != null && !(item instanceof this.getItemClass())) {
+        if (itemClass && !(item instanceof itemClass)) {
             throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'item');
         }
 
@@ -356,7 +360,7 @@ var Grid = Component.extend('mad.component.Grid', {
         this.options.isSorted = false;
         this.view.markAsUnsorted();
 
-        can.each(items, function (item, i) {
+        items.forEach(function (item, i) {
             self.insertItem(item);
         });
 
@@ -378,8 +382,9 @@ var Grid = Component.extend('mad.component.Grid', {
     resetFilter: function () {
         var self = this;
         this.options.isFiltered = false;
+        var items = options.items;
 
-        can.each(this.options.items, function(item, i) {
+        items.forEach(function(item, i) {
             self.view.showItem(item);
         });
     },
@@ -396,7 +401,7 @@ var Grid = Component.extend('mad.component.Grid', {
             // The keywords to search.
             keywords = needle.split(/\s+/),
             // Filtered resource.
-            filteredItems = new can.List();
+            filteredItems = new CanList();
 
         // The fields to look into have been given in options.
         if (typeof options.searchInFields != 'undefined') {
@@ -406,17 +411,18 @@ var Grid = Component.extend('mad.component.Grid', {
         }
 
         // Search the keywords in the list of items.
-        can.each(this.options.items, function (item, i) {
+        var items = this.options.items;
+        items.each(function (item, i) {
             // Foreach keywords.
             for (var j in keywords) {
                 var found = false,
                     field = null,
-                    i= 0;
+                    i = 0;
 
                 // Search in the item fields.
                 while(!found && (field = searchInFields[i])) {
                     // Is the keyword found in the field.
-                    found = can.getObject(field, item)
+                    found = getObject(item, field)
                             .toLowerCase()
                             .indexOf(keywords[j].toLowerCase()) != -1;
                     i++;
@@ -443,8 +449,9 @@ var Grid = Component.extend('mad.component.Grid', {
     filter: function (filteredItems) {
         var self = this;
         this.options.isFiltered = true;
+        var items = this.options.items;
 
-        can.each(this.options.items, function(item, i) {
+        items.forEach(function(item, i) {
             if (filteredItems.indexOf(item) != -1) {
                 self.view.showItem(item);
             } else {
@@ -512,11 +519,11 @@ var Grid = Component.extend('mad.component.Grid', {
      * remove it from the grid
      * @param {mad.model.Model} model The model reference
      * @param {HTMLEvent} ev The event which occurred
-     * @param {can.Model.List} items The removed items
+     * @param {CanList} items The removed items
      */
     '{items} remove': function (model, ev, items) {
         var self = this;
-        can.each(items, function (item, i) {
+        items.forEach(function (item, i) {
             self.removeItem(item);
         });
     },

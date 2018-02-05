@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/util/util';
+import Construct from 'can-construct';
 
 /**
  * @parent Mad.core_api
@@ -19,7 +19,7 @@ import 'passbolt-mad/util/util';
  * The aim of the object Map is to help developers to transform an object into another, by mapping
  * its fields following another structure.
  */
-var MadMap = can.Construct.extend('mad.Map', /** @static */ {
+var MadMap = Construct.extend('mad.Map', /** @static */ {
 
 	/**
 	 * @deprecated {0.0.2} Please call the function mapObject directly on the map object.
@@ -155,9 +155,11 @@ var MadMap = can.Construct.extend('mad.Map', /** @static */ {
 	mapObjects: function (data) {
 		var self = this;
 		var returnValue = [];
-		can.each(data, function(elt, i) {
-			returnValue[i] = self.mapObject(data[i]);
+
+		data.forEach(function(elt, i) {
+			returnValue[i] = self.mapObject(elt);
 		});
+
 		return returnValue;
 	}
 

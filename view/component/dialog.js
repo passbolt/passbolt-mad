@@ -43,9 +43,9 @@ var Dialog = View.extend('mad.view.component.Dialog', /* @static */ {}, /** @pro
      * @param {HTMLEvent} ev The event which occured
      * @return {void}
      */
-    '.dialog-close click': function (el, ev) {
+    '{element} .dialog-close click': function (el, ev) {
         ev.preventDefault();
-        this.element.remove();
+        $(this.element).remove();
     },
 
     /**
@@ -56,7 +56,7 @@ var Dialog = View.extend('mad.view.component.Dialog', /* @static */ {}, /** @pro
      */
     '{window} keyup': function (el, ev) {
         if (ev.keyCode == 27) {
-            this.element.remove();
+            $(this.element).remove();
         }
     },
 
@@ -66,8 +66,8 @@ var Dialog = View.extend('mad.view.component.Dialog', /* @static */ {}, /** @pro
      * @param {HTMLEvent} ev The event which occured
      * @return {void}
      */
-    ' .js-dialog-cancel click': function (el, ev) {
-        this.element.remove();
+    '{element} .js-dialog-cancel click': function (el, ev) {
+        $(this.element).remove();
     }
 });
 

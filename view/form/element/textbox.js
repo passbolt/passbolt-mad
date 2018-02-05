@@ -31,7 +31,7 @@ var Textbox = FormElementView.extend('mad.view.form.Textbox', /* @static */ {
      * @return {mixed} The value of the component
      */
     getValue: function () {
-        return this.element.val();
+        return $(this.element).val();
     },
 
     /**
@@ -40,7 +40,7 @@ var Textbox = FormElementView.extend('mad.view.form.Textbox', /* @static */ {
      * @param {mixed} value The value to set
      */
     setValue: function (value) {
-        this.element.val(value);
+        $(this.element).val(value);
     },
 
     /* ************************************************************** */
@@ -70,7 +70,7 @@ var Textbox = FormElementView.extend('mad.view.form.Textbox', /* @static */ {
 
             // Plan a new firing of the changed event.
             this._changeTimeout = setTimeout(function () {
-                self.element.trigger('changed', {
+                $(self.element).trigger('changed', {
                     value: self.getValue()
                 });
             }, this.getController().options.onChangeTimeout);

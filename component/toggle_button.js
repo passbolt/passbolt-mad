@@ -67,9 +67,9 @@ var ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @sta
      */
     'stateSelected': function (go) {
         if (go) {
-            this.element.addClass('selected');
+            $(this.element).addClass('selected');
         } else {
-            this.element.removeClass('selected');
+            $(this.element).removeClass('selected');
         }
     }
 });

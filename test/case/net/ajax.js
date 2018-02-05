@@ -10,54 +10,55 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/test/bootstrap";
+import 'passbolt-mad/test/bootstrap';
 import 'passbolt-mad/net/ajax';
-import 'can/util/fixture/fixture';
 import Ajax from 'passbolt-mad/net/ajax';
+import canFixture from 'can-fixture';
 import Response from 'passbolt-mad/net/response';
+import uuid from 'uuid/v4';
 
 describe("mad.net.Ajax", function() {
 
-    can.fixture({
+    canFixture({
         type: 'POST',
         url: '/ajax/request'
     }, function (original, settings, headers) {
         return {
-            'header': {
-                'id': uuid(),
-                'status': Response.STATUS_SUCCESS,
-                'title': 'Ajax Unit Test fixture title',
-                'message': 'Ajax Unit Test fixture message',
-                'controller': 'controllerName',
-                'action': 'actionName'
+            header: {
+                id: uuid(),
+                status: Response.STATUS_SUCCESS,
+                title: 'Ajax Unit Test fixture title',
+                message: 'Ajax Unit Test fixture message',
+                controller: 'controllerName',
+                action: 'actionName'
             },
-            'body': 'RESULT REQUEST 1'
+            body: 'RESULT REQUEST 1'
         };
     });
 
-    can.fixture({
+    canFixture({
         type: 'POST',
         url: '/ajax/server_error'
     }, function (original, settings, headers) {
         return {
-            'header': {
-                'id': uuid(),
-                'status': Response.STATUS_ERROR,
-                'title': 'Ajax Unit Test fixture title',
-                'message': 'Ajax Unit Test fixture message',
-                'controller': 'controllerName',
-                'action': 'actionName'
+            header: {
+                id: uuid(),
+                status: Response.STATUS_ERROR,
+                title: 'Ajax Unit Test fixture title',
+                message: 'Ajax Unit Test fixture message',
+                controller: 'controllerName',
+                action: 'actionName'
             },
-            'body': 'RESULT REQUEST 1'
+            body: 'RESULT REQUEST 1'
         };
     });
 
-    it("A successful ajax query should return a success status", function(done) {
+    it.only("A successful ajax query should return a success status", function(done) {
         Ajax.request({
-            'type': 'POST',
-            'url': '/ajax/request',
-            'async': true,
-            'dataType': 'json'
+            type: 'POST',
+            url: '/ajax/request',
+            async: true,
+            dataType: 'json'
         }).then(function (data, response, request) {
             expect(response.header.status).to.contain('success');
             done();
@@ -66,10 +67,10 @@ describe("mad.net.Ajax", function() {
 
     it("An ajax query to an unreachable url should return an error", function(done) {
         Ajax.request({
-            'type': 'POST',
-            'url': '/ajax/not_reachable',
-            'async': false,
-            'dataType': 'json'
+            type: 'POST',
+            url: '/ajax/not_reachable',
+            async: false,
+            dataType: 'json'
         }).then(function (data, response, request) {
             expect(false).to.be.ok;
             done();
@@ -88,10 +89,10 @@ describe("mad.net.Ajax", function() {
 
     it("An ajax query to a url returning an error should return an error status", function(done) {
         Ajax.request({
-            'type': 'POST',
-            'url': '/ajax/server_error',
-            'async': false,
-            'dataType': 'json'
+            type: 'POST',
+            url: '/ajax/server_error',
+            async: false,
+            dataType: 'json'
         }).then(function (data, response, request) {
             expect(false).to.be.ok;
             done();

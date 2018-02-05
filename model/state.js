@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import List from 'can-list';
 import Model from 'passbolt-mad/model/model';
 
 /**
@@ -39,8 +40,8 @@ var State = Model.extend('mad.model.State', /** @static */{
 	 * @return {mad.model.State} A new instance of the constructor function extending mad.model.State.
 	 */
 	init: function(){
-		this.previous = new can.List([]);
-		this.current = new can.List([]);
+		this.previous = new List([]);
+		this.current = new List([]);
 	},
 
 	/**

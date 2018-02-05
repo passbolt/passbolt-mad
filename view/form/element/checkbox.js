@@ -26,7 +26,7 @@ var Checkbox = FormElementView.extend('mad.view.form.Checkbox', /* @static */ {
      */
     getValue: function () {
         var returnValue = [];
-        this.element.find('input:checked').each(function () {
+        $(this.element).find('input:checked').each(function () {
             returnValue.push($(this).val());
         });
         return returnValue;
@@ -39,7 +39,7 @@ var Checkbox = FormElementView.extend('mad.view.form.Checkbox', /* @static */ {
      */
     setValue: function (value) {
         value = typeof value != 'undefined' && value != null ? value : [];
-        this.element.find('input').each(function () {
+        $(this.element).find('input').each(function () {
             // if the value of the input is found in the array of value given, check the box
             if (value.indexOf($(this).val()) != -1) {
                 $(this).attr('checked', true);
@@ -64,11 +64,11 @@ var Checkbox = FormElementView.extend('mad.view.form.Checkbox', /* @static */ {
     'input click': function (el, ev) {
         ev.stopPropagation();
 
-        if (el.is(':checked')) {
-            this.element.trigger('checked', el.val());
+        if ($(el).is(':checked')) {
+            $(this.element).trigger('checked', $(el).val());
         }
         else {
-            this.element.trigger('unchecked', el.val());
+            $(this.element).trigger('unchecked', $(el).val());
         }
     },
 
@@ -81,7 +81,7 @@ var Checkbox = FormElementView.extend('mad.view.form.Checkbox', /* @static */ {
     'input change': function (el, ev) {
         ev.stopPropagation();
 
-        this.element.trigger('changed', {value: this.getValue()});
+        $(this.element).trigger('changed', {value: this.getValue()});
     }
 });
 

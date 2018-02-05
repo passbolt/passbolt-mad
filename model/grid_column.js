@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/map/map';
+import CanMap from 'can-map';
+import List from 'can-list';
 
 /**
  * @inherits mad.model.Model
@@ -23,7 +24,7 @@ import 'can/map/map';
  * @param {array} options
  * @return {mad.model.GridColumn}
  */
-var GridColumn = can.Map.extend('mad.model.GridColumn', /** @prototype */ {
+var GridColumn = CanMap.extend('mad.model.GridColumn', /** @prototype */ {
 
     define: {
         // Name of the column
@@ -47,7 +48,7 @@ var GridColumn = can.Map.extend('mad.model.GridColumn', /** @prototype */ {
         },
         // CSS classes to add to the column header element (th).
         css: {
-            Type: Array,
+            Type: List,
             value: []
         },
         // The column cells will be formated based on an function adapter.
@@ -67,9 +68,12 @@ var GridColumn = can.Map.extend('mad.model.GridColumn', /** @prototype */ {
     init: function(options) {
         this._super(options);
 
-        // If sortable
+        if (!this.css) {
+            this.attr('css', new List());
+        }
+
+        // Add the class sortable to CSS classes.
         if (this.sortable) {
-            // Add the class sortable to CSS classes.
             this.css.push('sortable');
         }
     }

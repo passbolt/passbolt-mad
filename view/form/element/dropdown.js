@@ -21,8 +21,8 @@ var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}
      * Get the value of the dropdown form element
      * @return {mixed} The value of the component
      */
-    getValue: function (value) {
-        return this.element.val();
+    getValue: function () {
+        return $(this.element).val();
     },
 
     /**
@@ -30,7 +30,7 @@ var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}
      * @param {mixed} value The value to set
      */
     setValue: function (value) {
-        this.element.val(value);
+        $(this.element).val(value);
     },
 
     /* ************************************************************** */
@@ -43,7 +43,7 @@ var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}
      * @param {HTMLEvent} ev The event which occured
      */
     change: function (el, event) {
-        el.trigger('changed', {
+        $(el).trigger('changed', {
             value: this.getValue()
         });
     }

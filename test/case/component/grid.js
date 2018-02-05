@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/test/helper/model";
+import TestModel from "passbolt-mad/test/helper/model";
 import "passbolt-mad/test/fixture/users";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import GridColumn from 'passbolt-mad/model/grid_column';
 import GridComponent from "passbolt-mad/component/grid";
@@ -21,6 +21,7 @@ import HtmlHelper from 'passbolt-mad/helper/html';
 import MadControl from 'passbolt-mad/control/control';
 import MadMap from 'passbolt-mad/util/map/map';
 import Model from 'passbolt-mad/model/model';
+import UserTestModel from 'passbolt-mad/test/model/user';
 import xss from 'passbolt-mad/test/fixture/xss';
 
 describe("mad.component.Grid", function () {
@@ -55,7 +56,7 @@ describe("mad.component.Grid", function () {
     };
 
     it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model
         });
 
@@ -70,7 +71,7 @@ describe("mad.component.Grid", function () {
     });
 
     it("insertItem() requires the map option to be defined", function () {
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model
         });
         grid.start();
@@ -86,7 +87,6 @@ describe("mad.component.Grid", function () {
             grid.insertItem(itemInside);
         }).to.throw(Error); // should work but doesn't : mad.Exception.get(mad.error.MISSING_OPTION, 'map')
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -100,13 +100,15 @@ describe("mad.component.Grid", function () {
         var columnModel = [new GridColumn({
             name: 'id',
             index: 'id',
-            label: 'id'
+            label: 'id',
+            css: ['id_custom_css']
         }), new GridColumn({
             name: 'label',
             index: 'label',
-            label: 'label'
+            label: 'label',
+            css: ['label_custom_css']
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -158,7 +160,6 @@ describe("mad.component.Grid", function () {
         expect($grid.text()).to.contain(itemLast.attr('label'));
         expect(grid.view.getItemElement(itemInside).next().attr('id')).to.be.equal('item_last');
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -182,7 +183,7 @@ describe("mad.component.Grid", function () {
                 HtmlHelper.create(cellElement, 'inside_replace', html);
             }
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -197,7 +198,6 @@ describe("mad.component.Grid", function () {
         grid.insertItem(itemInside);
         expect($('#test-html').text()).to.contain('Cell adapted applied : ' + itemInside.attr('label'));
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -217,7 +217,7 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -232,8 +232,6 @@ describe("mad.component.Grid", function () {
         expect($grid.text()).to.contain('item label 1');
         expect($grid.text()).to.contain('item label 2');
 
-
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -253,7 +251,7 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -273,7 +271,6 @@ describe("mad.component.Grid", function () {
         grid.refreshItem(item);
         expect($('#test-html').text()).to.contain('updated item label');
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -293,7 +290,7 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -313,7 +310,6 @@ describe("mad.component.Grid", function () {
         expect($('#test-html').text()).to.contain(items[3].attr('label'));
         expect($('#test-html').text()).to.contain(items[4].attr('label'));
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -333,21 +329,18 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
-            itemClass: Model,
+        var grid = new GridComponent('#grid', {
+            itemClass: UserTestModel,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
-        // Insert items at root level.
-        var items = [],
-          savingDefs = [];
-
         // Retrieve the items to insert into the grid.
-        mad.test.model.UserTestModel.findAll().then(function(items) {
+        UserTestModel.findAll()
+        .then(function(items) {
             // Insert all the items into the grid
-            can.each(items, function(item, i) {
+            items.each(function(item) {
                 grid.insertItem(item);
                 expect($('#test-html').text()).to.contain(item.attr('username'));
             });
@@ -359,7 +352,6 @@ describe("mad.component.Grid", function () {
                 expect($('#test-html').text()).not.to.contain(items[2].attr('username'));
                 expect($('#test-html').text()).to.contain(items[0].attr('username'));
                 expect($('#test-html').text()).to.contain(items[1].attr('username'));
-                grid.element.empty();
                 grid.destroy();
                 done();
             });
@@ -382,7 +374,7 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel,
@@ -414,7 +406,6 @@ describe("mad.component.Grid", function () {
         grid.unselectItem(item);
         expect($item.hasClass('selected')).to.be.false;
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -434,7 +425,7 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel,
@@ -468,7 +459,6 @@ describe("mad.component.Grid", function () {
         grid.unselectItem(item);
         expect($item.hasClass('selected')).to.be.false;
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -488,7 +478,7 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -503,20 +493,19 @@ describe("mad.component.Grid", function () {
         expect(grid.isFiltered()).to.be.false;
 
         // Filter the grid
-        var filteredItems = new can.List([items[2], items[4]]);
+        var filteredItems = new Model.List([items[2], items[4]]);
         grid.filter(filteredItems);
 
         // Check that the grid is filtered.
         expect(grid.isFiltered()).to.be.true;
 
         // Check that the item we removed is not present anymore, but the other are still there.
-        expect(grid.view.getItemElement(items[0])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[1])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[2])).to.be.$visible;
-        expect(grid.view.getItemElement(items[3])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[4])).to.be.$visible;
+        expect(grid.view.getItemElement(items[0]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[1]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[2]).css('display')).to.not.be.equal('none');
+        expect(grid.view.getItemElement(items[3]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[4]).css('display')).to.not.be.equal('none');
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -536,7 +525,7 @@ describe("mad.component.Grid", function () {
             index: 'label',
             label: 'label'
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -551,28 +540,27 @@ describe("mad.component.Grid", function () {
         grid.filterByKeywords('_ item 2');
 
         // Check that the item we removed is not present anymore, but the other are still there.
-        expect(grid.view.getItemElement(items[0])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[1])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[2])).to.be.$visible;
-        expect(grid.view.getItemElement(items[3])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[4])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[0]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[1]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[2]).css('display')).to.not.be.equal('none');
+        expect(grid.view.getItemElement(items[3]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[4]).css('display')).to.be.equal('none');
 
         // Filter the grid on items hidden field
         var searchInFields = grid.options.map.getModelTargetFieldsNames()
             .concat(['hiddenField']);
 
-        grid.filterByKeywords('hidden item 2', {
+        grid.filterByKeywords('hidden item 3', {
             searchInFields: searchInFields
         });
 
         // Check that the item we removed is not present anymore, but the other are still there.
-        expect(grid.view.getItemElement(items[0])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[1])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[2])).to.be.$visible;
-        expect(grid.view.getItemElement(items[3])).to.be.$hidden;
-        expect(grid.view.getItemElement(items[4])).to.be.$hidden;
+        expect(grid.view.getItemElement(items[0]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[1]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[2]).css('display')).to.be.equal('none');
+        expect(grid.view.getItemElement(items[3]).css('display')).to.not.be.equal('none');
+        expect(grid.view.getItemElement(items[4]).css('display')).to.be.equal('none');
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -594,7 +582,7 @@ describe("mad.component.Grid", function () {
             label: 'label',
             sortable: true
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -602,27 +590,27 @@ describe("mad.component.Grid", function () {
         grid.start();
 
         // Sortable columns should be marked as sortable.
-        expect($('.js_grid_column_' + columnModel[0].name, grid.element)).to.have.$class('sortable');
-        expect($('.js_grid_column_' + columnModel[1].name, grid.element)).to.have.$class('sortable');
+        expect('sortable').to.be.oneOf($('.js_grid_column_' + columnModel[0].name, grid.element).attr('class').split(' '));
+        expect('sortable').to.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
 
         // Check that the grid is marked as sorted ascendingly when sorting ascendinly.
         grid.sort(columnModel[1], true);
-        expect($('.js_grid_column_' + columnModel[1].name, grid.element)).to.have.$class('sorted')
-            .and.to.have.$class('sort-asc');
+        expect('sorted').to.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-asc').to.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
 
         // Check that the grid is marked as sorted ascendingly when sorting descendingly.
         grid.sort(columnModel[1], false);
-        expect($('.js_grid_column_' + columnModel[1].name, grid.element)).to.have.$class('sorted')
-            .and.to.have.$class('sort-desc')
-            .and.to.not.have.$class('sort-asc');
+        expect('sorted').to.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-desc').to.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-asc').to.not.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
 
         grid.sort(columnModel[0], true);
-        expect($('.js_grid_column_' + columnModel[0].name, grid.element)).to.have.$class('sorted')
-            .and.to.have.$class('sort-asc');
-        expect($('.js_grid_column_' + columnModel[1].name, grid.element))
-            .to.not.have.$class('sorted')
-            .and.to.not.have.$class('sort-desc')
-            .and.to.not.have.$class('sort-asc');
+        expect('sorted').to.be.oneOf($('.js_grid_column_' + columnModel[0].name, grid.element).attr('class').split(' '));
+        expect('sort-asc').to.be.oneOf($('.js_grid_column_' + columnModel[0].name, grid.element).attr('class').split(' '));
+
+        expect('sorted').to.not.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-desc').to.not.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-asc').to.not.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
     });
 
     it("sort() should sort the grid regarding a given column", function(){
@@ -642,7 +630,7 @@ describe("mad.component.Grid", function () {
             label: 'label',
             sortable: true
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -683,7 +671,6 @@ describe("mad.component.Grid", function () {
             expect($('tbody tr', grid.element).eq(i).html()).to.contain('item label ' + alphabet[i]);
         }
 
-        grid.element.empty();
         grid.destroy();
     });
 
@@ -704,7 +691,7 @@ describe("mad.component.Grid", function () {
             label: 'label',
             sortable: true
         })];
-        var grid = new GridComponent($grid, {
+        var grid = new GridComponent('#grid', {
             itemClass: Model,
             map: map,
             columnModel: columnModel
@@ -717,16 +704,14 @@ describe("mad.component.Grid", function () {
 
         // Check that the grid is marked as sorted ascendingly when sorting descendingly.
         grid.sort(columnModel[1], false);
-        expect($('.js_grid_column_' + columnModel[1].name, grid.element))
-            .to.have.$class('sorted')
-            .and.to.have.$class('sort-desc');
+        expect('sorted').to.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-desc').to.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
 
         // Reloading the grid should mark the grid as unsorted.
         grid.load(items);
-        expect($('.js_grid_column_' + columnModel[1].name, grid.element))
-            .to.not.have.$class('sorted')
-            .and.to.not.have.$class('sort-desc')
-            .and.to.not.have.$class('sort-asc');
+        expect('sorted').to.not.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-desc').to.not.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
+        expect('sort-asc').to.not.be.oneOf($('.js_grid_column_' + columnModel[1].name, grid.element).attr('class').split(' '));
 
     });
 
@@ -750,7 +735,8 @@ describe("mad.component.Grid", function () {
         var columnModel = [new GridColumn({
             name: 'rule',
             index: 'rule',
-            label: 'rule'
+            label: 'rule',
+            css: ['test']
         }), new GridColumn({
             name: 'exploit',
             index: 'exploit',
@@ -758,7 +744,7 @@ describe("mad.component.Grid", function () {
         })];
 
         for (var rule in xss) {
-            var grid = new GridComponent($grid, {
+            var grid = new GridComponent('#grid', {
                 itemClass: Model,
                 map: map,
                 columnModel: columnModel
@@ -780,7 +766,6 @@ describe("mad.component.Grid", function () {
             // No Xss when clicking on the cell which contain the value
             $('#grid td.js_grid_column_exploit div').trigger('click');
 
-            grid.element.empty();
             grid.destroy();
         }
     });

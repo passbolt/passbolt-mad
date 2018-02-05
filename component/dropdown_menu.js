@@ -12,7 +12,7 @@
  */
 import MenuComponent from 'passbolt-mad/component/menu';
 import DropdownMenuView from 'passbolt-mad/view/component/dropdown_menu';
-import itemTemplate from 'passbolt-mad/view/template/component/dropdown_menu/dropdown_menu.ejs!';
+import itemTemplate from 'passbolt-mad/view/template/component/dropdown_menu/dropdown_menu.stache!';
 
 /**
  * @parent Mad.components_api

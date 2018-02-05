@@ -10,24 +10,15 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from 'passbolt-mad/util/util';
+import stache from 'can-stache';
+import View from 'passbolt-mad/view/view';
 
-/**
- * Our array utilities.
- */
-mad.array = mad.array || {};
+import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.stache!';
 
-/**
- * Return the intersection of two arrays given in parameter
- *
- * @param arr1
- * @param arr2
- * @return {[]} The intersection of the two arrays.
- */
-mad.array.intersect = function(arr1, arr2) {
-	return arr1.filter(function(n) {
-		return arr2.indexOf(n) > -1;
-	});
-};
-
-export default mad.array;
+// Register a stache helper to help the grid to render the cells.
+stache.registerHelper('gridCell', function(renderer, options){
+    if (!renderer) {
+        renderer = cellTemplate;
+    }
+    return View.render(renderer, options);
+});

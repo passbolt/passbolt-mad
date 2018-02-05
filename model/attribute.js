@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import getObject from 'can-util/js/get/get';
 import Model from 'passbolt-mad/model/model';
 
 /**
@@ -54,7 +55,7 @@ var Attribute = Model.extend('mad.model.Attribute', /* @static */ {
                     returnValue.push(subInstance[attributes[i].getName()]);
                 });
             } else {
-                pointer = can.getObject(attributes[i].getName(), pointer);
+                pointer = getObject(pointer, attributes[i].getName());
                 returnValue = pointer;
             }
         }
@@ -91,8 +92,8 @@ var Attribute = Model.extend('mad.model.Attribute', /* @static */ {
         // Find the root model.
         var matches = str.match(/[\.]?[A-Z][^.]*/),
             modelName = str.substr(0, matches.index + matches[0].length),
-            subAttributesStr = str.substr(modelName.length + 1),
-            model = can.getObject(modelName);
+            subAttributesStr = str.substr(modelName.length + 1);
+        var model = Model.get(modelName);
 
         returnValue.push(new Attribute({
             name: modelName,
@@ -113,7 +114,7 @@ var Attribute = Model.extend('mad.model.Attribute', /* @static */ {
                 // Extract the model full name.
                 var matches = attributeType.match(/(.*)\.models?$/);
                 name = subsplit[i];
-                model = can.getObject(matches[1]);
+                model = Model.get(matches[1]);
                 multiple = /models$/.test(attributeType);
             }
             else {

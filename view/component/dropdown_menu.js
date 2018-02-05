@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/view/component/tree';
+import DomData from 'can-util/dom/data/data';
+import TreeView from 'passbolt-mad/view/component/tree';
 
 /**
  * @inherits mad.view.component.Tree
@@ -21,7 +22,7 @@ import 'passbolt-mad/view/component/tree';
  * Instanciate a new Drop Down Menu view
  * @return {mad.view.component.tree.Jstree}
  */
-var DropdownMenu = mad.view.component.DropdownMenu = mad.view.component.Tree.extend('mad.view.component.DropdownMenu', /* @static */ {}, /** @prototype */ {
+var DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @static */ {}, /** @prototype */ {
 
     /**
      * Open an item
@@ -65,9 +66,11 @@ var DropdownMenu = mad.view.component.DropdownMenu = mad.view.component.Tree.ext
         ev.stopPropagation();
         ev.preventDefault();
 
-        var data = null;
+        var data = null,
+            itemClass = this.getController().getItemClass();
+
         if (this.getController().getItemClass()) {
-            data = el.data(this.getController().getItemClass().fullName);
+            data = DomData.get.call(li[0], itemClass.shortName);
         } else {
             data = el[0].id;
         }
@@ -84,10 +87,12 @@ var DropdownMenu = mad.view.component.DropdownMenu = mad.view.component.Tree.ext
     'li mouseleave': function (el, ev) {
         ev.stopPropagation();
         ev.preventDefault();
-        var data = null;
+
+        var data = null,
+            itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = el.data(this.getController().getItemClass().fullName);
+            data = DomData.get.call(li[0], itemClass.shortName);
         } else {
             data = el[0].id;
         }

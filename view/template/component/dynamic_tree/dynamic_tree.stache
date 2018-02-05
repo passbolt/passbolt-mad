@@ -1,0 +1,26 @@
+<li id="{{mappedItem.id}}" class="node close {{cssClasses}}">
+	<div class="row">
+
+		<div class="main-cell-wrapper">
+			<div class="main-cell">
+				<a><span>{{mappedItem.label}}</span></a>
+			</div>
+		</div>
+
+{{#if(hasChildren)}}
+		<div class="left-cell node-ctrl">
+			<a><span>open/close</span></a>
+		</div>
+{{/if}}
+
+		<div class="right-cell more-ctrl">
+			<a><span>more</span></a>
+		</div>
+
+	</div>
+	
+{{#if(hasChildren)}}
+	<ul></ul>
+{{/if}}
+
+</li>

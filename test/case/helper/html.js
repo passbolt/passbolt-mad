@@ -15,10 +15,7 @@ import HtmlHelper from 'passbolt-mad/helper/html';
 
 describe("mad.helper.Html", function(){
 
-    // Initialize the helper namespace for tests.
-    mad.test.helper = mad.test.helper || {};
-
-	it("create() should insert an HTML content and position it", function(){
+	it("create() should insert an HTML content and position it", function() {
 
 		// Inside replace strategy
 		var refElement = $('#test-html'),

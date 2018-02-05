@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 
-import 'can/model/model';
-import 'can/map/attributes/attributes';
+import CanModel from 'can-connect/can/model/model';
+//import 'can/map/attributes/attributes';
 import CakeSerializer from 'passbolt-mad/model/serializer/cake_serializer';
 import List from 'passbolt-mad/model/list';
 import Validation from 'passbolt-mad/util/validation';
@@ -27,7 +27,7 @@ import Validation from 'passbolt-mad/util/validation';
  * @constructor mad.Model
  * @inherits can.Model
  */
-var Model = can.Model.extend('mad.Model', /** @static */ {
+var Model = CanModel.extend('mad.Model', /** @static */ {
 
     /**
     * Force the storing of this model's instances.
@@ -39,13 +39,25 @@ var Model = can.Model.extend('mad.Model', /** @static */ {
     * Store all the instance of this model in the local store.
     * @protected
     */
-    madStore: new can.Model.List(),
+    madStore: new CanModel.List(),
 
     /**
      * The model validation rules.
      * @protected
      */
     validationRules: {},
+
+    _models: [],
+
+    get: function(modelName) {
+        if (modelName == 'mad.Model') return Model;
+        return Model._models[modelName];
+    },
+
+    setup: function(ModelClass, name, staticProps, protoProps){
+        this._models[name] = this;
+        CanModel.setup.apply(this, arguments)
+    },
 
     /**
      * Check if an attribute is a model attribute.
@@ -69,17 +81,30 @@ var Model = can.Model.extend('mad.Model', /** @static */ {
         return /models$/.test(this.attributes[name]);
     },
 
+    parseModels: function(data, xhr) {
+        if (data.body && typeof Array.isArray(data.body)) {
+            var returnValue = [];
+            for (var i in data.body) {
+                returnValue[i] = this.parseModel(data.body[i], xhr);
+            }
+            return returnValue;
+        }
+        return data;
+    },
+
     parseModel: function (data, xhr) {
         data = data || {};
-
         // if the provided data are formatted as an ajax server response
         if (typeof data.header != 'undefined') {
             data = data.body;
             // serialize the data from cake to can format
             data = CakeSerializer.from(data, this);
-        } else if (data[this.shortName]) {
-            // serialize the data from cake to can format
-            data = CakeSerializer.from(data, this);
+        } else {
+            var className = this.shortName.substr(this.shortName.lastIndexOf('.') + 1);
+            if (data[className]) {
+                // serialize the data from cake to can format
+                data = CakeSerializer.from(data, this);
+            }
         }
 
         return data;

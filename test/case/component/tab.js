@@ -12,7 +12,7 @@
  */
 import "passbolt-mad/test/bootstrap";
 import Action from "passbolt-mad/model/action";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import CompositeComponent from 'passbolt-mad/component/composite';
 import MadControl from 'passbolt-mad/control/control';

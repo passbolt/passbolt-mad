@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import DynamicTreeComponent from "passbolt-mad/component/dynamic_tree"
 import MadControl from 'passbolt-mad/control/control';
@@ -34,7 +34,7 @@ describe("mad.component.DynamicTree", function () {
     });
 
     it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
-        var tree = new DynamicTreeComponent($tree, {
+        var tree = new DynamicTreeComponent('#tree', {
             itemClass: Model
         });
 
@@ -50,7 +50,7 @@ describe("mad.component.DynamicTree", function () {
     });
 
     it('open() and close() should open and close the corresponding sections of the tree', function () {
-        var tree = new DynamicTreeComponent($tree, {
+        var tree = new DynamicTreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -83,7 +83,7 @@ describe("mad.component.DynamicTree", function () {
     });
 
     it('Clicking on the open/close trigger should open and close the corresponding section of the tree', function () {
-        var tree = new DynamicTreeComponent($tree, {
+        var tree = new DynamicTreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();

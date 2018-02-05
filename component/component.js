@@ -10,10 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import ArrayUtil from 'passbolt-mad/util/array/array';
 import Control from 'passbolt-mad/control/control';
 import MadBus from 'passbolt-mad/control/bus';
 import State from 'passbolt-mad/model/state';
+import StringUtil from 'can-util/js/string/string';
 import View from 'passbolt-mad/view/view';
 
 /**
@@ -108,9 +108,10 @@ var Component = Control.extend('mad.Component', /* @static */{
 		this.state = new State();
 
 		// Add the optional css classes to the HTMLElement.
-		for (var i in options.cssClasses) {
-			if(!this.element.hasClass(this.options.cssClasses[i])) {
-				this.element.addClass(this.options.cssClasses[i]);
+		for (var i in this.options.cssClasses) {
+
+			if(!$(this.element).hasClass(this.options.cssClasses[i])) {
+				$(this.element).addClass(this.options.cssClasses[i]);
 			}
 		}
 	},
@@ -133,13 +134,16 @@ var Component = Control.extend('mad.Component', /* @static */{
 			// Remove all the current states classes from the HTMLElement.
 			var currentStates = this.state.current.attr();
 			for (var i in currentStates) {
-				this.element.removeClass(currentStates[i]);
+				$(this.element).removeClass(currentStates[i]);
 			}
 
 			// Remove the optional css classes from the HTMLElement.
 			for (var i in this.options.cssClasses) {
-				this.element.removeClass(this.options.cssClasses[i]);
+				$(this.element).removeClass(this.options.cssClasses[i]);
 			}
+
+			// Remove the construct class name.
+			$(this.element).removeClass(this.constructor.name)
 		}
 
 		// Destroy the view.
@@ -180,7 +184,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 			// List of previous states.
 			current = this.state.current.attr(),
 			// List of changes the component is staying on.
-			staying = ArrayUtil.intersect(previous, current);
+			staying = previous.filter(x => current.indexOf(x) != -1);
 
 		// Check which states the component is leaving.
 		leaving = previous.filter(function(item) {
@@ -195,11 +199,11 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// Treat the states the component is going to leave.
 		for (var i in leaving) {
 			// Eemove the previous state class.
-			this.element.removeClass(leaving[i]);
+			$(this.element).removeClass(leaving[i]);
 
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a false
 			// to the function to notify it that the component is leaving the state.
-			var previousStateListener = this['state' + can.capitalize(leaving[i])];
+			var previousStateListener = this['state' + StringUtil.capitalize(leaving[i])];
 			if (previousStateListener) {
 				previousStateListener.call(this, false);
 			}
@@ -208,10 +212,10 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// Treat the states the component is going to enter on.
 		for (var i in entering) {
 			// Add the new state class.
-			this.element.addClass(entering[i]);
+			$(this.element).addClass(entering[i]);
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a true
 			// to the function to notify it that the component is entering on the state.
-			var newStateListener = this['state' + can.capitalize(entering[i])];
+			var newStateListener = this['state' + StringUtil.capitalize(entering[i])];
 			if (newStateListener) {
 				newStateListener.call(this, true);
 			}
@@ -274,7 +278,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 			return;
 		}
 
-		this.element.empty();
+		$(this.element).empty();
 
 		if (this.options.template && this.options.template != null) {
 			this.beforeRender();
@@ -395,7 +399,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 	 */
 	closest: function (Control) {
 		var classCssSelector = '.' + Control._fullName,
-			data = this.element.closest(classCssSelector).data();
+			data = $(this.element).closest(classCssSelector).data();
 		// @todo #BUG #JMVC $(ELEMENT).data(ControllerName) doesn't work.
 		for (var i in data.controls) {
 			if (data.controls[i].getClass().fullName == Control.fullName) {

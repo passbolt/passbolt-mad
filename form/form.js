@@ -173,7 +173,7 @@ var Form = Component.extend('mad.Form', /* @static */ {
      */
     addElement: function (element, feedback) {
         // If the given form element is not inherited from the Class mad.form.Element.
-        if (!(element instanceof mad.form.Element)) {
+        if (!(element instanceof FormElement)) {
             throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'element');
         }
 
@@ -213,7 +213,7 @@ var Form = Component.extend('mad.Form', /* @static */ {
             if (!modelPresentInForm) {
                 // We get the validation rules.
                 // First, get the model.
-                var model = can.getObject(modelName);
+                var model = Model.get(modelName);
                 if (model !== undefined) {
                     // Get the validation rules.
                     model.getValidationRules(this.options.action);
@@ -343,11 +343,11 @@ var Form = Component.extend('mad.Form', /* @static */ {
                             // If the element value is not null.
                             if (eltValue != null) {
                                 // Add each value to the return value following the expected representation.
-                                can.each(eltValue, function (val, prop) {
+                                for (var j in eltValue) {
                                     var obj = {};
-                                    obj[fieldAttrs[i].getName()] = val;
+                                    obj[fieldAttrs[i].getName()] = eltValue[j];
                                     pointer.push(obj);
-                                });
+                                }
                             }
                         }
                         // If the parent attribute is not multiple.

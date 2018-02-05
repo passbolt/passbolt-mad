@@ -10,27 +10,29 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/construct/construct';
+import Construct from 'can-construct';
 
 /**
  * @inherits jQuery.Class
  * @parent mad.core
  */
-var CakeSerializer = can.Construct.extend('mad.model.serializer.CakeSerializer', /** @static */ {
+var CakeSerializer = Construct.extend('mad.model.serializer.CakeSerializer', /** @static */ {
     from: function (data, Class) {
         var returnValue = {};
-        returnValue = $.extend(true, {}, data, data[Class.shortName]);
-        delete returnValue[Class.shortName];
+        var className = Class.shortName.substr(Class.shortName.lastIndexOf('.') + 1);
+        returnValue = $.extend(true, {}, data, data[className]);
+        delete returnValue[className];
         return returnValue;
     },
     to: function (data, Class) {
         var returnValue = {};
-        returnValue[Class.shortName] = {};
+        var className = Class.shortName.substr(Class.shortName.lastIndexOf('.') + 1);
+        returnValue[className] = {};
         for (var name in data) {
             if (Class.isModelAttribute(name)) {
                 returnValue[name] = data[name];
             } else {
-                returnValue[Class.shortName][name] = data[name];
+                returnValue[className][name] = data[name];
             }
         }
         return returnValue;

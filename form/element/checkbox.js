@@ -12,7 +12,7 @@
  */
 import ChoiceElement from 'passbolt-mad/form/choice_element';
 import CheckboxView from 'passbolt-mad/view/form/element/checkbox';
-import template from 'passbolt-mad/view/template/form/checkbox.ejs!';
+import template from 'passbolt-mad/view/template/form/checkbox.stache!';
 
 /**
  * @parent Mad.form_api

@@ -38,7 +38,7 @@ var Feedback = Component.extend('mad.form.Feedback', /* @static */ {
      * @return {mad.form.Feedback}
      */
     setMessage: function (message) {
-        this.element.text(message);
+        $(this.element).text(message);
         return this;
     }
 

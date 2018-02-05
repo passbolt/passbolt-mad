@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/construct/construct';
+import Construct from 'can-construct';
 import Config from 'passbolt-mad/config/config';
 import Response from 'passbolt-mad/net/response';
 
@@ -28,7 +28,7 @@ import Response from 'passbolt-mad/net/response';
  * @param {object} callbacks The optional callbacks to push on if existing
  * @return {ResponseHandler}
  */
-var ResponseHandler = can.Construct.extend('mad.net.ResponseHandler', /** @static */ {
+var ResponseHandler = Construct.extend('mad.net.ResponseHandler', /** @static */ {
 
 }, /** @prototype */ {
 
@@ -40,19 +40,19 @@ var ResponseHandler = can.Construct.extend('mad.net.ResponseHandler', /** @stati
      * The server response to treat
      * @type {Response}
      */
-    'response': null,
+    response: null,
 
     /**
      * The server request
      * @type {object}
      */
-    'request': null,
+    request: null,
 
     /**
      * The callback to push on
      * @type {object}
      */
-    'callback': null,
+    callback: null,
 
     /**
      * Get errorHandlerClass.

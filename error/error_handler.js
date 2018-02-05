@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import Construct from 'can-construct';
 
 /**
  * @inherits jQuery.Class
@@ -18,7 +19,7 @@
  * Common error handler.
  * Use the console as logger.
  */
-var ErrorHandler = can.Construct.extend('mad.error.ErrorHandler', /** @static */ {
+var ErrorHandler = Construct.extend('mad.error.ErrorHandler', /** @static */ {
 
     /**
      * Log the error or exception

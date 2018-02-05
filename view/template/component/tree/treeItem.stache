@@ -1,0 +1,16 @@
+{{= console.log('test') }}
+<li id="{{ mappedItem.id }}" class="{{ cssClasses }}">
+	<div class="row">
+		<div class="main-cell-wrapper">
+			<div class="main-cell">
+				<a><span>{{ mappedItem.label }}</span></a>
+			</div>
+		</div>
+	</div>
+
+{{#hasChildren}}
+	<ul>
+	</ul>
+{{/hasChildren}}
+
+</li>

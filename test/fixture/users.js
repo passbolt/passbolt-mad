@@ -11,7 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/net/ajax";
-import "can/util/fixture/fixture";
+import fixture from "can-fixture";
+import Model from 'passbolt-mad/model/model';
+import Response from 'passbolt-mad/net/response';
+import uuid from 'uuid/v4';
 
 var store = [
     {
@@ -44,14 +47,14 @@ var store = [
 ];
 
 // Fixture for UserTestModel findAll.
-can.fixture({
+fixture({
     type: 'GET',
     url: '/testusers'
-}, function (original, settings, headers) {
+}, function (request, response, headers, ajaxSettings) {
     return {
         'header': {
             'id': uuid(),
-            'status': mad.net.Response.STATUS_SUCCESS,
+            'status': Response.STATUS_SUCCESS,
             'title': 'success',
             'message': '',
             'controller': 'Users',
@@ -62,18 +65,18 @@ can.fixture({
 });
 
 // Fixture for UserTestModel findAll with a change on Carol.
-can.fixture({
+fixture({
     type: 'GET',
     url: '/testuserscarolupdated'
 }, function (original, settings, headers) {
     var storeCopy = $.extend(true, [], store),
-        instance = mad.Model.searchOne(storeCopy, 'UserTestModel.username', 'carol@passbolt.com');
-
+        instance = storeCopy.filter(user => user.UserTestModel.username == 'carol@passbolt.com')[0];
     instance.UserTestModel.email = 'carol_updated_email@passbolt.com';
+
     return {
         'header': {
             'id': uuid(),
-            'status': mad.net.Response.STATUS_SUCCESS,
+            'status': Response.STATUS_SUCCESS,
             'title': 'success',
             'message': '',
             'controller': 'Users',
@@ -84,7 +87,7 @@ can.fixture({
 });
 
 // Fixture for UserTestModel findOne.
-can.fixture({
+fixture({
     type: 'GET',
     url: '/testusers/{id}'
 }, function (original, settings, headers) {
@@ -103,7 +106,7 @@ can.fixture({
 });
 
 // Fixture for UserTestModel created.
-can.fixture({
+fixture({
     type: 'POST',
     url: '/testusers'
 }, function (attrs, settings, headers) {
@@ -124,42 +127,42 @@ can.fixture({
 });
 
 // Fixture for UserTestModel destroyed.
-can.fixture({
+fixture({
     type: 'DELETE',
     url: '/testusers/{id}'
 }, function (id, settings, headers) {
     // @todo We don't really maintain a local storage. So we do nothin.
     //       That means after a findAll the destroy item will appear again
     return {
-        'header': {
-            'id': uuid(),
-            'status': mad.net.Response.STATUS_SUCCESS,
-            'title': 'success',
-            'message': '',
-            'controller': 'Users',
-            'action': 'delete'
+        header: {
+            id: uuid(),
+            status: Response.STATUS_SUCCESS,
+            title: 'success',
+            message: '',
+            controller: 'Users',
+            action: 'delete'
         },
-        'body': {}
+        body: {}
     };
 });
 
 // Fixture for UserTestModel updated.
-can.fixture({
+fixture({
     type: 'PUT',
     url: '/testusers/{id}'
-}, function (original, settings, headers) {
-    var instance = mad.Model.searchOne(store, 'UserTestModel.id', original.params.id),
+}, function (request, response, headers, ajaxSettings) {
+    var instance = store.filter(user => user.UserTestModel.id == request.data.id)[0],
         instanceCopy = $.extend(true, [], instance);
 
-    for (var param in original.params) {
-        if (instanceCopy[param] && instanceCopy[param] != original.params[param]) {
-            instanceCopy[param] = original.params[param];
+    for (var param in request.data) {
+        if (instanceCopy[param] && instanceCopy[param] != request.data[param]) {
+            instanceCopy[param] = request.data[param];
         }
     }
     return {
         'header': {
             'id': uuid(),
-            'status': mad.net.Response.STATUS_SUCCESS,
+            'status': Response.STATUS_SUCCESS,
             'title': 'success',
             'message': '',
             'controller': 'Users',
@@ -170,17 +173,18 @@ can.fixture({
 });
 
 // Fixture for UserTestModel findOne.
-can.fixture({
+fixture({
     type: 'GET',
     url: '/testusersupdated/{id}'
-}, function (original, settings, headers) {
-    var instance = mad.Model.searchOne(store, 'UserTestModel.id', original.params.id),
-        instanceCopy = $.extend(true, [], instance);
+}, function (request, response, headers, ajaxSettings) {
+    var id = request.data.id;
+    var instance = store.filter(user => user.UserTestModel.id == id)[0];
+    var instanceCopy = $.extend(true, {}, instance);
     instanceCopy.UserTestModel.email = 'carol_updated_email@passbolt.com';
     return {
         'header': {
             'id': uuid(),
-            'status': mad.net.Response.STATUS_SUCCESS,
+            'status': Response.STATUS_SUCCESS,
             'title': 'success',
             'message': '',
             'controller': 'Users',
@@ -191,7 +195,7 @@ can.fixture({
 });
 
 // Fixture for UserTestModel findCustom.
-can.fixture({
+fixture({
     type: 'GET',
     url: '/testusers/custom/0'
 }, function (original, settings, headers) {

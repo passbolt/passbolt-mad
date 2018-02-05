@@ -10,6 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import Construct from 'can-construct';
+import getObject from 'can-util/js/get/get';
+import setObject from 'passbolt-mad/util/set/set';
 import mad from 'passbolt-mad/util/util';
 
 /**
@@ -23,7 +26,7 @@ mad.config = mad.config || {};
  *
  * The mad config tool as for aim to centralize the configuration of the application.
  */
-var MadConfig = can.Construct.extend('mad.Config', /** @static */ {
+var MadConfig = Construct.extend('mad.Config', /** @static */ {
 
 	/**
 	 * Load a config file
@@ -59,7 +62,7 @@ var MadConfig = can.Construct.extend('mad.Config', /** @static */ {
 	 * @return {mixed}
 	 */
 	read: function (name) {
-		return can.getObject(name, mad.config);
+		return getObject(mad.config, name);
 	},
 
 	/**
@@ -69,7 +72,7 @@ var MadConfig = can.Construct.extend('mad.Config', /** @static */ {
 	 * @param {mixed} value The value of the config variable to set.
 	 */
 	write: function (name, value) {
-		can.getObject(name, mad.config, true, value);
+		setObject(mad.config, name, value);
 	},
 
 	/**

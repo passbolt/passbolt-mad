@@ -14,25 +14,62 @@
   ],
   "main": "passbolt-mad",
   "dependencies": {
-    "can": "~2.3.33",
-    "jquery": "~2.2.4",
-    "steal": "~1.6.2",
+    "can": "3.12.1",
+    "can-ajax": "1.1.2",
+    "can-connect": "1.5.10",
+    "can-construct": "3.2.3",
+    "can-construct-super": "3.1.3",
+    "can-control": "3.2.4",
+    "can-fixture": "1.1.2",
+    "can-jquery": "3.2.3",
+    "can-list": "3.2.2",
+    "can-log": "1.0.0",
+    "can-map": "3.4.1",
+    "can-model": "3.0.3",
+    "can-observation": "3.3.6",
+    "can-stache": "3.13.2",
+    "can-stache-key": "0.1.1",
+    "can-util": "3.10.15",
+    "steal": "~1.6.4",
+    "steal-stache": "3.1.3",
+    "string-hash": "^1.1.3",
+    "uuid": "^3.2.1",
     "xregexp": "~3.2.0"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
-    "chai-jq": "^0.0.9",
-    "documentjs": "^0.4.4",
+    "chai": "^4.0.0",
+    "chai-jquery": "^2.0.0",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-shell": "^1.3.0",
     "http-server": "^0.10.0",
-    "mocha": "^3.5.3",
+    "mocha": "^5.0.0",
+    "puppeteer": "^1.0.0",
     "sinon": "^1.16.1",
-    "steal-css": "^1.3.1",
-    "steal-tools": "^1.10.0"
+    "steal-css": "^1.3.2",
+    "steal-tools": "^1.11.0",
+    "testee": "^0.7.0"
   },
   "scripts": {
-    "build": "steal-tools build --config stealconfig.js"
+    "build": "steal-tools build --config stealconfig.js",
+    "test": "testee ./test/test.html -c ./test/config.js"
+  },
+  "steal": {
+    "meta": {
+      "mocha": {
+        "format": "global",
+        "exports": "mocha",
+        "deps": [
+          "test/lib/stealMochaAddDom"
+        ]
+      }
+    },
+    "paths": {
+      "chai": "node_modules/chai/chai.js",
+      "mocha": "node_modules/mocha/mocha.js"
+    },
+    "plugins": [
+      "steal-stache"
+    ]
   }
 }

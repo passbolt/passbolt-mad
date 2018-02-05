@@ -117,10 +117,10 @@ var Button = Component.extend('mad.component.Button', {
    */
   stateDisabled: function (go) {
     if (go) {
-      this.element.attr('disabled', 'disabled')
+      $(this.element).attr('disabled', 'disabled')
         .addClass('disabled');
     } else {
-      this.element.removeAttr('disabled')
+      $(this.element).removeAttr('disabled')
         .removeClass('disabled');
     }
   }

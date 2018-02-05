@@ -27,7 +27,7 @@ var Form = View.extend('mad.view.Form', /* @static */ {}, /** @prototype */ {
         // Element's id.
         var eltId = element.getId(),
             $label = $('label[for="' + eltId + '"]'),
-            $wrapper = element.element.parent('.js_form_element_wrapper');
+            $wrapper = $(element.element).parent('.js_form_element_wrapper');
 
         switch (state) {
             case 'success':

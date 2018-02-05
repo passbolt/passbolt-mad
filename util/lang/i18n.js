@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'passbolt-mad/util/util';
+//import 'passbolt-mad/util/util';
+import Construct from 'can-construct';
 var glbl = typeof window !== "undefined" ? window : global
 
 /**
@@ -40,7 +41,7 @@ glbl.__ = __;
  * ```
  *
  */
-var I18n = can.Construct.extend('mad.I18n', /** @static */ {
+var I18n = Construct.extend('mad.I18n', /** @static */ {
 
     /**
      * The dictionary in use.

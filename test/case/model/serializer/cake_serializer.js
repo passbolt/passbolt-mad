@@ -13,7 +13,7 @@
 import "passbolt-mad/test/bootstrap";
 import Ajax from 'passbolt-mad/net/ajax';
 import "passbolt-mad/test/fixture/users";
-import "passbolt-mad/test/helper/model";
+import UserTestModel from "passbolt-mad/test/model/user";
 import CakeSerializer from "passbolt-mad/model/serializer/cake_serializer";
 
 describe("mad.model.serializer.CakeSerializer", function () {
@@ -21,17 +21,17 @@ describe("mad.model.serializer.CakeSerializer", function () {
     // Test CakeSerializer : From.
     it('test CakeSerializer : From', function (done) {
         Ajax.request({
-            'type': 'GET',
-            'url': '/testusers',
-            'async': true,
-            'dataType': 'json'
-        }).then(function (data, response, request) {
+            type: 'GET',
+            url: '/testusers',
+            async: true,
+            dataType: 'json'
+        }).then(function (data) {
             // Query is ok.
             expect(true).to.be.ok;
 
             // Test result.
-            var user = data[0];
-            var Class = mad.test.model.UserTestModel;
+            var user = data.body[0];
+            var Class = UserTestModel;
             var s = CakeSerializer.from(user, Class);
 
             for (var attrName in Class.attributes) {
@@ -41,11 +41,11 @@ describe("mad.model.serializer.CakeSerializer", function () {
                 else {
                     var subMdlAttr = Class.getAttribute(attrName);
                     if (subMdlAttr.multiple) {
-                        can.each(user[attrName], function (item, i) {
+                        for (var i in user[attrName]) {
                             for (var subMdlAttrName in subMdlAttr.modelReference.attributes) {
                                 expect(user[attrName][i][subMdlAttrName]).to.be.equal(s[attrName][i][subMdlAttrName]);
                             }
-                        });
+                        }
 
                     } else {
                         for (var subMdlAttrName in subMdlAttr.modelReference.attributes) {
@@ -56,7 +56,7 @@ describe("mad.model.serializer.CakeSerializer", function () {
             }
             done();
 
-        }).fail(function(jqXHR, status, response, request) {
+        }).then(null, function() {
             expect(false).to.be.ok;
             done();
         });
@@ -65,13 +65,13 @@ describe("mad.model.serializer.CakeSerializer", function () {
     // Test CakeSerializer : To.
     it('test CakeSerializer : To', function (done) {
         Ajax.request({
-            'type': 'GET',
-            'url': '/testusers',
-            'async': true,
-            'dataType': 'json'
+            type: 'GET',
+            url: '/testusers',
+            async: true,
+            dataType: 'json'
         }).then(function (data, response, request) {
-            var user = data[0];
-            var Class = mad.test.model.UserTestModel;
+            var user = data.body[0];
+            var Class = UserTestModel;
             var s = CakeSerializer.to(user, Class);
 
             expect(true).to.be.ok;
@@ -82,11 +82,11 @@ describe("mad.model.serializer.CakeSerializer", function () {
                 } else {
                     var subMdlAttr = Class.getAttribute(attrName);
                     if (subMdlAttr.multiple) {
-                        can.each(user[attrName], function (item, i) {
+                        for (var i in user[attrName]) {
                             for (var subMdlAttrName in subMdlAttr.modelReference.attributes) {
                                 expect(user[attrName][i][subMdlAttrName]).to.be.equal(s[attrName][i][subMdlAttrName]);
                             }
-                        });
+                        }
 
                     } else {
                         for (var subMdlAttrName in subMdlAttr.modelReference.attributes) {
@@ -97,7 +97,7 @@ describe("mad.model.serializer.CakeSerializer", function () {
             }
             done();
 
-        }).fail(function(jqXHR, status, response, request) {
+        }).then(null, function() {
             expect(false).to.be.ok;
             done();
         });

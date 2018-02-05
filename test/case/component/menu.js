@@ -12,10 +12,11 @@
  */
 import "passbolt-mad/test/bootstrap";
 import Action from "passbolt-mad/model/action";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
 import MenuComponent from 'passbolt-mad/component/menu';
+import $ from 'can-jquery';
 
 describe("mad.component.Menu", function () {
 
@@ -35,7 +36,7 @@ describe("mad.component.Menu", function () {
     });
 
     it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
-        var menu = new MenuComponent($menu);
+        var menu = new MenuComponent('#menu');
 
         // Basic control of classes inheritance.
         expect(menu).to.be.instanceOf(CanControl);
@@ -48,7 +49,7 @@ describe("mad.component.Menu", function () {
     });
 
     it("item_selected() should execute the menu item action on click", function () {
-        var menu = new MenuComponent($menu);
+        var menu = new MenuComponent('#menu');
         menu.start();
 
         expect($menu.text()).to.not.contain('Item 1');
@@ -81,7 +82,7 @@ describe("mad.component.Menu", function () {
     });
 
     it("setItemState() should change the state of a menu item", function () {
-        var menu = new MenuComponent($menu);
+        var menu = new MenuComponent('#menu');
         menu.start();
 
         var menuItems = [];

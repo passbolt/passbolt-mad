@@ -10,9 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/passbolt-mad";
+import Ajax from 'passbolt-mad/net/ajax';
+import CakeSerializer from 'passbolt-mad/model/serializer/cake_serializer';
+import Model from "passbolt-mad/model/model";
 
-var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
+var UserTestModel = Model.extend('mad.test.model.UserTestModel', {
     /**
      * Attributes.
      */
@@ -28,7 +30,7 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
         if (params && params.url) {
             url = params.url;
         }
-        return mad.net.Ajax.request({
+        return Ajax.request({
             url: url,
             type: 'GET',
             params: params,
@@ -41,7 +43,7 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
         if (params && params.url) {
             url = params.url;
         }
-        return mad.net.Ajax.request({
+        return Ajax.request({
             url: url,
             type: 'GET',
             params: params,
@@ -52,8 +54,8 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
     create : function (attrs, success, error) {
         var url = '/testusers';
         var self = this;
-        var params = mad.model.serializer.CakeSerializer.to(attrs, this);
-        return mad.net.Ajax.request({
+        var params = CakeSerializer.to(attrs, this);
+        return Ajax.request({
             url: url,
             type: 'POST',
             params: params,
@@ -63,15 +65,15 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
             // pipe the result to convert cakephp response format into can format
             // else the new attribute are not well placed
             var def = $.Deferred();
-            def.resolveWith(this, [mad.model.serializer.CakeSerializer.from(data, self)]);
+            def.resolveWith(this, [CakeSerializer.from(data, self)]);
             return def;
         });
     },
     update: function (id, attrs, success, error) {
         var url = '/testusers/' + id;
         // format data as expected by cakePHP
-        var params = mad.model.serializer.CakeSerializer.to(attrs, this);
-        return mad.net.Ajax.request({
+        var params = CakeSerializer.to(attrs, this);
+        return Ajax.request({
             url: url,
             type: 'PUT',
             params: params,
@@ -82,7 +84,7 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
     destroy : function (id, success, error) {
         var params = {id:id};
         var url = '/testusers/' + id;
-        return mad.net.Ajax.request({
+        return Ajax.request({
             url: url,
             type: 'DELETE',
             params: params,
@@ -92,7 +94,7 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
     },
     findCustom: function (params, success, error) {
         var self = this;
-        return mad.net.Ajax.request({
+        return Ajax.request({
             url: '/testusers/custom/0',
             type: 'GET',
             params: params,
@@ -108,7 +110,7 @@ var UserTestModel = mad.Model.extend('mad.test.model.UserTestModel', {
     }
 }, {});
 
-var ProfileTestModel = mad.Model.extend('mad.test.model.ProfileTestModel', {
+var ProfileTestModel = Model.extend('mad.test.model.ProfileTestModel', {
     /**
      * Attributes.
      */
@@ -120,13 +122,13 @@ var ProfileTestModel = mad.Model.extend('mad.test.model.ProfileTestModel', {
 
 }, {});
 
-var TestModel2 = mad.Model.extend('mad.test.model.TestModel2', {
+var TestModel2 = Model.extend('mad.test.model.TestModel2', {
     attributes: {
         testModel2Attribute: 'string'
     }
 }, {});
 
-var TestModel1 = mad.Model.extend('mad.test.model.TestModel1', {
+var TestModel1 = Model.extend('mad.test.model.TestModel1', {
     attributes: {
         TestModel2: 'mad.test.model.TestModel2.model',
         TestModel2s: 'mad.test.model.TestModel2.models',
@@ -152,7 +154,7 @@ var TestModel1 = mad.Model.extend('mad.test.model.TestModel1', {
     }
 }, {});
 
-var TestModel = mad.Model.extend('mad.test.model.TestModel', {
+var TestModel = Model.extend('mad.test.model.TestModel', {
     attributes: {
         TestModel1: 'mad.test.model.TestModel1.model',
         TestModel1s: 'mad.test.model.TestModel1.models',
@@ -172,4 +174,8 @@ var TestModel = mad.Model.extend('mad.test.model.TestModel', {
     }
 }, {});
 
-export default TestModel;
+export default {
+    ProfileTestModel: ProfileTestModel,
+    TestModel: TestModel,
+    UserTestModel: UserTestModel
+};

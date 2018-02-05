@@ -1,0 +1,15 @@
+<tr id="{{id}}">
+
+{{#columnModels}}
+
+	<td class="js_grid_column_{{name}} cell_{{name}} {{css.join(' ')}}">
+        {{#if(template)}}
+            {{#gridCell(template, cellValue=mappedItem[name])}}{{/gridCell}}
+        {{else}}
+            {{#gridCell(null, cellValue=mappedItem[name])}}{{/gridCell}}
+        {{/if}}
+	</td>
+
+{{/columnModels}}
+
+</tr>

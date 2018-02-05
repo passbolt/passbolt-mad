@@ -15,7 +15,7 @@ import MadMap from 'passbolt-mad/util/map/map';
 import TreeComponent from 'passbolt-mad/component/tree';
 import TreeView from 'passbolt-mad/view/component/tree';
 
-import itemTemplate from 'passbolt-mad/view/template/component/menu/menu_item.ejs!';
+import itemTemplate from 'passbolt-mad/view/template/component/menu/menu_item.stache!';
 
 /**
  * @parent Mad.components_api

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import CompositeComponent from "passbolt-mad/component/composite";
 import ConfirmComponent from "passbolt-mad/component/confirm";
@@ -27,7 +27,7 @@ describe("mad.component.Confirm", function () {
     });
 
     it("constructed instance should inherit mad.component.FreeComposite & the inherited parent classes", function () {
-        var confirm = new ConfirmComponent(null, {label: 'Confirm Test'}).start();
+        var confirm = ConfirmComponent.instantiate({label: 'Confirm Test'}).start();
 
         // Basic control of classes inheritance.
         expect(confirm).to.be.instanceOf(CanControl);
@@ -42,7 +42,7 @@ describe("mad.component.Confirm", function () {
 
     it("Confirm should be visible in the dom after start", function () {
         expect($('.dialog-wrapper').length).to.equal(0);
-        var configm = new ConfirmComponent(null, {label: 'Confirm Test'}).start();
+        var configm = ConfirmComponent.instantiate({label: 'Confirm Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
 
         expect($('.dialog').html()).to.contain('Confirm Test');
@@ -50,14 +50,14 @@ describe("mad.component.Confirm", function () {
     });
 
     it("Confirm should be hidden after clicking on close", function () {
-        var confirm = new ConfirmComponent(null, {label: 'Confirm Test'}).start();
+        var confirm = ConfirmComponent.instantiate({label: 'Confirm Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
         $('a.dialog-close').click();
         expect($('.dialog').length).to.equal(0);
     });
 
     it("Confirm should be hidden after clicking on cancel button", function () {
-        var confirm = new ConfirmComponent(null, {label: 'Confirm Test'}).start();
+        var confirm = ConfirmComponent.instantiate({label: 'Confirm Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
         $('a.js-dialog-cancel').click();
         expect($('.dialog').length).to.equal(0);
@@ -65,15 +65,12 @@ describe("mad.component.Confirm", function () {
 
     it("Action should be executed after clicking on Ok button", function () {
         $('body').append('<p class="feedback"></p>');
-        var confirm = new ConfirmComponent(
-            null,
-            {
-                label: 'Confirm Test',
-                action: function() {
-                    $('p.feedback').text('action is executed');
-                }
+        var confirm = ConfirmComponent.instantiate({
+            label: 'Confirm Test',
+            action: function() {
+                $('p.feedback').text('action is executed');
             }
-        ).start();
+        }).start();
         expect($('.dialog').length).to.not.equal(0);
         $('#confirm-button').click();
         expect($('.dialog').length).to.equal(0);
@@ -83,16 +80,13 @@ describe("mad.component.Confirm", function () {
 
     it("Confirm dialog should not be closed after action if closeAfterAction is set to false", function () {
         $('body').append('<p class="feedback"></p>');
-        var confirm = new ConfirmComponent(
-            null,
-            {
-                label: 'Confirm Test',
-                action: function() {
-                    $('p.feedback').text('action1 is executed');
-                },
-                closeAfterAction: false
-            }
-        ).start();
+        var confirm = ConfirmComponent.instantiate({
+            label: 'Confirm Test',
+            action: function() {
+                $('p.feedback').text('action1 is executed');
+            },
+            closeAfterAction: false
+        }).start();
         expect($('.dialog').length).to.not.equal(0);
         $('#confirm-button').click();
         expect($('.dialog').length).to.not.equal(0);
@@ -101,13 +95,10 @@ describe("mad.component.Confirm", function () {
     });
 
     it("Content should be displayed as per what is given in the variables", function () {
-        var confirm = new ConfirmComponent(
-            null,
-            {
-                label: 'Confirm Test',
-                content: 'Content of the confirm box'
-            }
-        ).start();
+        var confirm = ConfirmComponent.instantiate({
+            label: 'Confirm Test',
+            content: 'Content of the confirm box'
+        }).start();
         expect($('.dialog').length).to.not.equal(0);
         expect($('.dialog-content').text()).to.contain('Content of the confirm box');
     });

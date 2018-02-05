@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import Construct from 'can-construct';
 import I18n from "passbolt-mad/util/lang/i18n";
 
 // Sample of dictionary
@@ -26,7 +27,7 @@ describe("mad.I18n", function(){
 
 	it("should inherit can.Construct", function() {
 		var i18n = new I18n();
-		expect(i18n).to.be.instanceOf(can.Construct);
+		expect(i18n).to.be.instanceOf(Construct);
 	});
 
 	it("loadDico() should load a dictionary of sentences", function() {

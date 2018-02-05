@@ -10,12 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from "jquery";
-import mad from "passbolt-mad/passbolt-mad";
+import $ from 'can-jquery';
+import Control from "passbolt-mad/control/control";
 
-var OpenTheDoor = mad.Control.extend({
+var OpenTheDoor = Control.extend({
     'click': function () {
         $('#bar').toggle('display');
     }
 });
-var control = new OpenTheDoor($('#foo'));
+var control = new OpenTheDoor('#foo');

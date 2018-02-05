@@ -32,8 +32,8 @@ var ContextualMenu = DropdownMenuView.extend('mad.view.component.ContextualMenu'
      * @param ev
      */
     '{document} click': function (el, ev) {
-        if (!this.element.is(el) && !$(this.getController().options.source).is(ev.target)) {
-            this.element.remove();
+        if (!$(this.element).is(el) && !$(this.getController().options.source).is(ev.target)) {
+            $(this.element).remove();
         }
     },
 

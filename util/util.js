@@ -10,12 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import can from 'can/can';
 /* Override the can/util/string.js to use our patched version of the function getObject
  * Our version allow to set a value in a nested object if required. (@todo remove this trick) */
-import 'passbolt-mad/lib/can/utilString';
-import 'can/construct/super/super';
-import 'passbolt-mad/util/string/uuid';
 
 // Define the global context.
 var glbl = typeof window !== "undefined" ? window : global,

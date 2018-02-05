@@ -11,12 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import Config from 'passbolt-mad/config/config';
+import Construct from 'can-construct';
+import ErrorHandler from 'passbolt-mad/error/error_handler';
 import HtmlHelper from 'passbolt-mad/helper/html';
 import MadBus from "passbolt-mad/control/bus";
 import I18n from "passbolt-mad/util/lang/i18n";
-import ResponseHander from 'passbolt-mad/net/response_handler';
+import ResponseHandler from 'passbolt-mad/net/response_handler';
 
-import madConfig from "passbolt-mad/config/config.json";
+import madConfig from "passbolt-mad/config/config.js";
 
 // Load the default mad config.
 // See mad/config/config.json
@@ -86,7 +88,7 @@ Config.load(madConfig);
  * @param {String} defaultRoute.action The default action
  * @return {mad.bootstrap.AppBootstrap}
  */
-var Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static */ {
+var Bootstrap = Construct.extend('mad.Bootstrap', /* @static */ {
 
     defaults: {
         // Callbacks.
@@ -99,78 +101,15 @@ var Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static */ {
 }, /**  @prototype */ {
 
     // constructor like
-    init: function (options) {
-        this.options = {};
-        options = options || {};
+    init: function () {
+        // Define the error handler
+        Config.write('error.ErrorHandlerClass', ErrorHandler);
 
-        // Merge the default class options with the ones given in parameters.
-        $.extend(true, this.options, Bootstrap.defaults, options);
+        // Define the response handler
+        Config.write('net.ResponseHandlerClass', ResponseHandler);
 
-        // Check the application url.
-        var appUrl = Config.read('app.url');
-        if (typeof appUrl == 'undefined') {
-            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'app.url');
-        }
-        // Set APP_URL as global variable.
-        mad.setGlobal('APP_URL', appUrl);
-
-        // Define Error Handler Class
-        var ErrorHandlerClass = can.getObject(Config.read('error.ErrorHandlerClassName'));
-        // Has to be a mad.error.ErrorHandler
-        if (!ErrorHandlerClass) {
-            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'error.ErrorHandlerClassName');
-        }
-        Config.write('error.ErrorHandlerClass', ErrorHandlerClass);
-
-        // Define Response Handler Class
-        var ResponseHandlerClass = can.getObject(Config.read('net.ResponseHandlerClassName'));
-        // Has to be a mad.net.ResponseHandler
-        if (!ResponseHandlerClass) {
-            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'net.ResponseHandlerClassName');
-        }
-        Config.write('net.ResponseHandlerClass', ResponseHandlerClass);
-
-        // Define App Controller Class
-        var AppControllerClass = can.getObject(Config.read('app.ControllerClassName'));
-        // Has to be a mad.net.ResponseHandler
-        if (!AppControllerClass) {
-            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'app.ControllerClassName');
-        }
-        Config.write('app.AppControllerClass', AppControllerClass);
-
-        // The app controller element has to be defined, and to be a reference to
-        // an existing DOM element
-        if (!$(Config.read('app.controllerElt')).length) {
-            throw mad.Exception.get(mad.error.MISSING_CONFIG, 'app.controllerElt');
-        }
-
-        // Reference the application namespace if it does not exist yet
-        var ns = can.getObject(Config.read('app.namespace'), window, true);
-
-        // Load the required component
-        var components = Config.read('core.components');
-        for (var i in components) {
-            if (components[i] == 'Devel' && (Config.read('app.debug') == null ||
-                Config.read('app.debug') == 0)) {
-                continue;
-            }
-            this['init' + components[i]]();
-        }
-    },
-
-    /**
-     * Init application
-     */
-    initAppController: function () {
-        var self = this;
-        MadBus.bind('app_ready', function () {
-            if (self.options.callbacks.ready) {
-                self.options.callbacks.ready();
-            }
-        });
-        var AppControllerClass = can.getObject(Config.read('app.ControllerClassName'));
-        var app = new AppControllerClass($(Config.read('app.controllerElt')));
-        app.start();
+        // Initialize the event bus.
+        this.initEventBus();
     },
 
     /**
@@ -178,25 +117,12 @@ var Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static */ {
      */
     initEventBus: function () {
         var elt = HtmlHelper.create(
-            $(Config.read('app.controllerElt')),
-            'before',
-            '<div/>'
+            $('body'),
+            'first',
+            '<div id="bus"/>'
         );
-        var bus = MadBus.singleton(elt);
+        var bus = MadBus.singleton('#bus');
         mad.bus = bus;
-    },
-
-    /**
-     * Initialize the Application Development tools
-     */
-    initDevel: function () {
-        var elt = HtmlHelper.create(
-            $(Config.read('app.controllerElt')),
-            'before',
-            '<div/>'
-        );
-        var dev = new mad.devel.Devel(elt);
-        mad.dev = dev;
     }
 });
 

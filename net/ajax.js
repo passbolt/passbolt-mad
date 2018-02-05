@@ -10,11 +10,13 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Construct from   'can/construct/construct';
+import canAjax from 'can-ajax';
+import Construct from 'can-construct';
 import Config from 'passbolt-mad/config/config';
 import MadBus from 'passbolt-mad/control/bus';
 import Response from 'passbolt-mad/net/response';
 import ResponseHandler from 'passbolt-mad/net/response_handler'
+import StringUtil from 'can-util/js/string/string';
 
 /**
 * @inherits can.Construct
@@ -56,7 +58,7 @@ mad.net.Ajax.request({
 * * response (<a href="#!mad.net.Response">mad.net.Response</a>) : The server answer
 *
 **/
-var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
+var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
 
     defaults : {
         defaultResponseHandlerClass : 'mad.net.ResponseHandler'
@@ -81,7 +83,7 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
         // Keep the original parameters.
         request.originParams = $.extend({}, request.params);
         // Treat templated uris (e.g. /control/action/{id}).
-        request.url = can.sub(request.url, request.params, true);
+        request.url = StringUtil.sub(request.url, request.params, true);
         // By default we expect the request to return json.
         request.dataType = request.dataType || 'json';
         // Treat the request params as data
@@ -104,93 +106,95 @@ var Ajax = can.Construct.extend('mad.net.Ajax', /** @static */ {
         }
 
         // Perform the request.
-        var returnValue = can.ajax(request)
-            // pipe it to intercept server before any other treatments
-            .pipe(
-
-                // the request has been performed sucessfully
-                function (data, textStatus, jqXHR) {
-                    data.code = jqXHR.status;
-                    var response = new Response(data),
-                        // the deferred to return
-                        deferred = null;
-
-                    // @todo check the response format is valid
-
-                    // the server returns an error
-                    if (response.getStatus() == Response.STATUS_ERROR) {
-                        deferred = $.Deferred();
-                        deferred.rejectWith(this, [jqXHR, 'error', response]);
-                        return deferred;
-                    }
-                    // @todo treat notice, warning & success
-
-                    // everything fine, continue
-                    // override the deferred to pass the desired data
-                    // findOne, findAll get this deffered, but create seems to have
-                    // its own, it return only the bulk server response (treat it there)
-                    deferred = $.Deferred();
-                    deferred.resolveWith(this, [data.body, response, request]);
-                    return deferred;
-                },
-
-                // the request has not been performed
-                function (jqXHR, textStatus, data) {
-                    var jsonData = null;
-                    var response = null;
-                    // In case of error the reponse is not automatically parsed.
-                    // Try to parse it, in case the server return an understable message.
-                    try {
-                        if(typeof jqXHR.responseText != undefined) {
-                            jsonData = $.parseJSON(jqXHR.responseText);
-                        }
-                    } catch(e) {
-                        // @todo do something!
-                    }
-
-                    // In case we've been able to parse the server answer.
-                    if (Response.isResponse(jsonData)) {
-                        jsonData.code = jqXHR.status;
-                        response = new Response(jsonData);
-                    }
-                    // Otherwise treat a default unreacheable server answer.
-                    else {
-                        response = Response.getResponse('unreachable');
-                    }
-
-                    var deferred = $.Deferred();
-                    deferred.rejectWith(this, [jqXHR, response.getStatus(), response, request]);
-                    return deferred;
-                }
-
-            ); // end of pipe
-
-        var self = this;
-        // Handle the server success response with the default response handler
-        returnValue.then(function (data, response, request) {
-            // Notify other components that the ajax request has been completed.
-            if (typeof(mad.bus) != 'undefined') {
-                MadBus.trigger('mad_ajax_request_complete', request);
-            }
-            var ResponseHandlerClass = self._getResponseHandlerClass();
-            var ResponseHandlerClass = can.getObject(ResponseHandlerClass);
-            var responseHandler = new ResponseHandlerClass(response, request);
-            responseHandler.handle();
-        });
-
-        // Handle the server fail response with the default response handler
-        returnValue.fail(function (jqXHR, textStatus, response) {
-            // Notify other components that the ajax request has been completed.
-            if (typeof(mad.bus) != 'undefined') {
-                MadBus.trigger('mad_ajax_request_complete', request);
-            }
-            var ResponseHandlerClass = self._getResponseHandlerClass();
-            var ResponseHandlerClass = can.getObject(ResponseHandlerClass);
-            var responseHandler = new ResponseHandlerClass(response, request);
-            responseHandler.handle();
-        });
-
-        return returnValue;
+        return canAjax(request);
+        //    // pipe it to intercept server before any other treatments
+        //    .then(
+        //        // the request has been performed sucessfully
+        //        function (data, textStatus, jqXHR) {
+        //           console.log(data, textStatus, jqXHR);
+        //            data.code = jqXHR.status;
+        //            var response = new Response(data),
+        //                // the deferred to return
+        //                deferred = null;
+        //            console.log('Ah bon');
+        //            // @todo check the response format is valid
+        //
+        //            // the server returns an error
+        //            if (response.getStatus() == Response.STATUS_ERROR) {
+        //                deferred = $.Deferred();console.log('HEADER 8');
+        //                deferred.rejectWith(this, [jqXHR, 'error', response]);
+        //                return deferred;
+        //            }
+        //            // @todo treat notice, warning & success
+        //            console.log('HEADER 16');
+        //            // everything fine, continue
+        //            // override the deferred to pass the desired data
+        //            // findOne, findAll get this deffered, but create seems to have
+        //            // its own, it return only the bulk server response (treat it there)
+        //            deferred = $.Deferred();
+        //            deferred.resolveWith(this, [data.body, response, request]);
+        //            return deferred;
+        //        },
+        //
+        //        // the request has not been performed
+        //        function (jqXHR, textStatus, data) {
+        //            console.log('HEADER ERROR');
+        //            var jsonData = null;console.log('HEADER 12');
+        //            var response = null;
+        //            // In case of error the reponse is not automatically parsed.
+        //            // Try to parse it, in case the server return an understable message.
+        //            try {
+        //                if(typeof jqXHR.responseText != undefined) {
+        //                    jsonData = $.parseJSON(jqXHR.responseText);
+        //                }
+        //            } catch(e) {
+        //                // @todo do something!
+        //            }
+        //            console.log('HEADER 21');
+        //            // In case we've been able to parse the server answer.
+        //            if (Response.isResponse(jsonData)) {console.log('HEADER fd');
+        //                jsonData.code = jqXHR.status;
+        //                response = new Response(jsonData);
+        //            }
+        //            // Otherwise treat a default unreacheable server answer.
+        //            else {console.log('HEADER 1qsd');
+        //                response = Response.getResponse('unreachable');
+        //            }
+        //
+        //            var deferred = $.Deferred();console.log('HEADER azezavdsbgr1');
+        //            deferred.rejectWith(this, [jqXHR, response.getStatus(), response, request]);
+        //            return deferred;
+        //        }
+        //
+        //    ); // end of pipe
+        //
+        //var self = this;
+        //// Handle the server success response with the default response handler
+        //returnValue.then(function (data, response, request) {console.log('HEADER END');
+        //    // Notify other components that the ajax request has been completed.
+        //    if (typeof(mad.bus) != 'undefined') {
+        //        MadBus.trigger('mad_ajax_request_complete', request);
+        //    }
+        //    var ResponseHandlerClass = self._getResponseHandlerClass();
+        //    var ResponseHandlerClass = can.getObject(ResponseHandlerClass);
+        //    var responseHandler = new ResponseHandlerClass(response, request);
+        //    responseHandler.handle();
+        //});
+        //
+        //// Handle the server fail response with the default response handler
+        //returnValue.then(null, function (jqXHR, textStatus, response) {
+        //    console.log('ERRRORR');
+        //    // Notify other components that the ajax request has been completed.
+        //    if (typeof(mad.bus) != 'undefined') {
+        //        MadBus.trigger('mad_ajax_request_complete', request);
+        //    }
+        //    var ResponseHandlerClass = self._getResponseHandlerClass();
+        //    var ResponseHandlerClass = can.getObject(ResponseHandlerClass);
+        //    var responseHandler = new ResponseHandlerClass(response, request);
+        //    responseHandler.handle();
+        //});
+        //
+        //return returnValue;
     }
 }, /** @prototype */ {
 

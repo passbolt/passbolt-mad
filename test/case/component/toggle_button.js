@@ -12,7 +12,7 @@
  */
 import "passbolt-mad/test/bootstrap";
 import ButtonComponent from 'passbolt-mad/component/button';
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
 import ToggleButtonComponent from "passbolt-mad/component/toggle_button";
@@ -33,7 +33,7 @@ describe("mad.component.ToggleButton", function () {
     });
 
     it("constructed instance should inherit mad.component.Button & the inherited parent classes", function () {
-        var button = new ToggleButtonComponent($button);
+        var button = new ToggleButtonComponent('#button');
 
         // Basic control of classes inheritance.
         expect(button).to.be.instanceOf(CanControl);
@@ -47,7 +47,7 @@ describe("mad.component.ToggleButton", function () {
     });
 
     it("a click on button should put it in pressed position", function () {
-        var button = new ToggleButtonComponent($button, {});
+        var button = new ToggleButtonComponent('#button', {});
         button.start();
 
         $button.click();

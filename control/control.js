@@ -10,7 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from 'passbolt-mad/util/util';
+import $ from 'jquery';
+import CanControl from 'can-control';
+import uuid from 'uuid/v4';
+import "can-construct-super";
 
 /**
  * @parent Mad.core_api
@@ -32,7 +35,7 @@ import mad from 'passbolt-mad/util/util';
  * This is just another example of section.
  *
  */
-var Control = can.Control.extend('mad.Control', /** @prototype */ {
+var Control = CanControl.extend('mad.Control', /** @prototype */ {
 
 	/**
 	 * Constructor.
@@ -63,7 +66,7 @@ var Control = can.Control.extend('mad.Control', /** @prototype */ {
 
 		// The identifier has not been defined in the option parameters.
 		if (typeof options.id == 'undefined' || options.id == null || options.id == '') {
-			var elId = this.element.attr('id');
+			var elId = $(this.element).attr('id');
 
 			// If an identifier has been defined on the associated Controller's DOM Element.
 			if (typeof elId != 'undefined' && elId != '') {
@@ -72,13 +75,13 @@ var Control = can.Control.extend('mad.Control', /** @prototype */ {
 			// Otherwise generate a unique identifier.
 			else {
 				options.id = uuid();
-				this.element.attr('id', options.id);
+				$(this.element).attr('id', options.id);
 			}
 		}
 		// The id is given in the options.
 		else {
 			// Check if an id has also been defined in the template.
-			var elId = this.element.attr('id');
+			var elId = $(this.element).attr('id');
 
 			// If an identifier has also been defined on the associated Controller's DOM Element.
 			// Warn the developer about this to avoid any ambiguity before replacing it.
@@ -86,23 +89,11 @@ var Control = can.Control.extend('mad.Control', /** @prototype */ {
 				console.warn('Controller id is defined by options and by template, the template id will be overriden by the option id.');
 			}
 			// Override the DOM element id by the one defined in the optional parameters.
-			this.element.attr('id', options.id);
+			$(this.element).attr('id', options.id);
 		}
 
 		// Augment the default options with the one given in parameters.
 		this.options = $.extend(true, {}, this.options, options);
-
-		// Reference component
-		mad.referenceControl(this);
-	},
-
-	/**
-	 * Destroy the controller
-	 */
-	destroy: function () {
-		// Unreference the controller.
-		mad.unreferenceControl(this);
-		this._super();
 	},
 
 	/**
@@ -130,23 +121,8 @@ var Control = can.Control.extend('mad.Control', /** @prototype */ {
 	},
 
 	/**
-	 * Get Child controllers
-	 *
-	 * @deprecated {0.0.2} The function was written in the this class for convenience, but it was a
-	 * bad idea, and it is only an alias of (mad.controller.AppController.getComponent).
-	 * The function is now deprecated, and should be removed for the beta launch. Please
-	 * prefer to use the function mad.getControl
-	 *
-	 * @todo remove for beta-launch
-	 */
-	getComponent: function (id) {
-		console.warn('This function is deprecated, replace it with mad.getControl(id)');
-		return mad.app.getComponent(id);
-	},
-
-	/**
 	 * Get the controller class.
-	 * @return {mad.controller.Controller}
+	 * @return {mad.Control}
 	 */
 	getClass: function () {
 		return this.constructor;
@@ -166,7 +142,7 @@ var Control = can.Control.extend('mad.Control', /** @prototype */ {
 	 * @todo is this function still in use.
 	 */
 	remove: function () {
-		this.element.remove();
+		$(this.element).remove();
 	}
 
 });

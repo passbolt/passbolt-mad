@@ -14,7 +14,7 @@ import "passbolt-mad/test/bootstrap";
 import Action from "passbolt-mad/model/action";
 import ButtonComponent from "passbolt-mad/component/button";
 import ButtonDropdownComponent from "passbolt-mad/component/button_dropdown"
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
 
@@ -36,7 +36,7 @@ describe("mad.component.ButtonDropdown", function () {
     });
 
     it("constructed instance should inherit mad.component.Button & the inherited parent classes", function () {
-        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown);
+        var buttonDropdown = new ButtonDropdownComponent('#button-dropdown');
 
         // Basic control of classes inheritance.
         expect(buttonDropdown).to.be.instanceOf(CanControl);
@@ -68,7 +68,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown, {
+        var buttonDropdown = new ButtonDropdownComponent('#button-dropdown', {
             items:menuItems
         });
         buttonDropdown.start();
@@ -95,7 +95,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown, {
+        var buttonDropdown = new ButtonDropdownComponent('#button-dropdown', {
             items:menuItems
         });
         buttonDropdown.start();
@@ -130,7 +130,7 @@ describe("mad.component.ButtonDropdown", function () {
             }
         });
         menuItems.push(menuItem);
-        var buttonDropdown = new ButtonDropdownComponent($buttonDropdown, {
+        var buttonDropdown = new ButtonDropdownComponent('#button-dropdown', {
             items:menuItems
         });
         buttonDropdown.start();

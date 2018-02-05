@@ -10,22 +10,25 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/test/bootstrap";
-import CanControl from "can/control/control";
-import Component from "passbolt-mad/component/component";
+import 'passbolt-mad/test/bootstrap';
+import CanControl from 'can-control';
+import Component from 'passbolt-mad/component/component';
 import MadControl from 'passbolt-mad/control/control';
+import $ from 'can-jquery';
 
-import customTemplate from 'passbolt-mad/test/case/component/component_custom_template.ejs!'
+import customTemplate from 'passbolt-mad/test/case/component/component_custom_template.stache!'
 
 describe("mad.Component", function(){
 
 	// Extend Component for the needs of the tests.
 	var MyComponent = Component.extend('MyComponent', {
-		defaults: {}
+		defaults: {
+			cssClasses: ['js_test_component']
+		}
 	}, {});
 
 	it("should inherit can.Control & mad.Control", function(){
-		var component = new Component($('#test-html'));
+		var component = new Component('#test-html');
 
 		// Basic control of classes inheritance.
 		expect(component).to.be.instanceOf(CanControl);
@@ -36,7 +39,7 @@ describe("mad.Component", function(){
 	});
 
 	it("should be instantiated with the right properties & values", function(){
-		var component = new MyComponent($('#test-html')),
+		var component = new MyComponent('#test-html'),
 			$elt = $(component.element);
 
 		// The state property should be empty.
@@ -44,20 +47,20 @@ describe("mad.Component", function(){
 		expect(component.state.current.length).to.be.equal(0);
 
 		// The associated HTML Element should have the Component fullName as css class.
-		expect($elt.hasClass('my_component')).to.be.true;
+		expect($elt.hasClass('MyComponent')).to.be.true;
 		// The associated HTML Element should have the Component optional cssClasses as css classes.
-		expect($elt.hasClass('js_component')).to.be.true;
+		expect($elt.hasClass('js_test_component')).to.be.true;
 
 		component.destroy();
 
 		// After destroy, the associated HTML Element should not have the Component fullName as css class.
-		expect($elt.hasClass('my_component')).to.be.false;
+		expect($elt.hasClass('MyComponent')).to.be.false;
 		// After destroy, the associated HTML Element should not have the Component optional cssClasses as css classes.
-		expect($elt.hasClass('js_component')).to.be.false;
+		expect($elt.hasClass('js_test_component')).to.be.false;
 	});
 
 	it("should be in the default state after being started", function() {
-		var component = new MyComponent($('#test-html')),
+		var component = new MyComponent('#test-html'),
 			$elt = $(component.element);
 
 		component.start();
@@ -78,12 +81,11 @@ describe("mad.Component", function(){
 	it("should be in the overridden default state after being started", function() {
 		var MyComponentOverriddenState = Component.extend('MyComponentOverriddenState', {
 			defaults: {
-				state: 'disabled',
+				state: 'disabled'
 			}
 		}, {});
 
-		var component = new MyComponentOverriddenState($('#test-html'));
-
+		var component = new MyComponentOverriddenState('#test-html');
 		component.start();
 
 		// After start, the component' state is initialized with the Component overriden option.
@@ -100,15 +102,19 @@ describe("mad.Component", function(){
 				state: 'disabled',
 				template: customTemplate
 			}
-		}, {});
+		}, {
+			beforeRender: function() {
+				this.setViewData('variable', 'VARIABLE VALUE');
+			}
+		});
 
-		var component = new CustomComponent($('#test-html')),
+		var component = new CustomComponent('#test-html'),
 			$elt = $(component.element);
 
 		component.start();
 
 		// I should see a trace of the rendered custom template on the page.
-		expect($elt.text()).to.contain('look this is my custom template');
+		expect($elt.text()).to.contain('look this is my custom template and my custom variable value VARIABLE VALUE');
 
 		$elt.empty();
 		component.destroy();

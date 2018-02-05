@@ -36,7 +36,9 @@ var ChoiceElement = Element.extend('mad.form.ChoiceElement', /* @static */ {
      */
     beforeRender: function() {
         this._super();
+        this.setViewData('id', this.options.id);
         this.setViewData('availableValues', this.options.availableValues);
+        this.setViewData('counter', 0);
         this.setViewData('valueClasses', this.options.valueClasses);
     }
 

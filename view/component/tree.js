@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import DomData from 'can-util/dom/data/data';
 import View from 'passbolt-mad/view/view';
 import HtmlHelper from 'passbolt-mad/helper/html';
 
@@ -63,7 +64,7 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
         var hasChildren = mappedItem.children && mappedItem.children.length ? true : false;
         control.setViewData('hasChildren', hasChildren);
 
-        // Retrive custom item css classes.
+        // Retrieve custom item css classes.
         var cssClasses = [];
         if (typeof mappedItem['cssClasses'] != 'undefined') {
             cssClasses = cssClasses.concat(mappedItem['cssClasses']);
@@ -111,7 +112,7 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
         // Insert it in the DOM and position it.
         $item = HtmlHelper.create($refElement, position, itemRender);
         // Associate to the item to the just created node
-        can.data($item, control.getItemClass().fullName, item);
+        DomData.set.call($item[0], control.getItemClass().shortName, item);
 
         return $item;
     },
@@ -155,10 +156,10 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
         $item.replaceWith(itemRender);
         $item = this.getItemElement(item);
         // Associate to the item to the just created node.
-        can.data($item, control.getItemClass().fullName, item);
+        DomData.set.call($item[0], control.getItemClass().shortName, item);
 
         if (hasChildren) {
-            can.each(item.children, function (item, i) {
+            item.children.each(function (item, i) {
                 self.insertItem(item, mappedItem.id, 'last');
             });
         }
@@ -231,16 +232,16 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
         ev.preventDefault();
 
         var data = null,
-            li = el.parents('li:first'),
+            li = $(el).parents('li:first'),
             itemClass = this.getController().getItemClass();
 
         if (itemClass) {
-            data = li.data(itemClass.fullName);
+            data = DomData.get.call(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }
 
-        this.element.trigger('item_selected', [data, ev]);
+        $(this.element).trigger('item_selected', [data, ev]);
         return false;
     },
 
@@ -256,16 +257,16 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
 
         if (ev.which == 3) {
             var data = null,
-                li = el.parents('li:first'),
+                li = $(el).parents('li:first'),
                 itemClass = this.getController().getItemClass();
 
             if (itemClass) {
-                data = li.data(itemClass.fullName);
+                data = DomData.get.call(li[0], itemClass.shortName);
             } else {
                 data = li[0].id;
             }
 
-            this.element.trigger('item_right_selected', [data, ev]);
+            $(this.element).trigger('item_right_selected', [data, ev]);
         }
 
         return false;
@@ -286,7 +287,7 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
             itemClass = this.getController().getItemClass();
 
         if (itemClass) {
-            data = li.data(itemClass.fullName);
+            data = DomData.get.call(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }

@@ -12,12 +12,13 @@
  */
 import "passbolt-mad/test/bootstrap";
 import Action from "passbolt-mad/model/action";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import ContextualMenuComponent from "passbolt-mad/component/contextual_menu";
 import DropdownMenuComponent from 'passbolt-mad/component/dropdown_menu';
 import MadControl from 'passbolt-mad/control/control';
 import MenuComponent from 'passbolt-mad/component/menu';
+import HtmlHelper from 'passbolt-mad/helper/html';
 
 describe("mad.component.ContextualMenu", function () {
 
@@ -38,9 +39,7 @@ describe("mad.component.ContextualMenu", function () {
 
     function showContextualMenu($item) {
         var item_offset = $item.offset();
-
-        // Instantiate the contextual menu menu.
-        var contextualMenu = new ContextualMenuComponent(null, {
+        var contextualMenu = ContextualMenuComponent.instantiate({
             state: 'hidden',
             source: $item[0],
             coordinates: {
@@ -50,8 +49,6 @@ describe("mad.component.ContextualMenu", function () {
         });
         contextualMenu.start();
 
-        // Add a link to filter on all items as first item.
-        var menuItems = [];
         var menuItem = new Action({
             id: 'el1',
             label: 'Item 1',
@@ -68,16 +65,18 @@ describe("mad.component.ContextualMenu", function () {
             }
         });
         contextualMenu.insertItem(menuItem);
-        // Display the menu.
+
         contextualMenu.setState('ready');
+
         return contextualMenu;
     }
 
     it("constructed instance should inherit mad.component.DropdownMenu & the inherited parent classes", function () {
-        var menu = new ContextualMenuComponent(null, {
-            'state': 'hidden',
-            'source': $menu,
-            'coordinates': {
+        // Create an HTMLElement for the contextual menu.
+        var menu = ContextualMenuComponent.instantiate({
+            state: 'hidden',
+            source: '#menu',
+            coordinates: {
                 x: 0,
                 y: 0
             }

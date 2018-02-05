@@ -117,7 +117,7 @@ var Response = Model.extend('mad.net.Response', /** @static */ {
         var returnValue = false;
 
         // A response cannot be empty.
-        if(typeof data != 'undefined' && data != null) {
+        if (typeof data != 'undefined' && data != null) {
             // A response should carry a header.
             if (data.header) {
                 returnValue = true

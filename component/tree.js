@@ -11,10 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import Component from 'passbolt-mad/component/component';
+import List from 'can-list';
 import MadMap from 'passbolt-mad/util/map/map'
 import Model from 'passbolt-mad/model/model';
 import TreeView from 'passbolt-mad/view/component/tree';
-import itemTemplate from 'passbolt-mad/view/template/component/tree/treeItem.ejs!';
+
+import itemTemplate from 'passbolt-mad/view/template/component/tree/treeItem.stache!';
 
 /**
  * @parent Mad.components_api
@@ -24,7 +26,6 @@ import itemTemplate from 'passbolt-mad/view/template/component/tree/treeItem.ejs
  * The Tree Component as for aim to display a data tree.
  * @todo TBD
  */
-
 var Tree = Component.extend('mad.component.Tree', {
 
     defaults: {
@@ -42,7 +43,7 @@ var Tree = Component.extend('mad.component.Tree', {
         // The Model Class that defines the items displayed by the tree.
         itemClass: Model,
         // The list of objects displayed by the tree.
-        items: new can.Model.List(),
+        items: null,
         // The map used to transform the raw data into expected view format.
         map: null,
         // Prefix the id of each row.
@@ -73,7 +74,7 @@ var Tree = Component.extend('mad.component.Tree', {
      * See the parent class to see the inherited options.
      *
      * ### itemTemplate {string}
-     * The template used to render the tree's items. By default mad/view/template/component/tree/treeItem.ejs.
+     * The template used to render the tree's items. By default mad/view/template/component/tree/treeItem.stache.
      *
      * ### itemClass {mad.Model.constructor}
      * The Model Class that defines the items displayed by the tree.
@@ -171,6 +172,12 @@ var Tree = Component.extend('mad.component.Tree', {
                     return null;
                 }
             },
+            cssClasses: {
+                key: 'cssClasses',
+                func: function(value, map, rowObject) {
+                    return value.join(' ');
+                }
+            },
             children: {
                 key: 'children',
                 func: MadMap.mapObjects
@@ -209,7 +216,7 @@ var Tree = Component.extend('mad.component.Tree', {
             // Check if the current item has children.
             var children = this.options.map._getObjFieldPointer(item, this.options.map.map.children.key);
             if (typeof children != undefined && children != null && children.length > 0) {
-                can.each(children, function (childItem, i) {
+                children.each(function (childItem, i) {
                     self.insertItem(childItem, item, 'last');
                 });
             }
@@ -268,7 +275,7 @@ var Tree = Component.extend('mad.component.Tree', {
 
         // If the provided items parameter is a can.List.
         // Transform it in array, dirty because attr() func doesn't keep the attribute model reference.
-        else if (items instanceof can.Model.List) {
+        else if (items instanceof List) {
             var itemsList = items;
             items = [];
             itemsList.each(function(item) {

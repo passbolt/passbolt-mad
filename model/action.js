@@ -38,7 +38,7 @@ var Action = Model.extend('mad.model.Action', /** @static */{
         action: 'function',
         cssClasses: 'array',
         initial_state: 'string',
-        state: mad.model.State.model,
+        state: State.model,
         active: 'boolean'
     }
 
@@ -51,7 +51,7 @@ var Action = Model.extend('mad.model.Action', /** @static */{
         if (typeof this.initial_state == 'undefined') {
             this.initial_state = 'ready';
         }
-        this.state = new mad.model.State();
+        this.state = new State();
         this.state.setState(this.initial_state);
 
         // Instantiate the css classes variables if it has not been defined.

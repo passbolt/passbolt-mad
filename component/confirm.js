@@ -12,7 +12,9 @@
  */
 import DialogComponent from 'passbolt-mad/component/dialog';
 import ConfirmView from 'passbolt-mad/view/component/confirm';
-import template from 'passbolt-mad/view/template/component/confirm/confirm.ejs!';
+import HtmlHelper from 'passbolt-mad/helper/html';
+import template from 'passbolt-mad/view/template/component/confirm/confirm.stache!';
+import $ from 'can-jquery';
 
 var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
 
@@ -32,8 +34,32 @@ var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
         closeAfterAction: true,
         action: null,
         viewData: {}
-    }
+    },
 
+    /**
+     * Instantiate a new confirm dialog.
+     *
+     * @param {Object} [options] option values for the component.  These get added to
+     * this.options and merged with defaults static variable
+     * @return {mad.component.Dialog}
+     */
+    instantiate: function(options) {
+        // Create the DOM entry point for the dialog
+        var refElt = $('body'),
+            position = 'first';
+
+        // If a dialog already exist, position the new one right after.
+        var $existingDialog = $('.dialog-wrapper:last');
+        if ($existingDialog.length) {
+            refElt = $existingDialog;
+            position = 'after';
+        }
+
+        // Insert the element in the page DOM.
+        var $el = HtmlHelper.create(refElt, position, '<div/>');
+
+        return new Confirm($el[0], options);
+    }
 
 }, /** @prototype */ {
 
@@ -57,12 +83,12 @@ var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
      * confirm_clicked event
      * thrown when the user has clicked on confirm.
      */
-    ' confirm_clicked': function() {
+    '{element} confirm_clicked': function() {
         if (typeof this.options.action !== 'undefined') {
             this.options.action();
         }
         if (this.options.closeAfterAction === true) {
-            mad.component.Confirm.closeLatest();
+            Confirm.closeLatest();
         }
     }
 });

@@ -11,12 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
 import Model from 'passbolt-mad/model/model';
 import TreeComponent from "passbolt-mad/component/tree"
 import xss from 'passbolt-mad/test/fixture/xss';
+import $ from "can-jquery";
 
 describe("mad.component.Tree", function () {
 
@@ -34,7 +35,7 @@ describe("mad.component.Tree", function () {
     });
 
     it("constructed instance should inherit TreeComponent & the inherited parent classes", function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
 
@@ -49,7 +50,7 @@ describe("mad.component.Tree", function () {
     });
 
     it("insertItem() should insert an item into the tree", function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -57,7 +58,8 @@ describe("mad.component.Tree", function () {
         // Insert a first item.
         var itemInside = new Model({
             id: 'item_inside',
-            label: 'item inside label'
+            label: 'item inside label',
+            cssClasses: ['testclass']
         });
         tree.insertItem(itemInside);
         expect($('#test-html').text()).to.contain(itemInside.attr('label'));
@@ -66,7 +68,8 @@ describe("mad.component.Tree", function () {
         // Insert an item before the first one.
         var itemBefore = new Model({
             id: 'item_before',
-            label: 'item before label'
+            label: 'item before label',
+            cssClasses: ['testclass2']
         });
         tree.insertItem(itemBefore, itemInside, 'before');
         expect(tree.options.items.length).to.be.equal(2);
@@ -76,7 +79,8 @@ describe("mad.component.Tree", function () {
         // Insert an item after the before one.
         var itemAfter = new Model({
             id: 'item_after',
-            label: 'item after label'
+            label: 'item after label',
+            cssClasses: ['testclass3']
         });
         tree.insertItem(itemAfter, itemBefore, 'after');
         expect(tree.options.items.length).to.be.equal(3);
@@ -114,12 +118,11 @@ describe("mad.component.Tree", function () {
         expect($tree.text()).to.contain(itemFirst.attr('label'));
         expect(tree.view.getItemElement(itemBefore).prev().attr('id')).to.be.equal('item_first');
 
-        tree.element.empty();
         tree.destroy();
     });
 
     it('load() should insert several items in the tree', function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -152,7 +155,7 @@ describe("mad.component.Tree", function () {
     });
 
     it("removeItem() should remove an item from the tree - root level", function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -179,12 +182,11 @@ describe("mad.component.Tree", function () {
         expect($('#test-html').text()).to.contain(items[3].attr('label'));
         expect($('#test-html').text()).to.contain(items[4].attr('label'));
 
-        tree.element.empty();
         tree.destroy();
     });
 
     it("removeItem() should remove an item from the tree - nested levels", function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -258,12 +260,11 @@ describe("mad.component.Tree", function () {
         expect($('#test-html').text()).not.to.contain(subItems[4][3].attr('label'));
         expect($('#test-html').text()).not.to.contain(subItems[4][4].attr('label'));
 
-        tree.element.empty();
         tree.destroy();
     });
 
     it("refreshItem() should refresh an item in the tree", function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -282,12 +283,11 @@ describe("mad.component.Tree", function () {
         expect(tree.options.items.length).to.be.equal(1);
         expect($('#test-html').text()).to.contain(item.attr('label'));
 
-        tree.element.empty();
         tree.destroy();
     });
 
     it("selectItem() should select an item in the tree", function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -315,12 +315,11 @@ describe("mad.component.Tree", function () {
         $('a', $item).trigger('click');
         expect($('.row:first', $item).hasClass('selected')).to.be.true;
 
-        tree.element.empty();
         tree.destroy();
     });
 
     it("selectItem() should select an item in the tree after refresh", function () {
-        var tree = new TreeComponent($tree, {
+        var tree = new TreeComponent('#tree', {
             itemClass: Model
         });
         tree.start();
@@ -350,7 +349,6 @@ describe("mad.component.Tree", function () {
         $('a', $item).trigger('click');
         expect($('.row:first', $item).hasClass('selected')).to.be.true;
 
-        tree.element.empty();
         tree.destroy();
     });
 
@@ -363,7 +361,7 @@ describe("mad.component.Tree", function () {
      */
     it("Xss vulnerability check", function(){
         for (var rule in xss) {
-            var tree = new TreeComponent($tree, {
+            var tree = new TreeComponent('#tree', {
                 itemClass: Model
             });
             tree.start();
@@ -379,7 +377,6 @@ describe("mad.component.Tree", function () {
             // No Xss when clicking on the row which as the id attribute
             $('#tree li').trigger('click');
 
-            tree.element.empty();
             tree.destroy();
         }
     });

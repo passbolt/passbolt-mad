@@ -12,6 +12,8 @@
  */
 import 'can/control/control';
 import Config from 'passbolt-mad/config/config';
+import Control from 'can-control';
+import StringUtil from 'can-util/js/string/string';
 
 /**
  * @parent Mad.core_helper_api
@@ -19,7 +21,7 @@ import Config from 'passbolt-mad/config/config';
  *
  * A set of tools to help developer with Controllers.
  */
-var ControlHelper = can.Control.extend('mad.helper.Control', /** @static */ {
+var ControlHelper = Control.extend('mad.helper.Control', /** @static */ {
 
 	/**
 	 * Get view path of a Control class.
@@ -56,7 +58,7 @@ var ControlHelper = can.Control.extend('mad.helper.Control', /** @static */ {
 		// The path to build.
 		var path = '',
 			// Split the Control full name by .
-			split = Control.fullName.split('.');
+			split = Control.shortName.split('.');
 
 		// Check if the top namespace is known and require a specific treatment.
 		var root = split.shift();
@@ -76,7 +78,7 @@ var ControlHelper = can.Control.extend('mad.helper.Control', /** @static */ {
 		}
 
 		// The view file name is directly based on the controller name.
-		var viewName = can.underscore(split.pop());
+		var viewName = StringUtil.underscore(split.pop());
 
 		// Add the object nested namespaces to the path.
 		if (split.length) {

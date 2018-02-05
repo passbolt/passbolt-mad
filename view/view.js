@@ -12,6 +12,8 @@
  */
 import Control from 'passbolt-mad/control/control';
 import HtmlHelper from 'passbolt-mad/helper/html';
+import 'passbolt-mad/view/helper/stache/uuid.js';
+import 'passbolt-mad/view/helper/stache/hash.js';
 
 /**
  * @parent Mad.core_api
@@ -38,14 +40,16 @@ var View = Control.extend('mad.View', /** @static */{
 	 * Render a template. Prefer use this function instead of can.View.render or
 	 * jQuery.View cause they are not working with steal mapping of JMVC 3.3. We
 	 * do
-	 * @param {string} uri Template uri to render
+	 * @param {function} renderer The render to use to render the data
 	 * @param {array} data The data to pass to the renderer
 	 * @return {string}
 	 */
-	render: function (uri, data) {
+	render: function (renderer, data) {
 		data = data || {};
-		data['_mad'] = mad;
-		return can.view.render(uri, data);
+		var documentFragment = renderer(data);
+		// TODO: Alert of poo. Explain why please.
+		var html = $('<div>').append(documentFragment).html();
+		return html;
 	}
 
 }, /** @prototype */  {
@@ -64,7 +68,7 @@ var View = Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	addClass: function (className) {
-		this.element.addClass(className);
+		$(this.element).addClass(className);
 	},
 
 	/**
@@ -72,7 +76,7 @@ var View = Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	hide: function () {
-		this.element.hide();
+		$(this.element).hide();
 	},
 
 	/**
@@ -82,9 +86,9 @@ var View = Control.extend('mad.View', /** @static */{
 	 */
 	loading: function (loading) {
 		if (loading) {
-			this.element.prepend('<div class="js_loading" />');
+			$(this.element).prepend('<div class="js_loading" />');
 		} else {
-			$('.js_loading', this.element).remove();
+			$('.js_loading', $(this.element)).remove();
 		}
 	},
 
@@ -94,7 +98,7 @@ var View = Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	removeClass: function (className) {
-		this.element.removeClass(className);
+		$(this.element).removeClass(className);
 	},
 
 	/**
@@ -110,7 +114,7 @@ var View = Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	position: function(options) {
-		HtmlHelper.position(this.element, options);
+		HtmlHelper.position($(this.element), options);
 	},
 
 	/**
@@ -130,7 +134,7 @@ var View = Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	insertInDom: function(html) {
-		this.element.html(html);
+		$(this.element).html(html);
 	},
 
 	/**
@@ -138,7 +142,7 @@ var View = Control.extend('mad.View', /** @static */{
 	 * @return {void}
 	 */
 	show: function () {
-		this.element.show();
+		$(this.element).show();
 	}
 });
 

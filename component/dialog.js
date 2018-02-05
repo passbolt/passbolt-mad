@@ -13,7 +13,7 @@
 import DialogView from 'passbolt-mad/view/component/dialog';
 import FreeCompositeComponent from 'passbolt-mad/component/free_composite';
 import HtmlHelper from 'passbolt-mad/helper/html';
-import template from 'passbolt-mad/view/template/component/dialog/dialog.ejs!';
+import template from 'passbolt-mad/view/template/component/dialog/dialog.stache!';
 
 /**
  * @parent Mad.components_api
@@ -46,20 +46,18 @@ var Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static *
      */
     closeLatest: function() {
         $('.dialog-wrapper:last').remove();
-    }
-
-}, /** @prototype */ {
+    },
 
     /**
-     * Constructor.
-     * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
+     * Instantiate a new Dialog.
+     *
      * @param {Object} [options] option values for the component.  These get added to
      * this.options and merged with defaults static variable
      * @return {mad.component.Dialog}
      */
-    init: function(el, options) {
+    instantiate: function(options) {
         // Create the DOM entry point for the dialog
-        var refElt =  mad.config.rootElement,
+        var refElt = $('body'),
             position = 'first';
 
         // If a dialog already exist, position the new one right after.
@@ -72,11 +70,10 @@ var Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static *
         // Insert the element in the page DOM.
         var $el = HtmlHelper.create(refElt, position, '<div/>');
 
-        // Changing the element force us to recall the setup which is called before all init functions
-        // and make the magic things (bind event ...)
-        this.setup($el, options);
-        this._super($el, options);
-    },
+        return new Dialog($el[0], options);
+    }
+
+}, /** @prototype */ {
 
     /**
      * Add a component to the dialog container

@@ -56,7 +56,7 @@ import Control from "passbolt-mad/control/control";
  * by the function which takes care of the request.
  *
  */
-var Bus = Control.extend('mad.Bus', /** @prototype */ {
+var Bus = Control.extend('mad.Bus', /** @static */ {
 
     /**
      * Instance of Bus.
@@ -93,10 +93,9 @@ var Bus = Control.extend('mad.Bus', /** @prototype */ {
      */
     trigger: function (eventName, eventData) {
         var data = typeof eventData != 'undefined' ? eventData : [];
-        var element = Bus.element;
 
         // Trigger the event on the bus.
-        element.trigger(eventName, data);
+        $(Bus.element).trigger(eventName, data);
 
         // Make the an eventual plugin able to catch the application event.
         // Rhino does not understand these primitives.
@@ -147,8 +146,7 @@ var Bus = Control.extend('mad.Bus', /** @prototype */ {
      * @return {void}
      */
     bind: function (eventName, func) {
-        var element = Bus.element;
-        element.bind(eventName, func);
+        $(Bus.element).bind(eventName, func);
     }
 
 

@@ -12,9 +12,10 @@
  */
 import "passbolt-mad/test/bootstrap";
 import ButtonComponent from "passbolt-mad/component/button";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
+import $ from "can-jquery";
 
 describe("mad.component.Button", function () {
 
@@ -34,7 +35,7 @@ describe("mad.component.Button", function () {
     });
 
     it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
-        var button = new ButtonComponent($button);
+        var button = new ButtonComponent('#button');
 
         // Basic control of classes inheritance.
         expect(button).to.be.instanceOf(CanControl);
@@ -48,7 +49,7 @@ describe("mad.component.Button", function () {
 
     it("a click on button should trigger the associated function", function () {
         var valueTest = 'k3d';
-        var button = new ButtonComponent($button, {
+        var button = new ButtonComponent('#button', {
             value: valueTest,
             events: {
                 'click': function (el, ev, value) {
@@ -65,7 +66,7 @@ describe("mad.component.Button", function () {
     });
 
     it("state disabled should be intercepted", function () {
-        var button = new ButtonComponent($button);
+        var button = new ButtonComponent('#button');
         button.start();
 
         button.setState('disabled');
@@ -76,7 +77,7 @@ describe("mad.component.Button", function () {
 
     it("click should not be executed if the state is disabled", function () {
         var valueTest = 'k3d';
-        var button = new ButtonComponent($button, {
+        var button = new ButtonComponent('#button', {
             value: valueTest,
             events: {
                 'click': function (el, ev, value) {

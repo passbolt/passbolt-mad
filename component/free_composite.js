@@ -12,7 +12,7 @@
  */
 import ComponentHelper from 'passbolt-mad/helper/component';
 import CompositeComponent from 'passbolt-mad/component/composite';
-import template from 'passbolt-mad/view/template/component/free_composite/workspace.ejs!';
+import template from 'passbolt-mad/view/template/component/free_composite/workspace.stache!';
 
 /**
  * @parent Mad.components_api

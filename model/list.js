@@ -10,14 +10,14 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/construct/construct';
+import Construct from 'can-construct';
 import Model from 'passbolt-mad/model/model';
 
 /*
  * @inherits jQuery.Class
  * @parent mad.model
  */
-var List = can.Construct.extend('mad.model.List', /** @static */ {
+var List = Construct.extend('mad.model.List', /** @static */ {
 
     /**
      * IndexOf a reccord

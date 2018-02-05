@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanModel from 'can/model/model';
+import CanModel from 'can-connect/can/model/';
 import Model from 'passbolt-mad/model/model';
 import State from 'passbolt-mad/model/state';
 

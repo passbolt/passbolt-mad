@@ -2,9 +2,9 @@
     <table>
         <thead>
             <tr>
-<% for (var i in columnModel) { %>
-    <%== _mad.View.render(columnHeaderTemplate, {columnModel: columnModel[i], control: control}); %>
-<% } %>
+{{#columnModel}}
+    {{>columnHeaderTemplate}}
+{{/columnModel}}
             </tr>
         </thead>
     </table>

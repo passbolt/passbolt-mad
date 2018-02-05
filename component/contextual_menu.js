@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import ContextualMenuView from 'passbolt-mad/view/component/contextual_menu';
+import Control from 'can-control';
 import DropdownMenuComponent from 'passbolt-mad/component/dropdown_menu';
 import HtmlHelper from 'passbolt-mad/helper/html';
 
@@ -50,19 +51,10 @@ var ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMenu'
     },
 
     /**
-     * Removes existing contextual menu from the dom.
-     * Static function, can be called from anywhere.
-     */
-    remove: function() {
-        $('#js_contextual_menu', $(mad.config.rootElement)).remove();
-    }
-
-}, /** @prototype */ {
-
-    /**
-     * Constructor.
+     * Instantiate a contextual menu.
+     * If a contextual menu is already instantiated, remove it.
      *
-     * @signature `new mad.Component.ContextualMenu( element, options )`
+     * @signature `ContextualMenu.init( element, options )`
      * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
      * @param {Object} [options] option values for the component.  These get added to
      * this.options and merged with defaults static variable
@@ -70,28 +62,29 @@ var ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMenu'
      *   * coordinates [ x, y ] : coordinates where you want to display the contextual menu.
      * @return {mad.component.ContextualMenu}
      */
-    init: function(el, options) {
-        // If no element given, create a temporary one.
-        if(el == null || !el.length) {
-            // Remove any other contextual menu.
-            if($('#js_contextual_menu').length != 0) {
-                $('#js_contextual_menu').remove();
-            }
-
-            // Create the DOM entry point for the contextual menu.
-            var $el = HtmlHelper.create(
-                mad.config.rootElement,
-                'first',
-                '<ul id="js_contextual_menu" />'
-            );
-
-            // Changing the element force us to recall setup which is called before all init functions
-            // and make the magic things happen (bind events ...)
-            this.setup($el);
+    instantiate: function(options) {
+        if ($('#js_contextual_menu').length != 0) {
+            $('#js_contextual_menu').remove();
         }
 
-        this._super($el, options);
+        HtmlHelper.create(
+            'body',
+            'first',
+            '<ul id="js_contextual_menu" />'
+        );
+
+        return new ContextualMenu('#js_contextual_menu', options);
     },
+
+    /**
+     * Removes existing contextual menu from the dom.
+     * Static function, can be called from anywhere.
+     */
+    remove: function() {
+        $('#js_contextual_menu').remove();
+    }
+
+}, /** @prototype */ {
 
     /**
      * After start hook.
@@ -100,7 +93,7 @@ var ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMenu'
     afterStart: function () {
         this._super();
         this.view.position({
-            'coordinates': this.options.coordinates
+            coordinates: this.options.coordinates
         });
     },
 
@@ -110,7 +103,7 @@ var ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMenu'
      */
     destroy: function() {
         this._super();
-        mad.component.ContextualMenu.remove();
+        ContextualMenu.remove();
     }
 });
 

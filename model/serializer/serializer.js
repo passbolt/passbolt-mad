@@ -10,13 +10,13 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/construct/construct';
+import Construct from 'can-construct';
 
 /**
  * @inherits jQuery.Class
  * @parent mad.core
  */
-var Serializer = can.Construct.extend('mad.model.serializer.Serializer', /** @static */ {
+var Serializer = Construct.extend('mad.model.serializer.Serializer', /** @static */ {
     from: function (data) {
         // override this function to support the format to serialize from
     },

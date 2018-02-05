@@ -27,7 +27,7 @@ describe("mad.helper.Component", function(){
     it("create() should initialize and insert a new Component", function() {
         // Use a helper to insert a component.
         var component = ComponentHelper.create(
-            $rootElement,
+            $('#test-html'),
             'last',
             TreeComponent
         );
@@ -35,7 +35,7 @@ describe("mad.helper.Component", function(){
 
         // The component has been well inserted.
         component.start();
-        expect($('.mad_component_tree').length).to.be.equal(1);
+        expect($('ul', $('#test-html')).length).to.be.equal(1);
 
         // Quick check that everything is working fine with the primitive of the component.
         var items = new Model.List([{

@@ -15,21 +15,46 @@ steal.config({
     name: "passbolt-mad",
     main: "passbolt-mad",
     map: {
-        "jquery/jquery": "jquery",
+        "jquery/jquery": "jquery"
     },
-    paths: {
-        "jquery": "node_modules/jquery/dist/jquery.js",
-        "steal": "node_modules/steal/steal.js",
-        "mocha": "node_modules/mocha/mocha.js",
-        "mocha/mocha.css": "node_modules/mocha/mocha.css",
-        "chai": "node_modules/chai/chai.js",
-        "chai-jq": "node_modules/chai-jq/chai-jq.js",
-        "underscore": "node_modules/underscore/underscore.js",
-        "xregexp": "node_modules/xregexp/xregexp-all.js",
-        "can": "node_modules/can/can.js",
-        "can/*": "node_modules/can/*.js",
-        "passbolt-mad/*": "./*.js"
-    },
+    //paths: {
+    //    "jquery": "node_modules/jquery/dist/jquery.js",
+    //    "steal": "node_modules/steal/steal.js",
+    //    "mocha": "node_modules/mocha/mocha.js",
+    //    "mocha/mocha.css": "node_modules/mocha/mocha.css",
+    //    "chai": "node_modules/chai/chai.js",
+    //    "chai-jq": "node_modules/chai-jq/chai-jq.js",
+    //    "xregexp": "node_modules/xregexp/xregexp-all.js",
+    //    "can": "node_modules/can/can.js",
+    //    "can/*": "node_modules/can/*.js",
+    //    "can-assign": "node_modules/can-assign/can-assign.js",
+    //    "can-cid": "node_modules/can-cid/can-cid.js",
+    //    "can-cid/*": "node_modules/can-cid/*.js",
+    //    "can-compute": "node_modules/can-compute/can-compute.js",
+    //    "can-control": "node_modules/can-control/can-control.js",
+    //    "can-construct": "node_modules/can-construct/can-construct.js",
+    //    "can-dom-data-state": "node_modules/can-dom-data-state/can-dom-data-state.js",
+    //    "can-event": "node_modules/can-event/can-event.js",
+    //    "can-event/*": "node_modules/can-event/*.js",
+    //    "can-globals/*": "node_modules/can-globals/*.js",
+    //    "can-log": "node_modules/can-log/can-log.js",
+    //    "can-log/*": "node_modules/can-log/*.js",
+    //    "can-namespace": "node_modules/can-namespace/can-namespace.js",
+    //    "can-observation": "node_modules/can-observation/can-observation.js",
+    //    "can-reflect": "node_modules/can-reflect/can-reflect.js",
+    //    "can-reflect/*": "node_modules/can-reflect/*.js",
+    //    //"can-reflect/reflections/*": "node_modules/can-reflect/reflections/*.js",
+    //    "can-reflect-promise": "node_modules/can-reflect-promise/can-reflect-promise.js",
+    //    "can-stache-key": "node_modules/can-stache-key/can-stache-key.js",
+    //    "can-symbol": "node_modules/can-symbol/can-symbol.js",
+    //    "can-types": "node_modules/can-types/can-types.js",
+    //    "can-util/*": "node_modules/can-util/*.js",
+    //    "passbolt-mad/*": "./*.js",
+    //    "proto-compute": "node_modules/can-compute/proto-compute.js",
+    //    "reflections/*": "node_modules/can-reflect/reflections/*.js",
+    //    "types/map": "node_modules/can-reflect/types/map.js",
+    //    "types/set": "node_modules/can-reflect/types/set.js"
+    //},
     meta: {
         "mocha": {
             "format": "global",
@@ -46,7 +71,7 @@ steal.config({
 System.config({
     buildConfig: {
         map: {
-            "can/util/util": "node_modules/can/util/domless/domless"
+            "can/util/util": "can-util/domless/domless"
         }
     }
 });

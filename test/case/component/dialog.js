@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import CompositeComponent from "passbolt-mad/component/composite";
 import DialogComponent from "passbolt-mad/component/dialog"
@@ -26,7 +26,7 @@ describe("mad.component.Dialog", function () {
     });
 
     it("constructed instance should inherit mad.component.FreeComposite & the inherited parent classes", function () {
-        var dialog = new DialogComponent(null, {label: 'Dialog Test'}).start();
+        var dialog = DialogComponent.instantiate({label: 'Dialog Test'}).start();
 
         // Basic control of classes inheritance.
         expect(dialog).to.be.instanceOf(CanControl);
@@ -40,7 +40,7 @@ describe("mad.component.Dialog", function () {
 
     it("Dialog should be visible in the dom after start", function () {
         expect($('.dialog-wrapper').length).to.equal(0);
-        var dialog = new DialogComponent(null, {label: 'Dialog Test'}).start();
+        var dialog = DialogComponent.instantiate({label: 'Dialog Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
 
         expect($('.dialog').html()).to.contain('Dialog Test');
@@ -48,7 +48,7 @@ describe("mad.component.Dialog", function () {
     });
 
     it("Dialog should be hidden after clicking on close", function () {
-        var dialog = new DialogComponent(null, {label: 'Dialog Test'}).start();
+        var dialog = DialogComponent.instantiate({label: 'Dialog Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
         $('a.dialog-close').click();
         expect($('.dialog').length).to.equal(0);

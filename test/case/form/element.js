@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanControl from "can/control/control";
+import CanControl from "can-control";
 import Component from 'passbolt-mad/component/component';
 import FormElement from 'passbolt-mad/form/element';
 import MadControl from 'passbolt-mad/control/control';
@@ -32,7 +32,7 @@ describe("mad.form.Element", function () {
     });
 
     it("constructed instance should inherit FormElement & the inherited parent classes", function () {
-        var element = new FormElement($element, {});
+        var element = new FormElement('#element', {});
 
         // Basic control of classes inheritance.
         expect(element).to.be.instanceOf(CanControl);
@@ -43,7 +43,7 @@ describe("mad.form.Element", function () {
     });
 
     it("setValue() should change the value of the form element", function () {
-        var element = new FormElement($element, {});
+        var element = new FormElement('#element', {});
         element.start();
 
         expect(element.getValue()).to.be.null;
@@ -54,7 +54,7 @@ describe("mad.form.Element", function () {
     });
 
     it("Switching the form element state to disabled should add a disabled attribute", function () {
-        var element = new FormElement($element, {});
+        var element = new FormElement('#element', {});
         element.start();
 
         expect($element.attr('disabled')).to.be.undefined;

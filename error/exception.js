@@ -10,7 +10,6 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import mad from 'passbolt-mad/util/util';
 
 // Initialize the error namespaces.
 mad.error = mad.error || {};

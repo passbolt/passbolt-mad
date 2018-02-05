@@ -12,7 +12,7 @@
  */
 import TreeComponent from 'passbolt-mad/component/tree';
 import DynamicTreeView from 'passbolt-mad/view/component/dynamic_tree';
-import itemTemplate from 'passbolt-mad/view/template/component/dynamic_tree/dynamic_tree.ejs!';
+import itemTemplate from 'passbolt-mad/view/template/component/dynamic_tree/dynamic_tree.stache!';
 
 /**
  * @parent Mad.components_api

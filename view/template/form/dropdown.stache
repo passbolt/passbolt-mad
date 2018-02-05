@@ -1,0 +1,6 @@
+{{#if(controller.options.emptyValue)}}
+<option value=""><%= __('select a value') %></option>
+{{/if}}
+{{#each(availableValues)}}
+<option value="{{scope.key}}">{{this}}</option>
+{{/each}}

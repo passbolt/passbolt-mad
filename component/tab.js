@@ -15,7 +15,8 @@ import ComponentHelper from 'passbolt-mad/helper/component';
 import CompositeComponent from 'passbolt-mad/component/composite';
 import MenuComponent from 'passbolt-mad/component/menu';
 import TabView from 'passbolt-mad/view/component/tab';
-import template from 'passbolt-mad/view/template/component/tab/tab.ejs!';
+import template from 'passbolt-mad/view/template/component/tab/tab.stache!';
+import uuid from 'uuid/v4';
 
 /**
  * @parent Mad.components_api
@@ -55,14 +56,14 @@ var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
      *   * autoMenu : should the menu be generated automatically ?
      * @return {mad.component.Tab}
      */
-    init: function(el, opts) {
+    init: function(el, options) {
         /**
          * The current enabled tab id
          * @type {string}
          */
         this.enabledId = null;
 
-        this._super(el, opts);
+        this._super(el, options);
 
         // Set the view vars.
         this.setViewData('autoMenu', this.options.autoMenu);
@@ -74,7 +75,7 @@ var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
     afterStart: function() {
         // Instantiate the menu which will rule the tabs container
         if (this.options.autoMenu) {
-            this.options.menu = new MenuComponent($('.js_tabs_nav', this.element));
+            this.options.menu = new MenuComponent('.js_tabs_nav');
             this.options.menu.start();
         }
         this.on();
@@ -161,6 +162,7 @@ var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
             Class,
             options
         );
+
         return this._super(component);
     }
 
