@@ -80,14 +80,6 @@ var Control = CanControl.extend('mad.Control', /** @prototype */ {
 		}
 		// The id is given in the options.
 		else {
-			// Check if an id has also been defined in the template.
-			var elId = $(this.element).attr('id');
-
-			// If an identifier has also been defined on the associated Controller's DOM Element.
-			// Warn the developer about this to avoid any ambiguity before replacing it.
-			if (elId != '') {
-				console.warn('Controller id is defined by options and by template, the template id will be overriden by the option id.');
-			}
 			// Override the DOM element id by the one defined in the optional parameters.
 			$(this.element).attr('id', options.id);
 		}

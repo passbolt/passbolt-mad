@@ -28,7 +28,7 @@ var List = Construct.extend('mad.model.List', /** @static */ {
     indexOf: function (list, item) {
         var returnValue = -1;
         var itemId = item instanceof Model ? item.id : item;
-        can.each(list, function (raw, i) {
+        list.forEach(function(raw, i) {
             if (raw.id == itemId) {
                 returnValue = i;
                 return false; // break

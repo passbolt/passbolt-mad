@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
+import "passbolt-mad/test/fixture/testmodels";
 import "passbolt-mad/test/fixture/users";
 import CanList from 'can-list';
 import CanModel from 'can-connect/can/model/';
@@ -136,6 +137,7 @@ describe("mad.Model", function () {
             var updatedInstanceId = '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce';
             UserTestModel.findAllUpdated()
             .then(function(data) {
+
                 // A change on the list should have been caught.
                 expect(updatedEventCount).to.be.equal(2);
                 expect(updatedTarget.id).to.be.equal(updatedInstanceId);
@@ -208,7 +210,14 @@ describe("mad.Model", function () {
                 // Check that the instance of carol stored in the list has well been updated.
                 expect(instance.email).to.be.equal('carol_updated_email@passbolt.com');
 
-                done();
+                // Retrieving the data with a find should not update the data in the local storage.
+                UserTestModel.findOneUpdated(updatedInstanceId)
+                    .then(function(data) {
+                        expect(updatedEventCount).to.be.equal(2);
+                        expect(updatedTarget.id).to.be.equal(updatedInstanceId);
+                        done();
+                    });
+
             });
 
         }).then(null, function(data) {
@@ -310,6 +319,18 @@ describe("mad.Model", function () {
                 });
         }).then(null, function(data) {
             expect(false).to.be.true;
+            done();
+        });
+    });
+
+    // When retrieving model, can should identify automatically nested model
+    it("can should automatically identify models type when using find methods.", function(done) {
+        TestModel.findAll()
+        .then(function(testModels) {
+            var testModel = testModels[0];
+            expect(testModel.TestModel1.whoAmI()).to.be.equal('model1');
+            expect(testModel.TestModel1.TestModel2.whoAmI()).to.be.equal('model2');
+            done();
         });
     });
 });

@@ -30,7 +30,6 @@ var UserTestModel = Model.extend('mad.test.model.UserTestModel', {
         return Ajax.request({
             url: '/testuserscarolupdated'
         }).then(function(data) {
-            console.log('herer');
             return UserTestModel.connection.hydrateList(UserTestModel.parseModels(data));
         });
     },

@@ -16,6 +16,10 @@ var Test2Model = Model.extend('mad.test.model.TestModel2', {
     attributes: {
         testModel2Attribute: 'string'
     }
-}, {});
+}, {
+    whoAmI: function() {
+        return 'model2';
+    }
+});
 
 export default Test2Model;

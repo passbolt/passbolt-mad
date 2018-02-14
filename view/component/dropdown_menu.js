@@ -70,12 +70,12 @@ var DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @static
             itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = DomData.get.call(li[0], itemClass.shortName);
+            data = DomData.get.call(el, itemClass.shortName);
         } else {
-            data = el[0].id;
+            data = el.id;
         }
 
-        this.element.trigger('item_opened', data);
+        $(this.element).trigger('item_opened', data);
     },
 
     /**
@@ -92,11 +92,11 @@ var DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @static
             itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = DomData.get.call(li[0], itemClass.shortName);
+            data = DomData.get.call(el, itemClass.shortName);
         } else {
-            data = el[0].id;
+            data = el.id;
         }
-        this.element.trigger('item_closed', data);
+        $(this.element).trigger('item_closed', data);
     }
 
 });

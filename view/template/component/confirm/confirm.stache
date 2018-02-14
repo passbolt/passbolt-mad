@@ -3,7 +3,7 @@
         <h2>{{label}}</h2>
         <a class="dialog-close">
             <i class="fa fa-close"></i>
-            <span class="visuallyhidden">{{__(close)}}</span>
+            <span class="visuallyhidden">{{__('close')}}</span>
         </a>
     </div>
     <div class="js_dialog_content dialog-content">
@@ -16,14 +16,11 @@
             </p>
             {{/if}}
             <p>
-            {{#switch(typeof content)}}
-                {{#case("function")}}
-                    {{>content}}
-                {{/case}}
-                {{#default()}}
-                    {{content}}
-                {{/default}}
-            {{/switch}}
+            {{#if(isString(content))}}
+                {{content}}
+            {{#else}}
+                {{>content}}
+            {{/if}}
             </p>
         </div>
     </div>

@@ -13,7 +13,6 @@
 import DomData from 'can-util/dom/data/data';
 import View from 'passbolt-mad/view/view';
 import HtmlHelper from 'passbolt-mad/helper/html';
-import 'passbolt-mad/view/helper/stache/grid/grid_cell.js';
 
 /**
  * @inherits mad.View

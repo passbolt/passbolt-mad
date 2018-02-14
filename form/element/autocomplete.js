@@ -84,7 +84,7 @@ var Autocomplete = TextBox.extend('mad.form.Autocomplete', /* @static */ {
         // hide the autocomplete list
         this.options.list.setState('hidden');
         // Trigger the event on the main component.
-        this.element.trigger('item_selected', [data, ev]);
+        $(this.element).trigger('item_selected', [data, ev]);
     }
 
 });

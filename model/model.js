@@ -14,8 +14,12 @@
 import CanModel from 'can-connect/can/model/model';
 //import 'can/map/attributes/attributes';
 import CakeSerializer from 'passbolt-mad/model/serializer/cake_serializer';
+import getObject from 'can-util/js/get/get';
+import idMerge from 'can-connect/helpers/id-merge';
 import List from 'passbolt-mad/model/list';
+import setObject from 'passbolt-mad/util/set/set';
 import Validation from 'passbolt-mad/util/validation';
+import 'can-map-define';
 
 /**
  * @parent Mad.core_api
@@ -56,7 +60,46 @@ var Model = CanModel.extend('mad.Model', /** @static */ {
 
     setup: function(ModelClass, name, staticProps, protoProps){
         this._models[name] = this;
-        CanModel.setup.apply(this, arguments)
+        CanModel.setup.apply(this, arguments);
+
+        // Crap crap crap
+        // @todo document this.
+        // regarding the listData which is not good using legacy map
+        this.connection.updatedList = this.updatedList;
+    },
+
+    updatedList: function(list, listData, set) {
+        var instanceList = [];
+
+        if (!listData.data) {
+            listData = {data: listData};
+        }
+
+        for(var i = 0; i < listData.data.length; i++) {
+            instanceList.push( this.hydrateInstance(listData.data[i]) );
+        }
+        // This only works with "referenced" instances because it will not
+        // update and assume the instance is already updated
+        // this could be overwritten so that if the ids match, then a merge of properties takes place
+        idMerge(list, instanceList, this.id.bind(this), this.hydrateInstance.bind(this));
+
+        Model.copyMetadata(listData, list);
+    },
+
+    copyMetadata: function(listData, list){
+        for(var prop in listData) {
+            if(prop !== "data") {
+                // this is map infultrating constructor, but it's alright here.
+                if(typeof list.set === "function") {
+                    list.set(prop, listData[prop]);
+                } else if(typeof list.attr === "function") {
+                    list.attr(prop, listData[prop]);
+                } else {
+                    list[prop] = listData[prop];
+                }
+
+            }
+        }
     },
 
     /**
@@ -66,7 +109,7 @@ var Model = CanModel.extend('mad.Model', /** @static */ {
      * @return {boolean}
      */
     isModelAttribute: function (name) {
-        return /model[s]?$/.test(this.attributes[name]);
+        return this.attributes && /model[s]?$/.test(this.attributes[name]);
     },
 
     /**
@@ -81,28 +124,26 @@ var Model = CanModel.extend('mad.Model', /** @static */ {
         return /models$/.test(this.attributes[name]);
     },
 
-    parseModels: function(data, xhr) {
+    parseModels: function(data) {
         if (data.body && typeof Array.isArray(data.body)) {
             var returnValue = [];
             for (var i in data.body) {
-                returnValue[i] = this.parseModel(data.body[i], xhr);
+                returnValue[i] = this.parseModel(data.body[i]);
             }
             return returnValue;
         }
+
         return data;
     },
 
-    parseModel: function (data, xhr) {
+    parseModel: function (data) {
         data = data || {};
         // if the provided data are formatted as an ajax server response
         if (typeof data.header != 'undefined') {
-            data = data.body;
-            // serialize the data from cake to can format
-            data = CakeSerializer.from(data, this);
+            data = CakeSerializer.from(data.body, this);
         } else {
             var className = this.shortName.substr(this.shortName.lastIndexOf('.') + 1);
             if (data[className]) {
-                // serialize the data from cake to can format
                 data = CakeSerializer.from(data, this);
             }
         }
@@ -255,8 +296,57 @@ var Model = CanModel.extend('mad.Model', /** @static */ {
 		}
 
 		return returnValue;
+    },
+
+    /**
+     * Return the fields to filter on regarding a case given in parameters.
+     *
+     * @param filteredCase
+     * @returns {mixed} An array of fields to filter on, or false if the case doesn't require to be filtered.
+     */
+    getFilteredFields: function(filteredCase) {
+        return false;
+    },
+
+    /**
+     * Filter the attributes regarding a given case.
+     *
+     * canjs doesn't allow to filter the save and update attributes send to the back-end.
+     * We allow passbolt developers to filter the request by adding a __FILTER_CASE__
+     * attribute. This case attribute will be used to get the fields to filter on (see the function
+     * getFilteredFields).
+     *
+     * @param attrs
+     * @returns {{}}
+     */
+    filterAttributes: function(attrs) {
+        var filteredAttrs = {};
+
+        // If a filtered case has been given in parameter.
+        if (typeof attrs.__FILTER_CASE__ != 'undefined') {
+            var fields = this.getFilteredFields(attrs.__FILTER_CASE__);
+
+            // If the case requires to filter the attributes.
+            if (fields !== false) {
+                for (var i in fields) {
+                    var value = getObject(attrs, fields[i]);
+                    setObject(filteredAttrs, fields[i], value);
+                }
+            } else {
+                filteredAttrs = attrs;
+                delete filteredAttrs.__FILTER_CASE__;
+            }
+        }
+        // If no filter case has been given, return all the attributes.
+        else {
+            filteredAttrs = attrs;
+        }
+
+        return filteredAttrs;
     }
 
-}, /** @prototype */ {});
+}, /** @prototype */ {
+
+});
 
 export default Model;

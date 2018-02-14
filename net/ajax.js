@@ -17,6 +17,7 @@ import MadBus from 'passbolt-mad/control/bus';
 import Response from 'passbolt-mad/net/response';
 import ResponseHandler from 'passbolt-mad/net/response_handler'
 import StringUtil from 'can-util/js/string/string';
+import $ from 'can-jquery';
 
 /**
 * @inherits can.Construct
@@ -84,6 +85,9 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
         request.originParams = $.extend({}, request.params);
         // Treat templated uris (e.g. /control/action/{id}).
         request.url = StringUtil.sub(request.url, request.params, true);
+        if (/^\//.test(request.url) && typeof APP_URL != 'undefined') {
+            request.url = APP_URL + request.url.slice(1);
+        }
         // By default we expect the request to return json.
         request.dataType = request.dataType || 'json';
         // Treat the request params as data
@@ -106,7 +110,36 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
         }
 
         // Perform the request.
-        return canAjax(request);
+        return canAjax(request)
+            .then((data) => this._handleSuccess(data),
+                (jqXHR) => this._handleError(jqXHR, request));
+    },
+
+    _handleSuccess: function(data) {
+        return data;
+    },
+
+    _handleError: function(jqXHR, request) {
+        console.log('Handle ajax error');
+        var response = null;
+        try {
+            if(jqXHR.responseText) {
+                var jsonData = $.parseJSON(jqXHR.responseText);
+                if (Response.isResponse(jsonData)) {
+                    jsonData.code = jqXHR.status;
+                    response = new Response(jsonData);
+                }
+            } else {
+                response = Response.getResponse('unreachable');
+            }
+        } catch(e) { }
+
+        return new Promise((resolve, reject) => {
+            console.log(response);
+            reject(response);
+            //rejectWith(this, [jqXHR, response.getStatus(), response, request]);
+        });
+    }
         //    // pipe it to intercept server before any other treatments
         //    .then(
         //        // the request has been performed sucessfully
@@ -195,7 +228,6 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
         //});
         //
         //return returnValue;
-    }
 }, /** @prototype */ {
 
 });

@@ -12,8 +12,11 @@
  */
 import Control from 'passbolt-mad/control/control';
 import HtmlHelper from 'passbolt-mad/helper/html';
-import 'passbolt-mad/view/helper/stache/uuid.js';
+import 'passbolt-mad/view/helper/stache/i18n.js';
 import 'passbolt-mad/view/helper/stache/hash.js';
+import 'passbolt-mad/view/helper/stache/string.js';
+import 'passbolt-mad/view/helper/stache/time.js';
+import 'passbolt-mad/view/helper/stache/uuid.js';
 
 /**
  * @parent Mad.core_api

@@ -18,6 +18,7 @@ import ConfirmComponent from "passbolt-mad/component/confirm";
 import DialogComponent from "passbolt-mad/component/dialog"
 import FreeCompositeComponent from "passbolt-mad/component/free_composite";
 import MadControl from 'passbolt-mad/control/control';
+import contentTemplate from 'passbolt-mad/test/case/component/confirm_content_template.stache!';
 
 describe("mad.component.Confirm", function () {
 
@@ -27,7 +28,8 @@ describe("mad.component.Confirm", function () {
     });
 
     it("constructed instance should inherit mad.component.FreeComposite & the inherited parent classes", function () {
-        var confirm = ConfirmComponent.instantiate({label: 'Confirm Test'}).start();
+        var confirm = ConfirmComponent.instantiate({label: 'Confirm Test'});
+        confirm.start();
 
         // Basic control of classes inheritance.
         expect(confirm).to.be.instanceOf(CanControl);
@@ -101,5 +103,15 @@ describe("mad.component.Confirm", function () {
         }).start();
         expect($('.dialog').length).to.not.equal(0);
         expect($('.dialog-content').text()).to.contain('Content of the confirm box');
+    });
+
+    it("Content could be a template", function () {
+        var confirm = ConfirmComponent.instantiate({
+            content: contentTemplate
+        });
+        confirm.setViewData('confirm_content_template_var', 'custom template variable');
+        confirm.start();
+        expect($('.dialog').length).to.not.equal(0);
+        expect($('.dialog-content').text()).to.contain('custom template variable');
     });
 });

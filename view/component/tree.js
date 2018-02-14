@@ -292,7 +292,7 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
             data = li[0].id;
         }
 
-        this.element.trigger('item_hovered', [data, ev]);
+        $(this.element).trigger('item_hovered', [data, ev]);
         return false;
     }
 

@@ -53,7 +53,7 @@ describe("mad.net.Ajax", function() {
         };
     });
 
-    it.only("A successful ajax query should return a success status", function(done) {
+    it("A successful ajax query should return a success status", function(done) {
         Ajax.request({
             type: 'POST',
             url: '/ajax/request',

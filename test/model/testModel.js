@@ -14,6 +14,9 @@ import Model from 'passbolt-mad/model/model';
 import TestModel1 from 'passbolt-mad/test/model/testModel1';
 
 var TestModel = Model.extend('mad.test.model.TestModel', {
+    define: {
+        TestModel1: TestModel1
+    },
     attributes: {
         TestModel1: 'mad.test.model.TestModel1.model',
         TestModel1s: 'mad.test.model.TestModel1.models',
@@ -30,7 +33,23 @@ var TestModel = Model.extend('mad.test.model.TestModel', {
                 'message': 'testModelAttribute should be between %s and %s characters long'
             }
         }
+    },
+    findAll: 'GET /testmodels'
+}, {
+
+    define: {
+        TestModel1: {
+            Type: TestModel1
+        },
+
+        TestModel1s: {
+            Type: TestModel1.List
+        }
+    },
+
+    whoAmI: function() {
+        return 'model';
     }
-}, {});
+});
 
 export default TestModel;

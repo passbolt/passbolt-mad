@@ -30,7 +30,7 @@ var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
                 // Will be added to button, primary, js-dialog-confirm
             ]
         },
-        content: '',
+        content: 'default content',
         closeAfterAction: true,
         action: null,
         viewData: {}
@@ -64,19 +64,16 @@ var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
 }, /** @prototype */ {
 
     /**
-     * Init.
-     * @param el
-     * @param options
+     * @inheritdoc
      */
-    init: function(el, options) {
-        this._super(el, options);
-        var self = this;
+    beforeRender: function() {
         this.setViewData('content', this.options.content);
         this.setViewData('subtitle', this.options.subtitle);
         this.setViewData('submitButton', this.options.submitButton);
-        for (var i in this.options.viewData) {
-            self.setViewData(i, this.options.viewData[i]);
+        for (var name in this.options.viewData) {
+            this.setViewData(name, this.options.viewData[name]);
         }
+        this._super();
     },
 
     /**

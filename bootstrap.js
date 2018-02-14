@@ -13,6 +13,7 @@
 import Config from 'passbolt-mad/config/config';
 import Construct from 'can-construct';
 import ErrorHandler from 'passbolt-mad/error/error_handler';
+import global from 'passbolt-mad/util/global/global';
 import HtmlHelper from 'passbolt-mad/helper/html';
 import MadBus from "passbolt-mad/control/bus";
 import I18n from "passbolt-mad/util/lang/i18n";
@@ -104,9 +105,10 @@ var Bootstrap = Construct.extend('mad.Bootstrap', /* @static */ {
     init: function () {
         // Define the error handler
         Config.write('error.ErrorHandlerClass', ErrorHandler);
-
         // Define the response handler
         Config.write('net.ResponseHandlerClass', ResponseHandler);
+        // Set global constant
+        global('APP_URL', Config.read('app.url'));
 
         // Initialize the event bus.
         this.initEventBus();

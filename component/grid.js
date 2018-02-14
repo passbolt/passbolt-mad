@@ -22,6 +22,8 @@ import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/grid
 import template from 'passbolt-mad/view/template/component/grid/grid.stache!';
 import itemTemplate from 'passbolt-mad/view/template/component/grid/gridItem.stache!';
 
+import 'passbolt-mad/view/helper/stache/grid/grid_cell.js';
+
 /**
  * @parent Mad.components_api
  * @inherits mad.Component
@@ -382,7 +384,7 @@ var Grid = Component.extend('mad.component.Grid', {
     resetFilter: function () {
         var self = this;
         this.options.isFiltered = false;
-        var items = options.items;
+        var items = this.options.items;
 
         items.forEach(function(item, i) {
             self.view.showItem(item);

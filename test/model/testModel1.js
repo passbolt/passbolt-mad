@@ -37,6 +37,21 @@ var Test1Model = Model.extend('mad.test.model.TestModel1', {
             }
         }
     }
-}, {});
+}, {
+
+    define: {
+        TestModel2: {
+            Type: TestModel2
+        },
+
+        TestModel2s: {
+            Type: TestModel2.List
+        }
+    },
+
+    whoAmI: function() {
+        return 'model1';
+    }
+});
 
 export default Test1Model;

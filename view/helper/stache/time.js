@@ -11,15 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import stache from 'can-stache';
-import View from 'passbolt-mad/view/view';
+import getTimeAgo from 'passbolt-mad/util/time/get_time_ago';
 
-import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.stache!';
-
-// Register a stache helper to help the grid to render the cells.
-stache.registerHelper('gridCell', function(gridColumn, options){
-    var template = gridColumn.template;
-    if (!template) {
-        template = cellTemplate;
-    }
-    return View.render(template, options);
+// Register a stache helper to help convert date to time ago.
+stache.registerHelper('getTimeAgo', function(){
+    return getTimeAgo.apply(this, arguments);
 });

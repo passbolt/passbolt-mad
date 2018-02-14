@@ -18,13 +18,18 @@ import Construct from 'can-construct';
  */
 var CakeSerializer = Construct.extend('mad.model.serializer.CakeSerializer', /** @static */ {
     from: function (data, Class) {
-        var returnValue = {};
+        if (!data) {
+            return data;
+        }
         var className = Class.shortName.substr(Class.shortName.lastIndexOf('.') + 1);
-        returnValue = $.extend(true, {}, data, data[className]);
+        var returnValue = $.extend(true, {}, data, data[className]);
         delete returnValue[className];
         return returnValue;
     },
     to: function (data, Class) {
+        if (!data) {
+            return data;
+        }
         var returnValue = {};
         var className = Class.shortName.substr(Class.shortName.lastIndexOf('.') + 1);
         returnValue[className] = {};
