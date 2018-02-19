@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import List from 'can-list';
-import Model from 'passbolt-mad/model/model';
+import List from 'can-define/list/list';
+import MadMap from 'passbolt-mad/model/map/map';
 
 /**
  * @parent Mad.core_api
@@ -22,26 +22,24 @@ import Model from 'passbolt-mad/model/model';
  *
  * This state model is used by the mad.Component.
  */
-var State = Model.extend('mad.model.State', /** @static */{
-
-	attributes: {
-		// previous states
-		previous: 'can.List',
-		// current states
-		current: 'can.List'
-	}
-
-}, /** @prototype */ {
+var State = MadMap.extend('mad.model.State', {
 
 	/**
-	 * Constructor.
-	 *
-	 * @signature `new mad.model.State()`
-	 * @return {mad.model.State} A new instance of the constructor function extending mad.model.State.
+	 * Previous state values.
+	 * @type {List}
 	 */
-	init: function(){
-		this.previous = new List([]);
-		this.current = new List([]);
+	previous: {
+		Type: List,
+		Value: List
+	},
+
+	/**
+	 * Current state values.
+	 * @type {List}
+	 */
+	current: {
+		Type: List,
+		Value: List
 	},
 
 	/**
@@ -87,7 +85,7 @@ var State = Model.extend('mad.model.State', /** @static */{
 			states = [];
 		}
 		states = $.isArray(states) ? states : [states];
-		this.previous.replace(this.current.attr());
+		this.previous.replace(this.current);
 		this.current.replace(states);
 	},
 
@@ -99,8 +97,8 @@ var State = Model.extend('mad.model.State', /** @static */{
 	 */
 	addState: function (states) {
 		states = $.isArray(states) ? states : [states];
-		this.previous.replace(this.current.attr());
-		$.each(this.current.attr(), function(i, val) {
+		this.previous.replace(this.current);
+		$.each(this.current, function(i, val) {
 			states.push(val);
 		});
 		this.current.replace(states);
@@ -115,8 +113,8 @@ var State = Model.extend('mad.model.State', /** @static */{
 	removeState: function (states) {
 		states = $.isArray(states) ? states : [states];
 		var newStates = [];
-		this.previous.replace(this.current.attr());
-		$.each(this.current.attr(), function(i, val) {
+		this.previous.replace(this.current);
+		$.each(this.current, function(i, val) {
 			if (states.indexOf(val) == -1) {
 				newStates.push(val);
 			}

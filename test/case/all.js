@@ -13,13 +13,13 @@
 import "passbolt-mad/test/case/bootstrap";
 
 import "passbolt-mad/test/case/component/component";
-import "passbolt-mad/test/case/component/tree";
-import "passbolt-mad/test/case/component/dynamic_tree";
-import "passbolt-mad/test/case/component/menu";
-import "passbolt-mad/test/case/component/grid";
+//import "passbolt-mad/test/case/component/tree";
+//import "passbolt-mad/test/case/component/dynamic_tree";
+//import "passbolt-mad/test/case/component/menu";
+//import "passbolt-mad/test/case/component/grid";
 import "passbolt-mad/test/case/component/button";
-import "passbolt-mad/test/case/component/button_dropdown";
-import "passbolt-mad/test/case/component/contextual_menu";
+//import "passbolt-mad/test/case/component/button_dropdown";
+//import "passbolt-mad/test/case/component/contextual_menu";
 import "passbolt-mad/test/case/component/dialog";
 import "passbolt-mad/test/case/component/tab";
 import "passbolt-mad/test/case/component/toggle_button";
@@ -40,10 +40,9 @@ import "passbolt-mad/test/case/helper/component";
 
 //import "passbolt-mad/test/case/net/ajax";
 
-import "passbolt-mad/test/case/model/model";
-import "passbolt-mad/test/case/model/state";
-import "passbolt-mad/test/case/model/attribute";
-import "passbolt-mad/test/case/model/serializer/cake_serializer";
+import "passbolt-mad/test/case/model/map/map";
+import "passbolt-mad/test/case/model/map/state";
+//import "passbolt-mad/test/case/model/serializer/cake_serializer";
 
 import "passbolt-mad/test/case/util/i18n";
 import "passbolt-mad/test/case/util/map";

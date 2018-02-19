@@ -26,7 +26,7 @@ import "passbolt-mad/util/validation";
 import "passbolt-mad/util/lang/i18n";
 import "passbolt-mad/model/model";
 import "passbolt-mad/model/list";
-import "passbolt-mad/model/state";
+import "passbolt-mad/model/map/state";
 import "passbolt-mad/model/attribute";
 import "passbolt-mad/control/control";
 import "passbolt-mad/view/view";

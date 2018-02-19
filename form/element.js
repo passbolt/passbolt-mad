@@ -34,7 +34,7 @@ var Element = Component.extend('mad.form.Element', /* @static */ {
         // Override the viewClass option.
         viewClass: ElementView,
 
-        // The model the form element represents.
+        // The model reference.
         modelReference: null,
         // The form element requires a validation.
         validate: true,
@@ -62,15 +62,6 @@ var Element = Component.extend('mad.form.Element', /* @static */ {
     },
 
     /**
-     * Get the associated model reference.
-     *
-     * @return {string}
-     */
-    getModelReference: function () {
-        return this.options.modelReference;
-    },
-
-    /**
      * Get the associated validate function
      *
      * @return {func}
@@ -86,15 +77,6 @@ var Element = Component.extend('mad.form.Element', /* @static */ {
      */
     requireValidation: function () {
         return this.options.validate;
-    },
-
-    /**
-     * Set the associated model.attribute
-     *
-     * @param {string} modelReference
-     */
-    setModelReference: function (modelReference) {
-        this.options.modelReference = modelReference;
     },
 
     /**

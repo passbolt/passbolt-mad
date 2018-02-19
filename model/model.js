@@ -193,60 +193,6 @@ var Model = CanModel.extend('mad.Model', /** @static */ {
     },
 
     /**
-    * Get all model instances in an array which match the search parameters.
-     *
-    * @param {array} data The array to search in
-    * @param {string} key The key to search
-    * @param {string} value The value of the key to search
-    * @return {array}
-    */
-    search: function (data, key, value) {
-    	var returnValue = [],
-    		split = key.split('.'),
-    		modelName = split[0],
-    		attrName = split[1];
-
-    	for (var i in data) {
-    		if ($.isArray(data[i][modelName])) {
-    			for (var j in data[i][modelName]) {
-    				if (data[i][modelName][j][attrName] == value) {
-    					returnValue.push(data[i]);
-    				}
-    			}
-    		} else {
-    			if (data[i][modelName][attrName] == value) {
-    				returnValue.push(data[i]);
-    			}
-    		}
-    		// search in children
-    		if (data[i].children) {
-    			var childrenSearch = Model.search (data[i].children, key, value);
-    			if (childrenSearch.length) {
-    				returnValue = $.merge (returnValue, childrenSearch);
-    			}
-    		}
-    	}
-    	return returnValue;
-    },
-
-    /**
-    * Get on model instance in an array which match the search parameters
-    * and its value
-    * @param {array} data The array to search in
-    * @param {string} key The key to search
-    * @param {string} value The value of the key to search
-    * @return {mad.model.Model}
-    */
-    searchOne: function (data, key, value) {
-    	var returnValue = null;
-    	var searchResults = Model.search(data, key, value);
-    	if (searchResults.length) {
-    		returnValue = searchResults[0];
-    	}
-    	return returnValue;
-    },
-
-    /**
      * Validate an attribute value with a model attribute rule.
      *
      * @param {string} attrName The attribute name

@@ -111,8 +111,8 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
 
         // Perform the request.
         return canAjax(request)
-            .then((data) => this._handleSuccess(data),
-                (jqXHR) => this._handleError(jqXHR, request));
+            .then((data) => Ajax._handleSuccess(data),
+                (jqXHR) => Ajax._handleError(jqXHR, request));
     },
 
     _handleSuccess: function(data) {
@@ -120,7 +120,6 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
     },
 
     _handleError: function(jqXHR, request) {
-        console.log('Handle ajax error');
         var response = null;
         try {
             if(jqXHR.responseText) {
@@ -135,7 +134,6 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
         } catch(e) { }
 
         return new Promise((resolve, reject) => {
-            console.log(response);
             reject(response);
             //rejectWith(this, [jqXHR, response.getStatus(), response, request]);
         });

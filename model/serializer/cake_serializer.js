@@ -17,11 +17,10 @@ import Construct from 'can-construct';
  * @parent mad.core
  */
 var CakeSerializer = Construct.extend('mad.model.serializer.CakeSerializer', /** @static */ {
-    from: function (data, Class) {
+    from: function (data, className) {
         if (!data) {
             return data;
         }
-        var className = Class.shortName.substr(Class.shortName.lastIndexOf('.') + 1);
         var returnValue = $.extend(true, {}, data, data[className]);
         delete returnValue[className];
         return returnValue;

@@ -17,12 +17,11 @@ import Component from "passbolt-mad/component/component";
 import FeedbackFormElement from 'passbolt-mad/form/feedback';
 import Form from "passbolt-mad/form/form"
 import Model from 'passbolt-mad/model/model';
-import TestModel from 'passbolt-mad/test/model/testModel';
-import TestModel1 from 'passbolt-mad/test/model/testModel1';
-import TestModel2 from 'passbolt-mad/test/model/testModel2';
+import Role from 'passbolt-mad/test/model/map/role';
 import TextboxFormElement from 'passbolt-mad/form/element/textbox';
 import Tree from "passbolt-mad/component/tree";
 import TreeComponent from 'passbolt-mad/component/tree';
+import User from 'passbolt-mad/test/model/map/user';
 
 describe("mad.Form", function () {
     // The HTMLElement which will carry the form component.
@@ -49,22 +48,6 @@ describe("mad.Form", function () {
         form.destroy();
     });
 
-    it("addElement() should not associate not form element to the form", function () {
-        var form = new Form('#form', {});
-        form.start();
-
-        // Try to add a tree to the form.
-        $form.append('<ul id="tree"></ul>');
-        var tree = new TreeComponent('#tree', {
-            itemClass: Model
-        });
-        expect(function () {
-            form.addElement(tree.start());
-        }).to.throw(Error);
-
-        form.destroy();
-    });
-
     it("addElement() should associate form elements to the form", function () {
         var form = new Form('#form', {});
         form.start();
@@ -81,8 +64,8 @@ describe("mad.Form", function () {
         // This textbox is associated to a model reference.
         $('<input id="textbox-wth-model-ref"/>').appendTo($form);
         var textboxWthModelRef = new TextboxFormElement('#textbox-wth-model-ref', {
-                modelReference: 'mad.test.model.TestModel.testModelAttribute'
-            });
+            modelReference: 'User.username'
+        });
 
         expect(function () {
             form.addElement(textboxWthModelRef.start());
@@ -133,30 +116,27 @@ describe("mad.Form", function () {
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo($form);
         var textbox = new TextboxFormElement('#textbox', {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
+            modelReference: 'User.username'
         });
         form.addElement(textbox.start());
 
         // By default, if no data have been inserted.
-        setTimeout(function () {
-            // Get the data.
-            var data = form.getData();
-            expect(textbox.getValue()).to.be.null;
-            expect(data['mad.test.model.TestModel'].testModelAttribute).to.be.null;
-        }, 0);
+        var data = form.getData();
+        expect(textbox.getValue()).to.be.null;
+        expect(data.User).to.be.undefined;
 
         // Insert a value in the textbox.
         $textbox.val('abc');
         $textbox.focus().trigger('input');
 
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            // Get the data.
+        // Check the value is as expected
+        // Wrap it in setTimeout to ensure the events process are all completely treated.
+        setTimeout(() => {
             var data = form.getData();
             expect(textbox.getValue()).to.be.equal('abc');
-            expect(data['mad.test.model.TestModel'].testModelAttribute).to.be.equal('abc');
+            expect(data.User.username).to.be.equal('abc');
             done();
-        }, 0);
+        });
     });
 
     it("getData() should return the data the form elements gathered for a complex nested model representation", function (done) {
@@ -166,14 +146,14 @@ describe("mad.Form", function () {
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo($form);
         var textbox = new TextboxFormElement('#textbox', {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
+            modelReference: 'User.username'
         });
         form.addElement(textbox.start());
 
         // Add a second textbox to the form.
         var $textbox2 = $('<input id="textbox2"/>').appendTo($form);
         var textbox2 = new TextboxFormElement('#textbox2', {
-            modelReference: 'mad.test.model.TestModel.TestModel1.testModel1Attribute'
+            modelReference: 'User.Profile.first_name'
         });
         form.addElement(textbox2.start());
 
@@ -183,8 +163,7 @@ describe("mad.Form", function () {
             var data = form.getData();
             expect(textbox.getValue()).to.be.null;
             expect(textbox2.getValue()).to.be.null;
-            expect(data['mad.test.model.TestModel'].testModelAttribute).to.be.null;
-            expect(data['mad.test.model.TestModel'].TestModel1.testModel1Attribute).to.be.null;
+            expect(data.User).to.be.undefined;
 
             // Simuate keypress on the textboxes.
             $textbox.val('abc').trigger('input');
@@ -196,8 +175,8 @@ describe("mad.Form", function () {
                 var data = form.getData();
                 expect(textbox.getValue()).to.be.equal('abc');
                 expect(textbox2.getValue()).to.be.equal('xyz');
-                expect(data['mad.test.model.TestModel'].testModelAttribute).to.be.equal('abc');
-                expect(data['mad.test.model.TestModel'].TestModel1.testModel1Attribute).to.be.equal('xyz');
+                expect(data.User.username).to.be.equal('abc');
+                expect(data.User.Profile.first_name).to.be.equal('xyz');
                 done();
             }, 0);
         }, 0);
@@ -210,7 +189,7 @@ describe("mad.Form", function () {
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox" type="text"/>').appendTo($form);
         var textbox = new TextboxFormElement('#textbox', {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
+            modelReference: 'User.username'
         });
         form.addElement(textbox.start());
 
@@ -222,7 +201,7 @@ describe("mad.Form", function () {
                 'option_2': 'Option 2',
                 'option_3': 'Option 3'
             },
-            modelReference: 'mad.test.model.TestModel.TestModel1s.testModel1Attribute'
+            modelReference: 'User.Role[].name'
         });
         form.addElement(checkbox.start());
 
@@ -233,8 +212,7 @@ describe("mad.Form", function () {
 
             expect(textbox.getValue()).to.be.null;
             expect(checkbox.getValue()).to.be.null;
-            expect(data['mad.test.model.TestModel'].testModelAttribute).to.be.null;
-            expect(data['mad.test.model.TestModel'].TestModel1s).to.be.empty;
+            expect(data.User).to.be.undefined;
 
             // Simulate inputs.
             $textbox.val('abc').trigger('input');
@@ -245,10 +223,11 @@ describe("mad.Form", function () {
             setTimeout(function () {
                 // Get the data.
                 var data = form.getData();
+
                 expect(textbox.getValue()).to.be.equal('abc');
                 expect(checkbox.getValue()).to.be.eql(['option_1', 'option_2']);
-                expect(data['mad.test.model.TestModel'].testModelAttribute).to.be.equal('abc');
-                expect(data['mad.test.model.TestModel'].TestModel1s).to.be.eql([{testModel1Attribute: 'option_1'}, {testModel1Attribute: 'option_2'}]);
+                expect(data.User.username).to.be.equal('abc');
+                expect(data.User.Role).to.be.eql([{name: 'option_1'}, {name: 'option_2'}]);
                 done();
             }, 0);
         }, 0);
@@ -261,7 +240,7 @@ describe("mad.Form", function () {
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox" type="text"/>').appendTo($form);
         var textbox = new TextboxFormElement('#textbox', {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
+            modelReference: 'User.username'
         });
         form.addElement(textbox.start());
 
@@ -273,74 +252,82 @@ describe("mad.Form", function () {
                 'option_2': 'Option 2',
                 'option_3': 'Option 3'
             },
-            modelReference: 'mad.test.model.TestModel.TestModel1s.testModel1Attribute'
+            modelReference: 'User.Role[].name'
         });
         form.addElement(checkbox.start());
 
-        var testInstance = new TestModel({
-            testModelAttribute: 'test model attribute value',
-            TestModel1s: new TestModel1.List([{
-                testModel1Attribute: 'option_1'
-            }, {
-                testModel1Attribute: 'option_2'
-            }])
+        var testInstance = new User({
+            User: {
+                username: 'ada@passbolt.com',
+                Role: new Role.List([
+                    {name: 'admin'},
+                    {name: 'user'}
+                ])
+            }
         });
         form.load(testInstance);
 
         var data = form.getData();
-        expect(textbox.getValue()).to.be.equal('test model attribute value');
-        expect(checkbox.getValue()).to.be.eql(['option_1', 'option_2']);
-        expect(data['mad.test.model.TestModel'].testModelAttribute).to.be.not.null;
-        expect(data['mad.test.model.TestModel'].TestModel1s).to.be.eql([{testModel1Attribute: 'option_1'}, {testModel1Attribute: 'option_2'}]);
+        expect(textbox.getValue()).to.be.equal('ada@passbolt.com');
+        expect(checkbox.getValue()).to.be.eql(['admin', 'user']);
+        expect(data.User.username).to.be.equal('ada@passbolt.com');
+        expect(data.User.Role).to.be.eql([{name: 'admin'}, {name: 'user'}]);
     });
 
     it("validateElement() should validate an element", function() {
-        var testModelValidationRules = TestModel.validationRules;
         var form = new Form('#form', {});
         form.start();
 
-        // Add a textbox to the form.
-        var $textbox = $('<input id="textbox" type="text"/>').appendTo($form);
-        var textbox = new TextboxFormElement('#textbox', {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
+        // Add a textbox to the form that represents a User username
+        var $usernameTextbox = $('<input id="username_textbox" type="text"/>').appendTo($form);
+        var usernameTextbox = new TextboxFormElement('#username_textbox', {
+            modelReference: 'User.username'
         });
-        var $feedbackTxtBox = $('<span id="feedback_txtbox" for="textbox" />').appendTo($form);
-        var feedbackTxtBox = new FeedbackFormElement('#feedback_txtbox', {});
-        form.addElement(textbox.start(), feedbackTxtBox.start());
+        var $usernameFeedbackTextbox = $('<span id="feedback_username_textbox" for="username_textbox" />').appendTo($form);
+        var usernameFeedbackTextbox = new FeedbackFormElement('#feedback_username_textbox', {});
+        form.addElement(usernameTextbox.start(), usernameFeedbackTextbox.start());
+
+        // Add a textbox to the form that represents a User email
+        var $emailTextbox = $('<input id="email_textbox" type="text"/>').appendTo($form);
+        var emailTextbox = new TextboxFormElement('#email_textbox', {
+            modelReference: 'User.username'
+        });
+        var $emailFeedbackTextbox = $('<span id="feedback_email_textbox" for="email_textbox" />').appendTo($form);
+        var emailFeedbackTextbox = new FeedbackFormElement('#feedback_email_textbox', {});
+        form.addElement(emailTextbox.start(), emailFeedbackTextbox.start());
 
         // Add a checkbox to the form.
-        var $checkbox = $('<div id="checkbox"></div>').appendTo($form);
-        var checkbox = new CheckboxFormElement('#checkbox', {
+        var $checkbox = $('<div id="role_checkbox"></div>').appendTo($form);
+        var checkbox = new CheckboxFormElement('#role_checkbox', {
             availableValues: {
                 'option_1': 'Option 1',
                 'option_2': 'Option 2',
-                'option_3': 'Option 3'
+                'option_3': 'Option 3',
+                'op': 'Invalid option'
             },
-            modelReference: 'mad.test.model.TestModel.TestModel1s.testModel1Attribute'
+            modelReference: 'User.Role[].name'
         });
-        form.addElement(checkbox.start());
+        var $roleFeedback = $('<span id="feedback_role" for="role_checkbox" />').appendTo($form);
+        var roleFeedback = new FeedbackFormElement('#feedback_role', {});
+        form.addElement(checkbox.start(), roleFeedback.start());
 
-        // The textbox can be empty.
-        expect(form.validateElement(textbox)).to.be.true;
-        // The checkbox can also be empty (@todo for now it is impossible to test the cardinality of a multiple model reference)
+        // Test the required validation
+        // The username is required
+        expect(form.validateElement(usernameTextbox)).to.be.false;
+        expect($usernameFeedbackTextbox.html()).to.contain(User.validationRules.username.filter(item => item.rule == 'required')[0].message);
+        // The role is not required
         expect(form.validateElement(checkbox)).to.be.true;
 
-        // The textbox accept ASCII character
-        textbox.setValue('ABCDE');
-        expect(form.validateElement(textbox)).to.be.true;
+        // Test validation rule on single field
+        // The username accept whatever utf8 characters.
+        usernameTextbox.setValue('傅傅傅傅傅傅傅傅');
+        expect(form.validateElement(usernameTextbox)).to.be.true;
 
-        // The textbox doesn't accept special character.
-        textbox.setValue('ABCDE&');
-        expect(form.validateElement(textbox)).to.be.not.equal(true);
-        expect($feedbackTxtBox.html()).to.contain(testModelValidationRules.testModelAttribute.alphaNumeric.message);
-
-        // The textbox value length cannot be smaller than 3.
-        textbox.setValue('AB');
-        expect(form.validateElement(textbox)).to.be.not.equal(true);
-
-        // The textbox value length cannot be smaller than 8.
-        textbox.setValue('ABCDEFGHI');
-        expect(form.validateElement(textbox)).to.be.not.equal(true);
+        // Test validation rule on multiple fields.
+        // The role name should be at least 3 characters long.
+        checkbox.setValue(['op']);
+        expect(form.validateElement(checkbox)).to.be.not.equal(true);
+        expect($roleFeedback.html()).to.contain(Role.validationRules.name.filter(item => item.rule[0] == 'lengthBetween')[0].message);
     });
 
 });

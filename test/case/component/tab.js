@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import Action from "passbolt-mad/model/action";
+//import Action from "passbolt-mad/model/action";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import CompositeComponent from 'passbolt-mad/component/composite';
 import MadControl from 'passbolt-mad/control/control';
 import TabComponent from "passbolt-mad/component/tab";
 
-describe("mad.component.Tab", function () {
+describe.only("mad.component.Tab", function () {
 
     // The HTMLElement which will carry the tab component.
     var $tab = null;
@@ -34,7 +34,7 @@ describe("mad.component.Tab", function () {
     });
 
 
-    it("constructed instance should inherit TabComponent & the inherited parent classes", function () {
+    it.only("constructed instance should inherit TabComponent & the inherited parent classes", function () {
         var tabs = new TabComponent('#tab');
 
         // Basic control of classes inheritance.
@@ -45,7 +45,7 @@ describe("mad.component.Tab", function () {
         expect(tabs).to.be.instanceOf(TabComponent);
 
         tabs.start();
-        tabs.destroy();
+        //tabs.destroy();
     });
 
     it("Tabs should appear and disappear on click", function () {

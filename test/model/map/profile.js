@@ -10,16 +10,22 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Model from 'passbolt-mad/model/model';
+import MadMap from 'passbolt-mad/model/map/map';
 
-var Test2Model = Model.extend('mad.test.model.TestModel2', {
-    attributes: {
-        testModel2Attribute: 'string'
-    }
-}, {
-    whoAmI: function() {
-        return 'model2';
-    }
+var Profile = MadMap.extend('mad.test.model.Profile', {
+    first_name: 'string',
+    last_name: 'string'
 });
 
-export default Test2Model;
+Profile.validationRules = {
+    first_name: [
+        {rule: 'required', message:  __('A first name is required.')},
+        {rule: 'notEmpty', message:  __('A first name is required.')}
+    ],
+    last_name: [
+        {rule: 'required', message:  __('A last name is required.')},
+        {rule: 'notEmpty', message:  __('A last name is required.')}
+    ]
+};
+
+export default Profile;

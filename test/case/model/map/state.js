@@ -11,25 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import CanModel from 'can-connect/can/model/';
-import Model from 'passbolt-mad/model/model';
-import State from 'passbolt-mad/model/state';
+import MadMap from 'passbolt-mad/model/map/map';
+import State from 'passbolt-mad/model/map/state';
 
 describe("mad.model.State", function(){
 
 	it("should inherit can.Model & mad.Model", function(){
 		var state = new State();
-		expect(state).to.be.instanceOf(CanModel);
-		expect(state).to.be.instanceOf(Model);
+		expect(state).to.be.instanceOf(MadMap);
+		expect(state).to.be.instanceOf(State);
 	});
 
 	it("setState() should change the current state(s)", function(){
 		var state = new State();
+
 		expect(state.previous.length).to.be.equal(0);
 		expect(state.current.length).to.be.equal(0);
 
 		// Set the state to A.
 		state.setState('A');
+
 		expect(state.previous.length).to.be.equal(0);
 		expect(state.current.length).to.be.equal(1);
 		expect(state.is('A')).to.be.true;

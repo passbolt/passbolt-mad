@@ -9,6 +9,7 @@
  * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
+ * @deprecated
  */
 import getObject from 'can-util/js/get/get';
 import Model from 'passbolt-mad/model/model';

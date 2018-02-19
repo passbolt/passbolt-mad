@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Model from 'passbolt-mad/model/model';
-import State from 'passbolt-mad/model/state';
+import MadMap from 'passbolt-mad/model/map/map';
+import State from 'passbolt-mad/model/map/state';
 
 /**
  * @inherits mad.model.Model
@@ -24,41 +24,82 @@ import State from 'passbolt-mad/model/state';
  * @param {array} options
  * @return {mad.model.Action}
  */
-var Action = Model.extend('mad.model.Action', /** @static */{
+var Action = MadMap.extend('mad.model.Action', {
 
     /**
-     * Define attributes of the model
-     * @type {Object}
+     * Identifier of the action
+     * @type string
      */
-    attributes: {
-        id: 'string',
-        label: 'string',
-        name: 'string',
-        icon: 'string',
-        action: 'function',
-        cssClasses: 'array',
-        initial_state: 'string',
-        state: State.model,
-        active: 'boolean'
-    }
+    id: {
+        type: 'string'
+    },
 
-}, /** @prototype */ {
+    /**
+     * Label of the action
+     * @type string
+     */
+    label: {
+        type: 'string'
+    },
 
-    // Constructor like.
-    init: function() {
-        // Initialize the associated state instance. Byt default use the stateName defined in
-        // the options.state
-        if (typeof this.initial_state == 'undefined') {
-            this.initial_state = 'ready';
-        }
-        this.state = new State();
-        this.state.setState(this.initial_state);
+    /**
+     * Name of the action
+     * @type string
+     */
+    name: {
+        type: 'string'
+    },
 
-        // Instantiate the css classes variables if it has not been defined.
-        // As the action is massively used by the
-        if (typeof this.cssClasses == 'undefined' || this.cssClasses == null) {
-            this.cssClasses = [];
-        }
+    /**
+     * Icon of the action
+     * @type string
+     */
+    icon: {
+        type: 'string'
+    },
+
+    /**
+     * Callback associated to the action.
+     * @type function
+     */
+    action: {
+        type: '*'
+    },
+
+    /**
+     * Css classes to associate to the action
+     * @type array
+     */
+    cssClasses: {
+        type: '*',
+        value: () => []
+    },
+
+
+    /**
+     * Initial state of the action
+     * @type string
+     */
+    initial_state: {
+        type: 'string',
+        value: 'ready'
+    },
+
+    /**
+     * State of the action
+     * @type State
+     */
+    state: {
+        Type: State,
+        Value: () => new State('ready')
+    },
+
+    /**
+     * Is the action active
+     * @type boolean
+     */
+    active: {
+        type: 'boolean'
     },
 
     /**

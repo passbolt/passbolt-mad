@@ -12,7 +12,7 @@
  */
 import Control from 'passbolt-mad/control/control';
 import MadBus from 'passbolt-mad/control/bus';
-import State from 'passbolt-mad/model/state';
+import State from 'passbolt-mad/model/map/state';
 import StringUtil from 'can-util/js/string/string';
 import View from 'passbolt-mad/view/view';
 
@@ -120,8 +120,11 @@ var Component = Control.extend('mad.Component', /* @static */{
 	 * @inheritdoc
 	 */
 	destroy: function () {
+		console.log('destroy');
+		console.log(this);
 		// If the component is destroyed whereas he is loading.
 		// Complete the loading.
+		console.log(this.state);
 		if (this.state.is('loading')) {
 			MadBus.trigger('passbolt_component_loading_complete', [this]);
 		}
@@ -132,10 +135,9 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// If the component has been destroyed, but the HTMLElement still exists.
 		if (typeof this.element != 'undefined' && this.element != null) {
 			// Remove all the current states classes from the HTMLElement.
-			var currentStates = this.state.current.attr();
-			for (var i in currentStates) {
-				$(this.element).removeClass(currentStates[i]);
-			}
+			this.state.current.forEach((state) => {
+				$(this.element).removeClass(state);
+			});
 
 			// Remove the optional css classes from the HTMLElement.
 			for (var i in this.options.cssClasses) {
@@ -175,51 +177,45 @@ var Component = Control.extend('mad.Component', /* @static */{
 	 *
 	 */
 	_goNextStates: function () {
-		// List of states the component is leaving.
-		var leaving = [],
-			// List of states the component is entering on.
-			entering = [],
-			// List of current states.
-			previous = this.state.previous.attr(),
-			// List of previous states.
-			current = this.state.current.attr(),
-			// List of changes the component is staying on.
-			staying = previous.filter(x => current.indexOf(x) != -1);
+		// The list of states the component will stay on.
+		var staying = this.state.previous.filter((item) => {
+			return this.state.current.indexOf(item) != -1
+		});
 
 		// Check which states the component is leaving.
-		leaving = previous.filter(function(item) {
+		var leaving = this.state.previous.filter((item) => {
 			return staying.indexOf(item) == -1;
 		});
 
 		// Check which states the component is entering on.
-		entering = current.filter(function(item) {
+		var entering = this.state.current.filter((item) => {
 			return staying.indexOf(item) == -1;
 		});
 
 		// Treat the states the component is going to leave.
-		for (var i in leaving) {
-			// Eemove the previous state class.
-			$(this.element).removeClass(leaving[i]);
+		leaving.forEach((state) => {
+			// Remove the previous state class.
+			$(this.element).removeClass(state);
 
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a false
 			// to the function to notify it that the component is leaving the state.
-			var previousStateListener = this['state' + StringUtil.capitalize(leaving[i])];
+			var previousStateListener = this['state' + StringUtil.capitalize(state)];
 			if (previousStateListener) {
 				previousStateListener.call(this, false);
 			}
-		}
+		});
 
 		// Treat the states the component is going to enter on.
-		for (var i in entering) {
+		entering.forEach((state) =>  {
 			// Add the new state class.
-			$(this.element).addClass(entering[i]);
+			$(this.element).addClass(state);
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a true
 			// to the function to notify it that the component is entering on the state.
-			var newStateListener = this['state' + StringUtil.capitalize(entering[i])];
+			var newStateListener = this['state' + StringUtil.capitalize(state)];
 			if (newStateListener) {
 				newStateListener.call(this, true);
 			}
-		}
+		});
 	},
 
 	/**
