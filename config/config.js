@@ -29,14 +29,20 @@ var MadConfig = can.Construct.extend('mad.Config', /** @static */ {
 	 * Load a config file
      *
 	 * @param {string} url Url of the config file to load
+	 * @param {string} key Configuration key where to store the config loaded. (Useful in case of duplicate keys).
 	 */
-	loadFile: function (url) {
+	loadFile: function (url, key) {
 		var self = this;
 		$.ajax({
 			url: url,
 			async: false,
 			dataType: 'json',
 			success: function (data) {
+				if (key !== undefined) {
+					var dataWithKey = {};
+					dataWithKey[key] = data;
+					data = dataWithKey;
+				}
 				self.load(data);
 			}
 		});

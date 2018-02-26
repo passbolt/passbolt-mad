@@ -106,8 +106,8 @@ var Bootstrap = can.Construct.extend('mad.Bootstrap', /* @static */ {
         // Merge the default class options with the ones given in parameters.
         $.extend(true, this.options, Bootstrap.defaults, options);
 
-        // Check the application url.
-        var appUrl = Config.read('app.url');
+        // Check the application url from the base meta tag.
+        var appUrl = $('base').attr('href');
         if (typeof appUrl == 'undefined') {
             throw mad.Exception.get(mad.error.MISSING_CONFIG, 'app.url');
         }
