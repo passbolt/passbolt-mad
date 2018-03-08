@@ -170,6 +170,7 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
      * Reset the view by removing all the items
      */
     reset: function () {
+        if (!this.element) return;
         $('li', this.element).remove();
     },
 
