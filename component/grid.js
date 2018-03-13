@@ -423,10 +423,27 @@ var Grid = Component.extend('mad.component.Grid', {
 
                 // Search in the item fields.
                 while(!found && (field = searchInFields[i])) {
-                    // Is the keyword found in the field.
-                    found = getObject(item, field)
-                            .toLowerCase()
-                            .indexOf(keywords[j].toLowerCase()) != -1;
+                    // Is the field relative to a submodel with a multiple cardinality
+                    // Only search in first level.
+                    if (/(\[\])+/.test(searchInFields[i])) {
+                        var crumbs = field.split('[].');
+                        var objects = getObject(item, crumbs[0]);
+                        objects.forEach((object) => {
+                            if (!found) {
+                                var fieldValue = getObject(object, crumbs[1]);
+                                if (fieldValue) {
+                                    found = fieldValue.toLowerCase()
+                                            .indexOf(keywords[j].toLowerCase()) != -1;
+                                }
+                            }
+                        });
+                    } else {
+                        var object = can.getObject(field, item);
+                        if (object) {
+                            found = object.toLowerCase().indexOf(keywords[j].toLowerCase()) != -1;
+                        }
+                    }
+
                     i++;
                 }
 

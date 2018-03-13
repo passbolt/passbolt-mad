@@ -132,6 +132,9 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// Unbind the state's label attribute observer.
 		this.state.unbind('label');
 
+		// Mark the component has destroyed.
+		this.setState('destroyed');
+
 		// If the component has been destroyed, but the HTMLElement still exists.
 		if (typeof this.element != 'undefined' && this.element != null) {
 			// Remove all the current states classes from the HTMLElement.
@@ -195,7 +198,9 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// Treat the states the component is going to leave.
 		leaving.forEach((state) => {
 			// Remove the previous state class.
-			$(this.element).removeClass(state);
+			if (this.element) {
+				this.element.removeClass(state);
+			}
 
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a false
 			// to the function to notify it that the component is leaving the state.
@@ -208,7 +213,10 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// Treat the states the component is going to enter on.
 		entering.forEach((state) =>  {
 			// Add the new state class.
-			$(this.element).addClass(state);
+			if (this.element) {
+				this.element.addClass(state);
+			}
+
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a true
 			// to the function to notify it that the component is entering on the state.
 			var newStateListener = this['state' + StringUtil.capitalize(state)];
@@ -226,7 +234,9 @@ var Component = Control.extend('mad.Component', /* @static */{
 	 */
 	setState: function (statesName) {
 		this.state.setState(statesName);
-        this._goNextStates();
+		if (statesName != 'destroyed') {
+			this._goNextStates();
+		}
         return this;
 	},
 

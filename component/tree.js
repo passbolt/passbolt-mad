@@ -268,8 +268,7 @@ var Tree = Component.extend('mad.component.Tree', {
      *   Array are accepted.
      */
     load: function (items) {
-        // If the provided items is null, treat them as empty.
-        if (typeof items == undefined || items == null ) {
+        if (typeof items == undefined || items == null || !this.element) {
             return;
         }
 
