@@ -17,7 +17,6 @@ import global from 'passbolt-mad/util/global/global';
 import HtmlHelper from 'passbolt-mad/helper/html';
 import MadBus from "passbolt-mad/control/bus";
 import I18n from "passbolt-mad/util/lang/i18n";
-import ResponseHandler from 'passbolt-mad/net/response_handler';
 
 import madConfig from "passbolt-mad/config/config.js";
 
@@ -65,9 +64,6 @@ Config.load(madConfig);
      "i18n": {
      "lang": "EN-en"
  },
-     "net": {
-     "ResponseHandlerClassName": "passbolt.net.ResponseHandler"
- },
      "route": {
      "defaultRoute": {
          "extension": "passbolt",
@@ -105,8 +101,6 @@ var Bootstrap = Construct.extend('mad.Bootstrap', /* @static */ {
     init: function () {
         // Define the error handler
         Config.write('error.ErrorHandlerClass', ErrorHandler);
-        // Define the response handler
-        Config.write('net.ResponseHandlerClass', ResponseHandler);
         // Set global constant
         global('APP_URL', Config.read('app.url'));
 

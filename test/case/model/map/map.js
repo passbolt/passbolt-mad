@@ -29,9 +29,10 @@ describe("mad.Map", function () {
     });
 
     it("findAll() should retrieve the data", function (done) {
-        User.findAll().then((users) => {
+        User.findAll()
+        .then((users) => {
             expect(users[0]).to.be.instanceOf(User);
-            expect(users[0].Profile).to.be.instanceOf(Profile);
+            expect(users[0].profile).to.be.instanceOf(Profile);
             done();
         });
     });

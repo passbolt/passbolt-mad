@@ -12,7 +12,6 @@
  */
 import ChoiceElement from 'passbolt-mad/form/choice_element';
 import ComponentHelper from 'passbolt-mad/helper/component';
-import Model from 'passbolt-mad/model/model';
 import TextBox from 'passbolt-mad/view/form/element/textbox';
 
 /**

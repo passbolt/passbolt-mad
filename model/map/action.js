@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import DefineList from 'can-define/list/list';
 import MadMap from 'passbolt-mad/model/map/map';
 import State from 'passbolt-mad/model/map/state';
 
@@ -91,7 +92,7 @@ var Action = MadMap.extend('mad.model.Action', {
      */
     state: {
         Type: State,
-        Value: () => new State('ready')
+        Value: () => new State()
     },
 
     /**
@@ -100,6 +101,15 @@ var Action = MadMap.extend('mad.model.Action', {
      */
     active: {
         type: 'boolean'
+    },
+
+    /**
+     * Constructor like.
+     * @param params
+     */
+    init: function(params) {
+        this._super(params);
+        this.state.setState([this.initial_state]);
     },
 
     /**
@@ -112,6 +122,20 @@ var Action = MadMap.extend('mad.model.Action', {
             this.action(data);
         }
     }
+});
+
+/**
+ * @inherits DefineList
+ *
+ * List of actions.
+ *
+ * @constructor
+ * Creates a new list of actions.
+ * @param {array} items List of items to populate the list with
+ * @return {DefineList}
+ */
+Action.List = DefineList.extend({
+    "#": Action
 });
 
 export default Action;

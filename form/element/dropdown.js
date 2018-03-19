@@ -34,7 +34,6 @@ var Dropdown = ChoiceElement.extend('mad.form.Dropdown', /* @static */ {
         viewClass: DropdownView,
         // Allow empty value.
         emptyValue: true
-
     }
 
 }, /** @prototype */ {});

@@ -22,7 +22,13 @@ var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}
      * @return {mixed} The value of the component
      */
     getValue: function () {
-        return $(this.element).val();
+        var value = $(this.element).val();
+        if (value === 'true') {
+            value = true;
+        } else if (value === 'false') {
+            value = false;
+        }
+        return value;
     },
 
     /**
@@ -30,6 +36,11 @@ var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}
      * @param {mixed} value The value to set
      */
     setValue: function (value) {
+        if (value === true) {
+            value = 'true';
+        } else if (value === false) {
+            value = 'false';
+        }
         $(this.element).val(value);
     },
 

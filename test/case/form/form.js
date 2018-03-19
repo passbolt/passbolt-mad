@@ -16,7 +16,6 @@ import CheckboxFormElement from 'passbolt-mad/form/element/checkbox';
 import Component from "passbolt-mad/component/component";
 import FeedbackFormElement from 'passbolt-mad/form/feedback';
 import Form from "passbolt-mad/form/form"
-import Model from 'passbolt-mad/model/model';
 import Role from 'passbolt-mad/test/model/map/role';
 import TextboxFormElement from 'passbolt-mad/form/element/textbox';
 import Tree from "passbolt-mad/component/tree";
@@ -78,9 +77,7 @@ describe("mad.Form", function () {
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo('#form');
-        var textbox = new TextboxFormElement('#textbox', {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
-        });
+        var textbox = new TextboxFormElement('#textbox');
 
         // Check that the element is not already added to the form.
         expect(form.getElement(textbox.getId())).to.be.undefined;
@@ -98,9 +95,7 @@ describe("mad.Form", function () {
 
         // Add a textbox to the form.
         var $textbox = $('<input id="textbox"/>').appendTo($form);
-        var textbox = new TextboxFormElement('#textbox', {
-            modelReference: 'mad.test.model.TestModel.testModelAttribute'
-        });
+        var textbox = new TextboxFormElement('#textbox');
 
         // Add & remove the element from the form, check that the element is not associated to the form.
         form.addElement(textbox.start());
@@ -153,7 +148,7 @@ describe("mad.Form", function () {
         // Add a second textbox to the form.
         var $textbox2 = $('<input id="textbox2"/>').appendTo($form);
         var textbox2 = new TextboxFormElement('#textbox2', {
-            modelReference: 'User.Profile.first_name'
+            modelReference: 'User.profile.first_name'
         });
         form.addElement(textbox2.start());
 
@@ -176,7 +171,7 @@ describe("mad.Form", function () {
                 expect(textbox.getValue()).to.be.equal('abc');
                 expect(textbox2.getValue()).to.be.equal('xyz');
                 expect(data.User.username).to.be.equal('abc');
-                expect(data.User.Profile.first_name).to.be.equal('xyz');
+                expect(data.User.profile.first_name).to.be.equal('xyz');
                 done();
             }, 0);
         }, 0);
@@ -201,7 +196,7 @@ describe("mad.Form", function () {
                 'option_2': 'Option 2',
                 'option_3': 'Option 3'
             },
-            modelReference: 'User.Role[].name'
+            modelReference: 'User.role[].name'
         });
         form.addElement(checkbox.start());
 
@@ -227,7 +222,7 @@ describe("mad.Form", function () {
                 expect(textbox.getValue()).to.be.equal('abc');
                 expect(checkbox.getValue()).to.be.eql(['option_1', 'option_2']);
                 expect(data.User.username).to.be.equal('abc');
-                expect(data.User.Role).to.be.eql([{name: 'option_1'}, {name: 'option_2'}]);
+                expect(data.User.role).to.be.eql([{name: 'option_1'}, {name: 'option_2'}]);
                 done();
             }, 0);
         }, 0);
@@ -252,14 +247,14 @@ describe("mad.Form", function () {
                 'option_2': 'Option 2',
                 'option_3': 'Option 3'
             },
-            modelReference: 'User.Role[].name'
+            modelReference: 'User.role[].name'
         });
         form.addElement(checkbox.start());
 
         var testInstance = new User({
             User: {
                 username: 'ada@passbolt.com',
-                Role: new Role.List([
+                role: new Role.List([
                     {name: 'admin'},
                     {name: 'user'}
                 ])
@@ -271,7 +266,7 @@ describe("mad.Form", function () {
         expect(textbox.getValue()).to.be.equal('ada@passbolt.com');
         expect(checkbox.getValue()).to.be.eql(['admin', 'user']);
         expect(data.User.username).to.be.equal('ada@passbolt.com');
-        expect(data.User.Role).to.be.eql([{name: 'admin'}, {name: 'user'}]);
+        expect(data.User.role).to.be.eql([{name: 'admin'}, {name: 'user'}]);
     });
 
     it("validateElement() should validate an element", function() {
@@ -305,7 +300,7 @@ describe("mad.Form", function () {
                 'option_3': 'Option 3',
                 'op': 'Invalid option'
             },
-            modelReference: 'User.Role[].name'
+            modelReference: 'User.role[].name'
         });
         var $roleFeedback = $('<span id="feedback_role" for="role_checkbox" />').appendTo($form);
         var roleFeedback = new FeedbackFormElement('#feedback_role', {});

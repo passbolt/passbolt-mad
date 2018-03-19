@@ -85,7 +85,7 @@ var Grid = Component.extend('mad.component.Grid', {
      * @return {mad.component.Grid}
      */
     init: function(el, options) {
-        options.items = options.itemClass.List();
+        options.items = new options.itemClass.List();
         this._super(el, options);
 
         // Keep a trace of the items after mapping.
@@ -248,6 +248,14 @@ var Grid = Component.extend('mad.component.Grid', {
      * @param {mad.model.Model} item The item to remove
      */
     removeItem: function (item) {
+        // Remove the item from the list.
+        var index = -1;
+        this.options.items.forEach((_item, i) => {
+            if (_item.id == item.id) index = i;
+        });
+        if (index != -1) {
+            this.options.items.splice(index, 1);
+        }
         // Remove the item to the view
         this.view.removeItem(item);
         // Free space, remove the relative mapped item
@@ -347,6 +355,7 @@ var Grid = Component.extend('mad.component.Grid', {
         // by removing an item from the items list stored in options, the grid will
         // update itself (check "{items} remove" listener)
         this.options.items.splice(0, this.options.items.length);
+        this.view.reset();
     },
 
     /**
@@ -438,7 +447,7 @@ var Grid = Component.extend('mad.component.Grid', {
                             }
                         });
                     } else {
-                        var object = can.getObject(field, item);
+                        var object = getObject(item, field);
                         if (object) {
                             found = object.toLowerCase().indexOf(keywords[j].toLowerCase()) != -1;
                         }
@@ -540,30 +549,13 @@ var Grid = Component.extend('mad.component.Grid', {
      * @param {HTMLEvent} ev The event which occurred
      * @param {CanList} items The removed items
      */
-    '{items} remove': function (model, ev, items) {
-        var self = this;
-        items.forEach(function (item, i) {
-            self.removeItem(item);
-        });
+    '{itemClass} destroyed': function (model, event, destroyedItem) {
+        this.removeItem(destroyedItem);
     },
 
     /* ************************************************************** */
     /* LISTEN TO THE VIEW EVENTS */
     /* ************************************************************** */
-
-    /**
-     * @function mad.component.Grid.tbody__mouseleave
-     * @parent mad.component.Grid.view_events
-     *
-     * Observe when the mouse leave the main area of component. It does not include
-     * table header.
-     *
-     * @param {HTMLElement} el The element the event occurred on
-     * @param {HTMLEvent} ev The event that occurred
-     */
-    'tbody mouseleave': function (element, evt) {
-        //
-    },
 
     /**
      * @function mad.component.Grid.__column_sort_asc

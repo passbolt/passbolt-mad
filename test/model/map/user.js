@@ -17,28 +17,25 @@ import connectDataUrl from 'can-connect/data/url/url';
 import connectParse from 'can-connect/data/parse/parse';
 import connectConstructor from 'can-connect/constructor/constructor';
 import connectMap from 'can-connect/can/map/map';
-import connectMerge from 'can-connect/can/merge/merge';
 import connectStore from 'can-connect/constructor/store/store';
 import connectConstructorHydrate from 'can-connect/can/constructor-hydrate/constructor-hydrate';
-import connectRealTime from 'can-connect/real-time/real-time';
-import DefineList from 'can-define/list/list';
-import MadMap from 'passbolt-mad/model/map/map';
+import DefineList from 'passbolt-mad/model/list/list';
+import DefineMap from 'passbolt-mad/model/map/map';
 import Profile from 'passbolt-mad/test/model/map/profile';
 import Role from 'passbolt-mad/test/model/map/role';
-import superMap from 'can-define/map/map';
-import set from 'can-set';
 
-var User = MadMap.extend('mad.test.model.User', {
+var User = DefineMap.extend('mad.test.model.User', {
     id: 'string',
     username: 'string',
     email: 'string',
     active: 'boolean',
-    Profile: Profile,
-    Role: Role.List
+    profile: Profile,
+    role: Role.List
 });
-MadMap.setReference('User', User);
+DefineMap.setReference('User', User);
 
 User.List = DefineList.extend({'#': { Type: User }});
+User.List.itemReference = User;
 
 User.validationRules = {
     id: [
@@ -66,90 +63,9 @@ User.connection = connect([connectParse, connectDataUrl, connectConstructor, con
                 type: 'GET',
                 params: params
             });
-        }
-    },
-    parseListData: function(data) {
-        if (data.body && typeof Array.isArray(data.body)) {
-            var returnValue = [];
-            for (var i in data.body) {
-                returnValue[i] = User.connection.parseData.call(User.connection, data.body[i]);
-            }
-            return returnValue;
-        }
-        return data;
-    },
-    parseData: function (data) {
-        data = data || {};
-        // if the provided data are formatted as an ajax server response
-        if (typeof data.header != 'undefined') {
-            data = CakeSerializer.from(data.body, 'User');
-        } else {
-            var className = 'User';
-            if (data[className]) {
-                data = CakeSerializer.from(data, 'User');
-            }
-        }
-        return data;
+        },
+        destroyData: 'DELETE /test/users/{id}'
     }
-
-    //findAll: 'GET /testusers',
-    //findAllUpdated: function() {
-    //    return Ajax.request({
-    //        url: '/testuserscarolupdated'
-    //    }).then(function(data) {
-    //        return UserTestModel.connection.hydrateList(UserTestModel.parseModels(data));
-    //    });
-    //},
-    //findOne: 'GET /testusers/{id}',
-    //findOneUpdated: function(id) {
-    //    var params = {id: id};
-    //    return Ajax.request({
-    //        url: '/testusersupdated/{id}',
-    //        params: params
-    //    }).then(function(data) {
-    //        return UserTestModel.connection.hydrateInstance(UserTestModel.parseModel(data.body));
-    //    });
-    //},
-    //create : function (attrs) {
-    //    var url = '/testusers';
-    //    var self = this;
-    //    var params = CakeSerializer.to(attrs, UserTestModel);
-    //    return Ajax.request({
-    //        url: url,
-    //        type: 'POST',
-    //        params: params
-    //    }).pipe(function (data, textStatus, jqXHR) {
-    //        // pipe the result to convert cakephp response format into can format
-    //        // else the new attribute are not well placed
-    //        var def = $.Deferred();
-    //        def.resolveWith(this, [CakeSerializer.from(data, self)]);
-    //        return def;
-    //    });
-    //},
-    //update: function (data) {
-    //    var params = CakeSerializer.to(data, UserTestModel);
-    //    params.id = data.id;
-    //    return Ajax.request({
-    //        url: '/testusers/{id}',
-    //        type: 'PUT',
-    //        params: data
-    //    });
-    //},
-    //destroy: '/testusers/{id}',
-    //findCustom: function (params) {
-    //    var self = this;
-    //    return Ajax.request({
-    //        url: '/testusers/custom/0',
-    //        type: 'GET',
-    //        params: params
-    //    }).pipe(function (data, textStatus, jqXHR) {
-    //        // pipe the result to convert cakephp response format into can format
-    //        var def = $.Deferred();
-    //        var instance = self.model(data);
-    //        def.resolveWith(this, [instance]);
-    //        return def;
-    //    });
-    //}
 });
 
 export default User;

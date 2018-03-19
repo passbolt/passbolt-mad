@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from 'jquery';
+import $ from 'can-jquery';
 import CanControl from 'can-control';
 import uuid from 'uuid/v4';
 import "can-construct-super";

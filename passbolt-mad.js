@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from "jquery";
+import $ from 'can-jquery';
 import can from "can/can";
 import "can/map/define/define";
 
@@ -24,8 +24,9 @@ import "passbolt-mad/config/config";
 import "passbolt-mad/util/map/map";
 import "passbolt-mad/util/validation";
 import "passbolt-mad/util/lang/i18n";
-import "passbolt-mad/model/model";
-import "passbolt-mad/model/list";
+import "passbolt-mad/model/list/list";
+import "passbolt-mad/model/map/action";
+import "passbolt-mad/model/map/map";
 import "passbolt-mad/model/map/state";
 import "passbolt-mad/model/attribute";
 import "passbolt-mad/control/control";

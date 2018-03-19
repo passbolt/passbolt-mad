@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import Construct from 'can-construct';
-import Model from 'passbolt-mad/model/model';
+import MadDefineMap from 'passbolt-mad/model/map/map';
 
 /*
  * @inherits jQuery.Class
@@ -27,7 +27,7 @@ var List = Construct.extend('mad.model.List', /** @static */ {
      */
     indexOf: function (list, item) {
         var returnValue = -1;
-        var itemId = item instanceof Model ? item.id : item;
+        var itemId = item instanceof MadDefineMap ? item.id : item;
         list.forEach(function(raw, i) {
             if (raw.id == itemId) {
                 returnValue = i;

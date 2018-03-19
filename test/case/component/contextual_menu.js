@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import Action from "passbolt-mad/model/action";
+import Action from "passbolt-mad/model/map/action";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import ContextualMenuComponent from "passbolt-mad/component/contextual_menu";

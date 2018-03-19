@@ -12,7 +12,7 @@
  */
 import "passbolt-mad/test/bootstrap";
 import ComponentHelper from 'passbolt-mad/helper/component';
-import Model from 'passbolt-mad/model/model'
+import DefineList from 'passbolt-mad/model/list/list';
 import TreeComponent from "passbolt-mad/component/tree";
 
 describe("mad.helper.Component", function(){
@@ -38,7 +38,7 @@ describe("mad.helper.Component", function(){
         expect($('ul', $('#test-html')).length).to.be.equal(1);
 
         // Quick check that everything is working fine with the primitive of the component.
-        var items = new Model.List([{
+        var items = new DefineList([{
             id: 'item_1',
             label: 'Item 1'
         }, {

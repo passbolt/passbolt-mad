@@ -10,15 +10,17 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DefineList from 'can-define/list/list';
+import DefineList from 'passbolt-mad/model/list/list';
 import MadMap from 'passbolt-mad/model/map/map';
 
 var Role = MadMap.extend('mad.test.model.Role', {
-    name: 'string'
+    name: 'string',
+    test: 'string'
 });
 MadMap.setReference('Role', Role);
 
 Role.List = DefineList.extend({'#': { Type: Role }});
+Role.List.itemReference = Role;
 
 Role.validationRules = {
     name: [

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import Action from "passbolt-mad/model/action";
+import Action from "passbolt-mad/model/map/action";
 import ButtonComponent from "passbolt-mad/component/button";
 import ButtonDropdownComponent from "passbolt-mad/component/button_dropdown"
 import CanControl from "can-control";

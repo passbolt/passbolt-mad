@@ -73,7 +73,7 @@ var ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMenu'
             '<ul id="js_contextual_menu" />'
         );
 
-        return new ContextualMenu('#js_contextual_menu', options);
+        return new this('#js_contextual_menu', options);
     },
 
     /**

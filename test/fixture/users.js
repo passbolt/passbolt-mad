@@ -12,20 +12,17 @@
  */
 import "passbolt-mad/net/ajax";
 import fixture from "can-fixture";
-import Model from 'passbolt-mad/model/model';
 import Response from 'passbolt-mad/net/response';
 import uuid from 'uuid/v4';
 
 var data = [
     {
-        User: {
-            id: '50cdea9c-aa88-46cb-a09b-2f4fd7a10fce',
-            username: 'betty@passbolt.com',
-            email: 'betty@passbolt.com',
-            role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
-            active: 1
-        },
-        Profile: {
+        id: '50cdea9c-aa88-46cb-a09b-2f4fd7a10fce',
+        username: 'betty@passbolt.com',
+        email: 'betty@passbolt.com',
+        role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
+        active: 1,
+        profile: {
             id: 'cbce5d22-46c1-51d1-b851-36b174e40611',
             user_id: '50cdea9c-aa88-46cb-a09b-2f4fd7a10fce',
             first_name: 'Betty',
@@ -33,14 +30,12 @@ var data = [
         }
     },
     {
-        User: {
-            id: '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce',
-            username: 'carol@passbolt.com',
-            email: 'carol@passbolt.com',
-            role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
-            active: 1
-        },
-        Profile: {
+        id: '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce',
+        username: 'carol@passbolt.com',
+        email: 'carol@passbolt.com',
+        role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
+        active: 1,
+        profile: {
             id: '48bcd9ac-a520-53e0-b3a4-9da7e57b91aa',
             user_id: '50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce',
             first_name: 'Carol',
@@ -48,14 +43,12 @@ var data = [
         }
     },
     {
-        User: {
-            id: 'bbd56042-c5cd-11e1-a0c5-080027796c4e',
-            username: 'edith@passbolt.com',
-            email: 'edith@passbolt.com',
-            role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
-            active: 1
-        },
-        Profile: {
+        id: 'bbd56042-c5cd-11e1-a0c5-080027796c4e',
+        username: 'edith@passbolt.com',
+        email: 'edith@passbolt.com',
+        role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
+        active: 1,
+        profile: {
             id: '08710a74-8996-5f60-b5db-ffabfa85bfe6',
             user_id: 'bbd56042-c5cd-11e1-a0c5-080027796c4e',
             first_name: 'Edith',
@@ -67,24 +60,22 @@ var data = [
 var getData = function(scenario) {
     switch(scenario){
         case 'carol-email-updated':
-            var user = data.filter(item => item.User.username == 'carol@passbolt.com')[0];
-            user.User.email = 'carol-updated@passbolt.com';
-            user.User.active = 0;
+            var user = data.filter(item => item.username == 'carol@passbolt.com')[0];
+            user.email = 'carol-updated@passbolt.com';
+            user.active = 0;
             break;
         case 'carol-profile-updated':
-            var user = data.filter(item => item.User.username == 'carol@passbolt.com')[0];
-            user.Profile.first_name = 'Carol updated';
+            var user = data.filter(item => item.username == 'carol@passbolt.com')[0];
+            user.profile.first_name = 'Carol updated';
             break;
         case 'ada-created':
             var user = {
-                User: {
-                    id: 'f848277c-5398-58f8-a82a-72397af2d450',
-                    username: 'ada@passbolt.com',
-                    email: 'ada@passbolt.com',
-                    role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
-                    active: 1
-                },
-                Profile: {
+                id: 'f848277c-5398-58f8-a82a-72397af2d450',
+                username: 'ada@passbolt.com',
+                email: 'ada@passbolt.com',
+                role_id: '0208f57a-c5cd-11e1-a0c5-080027796c4c',
+                active: 1,
+                profile: {
                     id: '99522cc9-0acc-5ae2-b996-d03bded3c0a6',
                     user_id: 'f848277c-5398-58f8-a82a-72397af2d450',
                     first_name: 'Ada',
@@ -97,7 +88,7 @@ var getData = function(scenario) {
     return data;
 };
 
-// Fixture for UserTestModel findAll.
+// GET ALL
 fixture({
     type: 'GET',
     url: '/test/users'
@@ -116,6 +107,21 @@ fixture({
         body: body
     };
 });
+
+// DELETE
+fixture({
+    type: 'DELETE',
+    url: '/test/users/{id}'
+}, function (id, settings, headers) {
+    return {};
+});
+
+
+
+
+
+
+
 
 // Fixture for UserTestModel findOne.
 fixture({
@@ -145,35 +151,15 @@ fixture({
     data['UserTestModel']['id'] = uuid();
     store.push(data);
     return {
-        'header': {
-            'id': uuid(),
-            'status': mad.net.Response.STATUS_SUCCESS,
-            'title': 'success',
-            'message': '',
-            'controller': 'Users',
-            'action': 'add'
-        },
-        'body': data
-    };
-});
-
-// Fixture for UserTestModel destroyed.
-fixture({
-    type: 'DELETE',
-    url: '/testusers/{id}'
-}, function (id, settings, headers) {
-    // @todo We don't really maintain a local storage. So we do nothin.
-    //       That means after a findAll the destroy item will appear again
-    return {
         header: {
             id: uuid(),
-            status: Response.STATUS_SUCCESS,
+            status: mad.net.Response.STATUS_SUCCESS,
             title: 'success',
             message: '',
             controller: 'Users',
-            action: 'delete'
+            action: 'add'
         },
-        body: {}
+        'body': data
     };
 });
 

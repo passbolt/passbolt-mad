@@ -3,7 +3,7 @@
 {{#columnModels}}
 
 	<td class="js_grid_column_{{name}} cell_{{name}} {{css.join(' ')}}">
-        {{#gridCell(this, cellValue=mappedItem[name])}}{{/gridCell}}
+        {{#gridCell(this, cellValue=mappedItem[name] item=item mappedItem=mappedItem)}}{{/gridCell}}
 	</td>
 
 {{/columnModels}}

@@ -13,9 +13,9 @@
 import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
+import DefineMap from 'passbolt-mad/model/map/map';
 import DynamicTreeComponent from "passbolt-mad/component/dynamic_tree"
 import MadControl from 'passbolt-mad/control/control';
-import Model from 'passbolt-mad/model/model';
 import TreeComponent from 'passbolt-mad/component/tree';
 
 describe("mad.component.DynamicTree", function () {
@@ -35,7 +35,7 @@ describe("mad.component.DynamicTree", function () {
 
     it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
         var tree = new DynamicTreeComponent('#tree', {
-            itemClass: Model
+            itemClass: DefineMap
         });
 
         // Basic control of classes inheritance.
@@ -51,17 +51,17 @@ describe("mad.component.DynamicTree", function () {
 
     it('open() and close() should open and close the corresponding sections of the tree', function () {
         var tree = new DynamicTreeComponent('#tree', {
-            itemClass: Model
+            itemClass: DefineMap
         });
         tree.start();
 
-        var items = new Model.List([{
+        var items = new DefineMap.List([{
             id: 'item_1',
             label: 'Item 1'
         }, {
             id: 'item_2',
             label: 'Item 2',
-            'children': new Model.List([{
+            'children': new DefineMap.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {
@@ -84,17 +84,17 @@ describe("mad.component.DynamicTree", function () {
 
     it('Clicking on the open/close trigger should open and close the corresponding section of the tree', function () {
         var tree = new DynamicTreeComponent('#tree', {
-            itemClass: Model
+            itemClass: DefineMap
         });
         tree.start();
 
-        var items = new Model.List([{
+        var items = new DefineMap.List([{
             id: 'item_1',
             label: 'Item 1'
         }, {
             id: 'item_2',
             label: 'Item 2',
-            'children': new Model.List([{
+            'children': new DefineMap.List([{
                 id: 'item_21',
                 label: 'Item 21'
             }, {

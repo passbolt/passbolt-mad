@@ -10,11 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'can-jquery';
 import DialogComponent from 'passbolt-mad/component/dialog';
 import ConfirmView from 'passbolt-mad/view/component/confirm';
 import HtmlHelper from 'passbolt-mad/helper/html';
 import template from 'passbolt-mad/view/template/component/confirm/confirm.stache!';
-import $ from 'can-jquery';
 
 var Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
 

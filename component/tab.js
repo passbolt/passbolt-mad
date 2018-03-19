@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Action from 'passbolt-mad/model/action';
+import Action from 'passbolt-mad/model/map/action';
 import ComponentHelper from 'passbolt-mad/helper/component';
 import CompositeComponent from 'passbolt-mad/component/composite';
 import MenuComponent from 'passbolt-mad/component/menu';

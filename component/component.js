@@ -120,11 +120,8 @@ var Component = Control.extend('mad.Component', /* @static */{
 	 * @inheritdoc
 	 */
 	destroy: function () {
-		console.log('destroy');
-		console.log(this);
 		// If the component is destroyed whereas he is loading.
 		// Complete the loading.
-		console.log(this.state);
 		if (this.state.is('loading')) {
 			MadBus.trigger('passbolt_component_loading_complete', [this]);
 		}
@@ -199,7 +196,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 		leaving.forEach((state) => {
 			// Remove the previous state class.
 			if (this.element) {
-				this.element.removeClass(state);
+				$(this.element).removeClass(state);
 			}
 
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a false
@@ -214,7 +211,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 		entering.forEach((state) =>  {
 			// Add the new state class.
 			if (this.element) {
-				this.element.addClass(state);
+				$(this.element).addClass(state);
 			}
 
 			// Execute the function 'stateStateName' if it exists, passing a boolean set a true

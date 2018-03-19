@@ -11,17 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import TestModel from "passbolt-mad/test/helper/model";
 import "passbolt-mad/test/fixture/users";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
+import DefineMap from 'passbolt-mad/model/map/map';
 import GridColumn from 'passbolt-mad/model/grid_column';
 import GridComponent from "passbolt-mad/component/grid";
 import HtmlHelper from 'passbolt-mad/helper/html';
 import MadControl from 'passbolt-mad/control/control';
 import MadMap from 'passbolt-mad/util/map/map';
-import Model from 'passbolt-mad/model/model';
-import UserTestModel from 'passbolt-mad/test/model/user';
+import User from 'passbolt-mad/test/model/map/user';
 import xss from 'passbolt-mad/test/fixture/xss';
 
 describe("mad.component.Grid", function () {
@@ -46,7 +45,7 @@ describe("mad.component.Grid", function () {
         n = n || 10;
         var items = [];
         for (var i = 0; i<n; i++) {
-            items[i] = new Model({
+            items[i] = new DefineMap({
                 id: 'item_' + i,
                 label: 'item label ' + i,
                 hiddenField: 'hidden label ' + i
@@ -57,7 +56,7 @@ describe("mad.component.Grid", function () {
 
     it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
         var grid = new GridComponent('#grid', {
-            itemClass: Model
+            itemClass: DefineMap
         });
 
         // Basic control of classes inheritance.
@@ -72,12 +71,12 @@ describe("mad.component.Grid", function () {
 
     it("insertItem() requires the map option to be defined", function () {
         var grid = new GridComponent('#grid', {
-            itemClass: Model
+            itemClass: DefineMap
         });
         grid.start();
 
         // Insert a first item.
-        var itemInside = new Model({
+        var itemInside = new DefineMap({
             id: 'item_inside',
             label: 'item inside label'
         });
@@ -109,55 +108,55 @@ describe("mad.component.Grid", function () {
             css: ['label_custom_css']
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Insert a first item.
-        var itemInside = new Model({
+        var itemInside = new DefineMap({
             id: 'item_inside',
             label: 'item inside label'
         });
         grid.insertItem(itemInside);
-        expect($('#test-html').text()).to.contain(itemInside.attr('label'));
+        expect($('#test-html').text()).to.contain(itemInside.label);
 
         // Insert an item before the first one.
-        var itemBefore = new Model({
+        var itemBefore = new DefineMap({
             id: 'item_before',
             label: 'item before label'
         });
         grid.insertItem(itemBefore, itemInside, 'before');
-        expect($grid.text()).to.contain(itemBefore.attr('label'));
+        expect($grid.text()).to.contain(itemBefore.label);
         expect(grid.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_before');
 
         // Insert an item after the before one.
-        var itemAfter = new Model({
+        var itemAfter = new DefineMap({
             id: 'item_after',
             label: 'item after label'
         });
         grid.insertItem(itemAfter, itemBefore, 'after');
-        expect($grid.text()).to.contain(itemInside.attr('label'));
+        expect($grid.text()).to.contain(itemInside.label);
         expect(grid.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_after');
         expect(grid.view.getItemElement(itemBefore).next().attr('id')).to.be.equal('item_after');
 
         // Insert an item in first.
-        var itemFirst = new Model({
+        var itemFirst = new DefineMap({
             id: 'item_first',
             label: 'item first label'
         });
         grid.insertItem(itemFirst, null, 'first');
-        expect($grid.text()).to.contain(itemFirst.attr('label'));
+        expect($grid.text()).to.contain(itemFirst.label);
         expect(grid.view.getItemElement(itemBefore).prev().attr('id')).to.be.equal('item_first');
 
         // Insert an item in last.
-        var itemLast = new Model({
+        var itemLast = new DefineMap({
             id: 'item_last',
-            label: 'item last label'
+            label: 'item DefineMap label'
         });
         grid.insertItem(itemLast, null, 'last');
-        expect($grid.text()).to.contain(itemLast.attr('label'));
+        expect($grid.text()).to.contain(itemLast.label);
         expect(grid.view.getItemElement(itemInside).next().attr('id')).to.be.equal('item_last');
 
         grid.destroy();
@@ -184,19 +183,19 @@ describe("mad.component.Grid", function () {
             }
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Insert the item.
-        var itemInside = new Model({
+        var itemInside = new DefineMap({
             id: 'item',
             label: 'item label'
         });
         grid.insertItem(itemInside);
-        expect($('#test-html').text()).to.contain('Cell adapted applied : ' + itemInside.attr('label'));
+        expect($('#test-html').text()).to.contain('Cell adapted applied : ' + itemInside.label);
 
         grid.destroy();
     });
@@ -218,7 +217,7 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
@@ -252,22 +251,22 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Insert a first item.
-        var item = new Model({
+        var item = new DefineMap({
             id: 'item',
             label: 'item label'
         });
         grid.insertItem(item);
-        expect($('#test-html').text()).to.contain(item.attr('label'));
+        expect($('#test-html').text()).to.contain(item.label);
 
         // Update the item and refresh the grid.
-        item.attr('label', 'updated item label');
+        item.label = 'updated item label';
         grid.refreshItem(item);
         expect($('#test-html').text()).to.contain('updated item label');
 
@@ -291,7 +290,7 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
@@ -304,16 +303,16 @@ describe("mad.component.Grid", function () {
         // Remove an item.
         grid.removeItem(items[2]);
         // Check that the item we removed is not present anymore, but the other are still there.
-        expect($('#test-html').text()).not.to.contain(items[2].attr('label'));
-        expect($('#test-html').text()).to.contain(items[0].attr('label'));
-        expect($('#test-html').text()).to.contain(items[1].attr('label'));
-        expect($('#test-html').text()).to.contain(items[3].attr('label'));
-        expect($('#test-html').text()).to.contain(items[4].attr('label'));
+        expect($('#test-html').text()).not.to.contain(items[2].label);
+        expect($('#test-html').text()).to.contain(items[0].label);
+        expect($('#test-html').text()).to.contain(items[1].label);
+        expect($('#test-html').text()).to.contain(items[3].label);
+        expect($('#test-html').text()).to.contain(items[4].label);
 
         grid.destroy();
     });
 
-    it("{items} remove() should catch when an items displayed by the list is destroyed and remove it from the grid", function(done){
+    it("{itemClass} destroyed: should catch when an items displayed by the grid is destroyed and remove it from the grid", function(done){
         // Set the grid map that will be used to transform the data for the view.
         var map = new MadMap({
             id: 'id',
@@ -330,31 +329,31 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: UserTestModel,
+            itemClass: User,
             map: map,
             columnModel: columnModel
         });
         grid.start();
 
         // Retrieve the items to insert into the grid.
-        UserTestModel.findAll()
+        User.findAll()
         .then(function(items) {
             // Insert all the items into the grid
             items.each(function(item) {
                 grid.insertItem(item);
-                expect($('#test-html').text()).to.contain(item.attr('username'));
+                expect($('#test-html').text()).to.contain(item.username);
             });
 
             // Destroy an item.
-            var destroyDef = items[2].destroy();
-            $.when(destroyDef).then(function() {
-                // Check that the item we removed is not present anymore, but the other are still there.
-                expect($('#test-html').text()).not.to.contain(items[2].attr('username'));
-                expect($('#test-html').text()).to.contain(items[0].attr('username'));
-                expect($('#test-html').text()).to.contain(items[1].attr('username'));
-                grid.destroy();
-                done();
-            });
+            items[2].destroy()
+                .then(() => {
+                    // Check that the item we removed is not present anymore, but the other are still there.
+                    expect($('#test-html').text()).not.to.contain(items[2].username);
+                    expect($('#test-html').text()).to.contain(items[0].username);
+                    expect($('#test-html').text()).to.contain(items[1].username);
+                    grid.destroy();
+                    done();
+                });
         });
     });
 
@@ -375,7 +374,7 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel,
             callbacks: {
@@ -387,15 +386,15 @@ describe("mad.component.Grid", function () {
         grid.start();
 
         // Insert a first item.
-        var item = new Model({
+        var item = new DefineMap({
             id: 'item_inside',
             label: 'item inside label'
         });
         grid.insertItem(item);
-        expect($('#test-html').text()).to.contain(item.attr('label'));
+        expect($('#test-html').text()).to.contain(item.label);
 
         // By default an item shouldn't be selected.
-        var $item = $('#test-html #' + item.attr('id'));
+        var $item = $('#test-html #' + item.id);
         expect($item.hasClass('selected')).to.be.false;
 
         // Select an item by clicking on it.
@@ -426,7 +425,7 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel,
             callbacks: {
@@ -438,17 +437,17 @@ describe("mad.component.Grid", function () {
         grid.start();
 
         // Insert a first item.
-        var item = new Model({
+        var item = new DefineMap({
             id: 'item_inside',
             label: 'item inside label'
         });
         grid.insertItem(item);
-        item.attr('item inside label updated');
+        item.label = 'item inside label updated';
         grid.refreshItem(item);
-        expect($('#test-html').text()).to.contain(item.attr('label'));
+        expect($('#test-html').text()).to.contain(item.label);
 
         // By default an item shouldn't be selected.
-        var $item = $('#test-html #' + item.attr('id'));
+        var $item = $('#test-html #' + item.id);
         expect($item.hasClass('selected')).to.be.false;
 
         // Select an item by clicking on it.
@@ -479,7 +478,7 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
@@ -493,7 +492,7 @@ describe("mad.component.Grid", function () {
         expect(grid.isFiltered()).to.be.false;
 
         // Filter the grid
-        var filteredItems = new Model.List([items[2], items[4]]);
+        var filteredItems = new DefineMap.List([items[2], items[4]]);
         grid.filter(filteredItems);
 
         // Check that the grid is filtered.
@@ -526,7 +525,7 @@ describe("mad.component.Grid", function () {
             label: 'label'
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
@@ -583,7 +582,7 @@ describe("mad.component.Grid", function () {
             sortable: true
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
@@ -631,7 +630,7 @@ describe("mad.component.Grid", function () {
             sortable: true
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
@@ -646,7 +645,7 @@ describe("mad.component.Grid", function () {
             var rand = Math.floor(Math.random() * alphabetCopy.length),
                 letter = alphabetCopy.splice(rand, 1);
 
-            items[i] = new Model({
+            items[i] = new DefineMap({
                 id: 'item_' + letter,
                 label: 'item label ' + letter
             });
@@ -692,7 +691,7 @@ describe("mad.component.Grid", function () {
             sortable: true
         })];
         var grid = new GridComponent('#grid', {
-            itemClass: Model,
+            itemClass: DefineMap,
             map: map,
             columnModel: columnModel
         });
@@ -745,13 +744,13 @@ describe("mad.component.Grid", function () {
 
         for (var rule in xss) {
             var grid = new GridComponent('#grid', {
-                itemClass: Model,
+                itemClass: DefineMap,
                 map: map,
                 columnModel: columnModel
             });
             grid.start();
 
-            var item = new Model({
+            var item = new DefineMap({
                 id: xss[rule],
                 rule: rule,
                 exploit: xss[rule]

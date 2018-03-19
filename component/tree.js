@@ -13,7 +13,7 @@
 import Component from 'passbolt-mad/component/component';
 import List from 'can-list';
 import MadMap from 'passbolt-mad/util/map/map'
-import Model from 'passbolt-mad/model/model';
+import MadDefineMap from 'passbolt-mad/model/map/map';
 import TreeView from 'passbolt-mad/view/component/tree';
 
 import itemTemplate from 'passbolt-mad/view/template/component/tree/treeItem.stache!';
@@ -41,7 +41,7 @@ var Tree = Component.extend('mad.component.Tree', {
         // The template used to render the tree's items.
         itemTemplate: itemTemplate,
         // The Model Class that defines the items displayed by the tree.
-        itemClass: Model,
+        itemClass: MadDefineMap,
         // The list of objects displayed by the tree.
         items: null,
         // The map used to transform the raw data into expected view format.
@@ -201,12 +201,6 @@ var Tree = Component.extend('mad.component.Tree', {
     insertItem: function (item, refItem, position) {
         var self = this;
 
-        if (this.getItemClass() == null) {
-            throw mad.Exception.get('The associated itemClass can not be null');
-        }
-        if (!(item instanceof this.getItemClass())) {
-            throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'item');
-        }
         this.options.items.push(item);
         this.view.insertItem(item, refItem, position);
 
@@ -268,23 +262,13 @@ var Tree = Component.extend('mad.component.Tree', {
      *   Array are accepted.
      */
     load: function (items) {
-        if (typeof items == undefined || items == null || !this.element) {
+        if (!items || !this.element) {
             return;
         }
 
-        // If the provided items parameter is a can.List.
-        // Transform it in array, dirty because attr() func doesn't keep the attribute model reference.
-        else if (items instanceof List) {
-            var itemsList = items;
-            items = [];
-            itemsList.each(function(item) {
-                items.push(item);
-            });
-        }
-
-        for (var i in items) {
-            this.insertItem(items[i]);
-        }
+        items.forEach(item => {
+            this.insertItem(item);
+        });
     },
 
     /**

@@ -10,15 +10,14 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Attribute from 'passbolt-mad/model/attribute';
 import Component from 'passbolt-mad/component/component';
+import DefineList from 'passbolt-mad/model/list/list';
+import DefineMap from 'passbolt-mad/model/map/map';
 import FormElement from 'passbolt-mad/form/element';
 import FormFeedback from 'passbolt-mad/form/feedback';
 import FormView from 'passbolt-mad/view/form/form';
 import getObject from 'can-util/js/get/get';
-import MadMap from 'passbolt-mad/model/map/map';
 import setObject from 'passbolt-mad/util/set/set';
-import User from 'passbolt-mad/test/model/map/user';
 
 /**
  * @parent Mad.form_api
@@ -306,55 +305,32 @@ var Form = Component.extend('mad.Form', /* @static */ {
         return data;
     },
 
-
-
     /**
      * Read and process server errors.
-     * @param errors
+     * @param {array} errors
      */
-    showErrors: function (errors) {return;
+    showErrors: function (errors) {
         for (var i in this.elements) {
             var element = this.elements[i];
-            var eltModelRef = element.getModelReference();
+            var modelReference = element.options.modelReference;
+            var elementErrors = getObject(errors, modelReference);
+            var eltId = element.getId();
 
-            if (eltModelRef) {
-                var fieldAttrs = Attribute.getModelAttributes(eltModelRef),
-                // model full name
-                    modelFullName = fieldAttrs[fieldAttrs.length - 2].name,
-                // the attribute name
-                    attrName = fieldAttrs[fieldAttrs.length - 1].name,
-                // model name
-                    modelName = modelFullName.substr(modelFullName.lastIndexOf('.') + 1),
-                // element id
-                    eltId = element.getId();
+            if (elementErrors) {
+                element.state.addState('error');
 
-                for (var j in errors) {
-                    if (errors[modelName] != undefined && errors[modelName][attrName] != undefined) {
-                        var error = '';
-                        for (var errorRule in errors[modelName][attrName]) {
-                            error = errors[modelName][attrName][errorRule] + ' ';
-                        }
-
-                        var eltStates = ['error'];
-                        if (element.state.is('hidden')) {
-                            eltStates.push('hidden');
-                        }
-                        // switch the state of the element to error
-                        element.setState(eltStates);
-                        // set the feedback message, and switch the feedback element state to error
-                        if (this.feedbackElements[eltId]) {
-                            this.feedbackElements[eltId]
-                                .setMessage(error)
-                                .setState('error');
-                        }
-                        // Update the view.
-                        this.view.setElementState(this.elements[eltId], 'error');
+                // set the feedback message, and switch the feedback element state to error
+                if (this.feedbackElements[eltId]) {
+                    var error = '';
+                    for (var rule in elementErrors) {
+                        error += elementErrors[rule] + ' ';
                     }
+                    this.feedbackElements[eltId]
+                        .setMessage(error)
+                        .setState('error');
                 }
-
             }
         }
-
     },
 
     /**
@@ -398,12 +374,35 @@ var Form = Component.extend('mad.Form', /* @static */ {
 			}
 			// If the element is referenced by a model reference.
 			else if (modelReference != null) {
-                var regex = /([^.\[\]]*)(\[\])?\.([^.]*)$/i;
-                var match = modelReference.match(regex);
-                var modelName = match[1];
-                var multiple = match[2] != undefined;
-                var prop = match[3];
-                var Model = MadMap.getReference(modelName);
+                var split = modelReference.split('.');
+                var Model = null;
+                var prop = split[split.length - 1];
+
+                // Follow the model reference to locate the validation rules.
+                // ex: User.profile.first_name
+                for (var i=0; i<split.length - 1; i++) {
+                    if (Model == null) {
+                        Model = DefineMap.getReference(split[i]);
+                    } else {
+                        var definitions = Model.prototype._define.definitions;
+                        var mapName = split[i];
+                        var isList = false;
+
+                        if (/\[\]$/.test(split[i])) {
+                            mapName = split[i].replace('[]', '');
+                            isList = true;
+                        }
+
+                        var definition = definitions[mapName];
+                        if (definition.Type) {
+                            if (isList) {
+                                Model = definition.Type.itemReference;
+                            } else {
+                                Model = definition.Type;
+                            }
+                        }
+                    }
+                }
 
                 validationResult = Model.validateAttribute(prop, value, {}, this.options.action);
 			}

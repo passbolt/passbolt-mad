@@ -11,7 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import stache from 'can-stache';
+import string from 'can-util/js/string/string';
 import isString from 'can-util/js/is-string/is-string';
+
+// Register a stache helper to help to capitalize a string
+stache.registerHelper('capitalize', function() {
+    return string.capitalize.apply(this, arguments);
+});
 
 // Register a stache helper to help to check that a variable is a string.
 stache.registerHelper('isString', function() {

@@ -11,28 +11,40 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.0.0
  */
-import DefineMap from 'can-define/map/map';
+import CanDefineMap from 'can-define/map/map';
+import DefineList from 'passbolt-mad/model/list/list';
+import getObject from 'can-util/js/get/get';
+import setObject from 'passbolt-mad/util/set/set';
 import Validation from 'passbolt-mad/util/validation';
 
-var Map = DefineMap.extend({});
+var DefineMap = CanDefineMap.extend({
+    /**
+     * Should the data be filtered before being send to the server.
+     * User when performing a create or an update request.
+     */
+    __FILTER_CASE__: 'string'
+});
+DefineMap.List = DefineList.extend({
+    '#': DefineMap
+});
 
-Map.validationRules = {};
+DefineMap.validationRules = {};
 
-Map._references = {};
+DefineMap._references = {};
 
-Map.getReference = function(name) {
-    return Map._references[name];
+DefineMap.getReference = function(name) {
+    return DefineMap._references[name];
 };
 
-Map.setReference = function(name, ref) {
-    Map._references[name] = ref;
+DefineMap.setReference = function(name, ref) {
+    DefineMap._references[name] = ref;
 };
 
-Map.getValidationRules = function(validationCase) {
+DefineMap.getValidationRules = function(validationCase) {
     return this.validationRules;
 };
 
-Map.validateAttribute = function(attrName, value, values, validationCase) {
+DefineMap.validateAttribute = function(attrName, value, values, validationCase) {
     var returnValue = [];
 
     if (typeof validationCase == 'undefined') {
@@ -81,7 +93,7 @@ Map.validateAttribute = function(attrName, value, values, validationCase) {
  * @param {string} validationCase The validation case
  * @return {bool}
  */
-Map.getAttributeRule = function(attrName, ruleName, validationCase) {
+DefineMap.getAttributeRule = function(attrName, ruleName, validationCase) {
     var rules = this.getValidationRules(validationCase);
     var rule = null;
 
@@ -97,4 +109,52 @@ Map.getAttributeRule = function(attrName, ruleName, validationCase) {
     return rule;
 };
 
-export default Map;
+
+/**
+ * Return the fields to filter on regarding a case given in parameters.
+ *
+ * @param filteredCase
+ * @returns {mixed} An array of fields to filter on, or false if the case doesn't require to be filtered.
+ */
+DefineMap.getFilteredFields = function(filteredCase) {
+    return false;
+};
+
+/**
+ * Filter the attributes regarding a given case.
+ *
+ * canjs doesn't allow to filter the save and update attributes send to the back-end.
+ * We allow passbolt developers to filter the request by adding a __FILTER_CASE__
+ * attribute. This case attribute will be used to get the fields to filter on (see the function
+ * getFilteredFields).
+ *
+ * @param attrs
+ * @returns {{}}
+ */
+DefineMap.filterAttributes = function(attrs) {
+    var filteredAttrs = {};
+
+    // If a filtered case has been given in parameter.
+    if (typeof attrs.__FILTER_CASE__ != 'undefined') {
+        var fields = this.getFilteredFields(attrs.__FILTER_CASE__);
+
+        // If the case requires to filter the attributes.
+        if (fields !== false) {
+            for (var i in fields) {
+                var value = getObject(attrs, fields[i]);
+                setObject(filteredAttrs, fields[i], value);
+            }
+        } else {
+            filteredAttrs = attrs;
+            delete filteredAttrs.__FILTER_CASE__;
+        }
+    }
+    // If no filter case has been given, return all the attributes.
+    else {
+        filteredAttrs = attrs;
+    }
+
+    return filteredAttrs;
+};
+
+export default DefineMap;

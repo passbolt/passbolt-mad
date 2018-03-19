@@ -10,10 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from "jquery";
+import $ from 'can-jquery';
 import mad from "passbolt-mad/passbolt-mad";
 import Menu from "passbolt-mad/component/dropdown_menu";
-import Action from "passbolt-mad/model/action";
+import Action from "passbolt-mad/model/map/action";
 
 // Add a link to filter on all items as first item.
 var menuItems = [];

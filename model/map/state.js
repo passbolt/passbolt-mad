@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import List from 'can-define/list/list';
+import DefineList from 'can-define/list/list';
 import MadMap from 'passbolt-mad/model/map/map';
 
 /**
@@ -26,20 +26,20 @@ var State = MadMap.extend('mad.model.State', {
 
 	/**
 	 * Previous state values.
-	 * @type {List}
+	 * @type {DefineList}
 	 */
 	previous: {
-		Type: List,
-		Value: List
+		Type: DefineList,
+		Value: DefineList
 	},
 
 	/**
 	 * Current state values.
-	 * @type {List}
+	 * @type {DefineList}
 	 */
 	current: {
-		Type: List,
-		Value: List
+		Type: DefineList,
+		Value: DefineList
 	},
 
 	/**
@@ -98,8 +98,8 @@ var State = MadMap.extend('mad.model.State', {
 	addState: function (states) {
 		states = $.isArray(states) ? states : [states];
 		this.previous.replace(this.current);
-		$.each(this.current, function(i, val) {
-			states.push(val);
+		this.current.forEach((item) => {
+			states.push(item);
 		});
 		this.current.replace(states);
 	},
@@ -113,10 +113,10 @@ var State = MadMap.extend('mad.model.State', {
 	removeState: function (states) {
 		states = $.isArray(states) ? states : [states];
 		var newStates = [];
-		this.previous.replace(this.current);
-		$.each(this.current, function(i, val) {
-			if (states.indexOf(val) == -1) {
-				newStates.push(val);
+		this.previous.replace(this.current.get());
+		this.current.forEach((item) =>  {
+			if (states.indexOf(item) == -1) {
+				newStates.push(item);
 			}
 		});
 		this.current.replace(newStates);

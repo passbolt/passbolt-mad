@@ -15,7 +15,7 @@ import ButtonComponent from "passbolt-mad/component/button";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
-import $ from "can-jquery";
+import $ from 'can-jquery';
 
 describe("mad.component.Button", function () {
 

@@ -10,7 +10,6 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-//import 'passbolt-mad/util/util';
 import Construct from 'can-construct';
 var glbl = typeof window !== "undefined" ? window : global
 
@@ -91,15 +90,12 @@ var I18n = Construct.extend('mad.I18n', /** @static */ {
             return str;
         }
         // Replace string's hooks with the variables.
-        var j;
-        for (var i in vars) {
-            j = parseInt(i);
-            if (typeof vars[j] != 'string' && typeof vars[j] != 'number' && typeof vars[j] != 'boolean' && vars[j] !== null) {
-                throw mad.Exception.get('mad.I18n::replaceHooks() expects variables to be scalar');
+        for (var i in split) {
+            returnValue += split[i];
+            if (vars[i] && vars[i] != null && (typeof vars[i] == 'string' || typeof vars[i] == 'number' || typeof vars[i] == 'boolean')) {
+                returnValue += vars[i];
             }
-            returnValue += split[i] + vars[j];
         }
-        returnValue += (typeof split[j + 1] != 'undefined' ? split[j + 1] : '');
 
         return returnValue;
     },

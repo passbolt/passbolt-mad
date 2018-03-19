@@ -12,7 +12,6 @@
  */
 import Ajax from 'passbolt-mad/net/ajax';
 import CakeSerializer from 'passbolt-mad/model/serializer/cake_serializer';
-import Model from "passbolt-mad/model/model";
 
 var UserTestModel = Model.extend('mad.test.model.UserTestModel', {
     /**

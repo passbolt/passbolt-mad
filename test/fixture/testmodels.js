@@ -12,7 +12,6 @@
  */
 import "passbolt-mad/net/ajax";
 import fixture from "can-fixture";
-import Model from 'passbolt-mad/model/model';
 import Response from 'passbolt-mad/net/response';
 import uuid from 'uuid/v4';
 

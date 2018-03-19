@@ -10,7 +10,6 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import 'can/control/control';
 import Config from 'passbolt-mad/config/config';
 import Control from 'can-control';
 import StringUtil from 'can-util/js/string/string';
