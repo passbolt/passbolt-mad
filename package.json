@@ -23,8 +23,6 @@
     "can-connect": "1.5.18",
     "can-connect-cloneable": "0.2.4",
     "can-connect-feathers": "3.7.1",
-    "can-connect-ndjson": "0.1.3",
-    "can-connect-signalr": "0.2.3",
     "can-construct": "3.3.1",
     "can-construct-super": "3.1.4",
     "can-control": "3.2.4",
@@ -55,7 +53,6 @@
     "can-observe": "1.0.1",
     "can-param": "1.0.3",
     "can-parse-uri": "1.0.1",
-    "can-react-component": "0.1.10",
     "can-reflect": "1.13.3",
     "can-reflect-promise": "1.1.5",
     "can-route": "3.3.4",
@@ -102,20 +99,17 @@
   "devDependencies": {
     "chai": "^4.0.0",
     "chai-jquery": "^2.0.0",
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.2",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-shell": "^1.3.0",
-    "http-server": "^0.10.0",
-    "mocha": "^5.0.0",
-    "puppeteer": "^1.0.0",
+    "http-server": "^0.11.1",
+    "mocha": "^5.2.0",
     "sinon": "^1.16.1",
     "steal-css": "^1.3.2",
-    "steal-tools": "^1.11.0",
-    "testee": "^0.7.0"
+    "steal-tools": "^1.11.0"
   },
   "scripts": {
-    "build": "steal-tools build --config stealconfig.js",
-    "test": "testee ./test/test.html -c ./test/config.js"
+    "build": "steal-tools build --config stealconfig.js"
   },
   "steal": {
     "meta": {
