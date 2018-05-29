@@ -101,8 +101,10 @@ var Bootstrap = Construct.extend('mad.Bootstrap', /* @static */ {
     init: function () {
         // Define the error handler
         Config.write('error.ErrorHandlerClass', ErrorHandler);
-        // Set global constant
-        global('APP_URL', Config.read('app.url'));
+
+        // Define the APP_URL
+        var baseUrl = $('base').attr('href');
+        global('APP_URL', baseUrl);
 
         // Initialize the event bus.
         this.initEventBus();
