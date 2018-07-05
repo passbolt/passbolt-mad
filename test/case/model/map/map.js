@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import "passbolt-mad/test/fixture/testmodels";
 import "passbolt-mad/test/fixture/users";
 import CanList from 'can-list';
 import CanReflect from 'can-reflect';

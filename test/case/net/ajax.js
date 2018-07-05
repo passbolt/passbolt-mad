@@ -12,95 +12,57 @@
  */
 import 'passbolt-mad/test/bootstrap';
 import 'passbolt-mad/net/ajax';
+import "passbolt-mad/test/fixture/ajax";
 import Ajax from 'passbolt-mad/net/ajax';
-import canFixture from 'can-fixture';
 import Response from 'passbolt-mad/net/response';
 import uuid from 'uuid/v4';
 
 describe("mad.net.Ajax", function() {
 
-    canFixture({
-        type: 'POST',
-        url: '/ajax/request'
-    }, function (original, settings, headers) {
-        return {
-            header: {
-                id: uuid(),
-                status: Response.STATUS_SUCCESS,
-                title: 'Ajax Unit Test fixture title',
-                message: 'Ajax Unit Test fixture message',
-                controller: 'controllerName',
-                action: 'actionName'
-            },
-            body: 'RESULT REQUEST 1'
-        };
-    });
-
-    canFixture({
-        type: 'POST',
-        url: '/ajax/server_error'
-    }, function (original, settings, headers) {
-        return {
-            header: {
-                id: uuid(),
-                status: Response.STATUS_ERROR,
-                title: 'Ajax Unit Test fixture title',
-                message: 'Ajax Unit Test fixture message',
-                controller: 'controllerName',
-                action: 'actionName'
-            },
-            body: 'RESULT REQUEST 1'
-        };
-    });
-
     it("A successful ajax query should return a success status", function(done) {
-        Ajax.request({
+        var request = {
             type: 'POST',
-            url: '/ajax/request',
-            async: true,
-            dataType: 'json'
-        }).then(function (data, response, request) {
-            expect(response.header.status).to.contain('success');
+            url: '/ajax/success',
+            params: {}
+        };
+        Ajax.request(request).then(function (data) {
+            expect(request._response).to.be.instanceOf(Response);
+            expect(request._response.header.status).to.be.equal(Response.STATUS_SUCCESS);
             done();
         });
     });
 
     it("An ajax query to an unreachable url should return an error", function(done) {
-        Ajax.request({
+        var request = {
             type: 'POST',
             url: '/ajax/not_reachable',
-            async: false,
-            dataType: 'json'
-        }).then(function (data, response, request) {
-            expect(false).to.be.ok;
-            done();
-        }).fail(function(jqXHR, status, response, request) {
-            var unreachableResponse = Response.getResponse('unreachable');
-            expect(true).to.be.ok;
+            params: {}
+        };
+        Ajax.request(request).then(null, function(data) {
+            var response = request._response;
+            var unreachableResponse = Response.getResponse(0);
+
             expect(response).to.be.instanceOf(Response);
-            expect(response.getStatus()).to.be.equal(Response.STATUS_ERROR);
-            expect(response.getTitle()).to.be.equal(unreachableResponse.getTitle());
-            expect(response.getAction()).to.be.equal(unreachableResponse.getAction());
-            expect(response.getController()).to.be.equal(unreachableResponse.getController());
-            expect(response.getData()).to.be.equal(unreachableResponse.getData());
+            expect(response.header.status).to.be.equal(Response.STATUS_ERROR);
+            expect(response.header.title).to.be.equal(unreachableResponse.header.title);
+            expect(response.header.action).to.be.equal(unreachableResponse.header.action);
+            expect(response.header.controller).to.be.equal(unreachableResponse.header.controller);
+            expect(response.body).to.be.null;
             done();
         });
     });
 
     it("An ajax query to a url returning an error should return an error status", function(done) {
-        Ajax.request({
+        var request = {
             type: 'POST',
-            url: '/ajax/server_error',
-            async: false,
-            dataType: 'json'
-        }).then(function (data, response, request) {
-            expect(false).to.be.ok;
-            done();
-        }).fail(function(jqXHR, status, response, request) {
-            expect(true).to.be.ok;
-            expect(response).to.be.instanceOf(Response);
-            expect(response.getStatus()).to.be.equal(Response.STATUS_ERROR);
-            done();
-        });
+            url: '/ajax/error',
+            params: {}
+        };
+        Ajax.request(request)
+            .then(function(data) { // The promise is rejected in normal condition, it cannot be tested with can-fixture.
+                expect(request._response).to.be.instanceOf(Response);
+                expect(request._response.header.status).to.be.equal(Response.STATUS_ERROR);
+                done();
+            });
     });
 });

@@ -80,7 +80,7 @@ Response.getResponse = function (type, data) {
             controller: Response.RESPONSE_CONTROLLER_UNDEFINED,
             action: Response.RESPONSE_ACTION_UNDEFINED,
             title: __('Something went wrong sparkly'),
-            message: __('Something went wrong sparkly')
+            message: __('Check your request')
     },
         body = null,
         code = null;
@@ -92,8 +92,8 @@ Response.getResponse = function (type, data) {
             code = type;
             break;
         case 0:
-            header.title = __('Request entity too large');
-            header.message = __('The url is probably incorrectly formatted');
+            header.title = __('Something went wrong sparkly');
+            header.message = __('Check your request');
             code = type;
             body = data;
             break;

@@ -66,11 +66,18 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
             }
         }
 
+        // Associate the xhr request to the original request object.
+        if (!request.beforeSend) {
+            request.beforeSend = function(xhr) {
+                request._xhr = xhr;
+            };
+        }
+
         this._triggerAjaxStartEvent(request);
 
         return canAjax(request)
             .then((data) => this.handleSuccess(request, data),
-                (jqXHR) => this.handleError(request, jqXHR));
+                (data) => this.handleError(request, data));
     },
 
     /**
@@ -78,7 +85,7 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
      *
      * @param request
      * @param data
-     * @returns {*}
+     * @returns {Promise}
      */
     handleSuccess: function(request, data) {
         var response = null;
@@ -87,38 +94,33 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
         } else {
             response = data;
         }
-
+        request._response = response;
         this._triggerAjaxCompleteEvent(request);
 
         if (response instanceof Response) {
-            return response.body;
+            return Promise.resolve(response.body);
         }
 
-        return response;
+        return Promise.resolve(response);
     },
 
     /**
      * Handle error.
      *
      * @param request
-     * @param jqXHR
+     * @param data
      * @returns {Promise}
      */
-    handleError: function(request, jqXHR) {
+    handleError: function(request, data) {
         var response = null;
-        try {
-            if(jqXHR.responseText) {
-                var jsonData = $.parseJSON(jqXHR.responseText);
-                if (Response.isResponse(jsonData)) {
-                    jsonData.code = jqXHR.status;
-                    response = new Response(jsonData);
-                }
-            } else {
-                response = Response.getResponse(jqXHR.status);
-            }
-        } catch(e) { }
-
-        this._triggerAjaxCompleteEvent(request);
+        if (Response.isResponse(data)) {
+            data.code = request._xhr.status;
+            response = new Response(data);
+        } else {
+            response = Response.getResponse(request._xhr.status);
+        }
+        request._response = response;
+        this._triggerAjaxCompleteEvent(request, response);
 
         return Promise.reject(response);
     },

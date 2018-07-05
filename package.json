@@ -1,6 +1,6 @@
 {
   "name": "passbolt-mad",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "Passbolt SARL",
   "license": "AGPL-3.0",
   "description": "Passbolt javascript application library for the open source password manager for teams",
@@ -14,7 +14,7 @@
   ],
   "main": "passbolt-mad",
   "dependencies": {
-    "can-ajax": "1.1.4",
+    "can-ajax": "2.0.0",
     "can-assign": "1.1.1",
     "can-attribute-encoder": "0.3.4",
     "can-cid": "1.1.2",
