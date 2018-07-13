@@ -14,8 +14,10 @@ import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import CheckboxFormElement from "passbolt-mad/form/element/checkbox"
 import Component from 'passbolt-mad/component/component';
+import domEvents from 'can-dom-events';
 import FormElement from 'passbolt-mad/form/element';
 import MadControl from 'passbolt-mad/control/control';
+import $ from 'jquery';
 
 describe("mad.form.element.Checkbox", function () {
 

@@ -14,6 +14,7 @@ import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import TextboxFormElement from "passbolt-mad/form/element/textbox"
 import Component from 'passbolt-mad/component/component';
+import domEvents from 'can-dom-events';
 import FormElement from 'passbolt-mad/form/element';
 import MadControl from 'passbolt-mad/control/control';
 
@@ -50,7 +51,8 @@ describe("mad.form.element.Textbox", function () {
         textbox.start();
 
         // Simulate a keypress
-        $textbox.val('abc').trigger('input');
+        $textbox.val('abc');
+        domEvents.dispatch($textbox[0], 'input');
 
         // After all event handlers have done their treatment.
         setTimeout(function () {
@@ -67,8 +69,10 @@ describe("mad.form.element.Textbox", function () {
             textbox2 = new TextboxFormElement('#textbox2', {}).start();
 
         // Simulate a keypress
-        $textbox.val('abc').trigger('input');
-        $textbox2.val('xyz').trigger('input');
+        $textbox.val('abc');
+        domEvents.dispatch($textbox[0], 'input');
+        $textbox2.val('xyz');
+        domEvents.dispatch($textbox2[0], 'input');
 
         // After all event handlers have done their treatment.
         setTimeout(function () {
@@ -94,7 +98,8 @@ describe("mad.form.element.Textbox", function () {
         textbox.start();
 
         // Simulate a keypress and check after the timeout
-        $textbox.val('abc').trigger('input');
+        $textbox.val('abc');
+        domEvents.dispatch($textbox[0], 'input');
 
         // After all event handlers have done their treatment.
         setTimeout(function () {
@@ -121,7 +126,8 @@ describe("mad.form.element.Textbox", function () {
         textbox.start();
 
         // Simulate a keypress and check after the timeout
-        $textbox.val('ab').trigger('input');
+        $textbox.val('ab');
+        domEvents.dispatch($textbox[0], 'input');
 
         // After all event handlers have done their treatment.
         setTimeout(function () {
@@ -129,7 +135,8 @@ describe("mad.form.element.Textbox", function () {
             expect(firedChanged).to.be.false;
         }, 0);
 
-        $textbox.val('abc').trigger('input');
+        $textbox.val('abc');
+        domEvents.dispatch($textbox[0], 'input');
 
         // After all event handlers have done their treatment.
         setTimeout(function () {
@@ -156,7 +163,8 @@ describe("mad.form.element.Textbox", function () {
         textbox.start();
 
         // Simulate a keypress
-        $textbox.val('a').trigger('input');
+        $textbox.val('a');
+        domEvents.dispatch($textbox[0], 'input');
 
         // Simulate a keypress and check after the timeout
         setTimeout(function () {
@@ -165,7 +173,8 @@ describe("mad.form.element.Textbox", function () {
         }, 0);
 
         // Simulate a keypress
-        $textbox.val('b').trigger('input');
+        $textbox.val('b');
+        domEvents.dispatch($textbox[0], 'input');
 
         // Simulate a keypress and check after the timeout
         setTimeout(function () {
@@ -174,7 +183,8 @@ describe("mad.form.element.Textbox", function () {
         }, 0);
 
         // Simulate a keypress and check after the timeout
-        $textbox.val('c').trigger('input');
+        $textbox.val('c');
+        domEvents.dispatch($textbox[0], 'input');
 
         // After all event handlers have done their treatment.
         setTimeout(function () {

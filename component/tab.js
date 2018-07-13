@@ -48,13 +48,7 @@ var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
 }, /** @prototype */ {
 
     /**
-     * Constructor.
-     * Instantiate a new Tab Component.
-     * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
-     * @param {Object} [options] option values for the component.  These get added to
-     * this.options and merged with defaults static variable
-     *   * autoMenu : should the menu be generated automatically ?
-     * @return {mad.component.Tab}
+     * @inheritdoc
      */
     init: function(el, options) {
         /**
@@ -70,7 +64,7 @@ var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
     },
 
     /**
-     * After start
+     * @inheritdoc
      */
     afterStart: function() {
         // Instantiate the menu which will rule the tabs container
@@ -82,11 +76,10 @@ var Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
     },
 
     /**
-     * A tab has been selected (in case of automenu = true).
-     * @function mad.component.Tab.__item_selected
-     * @return {void}
+     * @inheritdoc
      */
-    '{menu.element} item_selected': function (el, ev, item) {
+    '{menu.element} item_selected': function (el, ev) {
+        const item = ev.data.item;
         // If the tab controller generate is own menu to drive itself
         if(this.options.autoMenu) {
             var tabId = item.id.replace('js_tab_nav_', '');

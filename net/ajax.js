@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from 'can-jquery';
+import $ from 'jquery';
 import canAjax from 'can-ajax';
 import Construct from 'can-construct';
 import Config from 'passbolt-mad/config/config';
@@ -133,7 +133,7 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
      */
     _triggerAjaxCompleteEvent: function(request) {
         if (typeof(mad.bus) != 'undefined') {
-            MadBus.trigger('mad_ajax_request_complete', request);
+            MadBus.trigger('mad_ajax_request_complete', {request});
         }
     },
 
@@ -145,7 +145,7 @@ var Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
      */
     _triggerAjaxStartEvent: function(request) {
         if (typeof(mad.bus) != 'undefined') {
-            MadBus.trigger('mad_ajax_request_start', request);
+            MadBus.trigger('mad_ajax_request_start', {request});
         }
     }
 

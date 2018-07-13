@@ -1,4 +1,3 @@
-{{= console.log('test') }}
 <li id="{{ mappedItem.id }}" class="{{ cssClasses }}">
 	<div class="row">
 		<div class="main-cell-wrapper">

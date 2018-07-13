@@ -14,6 +14,7 @@ import "passbolt-mad/test/bootstrap";
 import ButtonComponent from 'passbolt-mad/component/button';
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
+import domEvents from 'can-dom-events';
 import MadControl from 'passbolt-mad/control/control';
 import ToggleButtonComponent from "passbolt-mad/component/toggle_button";
 
@@ -50,9 +51,9 @@ describe("mad.component.ToggleButton", function () {
         var button = new ToggleButtonComponent('#button', {});
         button.start();
 
-        $button.click();
+        domEvents.dispatch($button[0], 'click');
         expect($button.hasClass('selected')).to.be.true;
-        $button.click();
+        domEvents.dispatch($button[0], 'click');
         expect($button.hasClass('selected')).to.be.false;
 
         button.destroy();

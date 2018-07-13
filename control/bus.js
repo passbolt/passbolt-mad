@@ -10,7 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Control from "passbolt-mad/control/control";
+import Control from 'passbolt-mad/control/control';
+import domEvents from 'can-dom-events';
+import $ from 'jquery';
 
 /**
  * @parent Mad.core_api
@@ -91,19 +93,29 @@ var Bus = Control.extend('mad.Bus', /** @static */ {
      * @param {Array} eventData (Optional) Data to associate to the event. The data has to be
      *  passed to the function as an array.
      */
-    trigger: function (eventName, eventData) {
-        var data = typeof eventData != 'undefined' ? eventData : [];
+    trigger: function (type, data, options) {
+        options = options || {};
+        const evOptions = {type};
+        let dataKey = 'data';
 
-        // Trigger the event on the bus.
-        $(Bus.element).trigger(eventName, data);
-
-        // Make the an eventual plugin able to catch the application event.
-        // Rhino does not understand these primitives.
-        if (!steal.isRhino) {
-            var event = document.createEvent('CustomEvent');
-            event.initCustomEvent(eventName, true, true, data);
-            document.documentElement.dispatchEvent(event);
+        // If the sender wants to override the name of the data key
+        if (options.dataKey) {
+            dataKey = options.dataKey;
         }
+        evOptions[dataKey] = data || {};
+
+        domEvents.dispatch(Bus.element, evOptions);
+    },
+
+    /**
+     * Trigger an event to the plugin
+     * @param type
+     * @param data
+     */
+    triggerPlugin: function (type, data) {
+        var event = document.createEvent('CustomEvent');
+        event.initCustomEvent(type, true, true, data);
+        document.documentElement.dispatchEvent(event);
     },
 
     /**

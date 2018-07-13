@@ -10,11 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from 'can-jquery';
+import $ from 'jquery';
 import "passbolt-mad/test/bootstrap";
 import Action from "passbolt-mad/model/map/action";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
+import domEvents from 'can-dom-events';
 import MadControl from 'passbolt-mad/control/control';
 import MenuComponent from 'passbolt-mad/component/menu';
 
@@ -77,7 +78,7 @@ describe("mad.component.Menu", function () {
         expect($menu.text()).to.contain('Item 2');
 
         // Click on an Item and observe that it triggers the action.
-        $('#i1 a').click();
+        domEvents.dispatch($('#i1 a')[0], 'click');
         expect($debugOutput.text()).to.contain('item 1 clicked');
     });
 

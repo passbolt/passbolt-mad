@@ -70,7 +70,8 @@ var Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static *
         // Insert the element in the page DOM.
         var $el = HtmlHelper.create(refElt, position, '<div/>');
 
-        return new Dialog($el[0], options);
+        var dialog = new Dialog($el[0], options);
+        return dialog;
     }
 
 }, /** @prototype */ {

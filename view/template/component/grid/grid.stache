@@ -3,7 +3,7 @@
         <thead>
             <tr>
 {{#columnModel}}
-    {{>columnHeaderTemplate}}
+    {{>../columnHeaderTemplate columnModel=this}}
 {{/columnModel}}
             </tr>
         </thead>

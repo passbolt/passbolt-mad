@@ -339,7 +339,7 @@ describe("mad.component.Grid", function () {
         User.findAll()
         .then(function(items) {
             // Insert all the items into the grid
-            items.each(function(item) {
+            items.forEach(function(item) {
                 grid.insertItem(item);
                 expect($('#test-html').text()).to.contain(item.username);
             });

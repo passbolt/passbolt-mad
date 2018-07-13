@@ -80,7 +80,8 @@ var DynamicTree = TreeComponent.extend('mad.component.DynamicTree', {
      * @param {mad.model.Model} item The target item
      * @return {void}
      */
-    ' item_opened': function (el, ev, item) {
+    '{element} item_opened': function (el, ev) {
+        const item = ev.data.item;
         this.open(item);
     },
 
@@ -93,7 +94,8 @@ var DynamicTree = TreeComponent.extend('mad.component.DynamicTree', {
      * @param {mad.model.Model} item The target item
      * @return {void}
      */
-    ' item_closed': function (el, ev, item) {
+    '{element} item_closed': function (el, ev) {
+        const item = ev.data.item;
         this.close(item);
     }
 

@@ -14,8 +14,10 @@ import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import CompositeComponent from 'passbolt-mad/component/composite';
+import domEvents from 'can-dom-events';
 import MadControl from 'passbolt-mad/control/control';
 import TabComponent from "passbolt-mad/component/tab";
+import $ from 'jquery';
 
 describe("mad.component.Tab", function () {
 
@@ -31,7 +33,6 @@ describe("mad.component.Tab", function () {
     afterEach(function () {
         $('#test-html').empty();
     });
-
 
     it("constructed instance should inherit TabComponent & the inherited parent classes", function () {
         var tabs = new TabComponent('#tab');
@@ -72,7 +73,7 @@ describe("mad.component.Tab", function () {
         $('<p class="txt2">this is the content of tab 2</p>').appendTo('#free-composite-2');
 
         expect($('.tabs-content p:visible').text()).to.equal('this is the content of tab 1');
-        $('#js_tab_nav_free-composite-2 a').click();
+        domEvents.dispatch($('#js_tab_nav_free-composite-2 a')[0], 'click');
         expect($('.tabs-content p:visible').text()).to.equal('this is the content of tab 2');
     });
 

@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import domEvents from 'can-dom-events';
 import FormElementView from 'passbolt-mad/view/form/element';
 
 /**
@@ -70,9 +71,9 @@ var Textbox = FormElementView.extend('mad.view.form.Textbox', /* @static */ {
 
             // Plan a new firing of the changed event.
             this._changeTimeout = setTimeout(function () {
-                $(self.element).trigger('changed', {
+                domEvents.dispatch(self.element, {type: 'changed', data: {
                     value: self.getValue()
-                });
+                }});
             }, this.getController().options.onChangeTimeout);
         }
     }

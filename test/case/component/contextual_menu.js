@@ -15,6 +15,7 @@ import Action from "passbolt-mad/model/map/action";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import ContextualMenuComponent from "passbolt-mad/component/contextual_menu";
+import domEvents from 'can-dom-events';
 import DropdownMenuComponent from 'passbolt-mad/component/dropdown_menu';
 import MadControl from 'passbolt-mad/control/control';
 import MenuComponent from 'passbolt-mad/component/menu';
@@ -119,7 +120,8 @@ describe("mad.component.ContextualMenu", function () {
         $menu.click();
 
         //// Click on an Item and observe that it triggers the action.
-        $('#el1 a', $('#js_contextual_menu')).click();
+        domEvents.dispatch($('#el1 a', $('#js_contextual_menu'))[0], 'click');
+
         expect($debugOutput.text()).to.contain('item 1 clicked');
 
         menu.destroy();

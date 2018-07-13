@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DomData from 'can-util/dom/data/data';
+import DomData from 'can-dom-data';
+import domEvents from 'can-dom-events';
 import TreeView from 'passbolt-mad/view/component/tree';
 
 /**
@@ -59,6 +60,7 @@ var DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static 
      * @return {void}
      */
     '.node-ctrl a click': function (el, ev) {
+        console.log('catch click');
         ev.stopPropagation();
         ev.preventDefault();
         var data = null,
@@ -66,18 +68,18 @@ var DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static 
             itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = DomData.get.call(li[0], itemClass.shortName);
+            data = DomData.get(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }
 
         // if the element is closed, open it
         if (li.hasClass('close')) {
-            $(this.element).trigger('item_opened', data);
+            domEvents.dispatch(this.element, {type: 'item_opened', data: {item: data, srcEv: ev}});
         }
         // otherwise close it
         else {
-            $(this.element).trigger('item_closed', data);
+            domEvents.dispatch(this.element, {type: 'item_closed', data: {item: data, srcEv: ev}});
         }
     },
 
@@ -95,12 +97,12 @@ var DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static 
             itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = DomData.get.call(li[0], itemClass.shortName);
+            data = DomData.get(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }
 
-        $(this.element).trigger('item_right_selected', [data, ev]);
+        domEvents.dispatch(this.element, {type: 'item_right_selected', data: {item: data, srcEv: ev}});
     }
 });
 

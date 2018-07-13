@@ -184,10 +184,9 @@ var Element = Component.extend('mad.form.Element', /* @static */ {
      *
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
-     * @param {mixed} data The new data
      */
-    ' changed': function (el, ev, data) {
-        this.value = data.value;
+    '{element} changed': function (el, ev) {
+        this.value = ev.data.value;
         if (this.options.callbacks.changed) {
             this.options.callbacks.changed(this.value);
         }

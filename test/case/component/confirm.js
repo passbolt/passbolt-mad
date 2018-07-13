@@ -16,13 +16,13 @@ import Component from "passbolt-mad/component/component";
 import CompositeComponent from "passbolt-mad/component/composite";
 import ConfirmComponent from "passbolt-mad/component/confirm";
 import DialogComponent from "passbolt-mad/component/dialog"
+import domEvents from 'can-dom-events';
 import FreeCompositeComponent from "passbolt-mad/component/free_composite";
 import MadControl from 'passbolt-mad/control/control';
 import contentTemplate from 'passbolt-mad/test/case/component/confirm_content_template.stache!';
 
 describe("mad.component.Confirm", function () {
 
-    //// Clean the DOM after each test.
     afterEach(function () {
         $('.dialog-wrapper').remove();
     });
@@ -54,14 +54,14 @@ describe("mad.component.Confirm", function () {
     it("Confirm should be hidden after clicking on close", function () {
         var confirm = ConfirmComponent.instantiate({label: 'Confirm Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
-        $('a.dialog-close').click();
+        domEvents.dispatch($('a.dialog-close')[0], 'click');
         expect($('.dialog').length).to.equal(0);
     });
 
     it("Confirm should be hidden after clicking on cancel button", function () {
         var confirm = ConfirmComponent.instantiate({label: 'Confirm Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
-        $('a.js-dialog-cancel').click();
+        domEvents.dispatch($('a.js-dialog-cancel')[0], 'click');
         expect($('.dialog').length).to.equal(0);
     });
 
@@ -74,7 +74,7 @@ describe("mad.component.Confirm", function () {
             }
         }).start();
         expect($('.dialog').length).to.not.equal(0);
-        $('#confirm-button').click();
+        domEvents.dispatch($('#confirm-button')[0], 'click');
         expect($('.dialog').length).to.equal(0);
         expect($('p.feedback').html()).to.equal('action is executed');
         $('p.feedback').remove();
@@ -90,7 +90,7 @@ describe("mad.component.Confirm", function () {
             closeAfterAction: false
         }).start();
         expect($('.dialog').length).to.not.equal(0);
-        $('#confirm-button').click();
+        domEvents.dispatch($('#confirm-button')[0], 'click');
         expect($('.dialog').length).to.not.equal(0);
         expect($('p.feedback').html()).to.equal('action1 is executed');
         $('p.feedback').remove();

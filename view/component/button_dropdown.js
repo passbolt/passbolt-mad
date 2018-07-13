@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import View from 'passbolt-mad/view/view';
+import $ from 'jquery';
 
 /**
  * @inherits mad.View
@@ -72,7 +73,7 @@ var ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @stati
      * Listen to the event click on the DOM button element
      * @return {bool}
      */
-    'click': function (el, ev) {
+    '{element} click': function (el, ev) {
         // If state is disabled, do not do anything on click.
         if (this.getController().state.is('disabled')) {
             return false;
@@ -98,7 +99,10 @@ var ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @stati
      * @param ev
      */
     '{document} click': function (el, ev) {
-        if (!$(this.element).is(el)) {
+        const dropdownIsSrc = $(ev.srcElement).is(this.element);
+        const componentSelector = '#' + this.getController().getId();
+        const dropdownIsParent = $(ev.srcElement).parents(componentSelector).length;
+        if (!dropdownIsSrc && !dropdownIsParent) {
             this.close();
         }
     }

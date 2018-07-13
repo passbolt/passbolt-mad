@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from 'can-jquery';
+import $ from 'jquery';
 import mad from "passbolt-mad/passbolt-mad";
 import Menu from "passbolt-mad/component/dropdown_menu";
 import Action from "passbolt-mad/model/map/action";

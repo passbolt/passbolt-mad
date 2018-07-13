@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DomData from 'can-util/dom/data/data';
+//import DomData from 'can-util/dom/data/data';
 import TreeView from 'passbolt-mad/view/component/tree';
 
 /**
@@ -70,7 +70,7 @@ var DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @static
             itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = DomData.get.call(el, itemClass.shortName);
+            //data = DomData.get.call(el, itemClass.shortName);
         } else {
             data = el.id;
         }
@@ -92,7 +92,7 @@ var DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @static
             itemClass = this.getController().getItemClass();
 
         if (this.getController().getItemClass()) {
-            data = DomData.get.call(el, itemClass.shortName);
+            //data = DomData.get.call(el, itemClass.shortName);
         } else {
             data = el.id;
         }

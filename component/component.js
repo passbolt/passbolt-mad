@@ -123,7 +123,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 		// If the component is destroyed whereas he is loading.
 		// Complete the loading.
 		if (this.state.is('loading')) {
-			MadBus.trigger('passbolt_component_loading_complete', [this]);
+			MadBus.trigger('passbolt_component_loading_complete', {component: this});
 		}
 
 		// Unbind the state's label attribute observer.
@@ -434,7 +434,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 			// Broadcast an event on the application event bus to notify all other components.
 			// @todo The event name shouldn't start by passbolt
 			if (MadBus.bus) {
-				MadBus.trigger('passbolt_component_loading_start', [this]);
+				MadBus.trigger('passbolt_component_loading_start', {component: this});
 			}
 		}
 		// Leaving the loading state.
@@ -442,7 +442,7 @@ var Component = Control.extend('mad.Component', /* @static */{
 			// Broadcast an event on the application event bus to notify all other components.
 			// @todo The event name shouldn't start by passbolt
 			if (MadBus.bus) {
-				MadBus.trigger('passbolt_component_loading_complete', [this]);
+				MadBus.trigger('passbolt_component_loading_complete', {component: this});
 			}
 		}
 	},

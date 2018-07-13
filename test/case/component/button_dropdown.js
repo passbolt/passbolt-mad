@@ -16,6 +16,7 @@ import ButtonComponent from "passbolt-mad/component/button";
 import ButtonDropdownComponent from "passbolt-mad/component/button_dropdown"
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
+import domEvents from 'can-dom-events';
 import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.component.ButtonDropdown", function () {
@@ -104,11 +105,11 @@ describe("mad.component.ButtonDropdown", function () {
         expect($('.dropdown-content').hasClass('visible')).to.equal(false);
 
         // Click on the button and observer that it opens the dropdown content.
-        $buttonDropdown.click();
+        domEvents.dispatch($buttonDropdown[0], 'click');
         expect($('.dropdown-content').hasClass('visible')).to.equal(true);
 
         // Click on an Item and observe that it triggers the action.
-        $('#i1 a').click();
+        domEvents.dispatch($('#i1 a')[0], 'click');
         expect($debugOutput.text()).to.contain('item 1 clicked');
     });
 
@@ -139,14 +140,14 @@ describe("mad.component.ButtonDropdown", function () {
         buttonDropdown.setItemState('i2', 'disabled');
 
         // Click on the button to open the content.
-        $buttonDropdown.click();
+        domEvents.dispatch($buttonDropdown[0], 'click');
         expect($('.dropdown-content').hasClass('visible')).to.equal(true);
 
         // Check whether the element is disabled.
         expect($('#i2').hasClass('disabled')).to.equal(true);
 
         // Click on disabled element.
-        $('#i2 a').click();
+        domEvents.dispatch($('#i2 a')[0], 'click');
 
         // Observe that the dropdown content is still visible.
         expect($('.dropdown-content').hasClass('visible')).to.equal(true);

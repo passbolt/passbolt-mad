@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DomData from 'can-util/dom/data/data';
+import DomData from 'can-dom-data';
+import domEvents from 'can-dom-events';
 import View from 'passbolt-mad/view/view';
 import HtmlHelper from 'passbolt-mad/helper/html';
 
@@ -126,7 +127,8 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
             item: item,
             id: control.options.prefixItemId + mappedItem.id,
             columnModels: columnModels,
-            mappedItem: mappedItem
+            mappedItem: mappedItem,
+            cellTemplate: control.options.cellTemplate
         });
     },
 
@@ -183,7 +185,7 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
         // Insert the row html fragment in the grid.
         $item = HtmlHelper.create($refElement, position, row);
         // Associate to the item to the just created node
-        DomData.set.call($item[0], control.getItemClass().shortName, item);
+        DomData.set($item[0], control.getItemClass().shortName, item);
 
         return $item;
     },
@@ -202,7 +204,7 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
         // Replace the previous row with the new one.
         var $item = HtmlHelper.create($current, 'replace_with', row);
         // Associate to the item to the just created node
-        DomData.set.call($item[0], this.getController().getItemClass().shortName, item);
+        DomData.set($item[0], this.getController().getItemClass().shortName, item);
     },
 
     /**
@@ -250,7 +252,7 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
      */
-    'thead th.sortable click': function (el, ev) {
+    '{element} thead th.sortable click': function (el, ev) {
         var columnModel = null,
             control = this.getController(),
             sortAsc = true;
@@ -264,8 +266,8 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
             }
         }
 
-        columnModel = DomData.get.call(el, control.getColumnModelClass().shortName);
-        $(this.element).trigger('column_sort', [columnModel, sortAsc, ev]);
+        columnModel = DomData.get(el, control.getColumnModelClass().shortName);
+        domEvents.dispatch(this.element, {type: 'column_sort', data: {columnModel: columnModel, sort: sortAsc, srcEv: ev}});
     },
 
     /**
@@ -273,18 +275,18 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
      */
-    'tbody tr click': function (el, ev) {
+    '{element} tbody tr click': function (el, ev) {
         var data = null,
             control = this.getController(),
             itemClass = control.getItemClass();
 
         if (itemClass) {
-            data = DomData.get.call(el, itemClass.shortName);
+            data = DomData.get(el, itemClass.shortName);
         } else {
             data = el.id.replace(control.options.prefixItemId, '');
         }
 
-        $(this.element).trigger('item_selected', [data, ev]);
+        domEvents.dispatch(this.element, {type: 'item_selected', data: {item: data, srcEv: ev}});
     },
 
     /**
@@ -293,18 +295,18 @@ var Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @prototy
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
      */
-    'tbody tr hover': function (el, ev) {
+    '{element} tbody tr hover': function (el, ev) {
         var data = null,
             control = this.getController(),
             itemClass = control.getItemClass();
 
         if (itemClass) {
-            data = DomData.get.call(el, itemClass.shortName);
+            data = DomData.get(el, itemClass.shortName);
         } else {
             data = el.id.replace(control.options.prefixItemId, '');
         }
 
-        $(this.element).trigger('item_hovered', [data, ev]);
+        domEvents.dispatch(this.element, {type: 'item_hovered', data: {item: data, srcEv: ev}});
     }
 
 });

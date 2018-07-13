@@ -15,12 +15,13 @@ import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import CompositeComponent from "passbolt-mad/component/composite";
 import DialogComponent from "passbolt-mad/component/dialog"
+import domEvents from 'can-dom-events';
 import FreeCompositeComponent from "passbolt-mad/component/free_composite";
 import MadControl from 'passbolt-mad/control/control';
 
 describe("mad.component.Dialog", function () {
 
-    //// Clean the DOM after each test.
+    // Clean the DOM after each test.
     afterEach(function () {
         $('.dialog-wrapper').remove();
     });
@@ -50,7 +51,7 @@ describe("mad.component.Dialog", function () {
     it("Dialog should be hidden after clicking on close", function () {
         var dialog = DialogComponent.instantiate({label: 'Dialog Test'}).start();
         expect($('.dialog').length).to.not.equal(0);
-        $('a.dialog-close').click();
+        domEvents.dispatch($('a.dialog-close')[0], 'click');
         expect($('.dialog').length).to.equal(0);
     });
 });

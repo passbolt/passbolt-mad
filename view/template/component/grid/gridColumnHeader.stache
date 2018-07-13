@@ -1,20 +1,16 @@
 <th class="js_grid_column js_grid_column_{{name}} cell_{{name}} {{css.join(' ')}}">
 
-{{#if(columnModel.sortable)}}
+{{#sortable}}
     <a>
+{{/sortable}}
+{{#if(label.name)}}
+    {{>label}}
+{{#else}}
+    {{label}}
 {{/if}}
 
-{{#switch(typeof content)}}
-    {{#case("function")}}
-        {{>label}}
-    {{/case}}
-    {{#default()}}
-        {{label}}
-    {{/default}}
-{{/switch}}
-
-{{#if(sortable)}}
+{{#sortable}}
     </a>
-{{/if}}
+{{/sortable}}
 
 </th>

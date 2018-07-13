@@ -210,7 +210,7 @@ var Tree = Component.extend('mad.component.Tree', {
             // Check if the current item has children.
             var children = this.options.map._getObjFieldPointer(item, this.options.map.map.children.key);
             if (typeof children != undefined && children != null && children.length > 0) {
-                children.each(function (childItem, i) {
+                children.forEach(function (childItem, i) {
                     self.insertItem(childItem, item, 'last');
                 });
             }
@@ -363,10 +363,10 @@ var Tree = Component.extend('mad.component.Tree', {
      *
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
-     * @param {mixed} item The target item
-     * @param {HTMLEvent} srcEv The source event that occurred
      */
-    ' item_selected': function (el, ev, item, srcEv) {
+    '{element} item_selected': function (el, ev) {
+        const item = ev.data.item;
+        const srcEv = ev.data.srcEv;
         this.selectItem(item);
         // override this function, call _super if you want the default behavior processed
         if (this.options.callbacks.itemSelected) {
@@ -382,10 +382,10 @@ var Tree = Component.extend('mad.component.Tree', {
      *
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
-     * @param {mixed} item The target item
-     * @param {HTMLEvent} srcEv The source event that occurred
      */
-    ' item_right_selected': function (el, ev, item, srcEv) {
+    '{element} item_right_selected': function (el, ev) {
+        const item = ev.data.item;
+        const srcEv = ev.data.srcEv;
         this.rightSelectItem(item);
         // override this function, call _super if you want the default behavior processed
         if (this.options.callbacks.itemRightSelected) {
@@ -401,10 +401,10 @@ var Tree = Component.extend('mad.component.Tree', {
      *
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
-     * @param {mixed} item The target item
-     * @param {HTMLEvent} srcEv The source event that occurred
      */
-    ' item_hovered': function (el, ev, item, srcEv) {
+    '{element} item_hovered': function (el, ev) {
+        const item = ev.data.item;
+        const srcEv = ev.data.srcEv;
         this.hoverItem(item);
         // override this function, call _super if you want the default behavior processed
         if (this.options.callbacks.itemHovered) {

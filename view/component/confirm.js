@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import DialogView from 'passbolt-mad/view/component/dialog';
+import domEvents from 'can-dom-events';
 
 /**
  * @inherits mad.view.View
@@ -23,9 +24,9 @@ var ConfirmView = DialogView.extend('mad.view.component.Confirm', /* @static */ 
      * @param {HTMLEvent} ev The event which occured
      * @return {void}
      */
-    ' .js-dialog-confirm click': function (el, ev) {
+    '{element} .js-dialog-confirm click': function (el, ev) {
         ev.preventDefault();
-        $(this.element).trigger('confirm_clicked');
+        domEvents.dispatch(this.element, {type: 'confirm_clicked'});
     }
 });
 

@@ -12,6 +12,7 @@
  */
 import ChoiceElement from 'passbolt-mad/form/choice_element';
 import ComponentHelper from 'passbolt-mad/helper/component';
+import domEvents from 'can-dom-events';
 import TextBox from 'passbolt-mad/view/form/element/textbox';
 
 /**
@@ -53,11 +54,11 @@ var Autocomplete = TextBox.extend('mad.form.Autocomplete', /* @static */ {
      * The user want to remove a permission
      * @param {HTMLElement} el The element the event occured on
      * @param {HTMLEvent} ev The event which occured
-     * @param {passbolt.model.Permission} permission The permission to remove
      * @return {void}
      */
-    ' changed': function(el, ev, data) {
+    '{element} changed': function(el, ev) {
         var self = this;
+        const data = ev.data;
         // autocomplete the given string
         // By using the given callback
         if(this.options.callbacks.ajax) {
@@ -74,16 +75,19 @@ var Autocomplete = TextBox.extend('mad.form.Autocomplete', /* @static */ {
      * An item has been selected in the autocomplete list
      * @param {HTMLElement} el The element the event occured on
      * @param {HTMLEvent} ev The event which occured
-     * @param {mad.model.Model} instance The selected instance
      * @return {void}
      */
-    '{list.element} item_selected': function(el, ev, data) {
+    '{list.element} item_selected': function(el, ev) {
+        const data = ev.data;
         // update the value of the autocomplete field with the selected value
         this.setValue(data.label);
         // hide the autocomplete list
         this.options.list.setState('hidden');
         // Trigger the event on the main component.
-        $(this.element).trigger('item_selected', [data, ev]);
+        domEvents.dispatch(this.element, {type: 'item_selected', data: {
+            item: data,
+            srcEv: ev
+        }});
     }
 
 });

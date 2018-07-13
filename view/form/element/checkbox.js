@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import domEvents from 'can-dom-events';
 import FormElementView from 'passbolt-mad/view/form/element';
 
 /**
@@ -61,14 +62,14 @@ var Checkbox = FormElementView.extend('mad.view.form.Checkbox', /* @static */ {
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
      */
-    'input click': function (el, ev) {
+    '{element} input click': function (el, ev) {
         ev.stopPropagation();
 
         if ($(el).is(':checked')) {
-            $(this.element).trigger('checked', $(el).val());
+            domEvents.dispatch(this.element, {type: 'checked', data: $(el).val()});
         }
         else {
-            $(this.element).trigger('unchecked', $(el).val());
+            domEvents.dispatch(this.element, {type: 'unchecked', data: $(el).val()});
         }
     },
 
@@ -78,10 +79,11 @@ var Checkbox = FormElementView.extend('mad.view.form.Checkbox', /* @static */ {
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
      */
-    'input change': function (el, ev) {
+    '{element} input change': function (el, ev) {
         ev.stopPropagation();
-
-        $(this.element).trigger('changed', {value: this.getValue()});
+        domEvents.dispatch(this.element, {type: 'changed', data: {
+            value: this.getValue()
+        }});
     }
 });
 

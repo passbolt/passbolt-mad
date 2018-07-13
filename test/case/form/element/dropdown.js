@@ -13,6 +13,7 @@
 import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import ChoiceFormElement from 'passbolt-mad/form/choice_element';
+import domEvents from 'can-dom-events';
 import DropdownFormElement from "passbolt-mad/form/element/dropdown"
 import Component from 'passbolt-mad/component/component';
 import FormElement from 'passbolt-mad/form/element';
@@ -81,7 +82,8 @@ describe("mad.form.element.Dropdown", function () {
         expect(firedChanged).to.be.false;
 
         // Simulate a keypress and check after the timeout
-        $dropdown.val('ID_2').trigger('change');
+        $dropdown.val('ID_2');
+        domEvents.dispatch($dropdown[0], 'change');
 
         // After all event handlers have done their treatment.
         setTimeout(function () {

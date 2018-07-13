@@ -7,5 +7,12 @@
         </a>
     </div>
     <div class="js_dialog_content dialog-content">
+        {{#if(subtitle != null && subtitle != '')}}
+        <p>
+            <strong>
+                {{subtitle}}
+            </strong>
+        </p>
+        {{/if}}
     </div>
 </div>

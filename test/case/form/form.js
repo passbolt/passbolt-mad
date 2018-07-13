@@ -14,6 +14,7 @@ import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import CheckboxFormElement from 'passbolt-mad/form/element/checkbox';
 import Component from "passbolt-mad/component/component";
+import domEvents from 'can-dom-events';
 import FeedbackFormElement from 'passbolt-mad/form/feedback';
 import Form from "passbolt-mad/form/form"
 import Role from 'passbolt-mad/test/model/map/role';
@@ -122,7 +123,7 @@ describe("mad.Form", function () {
 
         // Insert a value in the textbox.
         $textbox.val('abc');
-        $textbox.focus().trigger('input');
+        domEvents.dispatch($textbox[0], 'input');
 
         // Check the value is as expected
         // Wrap it in setTimeout to ensure the events process are all completely treated.
@@ -161,8 +162,10 @@ describe("mad.Form", function () {
             expect(data.User).to.be.undefined;
 
             // Simuate keypress on the textboxes.
-            $textbox.val('abc').trigger('input');
-            $textbox2.val('xyz').trigger('input');
+            $textbox.val('abc');
+            domEvents.dispatch($textbox[0], 'input');
+            $textbox2.val('xyz');
+            domEvents.dispatch($textbox2[0], 'input');
 
             // After all event handlers have done their treatment.
             setTimeout(function () {
@@ -210,9 +213,10 @@ describe("mad.Form", function () {
             expect(data.User).to.be.undefined;
 
             // Simulate inputs.
-            $textbox.val('abc').trigger('input');
-            $('input[value=option_1]', $checkbox).click();
-            $('input[value=option_2]', $checkbox).click();
+            $textbox.val('abc');
+            domEvents.dispatch($textbox[0], 'input');
+            $('input[value=option_1]', $checkbox).click()
+            $('input[value=option_2]', $checkbox).click()
 
             // After all event handlers have done their treatment.
             setTimeout(function () {

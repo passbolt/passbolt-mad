@@ -14,6 +14,7 @@ import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import DefineMap from 'passbolt-mad/model/map/map';
+import domEvents from 'can-dom-events';
 import DynamicTreeComponent from "passbolt-mad/component/dynamic_tree"
 import MadControl from 'passbolt-mad/control/control';
 import TreeComponent from 'passbolt-mad/component/tree';
@@ -108,10 +109,10 @@ describe("mad.component.DynamicTree", function () {
         tree.load(items);
 
         expect($('#item_2').hasClass('close')).to.be.true;
-        $('#item_2 .left-cell.node-ctrl > a').click();
+        domEvents.dispatch($('#item_2 .left-cell.node-ctrl > a')[0], 'click');
         expect($('#item_2').hasClass('close')).to.be.false;
         expect($('#item_2').hasClass('open')).to.be.true;
-        $('#item_2 .left-cell.node-ctrl > a').click();
+        domEvents.dispatch($('#item_2 .left-cell.node-ctrl > a')[0], 'click');
         expect($('#item_2').hasClass('close')).to.be.true;
     });
 });

@@ -12,15 +12,17 @@
  */
 import CanList from 'can-list';
 import Component from 'passbolt-mad/component/component';
-import DomData from 'can-util/dom/data/data';
+import DomData from 'can-dom-data';
 import getObject from 'can-util/js/get/get';
 import GridColumn from 'passbolt-mad/model/grid_column';
 import GridView from 'passbolt-mad/view/component/grid';
+import stache from 'can-stache';
 import View from 'passbolt-mad/view/view';
 
 import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.stache!';
 import template from 'passbolt-mad/view/template/component/grid/grid.stache!';
 import itemTemplate from 'passbolt-mad/view/template/component/grid/gridItem.stache!';
+import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.stache!';
 
 import 'passbolt-mad/view/helper/stache/grid/grid_cell.js';
 
@@ -47,6 +49,8 @@ var Grid = Component.extend('mad.component.Grid', {
         columnHeaderTemplate: columnHeaderTemplate,
         // The component item template.
         itemTemplate: itemTemplate,
+        // The component cell template.
+        cellTemplate: cellTemplate,
         // Override the viewClass option.
         viewClass: GridView,
         // Prefix the id of each row.
@@ -106,7 +110,7 @@ var Grid = Component.extend('mad.component.Grid', {
         // It will be used by the view to retrieve associated column model definition.
         for (var i in columnModel) {
             var $el = $('th.js_grid_column_' + columnModel[i].name, this.element);
-            DomData.set.call($el[0], this.getColumnModelClass().constructor.shortName, columnModel[i]);
+            DomData.set($el[0], this.getColumnModelClass().constructor.shortName, columnModel[i]);
         }
 
         this._super();
@@ -116,10 +120,10 @@ var Grid = Component.extend('mad.component.Grid', {
      * Before render.
      */
     beforeRender: function () {
-        this._super();
         this.setViewData('columnModel', this.options.columnModel);
         this.setViewData('columnHeaderTemplate', this.options.columnHeaderTemplate);
         this.setViewData('items', []);
+        this._super();
     },
 
     /**
@@ -423,7 +427,7 @@ var Grid = Component.extend('mad.component.Grid', {
 
         // Search the keywords in the list of items.
         var items = this.options.items;
-        items.each(function (item, i) {
+        items.forEach(function (item, i) {
             // Foreach keywords.
             for (var j in keywords) {
                 var found = false,
@@ -565,11 +569,11 @@ var Grid = Component.extend('mad.component.Grid', {
      *
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
-     * @param {mad.model.Gridcolumn} columnModel The column model reference
-     * @param {boolean} sortAsc Should the sort be ascending. If false, the sort will be descending.
-     * @param {HTMLEvent} srcEvent The source event which occurred
      */
-    ' column_sort': function (el, ev, columnModel, sortAsc, srcEvent) {
+    '{element} column_sort': function (el, ev) {
+        const columnModel = ev.data.columnModel;
+        const sortAsc = ev.data.sortAsc;
+        const srcEv = ev.data.srcEv;
         this.sort(columnModel, sortAsc);
     },
 
@@ -581,13 +585,14 @@ var Grid = Component.extend('mad.component.Grid', {
      *
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
-     * @param {mixed} item The selected item instance or its id
-     * @param {HTMLEvent} srcEvent The source event which occurred
      */
-    ' item_selected': function (el, ev, item, srcEvent) {
+    '{element} item_selected': function (el, ev) {
+        const item = ev.data.item;
+        const srcEv = ev.data.srcEv;
+
         // override this function, call _super if you want the default behavior processed
         if (this.options.callbacks.itemSelected) {
-            this.options.callbacks.itemSelected(el, ev, item, srcEvent);
+            this.options.callbacks.itemSelected(el, ev, item, srcEv);
         }
     },
 
@@ -599,13 +604,14 @@ var Grid = Component.extend('mad.component.Grid', {
      *
      * @param {HTMLElement} el The element the event occurred on
      * @param {HTMLEvent} ev The event that occurred
-     * @param {mixed} item The hovered item instance or its id
-     * @param {HTMLEvent} srcEvent The source event which occurred
      */
-    ' item_hovered': function (el, ev, item, srcEvent) {
+    '{element} item_hovered': function (el, ev) {
+        const item = ev.data.item;
+        const srcEv = ev.data.srcEv;
+
         // override this function, call _super if you want the default behavior processed
         if (this.options.callbacks.itemHovered) {
-            this.options.callbacks.itemHovered(el, ev, item, srcEvent);
+            this.options.callbacks.itemHovered(el, ev, item, srcEv);
         }
     }
 });

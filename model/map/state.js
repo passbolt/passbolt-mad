@@ -12,6 +12,7 @@
  */
 import DefineList from 'can-define/list/list';
 import MadMap from 'passbolt-mad/model/map/map';
+import $ from 'jquery';
 
 /**
  * @parent Mad.core_api

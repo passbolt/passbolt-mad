@@ -10,7 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DomData from 'can-util/dom/data/data';
+import DomData from 'can-dom-data';
+import domEvents from 'can-dom-events';
 import View from 'passbolt-mad/view/view';
 import HtmlHelper from 'passbolt-mad/helper/html';
 
@@ -112,7 +113,7 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
         // Insert it in the DOM and position it.
         $item = HtmlHelper.create($refElement, position, itemRender);
         // Associate to the item to the just created node
-        DomData.set.call($item[0], control.getItemClass().shortName, item);
+        DomData.set($item[0], control.getItemClass().shortName, item);
 
         return $item;
     },
@@ -156,10 +157,10 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
         $item.replaceWith(itemRender);
         $item = this.getItemElement(item);
         // Associate to the item to the just created node.
-        DomData.set.call($item[0], control.getItemClass().shortName, item);
+        DomData.set($item[0], control.getItemClass().shortName, item);
 
         if (hasChildren) {
-            item.children.each(function (item, i) {
+            item.children.forEach(function (item, i) {
                 self.insertItem(item, mappedItem.id, 'last');
             });
         }
@@ -237,12 +238,12 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
             itemClass = this.getController().getItemClass();
 
         if (itemClass) {
-            data = DomData.get.call(li[0], itemClass.shortName);
+            data = DomData.get(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }
 
-        $(this.element).trigger('item_selected', [data, ev]);
+        domEvents.dispatch(this.element, {type: 'item_selected', data: {item: data, srcEv: ev}});
         return false;
     },
 
@@ -262,12 +263,12 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
                 itemClass = this.getController().getItemClass();
 
             if (itemClass) {
-                data = DomData.get.call(li[0], itemClass.shortName);
+                data = DomData.get(li[0], itemClass.shortName);
             } else {
                 data = li[0].id;
             }
 
-            $(this.element).trigger('item_right_selected', [data, ev]);
+            domEvents.dispatch(this.element, {type: 'item_right_selected', data: {item: data, srcEv: ev}});
         }
 
         return false;
@@ -288,12 +289,12 @@ var Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @protot
             itemClass = this.getController().getItemClass();
 
         if (itemClass) {
-            data = DomData.get.call(li[0], itemClass.shortName);
+            data = DomData.get(li[0], itemClass.shortName);
         } else {
             data = li[0].id;
         }
 
-        $(this.element).trigger('item_hovered', [data, ev]);
+        domEvents.dispatch(this.element, {type: 'item_hovered', data: {item: data, srcEv: ev}});
         return false;
     }
 

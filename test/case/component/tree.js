@@ -13,13 +13,14 @@
 import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
+import domEvents from 'can-dom-events';
 import MadControl from 'passbolt-mad/control/control';
 import MadMap from 'passbolt-mad/util/map/map';
 import DefineMap from 'passbolt-mad/model/map/map';
 import TreeComponent from "passbolt-mad/component/tree"
 import User from 'passbolt-mad/test/model/map/user';
 import xss from 'passbolt-mad/test/fixture/xss';
-import $ from 'can-jquery';
+import $ from 'jquery';
 
 describe("mad.component.Tree", function () {
 
@@ -380,7 +381,7 @@ describe("mad.component.Tree", function () {
         expect($('.row:first', $item).hasClass('selected')).to.be.false;
 
         // Select an item by clicking on it.
-        $('a', $item).trigger('click');
+        domEvents.dispatch($('a', $item)[0], 'click');
         expect($('.row:first', $item).hasClass('selected')).to.be.true;
 
         tree.destroy();
@@ -409,7 +410,7 @@ describe("mad.component.Tree", function () {
             tree.insertItem(item);
 
             // No Xss when clicking on the row which as the id attribute
-            $('#tree li').trigger('click');
+            domEvents.dispatch($('#tree li')[0], 'click');
 
             tree.destroy();
         }

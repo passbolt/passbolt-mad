@@ -479,7 +479,7 @@ var Form = Component.extend('mad.Form', /* @static */ {
      * @param {HTMLEvent} ev The event which occured
      * @return {void}
      */
-    ' submit': function (el, ev) {
+    '{element} submit': function (el, ev) {
         ev.preventDefault();
 
         // Validate the form.
@@ -509,7 +509,7 @@ var Form = Component.extend('mad.Form', /* @static */ {
      * @param {HTMLEvent} ev The event that occurred
      * @param {mixed} data The new data
      */
-    ' changed': function (el, ev, data) {
+    '{element} changed': function (el, ev, data) {
         // Should the form element be validated.
         var validateOnChange = this.options.validateOnChange === true
             || (this.options.validateOnChange === 'afterFirstValidation' && this.validations > 0);

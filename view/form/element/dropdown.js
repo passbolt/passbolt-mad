@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import domEvents from 'can-dom-events';
 import FormElementView from 'passbolt-mad/view/form/element';
 
 /**
@@ -53,10 +54,10 @@ var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}
      * @param {HTMLElement} el The element the event occured on
      * @param {HTMLEvent} ev The event which occured
      */
-    change: function (el, event) {
-        $(el).trigger('changed', {
+    '{element} change': function (el, event) {
+        domEvents.dispatch(el, {type: 'changed', data: {
             value: this.getValue()
-        });
+        }});
     }
 });
 

@@ -99,10 +99,10 @@ var Menu = TreeComponent.extend('mad.component.Menu', {
      * @parent mad.component.Menu.view_events
      * @param {HTMLElement} el The element the event occured on
      * @param {HTMLEvent} ev The event which occured
-     * @param {string} item The selected item
      * @return {void}
      */
-    ' item_selected': function (el, ev, item) {
+    '{element} item_selected': function (el, ev) {
+        const item = ev.data.item;
         this._super(el, ev, item);
 
         // If this item is not disabled, try to execute the item action.
