@@ -31,47 +31,47 @@ import ButtonComponent from 'passbolt-mad/component/button';
  * this.options and merged with defaults static variable
  * @return {mad.component.ToggleButton}
  */
-var ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @static */ {
+const ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @static */ {
 
 }, /** @prototype */ {
 
-    /* ************************************************************** */
-    /* LISTEN TO THE VIEW EVENTS */
-    /* ************************************************************** */
+  /* ************************************************************** */
+  /* LISTEN TO THE VIEW EVENTS */
+  /* ************************************************************** */
 
-    /**
-     * Listen to the event click on the DOM toggle button element
-     * @function mad.component.ToggleButton.click
-     * @parent mad.component.ToggleButton.view_events
-     * @return {void}
-     */
-    'click': function (el, ev) {
-        this._super(el, ev);
-        if(!this.state.is('selected')) {
-            this.setState('selected');
-        } else {
-            this.setState('ready');
-        }
-    },
-
-    /* ************************************************************** */
-    /* LISTEN TO THE STATE CHANGES */
-    /* ************************************************************** */
-
-    /**
-     * Listen to the change relative to the state Disabled
-     * @function mad.component.ToggleButton.stateSelected
-     * @parent mad.component.ToggleButton.state_changes
-     * @param {boolean} go Enter or leave the state
-     * @return {void}
-     */
-    'stateSelected': function (go) {
-        if (go) {
-            $(this.element).addClass('selected');
-        } else {
-            $(this.element).removeClass('selected');
-        }
+  /**
+   * Listen to the event click on the DOM toggle button element
+   * @function mad.component.ToggleButton.click
+   * @parent mad.component.ToggleButton.view_events
+   * @return {void}
+   */
+  'click': function(el, ev) {
+    this._super(el, ev);
+    if (!this.state.is('selected')) {
+      this.setState('selected');
+    } else {
+      this.setState('ready');
     }
+  },
+
+  /* ************************************************************** */
+  /* LISTEN TO THE STATE CHANGES */
+  /* ************************************************************** */
+
+  /**
+   * Listen to the change relative to the state Disabled
+   * @function mad.component.ToggleButton.stateSelected
+   * @parent mad.component.ToggleButton.state_changes
+   * @param {boolean} go Enter or leave the state
+   * @return {void}
+   */
+  'stateSelected': function(go) {
+    if (go) {
+      $(this.element).addClass('selected');
+    } else {
+      $(this.element).removeClass('selected');
+    }
+  }
 });
 
 export default ToggleButton;

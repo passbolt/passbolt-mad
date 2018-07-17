@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import Construct from 'can-construct';
-var glbl = typeof window !== "undefined" ? window : global
+const glbl = typeof window !== "undefined" ? window : global;
 
 /**
  * Translate a string.
@@ -21,10 +21,10 @@ var glbl = typeof window !== "undefined" ? window : global
  * to translate
  * @return {string} The translated string
  */
-var __ = function (str) {
-    // Extract variables from arguments.
-    var args = Array.prototype.slice.call(arguments, 1);
-    return I18n.translate(str, args);
+const __ = function(str) {
+  // Extract variables from arguments.
+  const args = Array.prototype.slice.call(arguments, 1);
+  return I18n.translate(str, args);
 };
 glbl.__ = __;
 
@@ -40,78 +40,78 @@ glbl.__ = __;
  * ```
  *
  */
-var I18n = Construct.extend('mad.I18n', /** @static */ {
+const I18n = Construct.extend('mad.I18n', /** @static */ {
 
-    /**
-     * The dictionary in use.
-     * @type {array}
-     */
-    dico: {},
+  /**
+   * The dictionary in use.
+   * @type {array}
+   */
+  dico: {},
 
-    /**
-     * Translate a string.
-     *
-     * @param {string} str The string to translate
-     * @param {array} vars The array of variables to inject in the string
-     * @return {string} The translated string
-     */
-    translate: function (str, vars) {
-        var vars = typeof vars != 'undefined' ? vars : [];
-        return I18n.replaceHooks(this.getEntry(str), vars);
-    },
+  /**
+   * Translate a string.
+   *
+   * @param {string} str The string to translate
+   * @param {array} vars The array of variables to inject in the string
+   * @return {string} The translated string
+   */
+  translate: function(str, vars) {
+    vars = typeof vars != 'undefined' ? vars : [];
+    return I18n.replaceHooks(this.getEntry(str), vars);
+  },
 
-    /**
-     * Load a dictionary.
-     *
-     * @param {array} dico The dictionary to use
-     */
-    loadDico: function (dico) {
-        for (var i in dico) {
-            I18n.dico[i] = dico[i]; //make a copy of the data to be sure there will be existing in the app scope
-        }
-    },
-
-    /**
-     * Replace the variables' hooks in a string.
-     *
-     * @param {string} str The string to work on
-     * @param {array} vars The variables to inject in the string
-     * @return {string}
-     */
-    replaceHooks: function (str, vars) {
-        var returnValue = '',
-            split = [];
-
-        // Split the string regarding the variable's hooks.
-        split = str.split('%s');
-
-        // No hook found in the string.
-        if (split.length < 2) {
-            return str;
-        }
-        // Replace string's hooks with the variables.
-        for (var i in split) {
-            returnValue += split[i];
-            if (vars[i] && vars[i] != null && (typeof vars[i] == 'string' || typeof vars[i] == 'number' || typeof vars[i] == 'boolean')) {
-                returnValue += vars[i];
-            }
-        }
-
-        return returnValue;
-    },
-
-    /**
-     * Get an entry in the dictionary.
-     *
-     * @param {string} str The dictionary key
-     * @return {string}
-     */
-    getEntry: function (str) {
-        if (typeof I18n.dico[str] != 'undefined' && this.dico[str] != '') {
-            return I18n.dico[str];
-        }
-        return str;
+  /**
+   * Load a dictionary.
+   *
+   * @param {array} dico The dictionary to use
+   */
+  loadDico: function(dico) {
+    for (const i in dico) {
+      I18n.dico[i] = dico[i]; //make a copy of the data to be sure there will be existing in the app scope
     }
+  },
+
+  /**
+   * Replace the variables' hooks in a string.
+   *
+   * @param {string} str The string to work on
+   * @param {array} vars The variables to inject in the string
+   * @return {string}
+   */
+  replaceHooks: function(str, vars) {
+    let returnValue = '';
+    let split = [];
+
+    // Split the string regarding the variable's hooks.
+    split = str.split('%s');
+
+    // No hook found in the string.
+    if (split.length < 2) {
+      return str;
+    }
+    // Replace string's hooks with the variables.
+    for (const i in split) {
+      returnValue += split[i];
+      if (vars[i] && vars[i] != null && (typeof vars[i] == 'string' || typeof vars[i] == 'number' || typeof vars[i] == 'boolean')) {
+        returnValue += vars[i];
+      }
+    }
+
+    return returnValue;
+  },
+
+  /**
+   * Get an entry in the dictionary.
+   *
+   * @param {string} str The dictionary key
+   * @return {string}
+   */
+  getEntry: function(str) {
+    if (typeof I18n.dico[str] != 'undefined' && this.dico[str] != '') {
+      return I18n.dico[str];
+    }
+    return str;
+  }
 
 }, /** @prototype */ {});
 

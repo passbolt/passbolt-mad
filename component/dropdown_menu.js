@@ -35,67 +35,67 @@ import itemTemplate from 'passbolt-mad/view/template/component/dropdown_menu/dro
  *      * item_hovered : triggered when an item is hovered.
  * @return {mad.component.DropdownMenu}
  */
-var DropdownMenu = MenuComponent.extend('mad.component.DropdownMenu', {
+const DropdownMenu = MenuComponent.extend('mad.component.DropdownMenu', {
 
-    defaults: {
-        label: 'Drop Down Menu Component',
-        viewClass: DropdownMenuView,
-        itemTemplate: itemTemplate,
-        cssClasses: ['dropdownmenu'],
-        callbacks: {
-            item_selected: null,
-            item_right_selected: null,
-            item_hovered: null
-        }
+  defaults: {
+    label: 'Drop Down Menu Component',
+    viewClass: DropdownMenuView,
+    itemTemplate: itemTemplate,
+    cssClasses: ['dropdownmenu'],
+    callbacks: {
+      item_selected: null,
+      item_right_selected: null,
+      item_hovered: null
     }
+  }
 
 }, /** @prototype */ {
 
-    /**
-     * Open an item
-     * @param {mad.model.Model} item The target item to open
-     * @return {void}
-     */
-    open: function (item) {
-        this.view.open(item);
-    },
+  /**
+   * Open an item
+   * @param {mad.model.Model} item The target item to open
+   * @return {void}
+   */
+  open: function(item) {
+    this.view.open(item);
+  },
 
-    /**
-     * Close an item
-     * @param {mad.model.Model} item The target item to close
-     * @return {void}
-     */
-    close: function (item) {
-        this.view.close(item);
-    },
+  /**
+   * Close an item
+   * @param {mad.model.Model} item The target item to close
+   * @return {void}
+   */
+  close: function(item) {
+    this.view.close(item);
+  },
 
-    /* ************************************************************** */
-    /* LISTEN TO THE VIEW EVENTS */
-    /* ************************************************************** */
+  /* ************************************************************** */
+  /* LISTEN TO THE VIEW EVENTS */
+  /* ************************************************************** */
 
-    /**
-     * An item has been uncollapsed
-     * @parent mad.component.DropdownMenu.view_events
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @param {mad.model.Model} item The target item
-     * @return {void}
-     */
-    ' item_opened': function (el, ev, item) {
-        this.open(item);
-    },
+  /**
+   * An item has been uncollapsed
+   * @parent mad.component.DropdownMenu.view_events
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   * @param {mad.model.Model} item The target item
+   * @return {void}
+   */
+  ' item_opened': function(el, ev, item) {
+    this.open(item);
+  },
 
-    /**
-     * An item has been uncollapsed
-     * @parent mad.component.DropdownMenu.view_events
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @param {mad.model.Model} item The target item
-     * @return {void}
-     */
-    ' item_closed': function (el, ev, item) {
-        this.close(item);
-    }
+  /**
+   * An item has been uncollapsed
+   * @parent mad.component.DropdownMenu.view_events
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   * @param {mad.model.Model} item The target item
+   * @return {void}
+   */
+  ' item_closed': function(el, ev, item) {
+    this.close(item);
+  }
 });
 
 export default DropdownMenu;

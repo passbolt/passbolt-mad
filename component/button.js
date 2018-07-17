@@ -35,7 +35,7 @@ import Component from 'passbolt-mad/component/component';
  *   * tag : html tag to use.
  * @return {mad.component.Button}
  */
-var Button = Component.extend('mad.component.Button', {
+const Button = Component.extend('mad.component.Button', {
 
   defaults: {
     label: 'Button Component',
@@ -59,7 +59,7 @@ var Button = Component.extend('mad.component.Button', {
   /**
    * @inheritdoc
    */
-  init: function (el, options) {
+  init: function(el, options) {
     this._super(el, options);
     this.value = options.value;
   },
@@ -68,7 +68,7 @@ var Button = Component.extend('mad.component.Button', {
    * Get the value of the button
    * @return {mixed} value The value of the button
    */
-  getValue: function () {
+  getValue: function() {
     return this.value;
   },
 
@@ -77,7 +77,7 @@ var Button = Component.extend('mad.component.Button', {
    * @param {mixed} value The value to set
    * @return {mad.controller.component.ButtonController}
    */
-  setValue: function (value) {
+  setValue: function(value) {
     this.value = value;
     return this;
   },
@@ -92,7 +92,7 @@ var Button = Component.extend('mad.component.Button', {
    * Listen to the event click on the DOM button element
    * @return {void}
    */
-  click: function (el, ev) {
+  click: function(el, ev) {
     // if the component is disabled, stop the propagation
     if (this.state.is('disabled')) {
       ev.stopImmediatePropagation();
@@ -115,7 +115,7 @@ var Button = Component.extend('mad.component.Button', {
    * @param {boolean} go Enter or leave the state
    * @return {void}
    */
-  stateDisabled: function (go) {
+  stateDisabled: function(go) {
     if (go) {
       $(this.element).attr('disabled', 'disabled')
         .addClass('disabled');

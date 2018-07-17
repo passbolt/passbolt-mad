@@ -36,80 +36,85 @@ import itemTemplate from 'passbolt-mad/view/template/component/menu/menu_item.st
  *   * map : mapping object. (See mad.Map)
  * @return {mad.component.Menu}
  */
-var Menu = TreeComponent.extend('mad.component.Menu', {
+const Menu = TreeComponent.extend('mad.component.Menu', {
 
-    defaults: {
-        label: 'Menu',
-        cssClasses: ['menu'],
-        // View class.
-        viewClass: TreeView,
-        // The template to use to render each action.
-        itemTemplate: itemTemplate,
-        // The class which represent the item.
-        itemClass: Action,
-        // Mapping of the items for the view.
-        map: new MadMap({
-            id: 'id',
-            label: 'label',
-            // @todo : be carefull, for now if no cssClasses defined while creating the action.
-            // @todo : this mapping is not done, and the state is not added to css classes.
-            cssClasses: {
-                key: 'cssClasses',
-                func: function (value, map, item, mappedValues) {
-                    var mappedValue = $.merge([], value);
-                    // If a state is defined for the given item.
-                    // Add the state to the css classes.
-                    if (typeof item.state != 'undefined') {
-                        mappedValue = $.merge(mappedValue, item.state.current);
-                    }
-                    return mappedValue.join(' ');
-                }
-            },
-            children: {
-                key: 'children',
-                func: MadMap.mapObjects
-            }
-        })
-    }
+  defaults: {
+    label: 'Menu',
+    cssClasses: ['menu'],
+    // View class.
+    viewClass: TreeView,
+    // The template to use to render each action.
+    itemTemplate: itemTemplate,
+    // The class which represent the item.
+    itemClass: Action,
+    // Mapping of the items for the view.
+    map: new MadMap({
+      id: 'id',
+      label: 'label',
+      /*
+       * @todo : be carefull, for now if no cssClasses defined while creating the action.
+       * @todo : this mapping is not done, and the state is not added to css classes.
+       */
+      cssClasses: {
+        key: 'cssClasses',
+        // eslint-disable-next-line no-unused-vars
+        func: function(value, map, item, mappedValues) {
+          let mappedValue = $.merge([], value);
+          /*
+           * If a state is defined for the given item.
+           * Add the state to the css classes.
+           */
+          if (typeof item.state != 'undefined') {
+            mappedValue = $.merge(mappedValue, item.state.current);
+          }
+          return mappedValue.join(' ');
+        }
+      },
+      children: {
+        key: 'children',
+        func: MadMap.mapObjects
+      }
+    })
+  }
 
 }, /** @prototype */ {
 
-    /**
-     * Set the item state.
-     * @param id The item id.
-     * @param stateName The state to set.
-     */
-    setItemState: function (id, stateName) {
-        for (var i in this.options.items) {
-            if (this.options.items[i].id == id) {
-                this.options.items[i].state.setState(stateName);
-                this.refreshItem(this.options.items[i]);
-                return
-            }
-        }
-        throw mad.Exception.get('The item [%0] is not an item of the menu', [id]);
-    },
-
-    /* ************************************************************** */
-    /* LISTEN TO THE VIEW EVENTS */
-    /* ************************************************************** */
-
-    /**
-     * An item has been selected
-     * @parent mad.component.Menu.view_events
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @return {void}
-     */
-    '{element} item_selected': function (el, ev) {
-        const item = ev.data.item;
-        this._super(el, ev, item);
-
-        // If this item is not disabled, try to execute the item action.
-        if (!item.state.is('disabled')) {
-            item.execute(this);
-        }
+  /**
+   * Set the item state.
+   * @param id The item id.
+   * @param stateName The state to set.
+   */
+  setItemState: function(id, stateName) {
+    for (const i in this.options.items) {
+      if (this.options.items[i].id == id) {
+        this.options.items[i].state.setState(stateName);
+        this.refreshItem(this.options.items[i]);
+        return;
+      }
     }
+    throw mad.Exception.get('The item [%0] is not an item of the menu', [id]);
+  },
+
+  /* ************************************************************** */
+  /* LISTEN TO THE VIEW EVENTS */
+  /* ************************************************************** */
+
+  /**
+   * An item has been selected
+   * @parent mad.component.Menu.view_events
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   * @return {void}
+   */
+  '{element} item_selected': function(el, ev) {
+    const item = ev.data.item;
+    this._super(el, ev, item);
+
+    // If this item is not disabled, try to execute the item action.
+    if (!item.state.is('disabled')) {
+      item.execute(this);
+    }
+  }
 });
 
 export default Menu;

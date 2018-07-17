@@ -21,89 +21,83 @@ import TreeView from 'passbolt-mad/view/component/tree';
  *
  * @constructor
  * Instanciate a new Dynamic Tree view
- * @return {mad.view.component.tree.Jstree}
+ * @return {mad.view.component.tree.DynamicTree}
  */
-var DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static */ {
+const DynamicTree = TreeView.extend('mad.view.component.DynamicTree', /** @static */ {
 
 }, /** @prototype */ {
 
-    /**
-     * Open an item
-     * @param {mad.model.Model} item The target item to open
-     * @return {void}
-     */
-    'open': function (item) {
-        var li = $('#' + item.id, this.element);
-        li.removeClass('close')
-            .addClass('open');
-    },
+  /**
+   * Open an item
+   * @param {DefineMap} item The target item to open
+   */
+  open: function(item) {
+    const li = $(`#${item.id}`, this.element);
+    li.removeClass('close')
+      .addClass('open');
+  },
 
-    /**
-     * Close an item
-     * @param {mad.model.Model} item The target item to close
-     * @return {void}
-     */
-    'close': function (item) {
-        var li = $('#' + item.id, this.element);
-        li.removeClass('open')
-            .addClass('close');
-    },
+  /**
+   * Close an item
+   * @param {DefineMap} item The target item to close
+   */
+  close: function(item) {
+    const li = $(`#${item.id}`, this.element);
+    li.removeClass('open')
+      .addClass('close');
+  },
 
-    /* ************************************************************** */
-    /* LISTEN TO THE VIEW EVENTS */
-    /* ************************************************************** */
+  /* ************************************************************** */
+  /* LISTEN TO THE VIEW EVENTS */
+  /* ************************************************************** */
 
-    /**
-     * Collapse / Uncollapse an item
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @return {void}
-     */
-    '.node-ctrl a click': function (el, ev) {
-        console.log('catch click');
-        ev.stopPropagation();
-        ev.preventDefault();
-        var data = null,
-            li = $(el).parents('li'),
-            itemClass = this.getController().getItemClass();
+  /**
+   * Collapse / Uncollapse an item
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   */
+  '{element} .node-ctrl a click': function(el, ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+    let data = null;
+    const li = $(el).parents('li');
+    const itemClass = this.getController().getItemClass();
 
-        if (this.getController().getItemClass()) {
-            data = DomData.get(li[0], itemClass.shortName);
-        } else {
-            data = li[0].id;
-        }
-
-        // if the element is closed, open it
-        if (li.hasClass('close')) {
-            domEvents.dispatch(this.element, {type: 'item_opened', data: {item: data, srcEv: ev}});
-        }
-        // otherwise close it
-        else {
-            domEvents.dispatch(this.element, {type: 'item_closed', data: {item: data, srcEv: ev}});
-        }
-    },
-
-    /**
-     * Contextual menu
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @return {void}
-     */
-    '.more-ctrl a click': function (el, ev) {
-        ev.stopPropagation();
-        ev.preventDefault();
-        var data = null,
-            li = $(el).parents('li'),
-            itemClass = this.getController().getItemClass();
-
-        if (this.getController().getItemClass()) {
-            data = DomData.get(li[0], itemClass.shortName);
-        } else {
-            data = li[0].id;
-        }
-
-        domEvents.dispatch(this.element, {type: 'item_right_selected', data: {item: data, srcEv: ev}});
+    if (this.getController().getItemClass()) {
+      data = DomData.get(li[0], itemClass.shortName);
+    } else {
+      data = li[0].id;
     }
+
+    // if the element is closed, open it
+    if (li.hasClass('close')) {
+      domEvents.dispatch(this.element, {type: 'item_opened', data: {item: data, srcEv: ev}});
+    } else {
+      // otherwise close it
+      domEvents.dispatch(this.element, {type: 'item_closed', data: {item: data, srcEv: ev}});
+    }
+  },
+
+  /**
+   * Contextual menu
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   */
+  '{element} .more-ctrl a click': function(el, ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+    let data = null;
+    const li = $(el).parents('li');
+    const itemClass = this.getController().getItemClass();
+
+    if (this.getController().getItemClass()) {
+      data = DomData.get(li[0], itemClass.shortName);
+    } else {
+      data = li[0].id;
+    }
+
+    domEvents.dispatch(this.element, {type: 'item_right_selected', data: {item: data, srcEv: ev}});
+  }
 });
 
 export default DynamicTree;

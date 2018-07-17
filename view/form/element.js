@@ -15,30 +15,31 @@ import View from 'passbolt-mad/view/view';
 /**
  * @inherits mad.View
  */
-var Element = View.extend('mad.view.form.Element', /** @static */ {}, /** @prototype */ {
+const Element = View.extend('mad.view.form.Element', /** @static */ {}, /** @prototype */ {
 
-    /**
-     * Get the name of the form element
-     * @return {string}
-     */
-    getName: function () {
-        return this.element.attr('name');
-    },
+  /**
+   * Get the name of the form element
+   * @return {string}
+   */
+  getName: function() {
+    return this.element.attr('name');
+  },
 
-    /**
-     * Set the value of the form element
-     * @param {mixed} value The value to set
-     */
-    setValue: function (value) {
-        steal.dev.warn('The setValue function has not been implemented for the class ' + this.getClass().fullName);
-    },
+  /**
+   * Set the value of the form element
+   * @param {mixed} value The value to set
+   */
+  // eslint-disable-next-line no-unused-vars
+  setValue: function(value) {
+    steal.dev.warn(`The setValue function has not been implemented for the class ${this.getClass().fullName}`);
+  },
 
-    /**
-     * Reset the form element view
-     */
-    reset: function () {
-        steal.dev.warn('The reset function has not been implemented for the class ' + this.getClass().fullName);
-    }
+  /**
+   * Reset the form element view
+   */
+  reset: function() {
+    steal.dev.warn(`The reset function has not been implemented for the class ${this.getClass().fullName}`);
+  }
 
 });
 

@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import Ajax from 'passbolt-mad/net/ajax';
-import CakeSerializer from 'passbolt-mad/model/serializer/cake_serializer';
 import connect from 'can-connect';
 import connectDataUrl from 'can-connect/data/url/url';
 import connectParse from 'can-connect/data/parse/parse';

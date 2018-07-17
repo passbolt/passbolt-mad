@@ -35,107 +35,109 @@ import "can-construct-super";
  * This is just another example of section.
  *
  */
-var Control = CanControl.extend('mad.Control', /** @prototype */ {
+const Control = CanControl.extend('mad.Control', /** @prototype */ {
 
-	/**
-	 * Constructor.
-	 *
-	 * @signature `new mad.Control( element, options )`
-	 * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
-	 * @param {Object} options Option values merged with the class defaults and set as this.options
-	 * @return {mad.Control} A new instance of the constructor function extending mad.Control.
-	 *
-	 * @body
-	 * ## Options
-	 *
-	 * ### options.id
-	 * All controllers instantiated by the app should have an identifier.
-	 *
-	 * The identifier can be defined either with the optional parameters of the Controller or it can be
-	 * defined by the id attribute of the HTML element for which the controller will be created for.
-	 *
-	 * Note that if the identifier has been twice in the optional parameters and in the template, the one
-	 * defined in the optional parameters will override the one defined on the HTML Element.
-	 */
-	init: function (el, options) {
-		// A controller is always associated to a DOM element.
-		// If the element is null, or does not exist, throw an exception.
-		if (!el || !$(el).length) {
-			throw new mad.Exception('The parameter "el" (' + $(el).selector + ') should refer to an existing DOM node.');
-		}
+  /**
+   * Constructor.
+   *
+   * @signature `new mad.Control( element, options )`
+   * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
+   * @param {Object} options Option values merged with the class defaults and set as this.options
+   * @return {mad.Control} A new instance of the constructor function extending mad.Control.
+   *
+   * @body
+   * ## Options
+   *
+   * ### options.id
+   * All controllers instantiated by the app should have an identifier.
+   *
+   * The identifier can be defined either with the optional parameters of the Controller or it can be
+   * defined by the id attribute of the HTML element for which the controller will be created for.
+   *
+   * Note that if the identifier has been twice in the optional parameters and in the template, the one
+   * defined in the optional parameters will override the one defined on the HTML Element.
+   */
+  init: function(el, options) {
+    /*
+     * A controller is always associated to a DOM element.
+     * If the element is null, or does not exist, throw an exception.
+     */
+    if (!el || !$(el).length) {
+      throw new mad.Exception(`The parameter "el" (${$(el).selector}) should refer to an existing DOM node.`);
+    }
 
-		// The identifier has not been defined in the option parameters.
-		if (typeof options.id == 'undefined' || options.id == null || options.id == '') {
-			var elId = $(this.element).attr('id');
+    // The identifier has not been defined in the option parameters.
+    if (typeof options.id == 'undefined' || options.id == null || options.id == '') {
+      const elId = $(this.element).attr('id');
 
-			// If an identifier has been defined on the associated Controller's DOM Element.
-			if (typeof elId != 'undefined' && elId != '') {
-				options.id = elId;
-			}
-			// Otherwise generate a unique identifier.
-			else {
-				options.id = uuid();
-				$(this.element).attr('id', options.id);
-			}
-		}
-		// The id is given in the options.
-		else {
-			// Override the DOM element id by the one defined in the optional parameters.
-			$(this.element).attr('id', options.id);
-		}
+      // If an identifier has been defined on the associated Controller's DOM Element.
+      if (typeof elId != 'undefined' && elId != '') {
+        options.id = elId;
+      } else {
+        // Otherwise generate a unique identifier.
+        options.id = uuid();
+        $(this.element).attr('id', options.id);
+      }
+    } else {
+      /*
+       * The id is given in the options.
+       * Override the DOM element id by the one defined in the optional parameters.
+       */
+      $(this.element).attr('id', options.id);
+    }
 
-		// Augment the default options with the one given in parameters.
-		this.options = $.extend(true, {}, this.options, options);
-	},
+    // Augment the default options with the one given in parameters.
+    this.options = $.extend(true, {}, this.options, options);
+  },
 
-	/**
-	 * Get controller alias
-	 * ex: PasswordBrowserController -> password_browser
-	 * @param {String} format The return format [camel, under], by default camel for camelcased
-	 * @return {String}
-	 */
-	getAlias: function (type) {
-		type = (typeof type == 'undefined') ? 'camel' : type;
-		var returnValue = '';
-		var alias = this.constructor.shortName.replace(/Controller$/, '');
+  /**
+   * Get controller alias
+   * ex: PasswordBrowserController -> password_browser
+   * @param {String} format The return format [camel, under], by default camel for camelcased
+   * @return {String}
+   */
+  getAlias: function(type) {
+    type = (typeof type == 'undefined') ? 'camel' : type;
+    let returnValue = '';
+    const alias = this.constructor.shortName.replace(/Controller$/, '');
 
-		switch (type) {
-			case 'under':
-				returnValue = jQuery.String.underscore(alias);
-				break;
-			case 'camel':
-			default:
-				returnValue = alias;
-				break;
-		}
+    switch (type) {
+      case 'under':
+        returnValue = jQuery.String.underscore(alias);
+        break;
+      case 'camel':
+      default:
+        returnValue = alias;
+        break;
+    }
 
-		return returnValue;
-	},
+    return returnValue;
+  },
 
-	/**
-	 * Get the controller class.
-	 * @return {mad.Control}
-	 */
-	getClass: function () {
-		return this.constructor;
-	},
+  /**
+   * Get the controller class.
+   * @return {mad.Control}
+   */
+  getClass: function() {
+    return this.constructor;
+  },
 
-	/**
-	 * Get the controller's identifier.
-	 *
-	 * @return {String} Controller's Identifier
-	 */
-	getId: function () {
-		return this.options.id;
-	},
+  /**
+   * Get the controller's identifier.
+   *
+   * @return {String} Controller's Identifier
+   */
+  getId: function() {
+    return this.options.id;
+  },
 
-	/**
-	 * Destroy the controller
-	 * @todo is this function still in use.
-	 */
-	remove: function () {
-		$(this.element).remove();
-	}
+  /**
+   * Destroy the controller
+   * @todo is this function still in use.
+   */
+  remove: function() {
+    $(this.element).remove();
+  }
 
 });
 

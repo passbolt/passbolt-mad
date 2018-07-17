@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-//import DomData from 'can-util/dom/data/data';
+import DomData from 'can-dom-data';
 import TreeView from 'passbolt-mad/view/component/tree';
 
 /**
@@ -20,84 +20,76 @@ import TreeView from 'passbolt-mad/view/component/tree';
  *
  * @constructor
  * Instanciate a new Drop Down Menu view
- * @return {mad.view.component.tree.Jstree}
+ * @return {mad.view.component.DropdownMenu}
  */
-var DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @static */ {}, /** @prototype */ {
+const DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @static */ {}, /** @prototype */ {
 
-    /**
-     * Open an item
-     * @param {mad.model.Model} item The target item to open
-     * @return {void}
-     */
-    open: function (item) {
-        var li = $('#' + item.id, this.element);
-        li.removeClass('closed')
-            .addClass('opened');
-        var control = $('.control:first', li);
-        control.removeClass('open')
-            .addClass('close');
-    },
+  /**
+   * Open an item
+   * @param {DefineMap} item The target item to open
+   */
+  open: function(item) {
+    const li = $(`#${item.id}`, this.element);
+    li.removeClass('closed').addClass('opened');
+    const control = $('.control:first', li);
+    control.removeClass('open').addClass('close');
+  },
 
-    /**
-     * Close an item
-     * @param {mad.model.Model} item The target item to close
-     * @return {void}
-     */
-    close: function (item) {
-        var li = $('#' + item.id, this.element);
-        li.removeClass('opened')
-            .addClass('closed');
-        var control = $('.control:first', li);
-        control.removeClass('close')
-            .addClass('open');
-    },
+  /**
+   * Close an item
+   * @param {DefineMap} item The target item to close
+   */
+  close: function(item) {
+    const li = $(`#${item.id}`, this.element);
+    li.removeClass('opened').addClass('closed');
+    const control = $('.control:first', li);
+    control.removeClass('close').addClass('open');
+  },
 
-    /* ************************************************************** */
-    /* LISTEN TO THE VIEW EVENTS */
-    /* ************************************************************** */
+  /* ************************************************************** */
+  /* LISTEN TO THE VIEW EVENTS */
+  /* ************************************************************** */
 
-    /**
-     * Uncollapse an item
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @return {void}
-     */
-    'li mouseover': function (el, ev) {
-        ev.stopPropagation();
-        ev.preventDefault();
+  /**
+   * Uncollapse an item
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   */
+  '{element} li mouseover': function(el, ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
 
-        var data = null,
-            itemClass = this.getController().getItemClass();
+    let data = null;
+    const itemClass = this.getController().getItemClass();
 
-        if (this.getController().getItemClass()) {
-            //data = DomData.get.call(el, itemClass.shortName);
-        } else {
-            data = el.id;
-        }
-
-        $(this.element).trigger('item_opened', data);
-    },
-
-    /**
-     * Uncollapse an item
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @return {void}
-     */
-    'li mouseleave': function (el, ev) {
-        ev.stopPropagation();
-        ev.preventDefault();
-
-        var data = null,
-            itemClass = this.getController().getItemClass();
-
-        if (this.getController().getItemClass()) {
-            //data = DomData.get.call(el, itemClass.shortName);
-        } else {
-            data = el.id;
-        }
-        $(this.element).trigger('item_closed', data);
+    if (this.getController().getItemClass()) {
+      data = DomData.get(el, itemClass.shortName);
+    } else {
+      data = el.id;
     }
+
+    $(this.element).trigger('item_opened', data);
+  },
+
+  /**
+   * Uncollapse an item
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   */
+  '{element} li mouseleave': function(el, ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+
+    let data = null;
+    const itemClass = this.getController().getItemClass();
+
+    if (this.getController().getItemClass()) {
+      data = DomData.get(el, itemClass.shortName);
+    } else {
+      data = el.id;
+    }
+    $(this.element).trigger('item_closed', data);
+  }
 
 });
 

@@ -1,6 +1,6 @@
-'use strict';
 
-var glbl = typeof window !== "undefined" ? window : global;
+
+const glbl = typeof window !== "undefined" ? window : global;
 
 /**
  * Set a global variable.
@@ -16,7 +16,7 @@ var glbl = typeof window !== "undefined" ? window : global;
  * ```
  */
 function global(name, value) {
-    glbl[name] = value;
+  glbl[name] = value;
 }
 
 export default global;

@@ -13,6 +13,6 @@
 import stache from 'can-stache';
 
 // Register a stache helper to help generate uuid.
-stache.registerHelper('__', function(){
-    return __.apply(this, arguments);
+stache.registerHelper('__', function() {
+  return __.apply(this, arguments);
 });

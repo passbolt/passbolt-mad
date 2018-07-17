@@ -25,103 +25,103 @@ import State from 'passbolt-mad/model/map/state';
  * @param {array} options
  * @return {mad.model.Action}
  */
-var Action = MadMap.extend('mad.model.Action', {
+const Action = MadMap.extend('mad.model.Action', {
 
-    /**
-     * Identifier of the action
-     * @type string
-     */
-    id: {
-        type: 'string'
-    },
+  /**
+   * Identifier of the action
+   * @type string
+   */
+  id: {
+    type: 'string'
+  },
 
-    /**
-     * Label of the action
-     * @type string
-     */
-    label: {
-        type: 'string'
-    },
+  /**
+   * Label of the action
+   * @type string
+   */
+  label: {
+    type: 'string'
+  },
 
-    /**
-     * Name of the action
-     * @type string
-     */
-    name: {
-        type: 'string'
-    },
+  /**
+   * Name of the action
+   * @type string
+   */
+  name: {
+    type: 'string'
+  },
 
-    /**
-     * Icon of the action
-     * @type string
-     */
-    icon: {
-        type: 'string'
-    },
+  /**
+   * Icon of the action
+   * @type string
+   */
+  icon: {
+    type: 'string'
+  },
 
-    /**
-     * Callback associated to the action.
-     * @type function
-     */
-    action: {
-        type: '*'
-    },
+  /**
+   * Callback associated to the action.
+   * @type function
+   */
+  action: {
+    type: '*'
+  },
 
-    /**
-     * Css classes to associate to the action
-     * @type array
-     */
-    cssClasses: {
-        type: '*',
-        value: () => []
-    },
+  /**
+   * Css classes to associate to the action
+   * @type array
+   */
+  cssClasses: {
+    type: '*',
+    value: () => []
+  },
 
 
-    /**
-     * Initial state of the action
-     * @type string
-     */
-    initial_state: {
-        type: 'string',
-        value: 'ready'
-    },
+  /**
+   * Initial state of the action
+   * @type string
+   */
+  initial_state: {
+    type: 'string',
+    value: 'ready'
+  },
 
-    /**
-     * State of the action
-     * @type State
-     */
-    state: {
-        Type: State,
-        Value: () => new State()
-    },
+  /**
+   * State of the action
+   * @type State
+   */
+  state: {
+    Type: State,
+    Value: () => new State()
+  },
 
-    /**
-     * Is the action active
-     * @type boolean
-     */
-    active: {
-        type: 'boolean'
-    },
+  /**
+   * Is the action active
+   * @type boolean
+   */
+  active: {
+    type: 'boolean'
+  },
 
-    /**
-     * Constructor like.
-     * @param params
-     */
-    init: function(params) {
-        this._super(params);
-        this.state.setState([this.initial_state]);
-    },
+  /**
+   * Constructor like.
+   * @param params
+   */
+  init: function(params) {
+    this._super(params);
+    this.state.setState([this.initial_state]);
+  },
 
-    /**
-     * Execute the associated callback action if any.
-     * @param {mixed} data Data to pass to the callback if any
-     * @return {function}
-     */
-    execute: function (data) {
-        if(this.action) {
-            this.action(data);
-        }
+  /**
+   * Execute the associated callback action if any.
+   * @param {mixed} data Data to pass to the callback if any
+   * @return {function}
+   */
+  execute: function(data) {
+    if (this.action) {
+      this.action(data);
     }
+  }
 });
 
 /**
@@ -135,7 +135,7 @@ var Action = MadMap.extend('mad.model.Action', {
  * @return {DefineList}
  */
 Action.List = DefineList.extend({
-    "#": Action
+  "#": Action
 });
 
 export default Action;

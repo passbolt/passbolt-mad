@@ -1,4 +1,4 @@
-'use strict';
+
 
 import Config from 'passbolt-mad/config/config';
 import moment from 'moment/moment';
@@ -18,7 +18,7 @@ import 'moment-timezone/builds/moment-timezone-with-data';
  * ```
  */
 function getTimeAgo(date) {
-    return moment.tz(date, Config.read('app.server_timezone')).fromNow();
+  return moment.tz(date, Config.read('app.server_timezone')).fromNow();
 }
 
 export default getTimeAgo;

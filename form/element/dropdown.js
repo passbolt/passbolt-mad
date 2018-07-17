@@ -21,20 +21,20 @@ import template from 'passbolt-mad/view/template/form/dropdown.stache!';
  * The Dropdown Form Element
  * @todo TBD
  */
-var Dropdown = ChoiceElement.extend('mad.form.Dropdown', /* @static */ {
+const Dropdown = ChoiceElement.extend('mad.form.Dropdown', /* @static */ {
 
-    defaults: {
-        // Override the label option.
-        label: 'DropDown Form Element',
-        // Override the tag option.
-        tag: 'div',
-        // Override the template option.
-        template: template,
-        // Override the viewClass option.
-        viewClass: DropdownView,
-        // Allow empty value.
-        emptyValue: true
-    }
+  defaults: {
+    // Override the label option.
+    label: 'DropDown Form Element',
+    // Override the tag option.
+    tag: 'div',
+    // Override the template option.
+    template: template,
+    // Override the viewClass option.
+    viewClass: DropdownView,
+    // Allow empty value.
+    emptyValue: true
+  }
 
 }, /** @prototype */ {});
 

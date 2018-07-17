@@ -24,21 +24,21 @@ import List from 'can-list';
  * @param {array} options
  * @return {mad.model.GridColumn}
  */
-var GridColumn = CanMap.extend('mad.model.GridColumn', /** @prototype */ {
+const GridColumn = CanMap.extend('mad.model.GridColumn', /** @prototype */ {
 
-    // Constructor like
-    init: function(options) {
-        this._super(options);
+  // Constructor like
+  init: function(options) {
+    this._super(options);
 
-        if (!this.css) {
-            this.attr('css', new List());
-        }
-
-        // Add the class sortable to CSS classes.
-        if (this.sortable) {
-            this.css.push('sortable');
-        }
+    if (!this.css) {
+      this.attr('css', new List());
     }
+
+    // Add the class sortable to CSS classes.
+    if (this.sortable) {
+      this.css.push('sortable');
+    }
+  }
 
 });
 

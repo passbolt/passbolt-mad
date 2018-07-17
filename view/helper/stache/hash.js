@@ -14,6 +14,4 @@ import stache from 'can-stache';
 import hash from 'string-hash';
 
 // Register a stache helper to help hash string.
-stache.registerHelper('hash', function(seed){
-    return hash(seed);
-});
+stache.registerHelper('hash', seed => hash(seed));

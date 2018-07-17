@@ -58,108 +58,107 @@ import $ from 'jquery';
  * by the function which takes care of the request.
  *
  */
-var Bus = Control.extend('mad.Bus', /** @static */ {
+const Bus = Control.extend('mad.Bus', /** @static */ {
 
-    /**
-     * Instance of Bus.
-     */
-    bus: null,
+  /**
+   * Instance of Bus.
+   */
+  bus: null,
 
-    /**
-     * Instantiate or retrieve an existing bus.
-     */
-    singleton: function(el) {
-        if (Bus.bus) {
-            return Bus.bus;
-        }
-        var bus = new Bus(el);
-        Bus.bus = bus;
-        Bus.element = bus.element;
-        return bus;
-    },
-
-    /**
-     * Destroy the bus
-     */
-    destroy: function() {
-        Bus.bus.destroy();
-        Bus.bus = null;
-    },
-
-    /**
-     * Trigger an event on the Event Bus.
-     *
-     * @param {String} eventName Event name
-     * @param {Array} eventData (Optional) Data to associate to the event. The data has to be
-     *  passed to the function as an array.
-     */
-    trigger: function (type, data, options) {
-        options = options || {};
-        const evOptions = {type};
-        let dataKey = 'data';
-
-        // If the sender wants to override the name of the data key
-        if (options.dataKey) {
-            dataKey = options.dataKey;
-        }
-        evOptions[dataKey] = data || {};
-
-        domEvents.dispatch(Bus.element, evOptions);
-    },
-
-    /**
-     * Trigger an event to the plugin
-     * @param type
-     * @param data
-     */
-    triggerPlugin: function (type, data) {
-        var event = document.createEvent('CustomEvent');
-        event.initCustomEvent(type, true, true, data);
-        document.documentElement.dispatchEvent(event);
-    },
-
-    /**
-     * Trigger a request on the Event Bus.
-     *
-     * @param {String} eventName Event name
-     * @param {Array} eventData (Optional) Data to associate to the event. The data has to be
-     *  passed to the function as an array.
-     *
-     * @return {jQuery.Deferred.Promise} Return a promise to the caller.
-     */
-    triggerRequest: function (rqstName, rqstData) {
-        var data = [];
-        var deferred = $.Deferred();
-
-        // The request data are in the expected format.
-        if (Object.prototype.toString.call(rqstData) == "[object Array]") {
-            data = rqstData;
-        }
-        // If object format given, format it in array
-        else if (Object.prototype.toString.call(rqstData) == "[object Object]") {
-            data = [rqstData];
-        }
-
-        // Observers of this request expect a promise as first parameter.
-        data.unshift(deferred);
-
-        // Trigger the request on the Event Bus.
-        Bus.bus.trigger(rqstName, data);
-
-        // Return the promise to the caller.
-        return deferred.promise();
-    },
-
-    /**
-     * Bind an event on the associated DOM element.
-     *
-     * @param {String} eventName Event name
-     * @param {function} func The function to execute when the event is fired
-     * @return {void}
-     */
-    bind: function (eventName, func) {
-        $(Bus.element).bind(eventName, func);
+  /**
+   * Instantiate or retrieve an existing bus.
+   */
+  singleton: function(el) {
+    if (Bus.bus) {
+      return Bus.bus;
     }
+    const bus = new Bus(el);
+    Bus.bus = bus;
+    Bus.element = bus.element;
+    return bus;
+  },
+
+  /**
+   * Destroy the bus
+   */
+  destroy: function() {
+    Bus.bus.destroy();
+    Bus.bus = null;
+  },
+
+  /**
+   * Trigger an event on the Event Bus.
+   *
+   * @param {String} eventName Event name
+   * @param {Array} eventData (Optional) Data to associate to the event. The data has to be
+   *  passed to the function as an array.
+   */
+  trigger: function(type, data, options) {
+    options = options || {};
+    const evOptions = {type: type};
+    let dataKey = 'data';
+
+    // If the sender wants to override the name of the data key
+    if (options.dataKey) {
+      dataKey = options.dataKey;
+    }
+    evOptions[dataKey] = data || {};
+
+    domEvents.dispatch(Bus.element, evOptions);
+  },
+
+  /**
+   * Trigger an event to the plugin
+   * @param type
+   * @param data
+   */
+  triggerPlugin: function(type, data) {
+    const event = document.createEvent('CustomEvent');
+    event.initCustomEvent(type, true, true, data);
+    document.documentElement.dispatchEvent(event);
+  },
+
+  /**
+   * Trigger a request on the Event Bus.
+   *
+   * @param {String} eventName Event name
+   * @param {Array} eventData (Optional) Data to associate to the event. The data has to be
+   *  passed to the function as an array.
+   *
+   * @return {jQuery.Deferred.Promise} Return a promise to the caller.
+   */
+  triggerRequest: function(rqstName, rqstData) {
+    let data = [];
+    const deferred = $.Deferred();
+
+    // The request data are in the expected format.
+    if (Object.prototype.toString.call(rqstData) == "[object Array]") {
+      data = rqstData;
+    } else if (Object.prototype.toString.call(rqstData) == "[object Object]") {
+      // If object format given, format it in array
+      data = [rqstData];
+    }
+
+    // Observers of this request expect a promise as first parameter.
+    data.unshift(deferred);
+
+    // Trigger the request on the Event Bus.
+    Bus.bus.trigger(rqstName, data);
+
+    // Return the promise to the caller.
+    return deferred.promise();
+  },
+
+  /**
+   * Bind an event on the associated DOM element.
+   *
+   * @param {String} eventName Event name
+   * @param {function} func The function to execute when the event is fired
+   * @return {void}
+   */
+  bind: function(eventName, func) {
+    $(Bus.element).bind(eventName, func);
+  }
 
 
 }, /** @prototype */ {
@@ -167,8 +166,8 @@ var Bus = Control.extend('mad.Bus', /** @static */ {
 });
 
 // Observe the addon-message and forward them to the eventBus.
-window.addEventListener("addon-message", function (event) {
-    Bus.trigger(event.detail.event, event.detail.data);
+window.addEventListener("addon-message", event => {
+  Bus.trigger(event.detail.event, event.detail.data);
 }, false);
 
 export default Bus;

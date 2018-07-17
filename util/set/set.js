@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  *
@@ -18,25 +18,27 @@
  * ```
  */
 function set(obj, name, value) {
-    // The parts of the name we are looking up
-    // `['App','Models','Recipe']`
-    let parts = typeof name !== 'undefined' ? (name + '').replace(/\[/g,'.')
-    		.replace(/]/g,'').split('.') : [];
-    let length = parts.length;
-    let current, i;
+  /*
+   * The parts of the name we are looking up
+   * `['App','Models','Recipe']`
+   */
+  const parts = typeof name !== 'undefined' ? (String(name)).replace(/\[/g, '.')
+    .replace(/]/g, '').split('.') : [];
+  const length = parts.length;
+  let current, i;
 
-    if (!length) {
-        return obj;
-    }
+  if (!length) {
+    return obj;
+  }
 
-    current = obj;
-    for (i = 0; i < length - 1; i++) {
-        if (current[parts[i]] == undefined) {
-            current[parts[i]] = {};
-        }
-        current = current[parts[i]];
+  current = obj;
+  for (i = 0; i < length - 1; i++) {
+    if (current[parts[i]] == undefined) {
+      current[parts[i]] = {};
     }
-    current[parts[length - 1]] = value;
+    current = current[parts[i]];
+  }
+  current[parts[length - 1]] = value;
 }
 
 export default set;

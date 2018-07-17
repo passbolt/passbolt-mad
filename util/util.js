@@ -10,13 +10,15 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-/* Override the can/util/string.js to use our patched version of the function getObject
- * Our version allow to set a value in a nested object if required. (@todo remove this trick) */
+/*
+ * Override the can/util/string.js to use our patched version of the function getObject
+ * Our version allow to set a value in a nested object if required. (@todo remove this trick)
+ */
 
 // Define the global context.
-var glbl = typeof window !== "undefined" ? window : global,
+const glbl = typeof window !== "undefined" ? window : global;
 // Define the mad namespace.
-    mad = {};
+const mad = {};
 
 // Make mad global.
 glbl.mad = mad;
@@ -24,8 +26,8 @@ mad.global = mad;
 
 // Global configuration. Can be overriden later by other components.
 mad.config = {
-    // Root element.
-    rootElement: $('body')
+  // Root element.
+  rootElement: $('body')
 };
 
 /**
@@ -44,15 +46,17 @@ mad._controls = {};
  * @param {string} controlName The controller class name.
  * @return {mad.Control} The found controller or undefined.
  */
-mad.getControl = function (id, controlName) {
-    // If a controller class name is not given.
-    // Find the first one.
-    if (controlName == undefined) {
-        for (controlName in mad._controls[id]) {
-            break;
-        }
+mad.getControl = function(id, controlName) {
+  /*
+   * If a controller class name is not given.
+   * Find the first one.
+   */
+  if (controlName == undefined) {
+    for (controlName in mad._controls[id]) {
+      break;
     }
-    return mad._controls[id][controlName];
+  }
+  return mad._controls[id][controlName];
 };
 
 /**
@@ -63,12 +67,12 @@ mad.getControl = function (id, controlName) {
  *
  * @param {mad.Control} control The controller to reference
  */
-mad.referenceControl = function (control) {
-    var id = control.getId();
-    if (mad._controls[id] == undefined) {
-        mad._controls[id] = {};
-    }
-    mad._controls[id][control.constructor.fullName] = control;
+mad.referenceControl = function(control) {
+  const id = control.getId();
+  if (mad._controls[id] == undefined) {
+    mad._controls[id] = {};
+  }
+  mad._controls[id][control.constructor.fullName] = control;
 };
 
 /**
@@ -79,8 +83,8 @@ mad.referenceControl = function (control) {
  *
  * @param {mad.Control} control The controller to reference
  */
-mad.unreferenceControl = function (control) {
-    delete mad._controls[control.getId()][control.constructor.fullName];
+mad.unreferenceControl = function(control) {
+  delete mad._controls[control.getId()][control.constructor.fullName];
 };
 
 /**
@@ -92,8 +96,8 @@ mad.unreferenceControl = function (control) {
  * @param {mixed} name The variable name to set.
  * @param {mixed} value The variable value to set.
  */
-mad.setGlobal = function (name, value) {
-    glbl[name] = value;
+mad.setGlobal = function(name, value) {
+  glbl[name] = value;
 };
 
 export default mad;

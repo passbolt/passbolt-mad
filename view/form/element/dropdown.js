@@ -16,49 +16,48 @@ import FormElementView from 'passbolt-mad/view/form/element';
 /**
  * @inherits mad.view.form.Element
  */
-var Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}, /** @prototype */ {
+const Dropdown = FormElementView.extend('mad.view.form.Dropdown', /* @static */ {}, /** @prototype */ {
 
-    /**
-     * Get the value of the dropdown form element
-     * @return {mixed} The value of the component
-     */
-    getValue: function () {
-        var value = $(this.element).val();
-        if (value === 'true') {
-            value = true;
-        } else if (value === 'false') {
-            value = false;
-        }
-        return value;
-    },
-
-    /**
-     * Set the value of the dropdown form element
-     * @param {mixed} value The value to set
-     */
-    setValue: function (value) {
-        if (value === true) {
-            value = 'true';
-        } else if (value === false) {
-            value = 'false';
-        }
-        $(this.element).val(value);
-    },
-
-    /* ************************************************************** */
-    /* LISTEN TO THE VIEW EVENTS */
-    /* ************************************************************** */
-
-    /**
-     * Listen to the view event change
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     */
-    '{element} change': function (el, event) {
-        domEvents.dispatch(el, {type: 'changed', data: {
-            value: this.getValue()
-        }});
+  /**
+   * Get the value of the dropdown form element
+   * @return {mixed} The value of the component
+   */
+  getValue: function() {
+    let value = $(this.element).val();
+    if (value === 'true') {
+      value = true;
+    } else if (value === 'false') {
+      value = false;
     }
+    return value;
+  },
+
+  /**
+   * Set the value of the dropdown form element
+   * @param {mixed} value The value to set
+   */
+  setValue: function(value) {
+    if (value === true) {
+      value = 'true';
+    } else if (value === false) {
+      value = 'false';
+    }
+    $(this.element).val(value);
+  },
+
+  /* ************************************************************** */
+  /* LISTEN TO THE VIEW EVENTS */
+  /* ************************************************************** */
+
+  /**
+   * Listen to the view event change
+   * @param {HTMLElement} el The element the event occured on
+   */
+  '{element} change': function(el) {
+    domEvents.dispatch(el, {type: 'changed', data: {
+      value: this.getValue()
+    }});
+  }
 });
 
 export default Dropdown;

@@ -13,33 +13,33 @@
  */
 import DefineList from 'can-define/list/list';
 
-var DefineMadList = DefineList.extend({
+const DefineMadList = DefineList.extend({
 
-    /**
-     * Find the position of a given element in the list
-     * @param item
-     * @param fromIndex
-     * @returns {*}
-     */
-    indexOf: function(item, fromIndex) {
-        for (var i = fromIndex || 0, len = this.length; i < len; i++) {
-            if (this.get(i).id === item.id) {
-                return i;
-            }
-        }
-        return -1;
-    },
-
-    /**
-     * Remove an item from the list
-     * @param {DefineMap} item The item to remove
-     */
-    remove: function(item) {
-        var index = this.indexOf(item);
-        if (index != -1) {
-            this.splice(index, 1);
-        }
+  /**
+   * Find the position of a given element in the list
+   * @param item
+   * @param fromIndex
+   * @returns {*}
+   */
+  indexOf: function(item, fromIndex) {
+    for (let i = fromIndex || 0, len = this.length; i < len; i++) {
+      if (this.get(i).id === item.id) {
+        return i;
+      }
     }
+    return -1;
+  },
+
+  /**
+   * Remove an item from the list
+   * @param {DefineMap} item The item to remove
+   */
+  remove: function(item) {
+    const index = this.indexOf(item);
+    if (index != -1) {
+      this.splice(index, 1);
+    }
+  }
 });
 
 export default DefineMadList;

@@ -20,27 +20,27 @@ import Component from 'passbolt-mad/component/component';
  * The Form Feedback component as for aim to manage forms element validation feedback.
  * @todo TBD
  */
-var Feedback = Component.extend('mad.form.Feedback', /* @static */ {
+const Feedback = Component.extend('mad.form.Feedback', /* @static */ {
 
-    defaults: {
-        // Override the label option.
-        label: 'Form Feedback Component',
-        // The message the feedback should display.
-        message: null
-    }
+  defaults: {
+    // Override the label option.
+    label: 'Form Feedback Component',
+    // The message the feedback should display.
+    message: null
+  }
 
 }, /** @prototype */ {
 
-    /**
-     * Set the feedback component controller message
-     *
-     * @param {string} message The message to display
-     * @return {mad.form.Feedback}
-     */
-    setMessage: function (message) {
-        $(this.element).text(message);
-        return this;
-    }
+  /**
+   * Set the feedback component controller message
+   *
+   * @param {string} message The message to display
+   * @return {mad.form.Feedback}
+   */
+  setMessage: function(message) {
+    $(this.element).text(message);
+    return this;
+  }
 
 });
 

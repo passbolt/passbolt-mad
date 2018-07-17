@@ -16,10 +16,10 @@ import View from 'passbolt-mad/view/view';
 import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.stache!';
 
 // Register a stache helper to help the grid to render the cells.
-stache.registerHelper('gridCell', function(gridColumn, options){
-    var template = gridColumn.template;
-    if (!template) {
-        template = cellTemplate;
-    }
-    return View.render(template, options);
+stache.registerHelper('gridCell', (gridColumn, options) => {
+  let template = gridColumn.template;
+  if (!template) {
+    template = cellTemplate;
+  }
+  return View.render(template, options);
 });

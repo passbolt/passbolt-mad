@@ -37,83 +37,84 @@ import template from 'passbolt-mad/view/template/component/button_dropdown/butto
  *   * contentElement : the element where the subitems will be displayed.
  * @return {mad.component.ButtonDropdown}
  */
-var ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
+const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
 
-    defaults: {
-        label: 'Button Dropdown Component',
-        viewClass: ButtonDropdownView,
-        // The menu items.
-        items: null,
-        // Customize the element which will carry the dropdown content
-        contentElement: null,
-        // Close menu on item click.
-        closeOnItemClick: true,
-        // Template
-        template: template
-    }
+  defaults: {
+    label: 'Button Dropdown Component',
+    viewClass: ButtonDropdownView,
+    // The menu items.
+    items: null,
+    // Customize the element which will carry the dropdown content
+    contentElement: null,
+    // Close menu on item click.
+    closeOnItemClick: true,
+    // Template
+    template: template
+  }
 
 }, /** @prototype */ {
 
-    /**
-     * @inheritdoc
+  /**
+   * @inheritdoc
+   */
+  afterStart: function() {
+    let $dropdownElement = null;
+
+    /*
+     * @todo This container should be inserted following a different way
+     * If the dropdown content element hasn't been customized, inject one in DOM.
      */
-    afterStart: function() {
-        var $dropdownElement = null;
-
-        // @todo This container should be inserted following a different way
-        // If the dropdown content element hasn't been customized, inject one in DOM.
-        if (this.options.contentElement == null) {
-            $dropdownElement = $('<ul class="dropdown-content"></div>').insertAfter(this.element);
-        }
-        else {
-            $dropdownElement = $(this.options.contentElement);
-        }
-
-        // Create and render dropdown content.
-        var menu = new MenuComponent($dropdownElement[0]);
-        menu.start();
-        menu.load(this.options.items);
-        this.options.menu = menu;
-        this.on();
-    },
-
-    /**
-     * Set the item state.
-     * @param id The item id.
-     * @param stateName The state to set.
-     */
-    setItemState: function(id, stateName) {
-        this.options.menu.setItemState(id, stateName);
-    },
-
-    /**
-     * Close menu when clicking on an item.
-     * @param el
-     * @param ev
-     */
-    '{menu.element} item_selected': function(el, ev) {
-        const item = ev.data.item;
-        if (this.options.closeOnItemClick === true  && !item.state.is('disabled')) {
-            this.view.close();
-        }
-    },
-
-    /* ************************************************************** */
-    /* LISTEN TO THE STATE CHANGES */
-    /* ************************************************************** */
-
-    /**
-     * Listen to the change relative to the state Disabled
-     * @parent mad.component.ButtonDropdown.state_changes
-     * @param {boolean} go Enter or leave the state
-     * @return {void}
-     */
-    stateDisabled: function (go) {
-        this._super(go);
-        if (go) {
-            this.view.close();
-        }
+    if (this.options.contentElement == null) {
+      $dropdownElement = $('<ul class="dropdown-content"></div>').insertAfter(this.element);
+    } else {
+      $dropdownElement = $(this.options.contentElement);
     }
+
+    // Create and render dropdown content.
+    const menu = new MenuComponent($dropdownElement[0]);
+    menu.start();
+    menu.load(this.options.items);
+    this.options.menu = menu;
+    this.on();
+  },
+
+  /**
+   * Set the item state.
+   * @param id The item id.
+   * @param stateName The state to set.
+   */
+  setItemState: function(id, stateName) {
+    this.options.menu.setItemState(id, stateName);
+  },
+
+  /**
+   * Close menu when clicking on an item.
+   * @param el
+   * @param ev
+   */
+  '{menu.element} item_selected': function(el, ev) {
+    const item = ev.data.item;
+    if (this.options.closeOnItemClick === true  && !item.state.is('disabled')) {
+      this.view.close();
+    }
+  },
+
+  /* ************************************************************** */
+  /* LISTEN TO THE STATE CHANGES */
+  /* ************************************************************** */
+
+  /**
+   * Listen to the change relative to the state Disabled
+   * @parent mad.component.ButtonDropdown.state_changes
+   * @param {boolean} go Enter or leave the state
+   * @return {void}
+   */
+  stateDisabled: function(go) {
+    this._super(go);
+    if (go) {
+      this.view.close();
+    }
+  }
 });
 
 export default ButtonDropdown;

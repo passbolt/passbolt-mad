@@ -16,18 +16,18 @@ import domEvents from 'can-dom-events';
 /**
  * @inherits mad.view.View
  */
-var ConfirmView = DialogView.extend('mad.view.component.Confirm', /* @static */ {}, /** @prototype */ {
+const ConfirmView = DialogView.extend('mad.view.component.Confirm', /* @static */ {}, /** @prototype */ {
 
-    /**
-     * Listen to click on the confirm link
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @return {void}
-     */
-    '{element} .js-dialog-confirm click': function (el, ev) {
-        ev.preventDefault();
-        domEvents.dispatch(this.element, {type: 'confirm_clicked'});
-    }
+  /**
+   * Listen to click on the confirm link
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   * @return {void}
+   */
+  '{element} .js-dialog-confirm click': function(el, ev) {
+    ev.preventDefault();
+    domEvents.dispatch(this.element, {type: 'confirm_clicked'});
+  }
 });
 
 export default ConfirmView;

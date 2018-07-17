@@ -14,7 +14,6 @@ import "passbolt-mad/test/bootstrap";
 import "passbolt-mad/test/fixture/users";
 import CanList from 'can-list';
 import CanReflect from 'can-reflect';
-import List from 'passbolt-mad/model/list';
 import MadMap from 'passbolt-mad/model/map/map';
 import Profile from 'passbolt-mad/test/model/map/profile';
 import User from 'passbolt-mad/test/model/map/user';

@@ -26,69 +26,69 @@ mad.config = mad.config || {};
  *
  * The mad config tool as for aim to centralize the configuration of the application.
  */
-var MadConfig = Construct.extend('mad.Config', /** @static */ {
+const MadConfig = Construct.extend('mad.Config', /** @static */ {
 
-	/**
-	 * Load a config file
-     *
-	 * @param {string} url Url of the config file to load
-	 * @param {string} key Configuration key where to store the config loaded. (Useful in case of duplicate keys).
-	 */
-	loadFile: function (url, key) {
-		var self = this;
-		return $.ajax({
-			url: url,
-			async: false,
-			dataType: 'json',
-			success: function (data) {
-				if (key !== undefined) {
-					var dataWithKey = {};
-					dataWithKey[key] = data;
-					data = dataWithKey;
-				}
-				self.load(data);
-			}
-		});
-	},
+  /**
+   * Load a config file
+   *
+   * @param {string} url Url of the config file to load
+   * @param {string} key Configuration key where to store the config loaded. (Useful in case of duplicate keys).
+   */
+  loadFile: function(url, key) {
+    const self = this;
+    return $.ajax({
+      url: url,
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+        if (key !== undefined) {
+          const dataWithKey = {};
+          dataWithKey[key] = data;
+          data = dataWithKey;
+        }
+        self.load(data);
+      }
+    });
+  },
 
-	/**
-	 * Load a config array of variables.
-     *
-	 * @param {array} config The config array
-	 */
-	load: function (config) {
-		$.extend(true, mad.config, config);
-	},
+  /**
+   * Load a config array of variables.
+   *
+   * @param {array} config The config array
+   */
+  load: function(config) {
+    $.extend(true, mad.config, config);
+  },
 
-	/**
-	 * Retrieve a config variable
-	 *
-	 * @param {string} name The name of the config variable to retrieve.
-     *
-	 * @return {mixed}
-	 */
-	read: function (name) {
-		return getObject(mad.config, name);
-	},
+  /**
+   * Retrieve a config variable
+   *
+   * @param {string} name The name of the config variable to retrieve.
+   *
+   * @return {mixed}
+   */
+  read: function(name) {
+    return getObject(mad.config, name);
+  },
 
-	/**
-	 * Store a config variable.
-     *
-	 * @param {string} name The name of the config variable to set.
-	 * @param {mixed} value The value of the config variable to set.
-	 */
-	write: function (name, value) {
-		setObject(mad.config, name, value);
-	},
+  /**
+   * Store a config variable.
+   *
+   * @param {string} name The name of the config variable to set.
+   * @param {mixed} value The value of the config variable to set.
+   */
+  write: function(name, value) {
+    setObject(mad.config, name, value);
+  },
 
-	/**
-	 * Flush the config.
-	 */
-	flush: function() {
-		for (var i in mad.config) {
-			delete mad.config[i];
-		}
-	}
+  /**
+   * Flush the config.
+   */
+  flush: function() {
+    for (const i in mad.config) {
+      delete mad.config[i];
+    }
+  }
 
 }, { });
 

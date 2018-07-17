@@ -21,18 +21,18 @@ import template from 'passbolt-mad/view/template/form/checkbox.stache!';
  * The Checkbox Form Element
  * @todo TBD
  */
-var Checkbox = ChoiceElement.extend('mad.form.Checkbox', /* @static */ {
+const Checkbox = ChoiceElement.extend('mad.form.Checkbox', /* @static */ {
 
-    defaults: {
-        // Override the label option.
-        label: 'Checkbox Form Element',
-        // Override the tag option.
-        tag: 'div',
-        // Override the template option.
-        template: template,
-        // Override the viewClass option.
-        viewClass: CheckboxView
-    }
+  defaults: {
+    // Override the label option.
+    label: 'Checkbox Form Element',
+    // Override the tag option.
+    tag: 'div',
+    // Override the template option.
+    template: template,
+    // Override the viewClass option.
+    viewClass: CheckboxView
+  }
 
 }, /** @prototype */ {});
 

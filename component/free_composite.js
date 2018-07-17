@@ -29,27 +29,27 @@ import template from 'passbolt-mad/view/template/component/free_composite/worksp
  * this.options and merged with defaults static variable
  * @return {mad.component.FreeComposite}
  */
-var FreeComposite = CompositeComponent.extend('mad.component.FreeComposite', /** @static */ {
+const FreeComposite = CompositeComponent.extend('mad.component.FreeComposite', /** @static */ {
 
-    defaults: {
-        label: 'WorkspaceController',
-        template: template
-    }
+  defaults: {
+    label: 'WorkspaceController',
+    template: template
+  }
 }, /** @prototype */ {
 
-    /**
-     * Add a component to the container
-     * @param {String} ComponentClass The component class to use to instantiate the component
-     * @param {Array} componentOptions The optional data to pass to the component constructor
-     * @param {String} area The area to add the component. Default : mad-container-main
-     * @todo Implement this function with the view system
-     */
-    addComponent: function (ComponentClass, componentOptions, area) {
-        area = area || 'mad-container-main';
-        var $area = $('.' + area, this.element);
-        var component = ComponentHelper.create($area, 'inside_replace', ComponentClass, componentOptions);
-        return this._super(component);
-    }
+  /**
+   * Add a component to the container
+   * @param {String} ComponentClass The component class to use to instantiate the component
+   * @param {Array} componentOptions The optional data to pass to the component constructor
+   * @param {String} area The area to add the component. Default : mad-container-main
+   * @todo Implement this function with the view system
+   */
+  addComponent: function(ComponentClass, componentOptions, area) {
+    area = area || 'mad-container-main';
+    const $area = $(`.${area}`, this.element);
+    const component = ComponentHelper.create($area, 'inside_replace', ComponentClass, componentOptions);
+    return this._super(component);
+  }
 });
 
 export default FreeComposite;

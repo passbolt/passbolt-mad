@@ -15,39 +15,38 @@ import View from 'passbolt-mad/view/view';
 /**
  * @inherits mad.View
  */
-var Form = View.extend('mad.view.Form', /* @static */ {}, /** @prototype */ {
+const Form = View.extend('mad.view.Form', /* @static */ {}, /** @prototype */ {
 
-    /**
-     * Set the state of an embedded element.
-     *
-     * @param element
-     * @param state
-     */
-    setElementState: function (element, state) {
-        // Element's id.
-        var eltId = element.getId(),
-            $label = $('label[for="' + eltId + '"]'),
-            $wrapper = $(element.element).parent('.js_form_element_wrapper');
+  /**
+   * Set the state of an embedded element.
+   *
+   * @param element
+   * @param state
+   */
+  setElementState: function(element, state) {
+    const eltId = element.getId();
+    const $label = $(`label[for="${eltId}"]`);
+    const $wrapper = $(element.element).parent('.js_form_element_wrapper');
 
-        switch (state) {
-            case 'success':
-                if ($label) {
-                    $label.removeClass('error');
-                }
-                if ($wrapper) {
-                    $wrapper.removeClass('error');
-                }
-                break;
-            case 'error':
-                if ($label) {
-                    $label.addClass('error');
-                }
-                if ($wrapper) {
-                    $wrapper.addClass('error');
-                }
-                break;
+    switch (state) {
+      case 'success':
+        if ($label) {
+          $label.removeClass('error');
         }
+        if ($wrapper) {
+          $wrapper.removeClass('error');
+        }
+        break;
+      case 'error':
+        if ($label) {
+          $label.addClass('error');
+        }
+        if ($wrapper) {
+          $wrapper.addClass('error');
+        }
+        break;
     }
+  }
 });
 
 export default Form;

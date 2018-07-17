@@ -16,10 +16,10 @@ import isString from 'can-util/js/is-string/is-string';
 
 // Register a stache helper to help to capitalize a string
 stache.registerHelper('capitalize', function() {
-    return string.capitalize.apply(this, arguments);
+  return string.capitalize.apply(this, arguments);
 });
 
 // Register a stache helper to help to check that a variable is a string.
 stache.registerHelper('isString', function() {
-    return isString.apply(this, arguments);
+  return isString.apply(this, arguments);
 });

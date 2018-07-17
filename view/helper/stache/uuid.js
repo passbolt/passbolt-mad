@@ -14,6 +14,4 @@ import stache from 'can-stache';
 import uuid from 'uuid/v4';
 
 // Register a stache helper to help generate uuid.
-stache.registerHelper('uuid', function(){
-    return uuid();
-});
+stache.registerHelper('uuid', () => uuid());

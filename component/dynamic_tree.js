@@ -33,71 +33,71 @@ import itemTemplate from 'passbolt-mad/view/template/component/dynamic_tree/dyna
  * this.options and merged with defaults static variable
  * @return {mad.component.DynamicTree}
  */
-var DynamicTree = TreeComponent.extend('mad.component.DynamicTree', {
+const DynamicTree = TreeComponent.extend('mad.component.DynamicTree', {
 
-    defaults: {
-        label: 'Dynamic Tree Component',
-        viewClass: DynamicTreeView,
-        itemTemplate: itemTemplate,
-        map: null,
-        callbacks: {
-            item_selected: null,
-            item_right_selected: null,
-            item_hovered: null
-        }
+  defaults: {
+    label: 'Dynamic Tree Component',
+    viewClass: DynamicTreeView,
+    itemTemplate: itemTemplate,
+    map: null,
+    callbacks: {
+      item_selected: null,
+      item_right_selected: null,
+      item_hovered: null
     }
+  }
 
 }, /** @prototype */ {
 
-    /**
-     * Open an item
-     * @param {mad.model.Model} item The target item to open
-     * @return {void}
-     */
-    open: function (item) {
-        this.view.open(item);
-    },
+  /**
+   * Open an item
+   * @param {mad.model.Model} item The target item to open
+   * @return {void}
+   */
+  open: function(item) {
+    this.view.open(item);
+  },
 
-    /**
-     * Close an item
-     * @param {mad.model.Model} item The target item to close
-     * @return {void}
-     */
-    close: function (item) {
-        this.view.close(item);
-    },
+  /**
+   * Close an item
+   * @param {mad.model.Model} item The target item to close
+   * @return {void}
+   */
+  close: function(item) {
+    this.view.close(item);
+  },
 
-    /* ************************************************************** */
-    /* LISTEN TO THE VIEW EVENTS */
-    /* ************************************************************** */
+  /* ************************************************************** */
+  /* LISTEN TO THE VIEW EVENTS */
+  /* ************************************************************** */
 
-    /**
-     * An item has been uncollapsed
-     * @function mad.component.DynamicTree.item_opened
-     * @parent mad.component.DynamicTree.view_events
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @param {mad.model.Model} item The target item
-     * @return {void}
-     */
-    '{element} item_opened': function (el, ev) {
-        const item = ev.data.item;
-        this.open(item);
-    },
+  /**
+   * An item has been uncollapsed
+   * @function mad.component.DynamicTree.item_opened
+   * @parent mad.component.DynamicTree.view_events
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   * @param {mad.model.Model} item The target item
+   * @return {void}
+   */
+  '{element} item_opened': function(el, ev) {
+    const item = ev.data.item;
+    this.open(item);
+  },
 
-    /**
-     * An item has been collapsed
-     * @function mad.component.DynamicTree.item_closed
-     * @parent mad.component.DynamicTree.view_events
-     * @param {HTMLElement} el The element the event occured on
-     * @param {HTMLEvent} ev The event which occured
-     * @param {mad.model.Model} item The target item
-     * @return {void}
-     */
-    '{element} item_closed': function (el, ev) {
-        const item = ev.data.item;
-        this.close(item);
-    }
+  /**
+   * An item has been collapsed
+   * @function mad.component.DynamicTree.item_closed
+   * @parent mad.component.DynamicTree.view_events
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
+   * @param {mad.model.Model} item The target item
+   * @return {void}
+   */
+  '{element} item_closed': function(el, ev) {
+    const item = ev.data.item;
+    this.close(item);
+  }
 
 });
 

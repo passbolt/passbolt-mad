@@ -17,15 +17,15 @@ import getObject from 'can-util/js/get/get';
 import setObject from 'passbolt-mad/util/set/set';
 import Validation from 'passbolt-mad/util/validation';
 
-var DefineMap = CanDefineMap.extend({
-    /**
-     * Should the data be filtered before being send to the server.
-     * User when performing a create or an update request.
-     */
-    __FILTER_CASE__: 'string'
+const DefineMap = CanDefineMap.extend({
+  /**
+   * Should the data be filtered before being send to the server.
+   * User when performing a create or an update request.
+   */
+  __FILTER_CASE__: 'string'
 });
 DefineMap.List = DefineList.extend({
-    '#': DefineMap
+  '#': DefineMap
 });
 
 DefineMap.validationRules = {};
@@ -33,57 +33,59 @@ DefineMap.validationRules = {};
 DefineMap._references = {};
 
 DefineMap.getReference = function(name) {
-    return DefineMap._references[name];
+  return DefineMap._references[name];
 };
 
 DefineMap.setReference = function(name, ref) {
-    DefineMap._references[name] = ref;
+  DefineMap._references[name] = ref;
 };
 
+// eslint-disable-next-line no-unused-vars
 DefineMap.getValidationRules = function(validationCase) {
-    return this.validationRules;
+  return this.validationRules;
 };
 
 DefineMap.validateAttribute = function(attrName, value, values, validationCase) {
-    var returnValue = [];
+  const returnValue = [];
 
-    if (typeof validationCase == 'undefined') {
-        validationCase = 'default';
+  if (typeof validationCase == 'undefined') {
+    validationCase = 'default';
+  }
+
+  const rules = this.getValidationRules(validationCase);
+  if (rules[attrName]) {
+    // Retrieve the required rule of the attribute if any.
+    const requiredRule = this.getAttributeRule(attrName, 'required', validationCase);
+
+    // If the field is required & doesn't pass the required validation return an error.
+    if (requiredRule != null) {
+      const requiredResult = Validation.validate(requiredRule, value);
+      if (requiredResult !== true) {
+        returnValue.push(requiredResult);
+        return returnValue;
+      }
+    } else {
+      /*
+       * If the filed is not required and doesn't pass the required the validation
+       * the system won't process the other constraints.
+       */
+      const requiredResult = Validation.validate('required', value);
+      if (requiredResult !== true) {
+        return returnValue;
+      }
     }
 
-    var rules = this.getValidationRules(validationCase);
-    if (rules[attrName]) {
-        // Retrieve the required rule of the attribute if any.
-        var requiredRule = this.getAttributeRule(attrName, 'required', validationCase);
-
-        // If the field is required & doesn't pass the required validation return an error.
-        if (requiredRule != null) {
-            var requiredResult = Validation.validate(requiredRule, value);
-            if (requiredResult !== true) {
-                returnValue.push(requiredResult);
-                return returnValue;
-            }
-        }
-        // If the filed is not required and doesn't pass the required the validation
-        // the system won't process the other constraints.
-        else {
-            var requiredResult = Validation.validate('required', value);
-            if (requiredResult !== true) {
-                return returnValue;
-            }
-        }
-
-        // Otherwise execute all the constraints.
-        var attributeRules = rules[attrName];
-        for (var i in attributeRules) {
-            var validateResult = Validation.validate(attributeRules[i], value, values);
-            if (validateResult !== true) {
-                returnValue.push(validateResult);
-            }
-        }
+    // Otherwise execute all the constraints.
+    const attributeRules = rules[attrName];
+    for (const i in attributeRules) {
+      const validateResult = Validation.validate(attributeRules[i], value, values);
+      if (validateResult !== true) {
+        returnValue.push(validateResult);
+      }
     }
+  }
 
-    return returnValue;
+  return returnValue;
 };
 
 /**
@@ -94,21 +96,20 @@ DefineMap.validateAttribute = function(attrName, value, values, validationCase) 
  * @return {bool}
  */
 DefineMap.getAttributeRule = function(attrName, ruleName, validationCase) {
-    var rules = this.getValidationRules(validationCase);
-    var rule = null;
+  const rules = this.getValidationRules(validationCase);
+  let rule = null;
 
-    // The rule is not define as "fieldName" => "ruleName"
-    if ($.isArray(rules[attrName])) {
-        for (var i in rules[attrName]) {
-            if (rules[attrName][i].rule && rules[attrName][i].rule == 'required') {
-                rule = rules[attrName][i];
-            }
-        }
+  // The rule is not define as "fieldName" => "ruleName"
+  if ($.isArray(rules[attrName])) {
+    for (const i in rules[attrName]) {
+      if (rules[attrName][i].rule && rules[attrName][i].rule == 'required') {
+        rule = rules[attrName][i];
+      }
     }
+  }
 
-    return rule;
+  return rule;
 };
-
 
 /**
  * Return the fields to filter on regarding a case given in parameters.
@@ -116,8 +117,9 @@ DefineMap.getAttributeRule = function(attrName, ruleName, validationCase) {
  * @param filteredCase
  * @returns {mixed} An array of fields to filter on, or false if the case doesn't require to be filtered.
  */
+// eslint-disable-next-line no-unused-vars
 DefineMap.getFilteredFields = function(filteredCase) {
-    return false;
+  return false;
 };
 
 /**
@@ -132,29 +134,28 @@ DefineMap.getFilteredFields = function(filteredCase) {
  * @returns {{}}
  */
 DefineMap.filterAttributes = function(attrs) {
-    var filteredAttrs = {};
+  let filteredAttrs = {};
 
-    // If a filtered case has been given in parameter.
-    if (typeof attrs.__FILTER_CASE__ != 'undefined') {
-        var fields = this.getFilteredFields(attrs.__FILTER_CASE__);
+  // If a filtered case has been given in parameter.
+  if (typeof attrs.__FILTER_CASE__ != 'undefined') {
+    const fields = this.getFilteredFields(attrs.__FILTER_CASE__);
 
-        // If the case requires to filter the attributes.
-        if (fields !== false) {
-            for (var i in fields) {
-                var value = getObject(attrs, fields[i]);
-                setObject(filteredAttrs, fields[i], value);
-            }
-        } else {
-            filteredAttrs = attrs;
-            delete filteredAttrs.__FILTER_CASE__;
-        }
+    // If the case requires to filter the attributes.
+    if (fields !== false) {
+      for (const i in fields) {
+        const value = getObject(attrs, fields[i]);
+        setObject(filteredAttrs, fields[i], value);
+      }
+    } else {
+      filteredAttrs = attrs;
+      delete filteredAttrs.__FILTER_CASE__;
     }
+  } else {
     // If no filter case has been given, return all the attributes.
-    else {
-        filteredAttrs = attrs;
-    }
+    filteredAttrs = attrs;
+  }
 
-    return filteredAttrs;
+  return filteredAttrs;
 };
 
 export default DefineMap;

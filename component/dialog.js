@@ -31,83 +31,83 @@ import template from 'passbolt-mad/view/template/component/dialog/dialog.stache!
  * this.options and merged with defaults static variable
  * @return {mad.component.Dialog}
  */
-var Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static */ {
+const Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static */ {
 
-    defaults: {
-        label: 'Dialog Controller',
-        viewClass: DialogView,
-        template: template,
-        cssClasses: ['dialog-wrapper'],
-        tag: 'div'
-    },
+  defaults: {
+    label: 'Dialog Controller',
+    viewClass: DialogView,
+    template: template,
+    cssClasses: ['dialog-wrapper'],
+    tag: 'div'
+  },
 
-    /**
-     * Close the latest dialog.
-     */
-    closeLatest: function() {
-        $('.dialog-wrapper:last').remove();
-    },
+  /**
+   * Close the latest dialog.
+   */
+  closeLatest: function() {
+    $('.dialog-wrapper:last').remove();
+  },
 
-    /**
-     * Instantiate a new Dialog.
-     *
-     * @param {Object} [options] option values for the component.  These get added to
-     * this.options and merged with defaults static variable
-     * @return {mad.component.Dialog}
-     */
-    instantiate: function(options) {
-        // Create the DOM entry point for the dialog
-        var refElt = $('body'),
-            position = 'first';
+  /**
+   * Instantiate a new Dialog.
+   *
+   * @param {Object} [options] option values for the component.  These get added to
+   * this.options and merged with defaults static variable
+   * @return {mad.component.Dialog}
+   */
+  instantiate: function(options) {
+    // Create the DOM entry point for the dialog
+    let refElt = $('body');
+    let position = 'first';
 
-        // If a dialog already exist, position the new one right after.
-        var $existingDialog = $('.dialog-wrapper:last');
-        if ($existingDialog.length) {
-            refElt = $existingDialog;
-            position = "after";
-        }
-
-        // Insert the element in the page DOM.
-        var $el = HtmlHelper.create(refElt, position, '<div/>');
-
-        var dialog = new Dialog($el[0], options);
-        return dialog;
+    // If a dialog already exist, position the new one right after.
+    const $existingDialog = $('.dialog-wrapper:last');
+    if ($existingDialog.length) {
+      refElt = $existingDialog;
+      position = "after";
     }
+
+    // Insert the element in the page DOM.
+    const $el = HtmlHelper.create(refElt, position, '<div/>');
+
+    const dialog = new Dialog($el[0], options);
+    return dialog;
+  }
 
 }, /** @prototype */ {
 
-    /**
-     * Add a component to the dialog container
-     * @param {mad.controller.ComponentController} Class The class of the component to add, or the html to
-     *   display.
-     * @param {Object} options Option of the component
-     */
-    add: function(Class, options) {
-        if (typeof options == 'undefined' || options == null) {
-            options = {};
-        }
-
-        var component = this.addComponent(Class, options, 'js_dialog_content');
-        component.start();
-
-        return component;
-    },
-
-    /**
-     * Set the title
-     * @param {string} title The new title
-     */
-    setTitle: function(title) {
-        this.view.setTitle(title);
-    },
-
-    /**
-     * Set the subtitle
-     * @param {string} subtitle The new subtitle
-     */
-    setSubtitle: function(subtitle) {
-        this.view.setSubtitle(subtitle);
+  /**
+   * Add a component to the dialog container
+   * @param {mad.controller.ComponentController} Class The class of the component to add, or the html to
+   *   display.
+   * @param {Object} options Option of the component
+   */
+  add: function(Class, options) {
+    if (typeof options == 'undefined' || options == null) {
+      options = {};
     }
+
+    const component = this.addComponent(Class, options, 'js_dialog_content');
+    component.start();
+
+    return component;
+  },
+
+  /**
+   * Set the title
+   * @param {string} title The new title
+   */
+  setTitle: function(title) {
+    this.view.setTitle(title);
+  },
+
+  /**
+   * Set the subtitle
+   * @param {string} subtitle The new subtitle
+   */
+  setSubtitle: function(subtitle) {
+    this.view.setSubtitle(subtitle);
+  }
 });
 
 export default Dialog;
