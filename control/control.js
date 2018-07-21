@@ -13,7 +13,7 @@
 import $ from 'jquery';
 import CanControl from 'can-control';
 import uuid from 'uuid/v4';
-import "can-construct-super";
+import 'can-construct-super';
 
 /**
  * @parent Mad.core_api
@@ -43,7 +43,7 @@ const Control = CanControl.extend('mad.Control', /** @prototype */ {
    * @signature `new mad.Control( element, options )`
    * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
    * @param {Object} options Option values merged with the class defaults and set as this.options
-   * @return {mad.Control} A new instance of the constructor function extending mad.Control.
+   * @return {Control} A new instance of the constructor function extending Control.
    *
    * @body
    * ## Options
@@ -91,32 +91,8 @@ const Control = CanControl.extend('mad.Control', /** @prototype */ {
   },
 
   /**
-   * Get controller alias
-   * ex: PasswordBrowserController -> password_browser
-   * @param {String} format The return format [camel, under], by default camel for camelcased
-   * @return {String}
-   */
-  getAlias: function(type) {
-    type = (typeof type == 'undefined') ? 'camel' : type;
-    let returnValue = '';
-    const alias = this.constructor.shortName.replace(/Controller$/, '');
-
-    switch (type) {
-      case 'under':
-        returnValue = jQuery.String.underscore(alias);
-        break;
-      case 'camel':
-      default:
-        returnValue = alias;
-        break;
-    }
-
-    return returnValue;
-  },
-
-  /**
    * Get the controller class.
-   * @return {mad.Control}
+   * @return {Control.prototype}
    */
   getClass: function() {
     return this.constructor;

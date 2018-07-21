@@ -88,14 +88,12 @@ const ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @sta
   },
 
   /**
-   * @function mad.component.ButtonDropdown.__document_click
-   * @parent mad.component.ButtonDropdown.view_events
    * Intercept global click event and close menu if open.
    */
   '{document} click': function(el, ev) {
-    const dropdownIsSrc = $(ev.srcElement).is(this.element);
     const componentSelector = `#${this.getController().getId()}`;
-    const dropdownIsParent = $(ev.srcElement).parents(componentSelector).length;
+    const dropdownIsSrc = this.element.id == ev.target.id;
+    const dropdownIsParent = $(ev.target).parents(componentSelector).length;
     if (!dropdownIsSrc && !dropdownIsParent) {
       this.close();
     }

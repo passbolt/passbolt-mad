@@ -78,10 +78,9 @@ const DropdownMenu = MenuComponent.extend('mad.component.DropdownMenu', {
    * @parent mad.component.DropdownMenu.view_events
    * @param {HTMLElement} el The element the event occured on
    * @param {HTMLEvent} ev The event which occured
-   * @param {mad.model.Model} item The target item
-   * @return {void}
    */
-  ' item_opened': function(el, ev, item) {
+  '{element} item_opened': function(el, ev) {
+    const item = ev.data.item;
     this.open(item);
   },
 
@@ -90,10 +89,9 @@ const DropdownMenu = MenuComponent.extend('mad.component.DropdownMenu', {
    * @parent mad.component.DropdownMenu.view_events
    * @param {HTMLElement} el The element the event occured on
    * @param {HTMLEvent} ev The event which occured
-   * @param {mad.model.Model} item The target item
-   * @return {void}
    */
-  ' item_closed': function(el, ev, item) {
+  'element} item_closed': function(el, ev) {
+    const item = ev.data.item;
     this.close(item);
   }
 });

@@ -14,15 +14,6 @@ import DefineList from 'can-define/list/list';
 import MadMap from 'passbolt-mad/model/map/map';
 import $ from 'jquery';
 
-/**
- * @parent Mad.core_api
- * @inherits mad.Model
- *
- * The aim of the State model is to manage states of a component and its
- * transitions.
- *
- * This state model is used by the mad.Component.
- */
 const State = MadMap.extend('mad.model.State', {
 
   /**
@@ -31,7 +22,7 @@ const State = MadMap.extend('mad.model.State', {
    */
   previous: {
     Type: DefineList,
-    Value: DefineList
+    Default: DefineList
   },
 
   /**
@@ -40,7 +31,7 @@ const State = MadMap.extend('mad.model.State', {
    */
   current: {
     Type: DefineList,
-    Value: DefineList
+    Default: DefineList
   },
 
   /**

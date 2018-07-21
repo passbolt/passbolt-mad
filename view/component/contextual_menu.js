@@ -28,12 +28,15 @@ const ContextualMenu = DropdownMenuView.extend('mad.view.component.ContextualMen
    *
    * Intercept global click event and close menu if open.
    *
-   * @param el
-   * @param ev
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
    */
-  '{document} click': function(el, ev) {
-    if (!$(this.element).is(el) && !$(this.getController().options.source).is(ev.target)) {
-      $(this.element).remove();
+  '{document} mouseup': function(el, ev) {
+    const controller = this.getController();
+    const menuIsSrc = this.element.id == ev.target.id;
+    const menuIsParent = $(ev.target).parents(`#${controller.getId()}`).length;
+    if (!menuIsSrc && !menuIsParent) {
+      controller.remove();
     }
   },
 
@@ -45,10 +48,10 @@ const ContextualMenu = DropdownMenuView.extend('mad.view.component.ContextualMen
    * resulting in contextual menu component catching the contextmenu event.
    * We don't want that to happen, so we simply preventDefault here.
    *
-   * @param el
-   * @param ev
+   * @param {HTMLElement} el The element the event occured on
+   * @param {HTMLEvent} ev The event which occured
    */
-  ' contextmenu': function(el, ev) {
+  '{element} contextmenu': function(el, ev) {
     ev.preventDefault();
   }
 });

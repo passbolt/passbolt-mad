@@ -17,7 +17,7 @@ import View from 'passbolt-mad/view/view';
  *
  * @constructor
  *
- * @return {mad.view.component.Tab}
+ * @return {Tab}
  */
 const Tab = View.extend('mad.view.component.Tab', /** @static */ { }, /** @prototype */ {
 

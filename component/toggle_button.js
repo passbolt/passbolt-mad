@@ -29,7 +29,7 @@ import ButtonComponent from 'passbolt-mad/component/button';
  * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
  * @param {Object} [options] option values for the component.  These get added to
  * this.options and merged with defaults static variable
- * @return {mad.component.ToggleButton}
+ * @return {ToggleButton}
  */
 const ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @static */ {
 
@@ -41,11 +41,10 @@ const ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @s
 
   /**
    * Listen to the event click on the DOM toggle button element
-   * @function mad.component.ToggleButton.click
-   * @parent mad.component.ToggleButton.view_events
-   * @return {void}
+   * @param {HTMLElement} el The element the event occurred on
+   * @param {HTMLEvent} ev The event which occurred
    */
-  'click': function(el, ev) {
+  '{element} click': function(el, ev) {
     this._super(el, ev);
     if (!this.state.is('selected')) {
       this.setState('selected');
@@ -60,10 +59,7 @@ const ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @s
 
   /**
    * Listen to the change relative to the state Disabled
-   * @function mad.component.ToggleButton.stateSelected
-   * @parent mad.component.ToggleButton.state_changes
    * @param {boolean} go Enter or leave the state
-   * @return {void}
    */
   'stateSelected': function(go) {
     if (go) {

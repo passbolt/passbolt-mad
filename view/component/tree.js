@@ -238,7 +238,7 @@ const Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @prot
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */
-  'li .main-cell a click': function(el, ev) {
+  '{element} li .main-cell a click': function(el, ev) {
     ev.stopPropagation();
     ev.preventDefault();
 
@@ -262,7 +262,7 @@ const Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @prot
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */
-  'li a contextmenu': function(el, ev) {
+  '{element} li a contextmenu': function(el, ev) {
     ev.stopPropagation();
     ev.preventDefault();
 
@@ -289,7 +289,7 @@ const Tree = View.extend('mad.view.component.Tree', /** @static */ {}, /** @prot
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */
-  'li a hover': function(el, ev) {
+  '{element} li a hover': function(el, ev) {
     ev.stopPropagation();
     ev.preventDefault();
 

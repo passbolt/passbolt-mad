@@ -36,8 +36,7 @@ const Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
 
   /**
    * Perform an ajax request
-   * @param {Array} request The ajax request settings (almost similar to the
-   * jQuery ajax function)
+   * @param {object} request The ajax request settings (almost similar to the jQuery ajax function)
    * @return {jQuery.deferred}
    */
   request: function(request) {
@@ -59,7 +58,7 @@ const Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
     request.type = request.type ? request.type.toUpperCase() : 'GET';
 
     // The request will not display a loading feedback, default true.
-    if (typeof request.silentLoading == 'undefined') {
+    if ((typeof request.silentLoading) == 'undefined') {
       request.silentLoading = true;
       if (request.type == 'POST' || request.type == 'DELETE' || request.type == 'PUT') {
         request.silentLoading = false;

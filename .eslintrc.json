@@ -21,6 +21,7 @@
     "globals": {
         "__": true,
         "APP_URL": true,
+        "global": true,
         "mad": true,
         "steal": true
     },

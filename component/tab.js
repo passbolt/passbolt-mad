@@ -90,7 +90,6 @@ const Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
   /**
    * Enable a tab
    * @param {string} tabId id of the tab to enable
-   * @return {void}
    */
   enableTab: function(tabId) {
     /*

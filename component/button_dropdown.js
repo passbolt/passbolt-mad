@@ -18,8 +18,6 @@ import template from 'passbolt-mad/view/template/component/button_dropdown/butto
 
 /**
  * @parent Mad.components_api
- * @inherits mad.component.Button
- * @group mad.component.ButtonDropdown.state_changes 0 State Changes
  *
  * The Button Dropdown class Controller is our implementation of the UI component Drop down button.
  *
@@ -35,7 +33,7 @@ import template from 'passbolt-mad/view/template/component/button_dropdown/butto
  *   * menu : the menu component
  *   * items : an array of Action models
  *   * contentElement : the element where the subitems will be displayed.
- * @return {mad.component.ButtonDropdown}
+ * @return {ButtonDropdown}
  */
 const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
 
@@ -80,8 +78,8 @@ const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
 
   /**
    * Set the item state.
-   * @param id The item id.
-   * @param stateName The state to set.
+   * @param {string} id The item id.
+   * @param {string} stateName The state to set.
    */
   setItemState: function(id, stateName) {
     this.options.menu.setItemState(id, stateName);
@@ -89,8 +87,8 @@ const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
 
   /**
    * Close menu when clicking on an item.
-   * @param el
-   * @param ev
+   * @param {HTMLElement} el The element the event occurred on
+   * @param {HTMLEvent} ev The event which occurred
    */
   '{menu.element} item_selected': function(el, ev) {
     const item = ev.data.item;
@@ -105,9 +103,7 @@ const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
 
   /**
    * Listen to the change relative to the state Disabled
-   * @parent mad.component.ButtonDropdown.state_changes
    * @param {boolean} go Enter or leave the state
-   * @return {void}
    */
   stateDisabled: function(go) {
     this._super(go);

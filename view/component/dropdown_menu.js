@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import DomData from 'can-dom-data';
+import domEvents from 'can-dom-events';
 import TreeView from 'passbolt-mad/view/component/tree';
 
 /**
@@ -68,7 +69,7 @@ const DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @stat
       data = el.id;
     }
 
-    $(this.element).trigger('item_opened', data);
+    domEvents.dispatch(this.element, {type: 'item_opened', data: {item: data, srcEv: ev}});
   },
 
   /**
@@ -88,7 +89,8 @@ const DropdownMenu = TreeView.extend('mad.view.component.DropdownMenu', /* @stat
     } else {
       data = el.id;
     }
-    $(this.element).trigger('item_closed', data);
+
+    domEvents.dispatch(this.element, {type: 'item_closed', data: {item: data, srcEv: ev}});
   }
 
 });

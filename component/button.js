@@ -15,8 +15,6 @@ import Component from 'passbolt-mad/component/component';
 /**
  * @parent Mad.components_api
  * @inherits mad.Component
- * @group mad.component.Button.view_events 0 View Events
- * @group mad.component.Button.state_changes 1 State Listeners
  *
  * The Button component is a simple button implementation.
  *
@@ -33,7 +31,7 @@ import Component from 'passbolt-mad/component/component';
  *   * events : object that can contain
  *      * click : callback to be executed at click.
  *   * tag : html tag to use.
- * @return {mad.component.Button}
+ * @return {Button}
  */
 const Button = Component.extend('mad.component.Button', {
 
@@ -75,7 +73,7 @@ const Button = Component.extend('mad.component.Button', {
   /**
    * Set the value of the button
    * @param {mixed} value The value to set
-   * @return {mad.controller.component.ButtonController}
+   * @return {Button}
    */
   setValue: function(value) {
     this.value = value;
@@ -87,12 +85,9 @@ const Button = Component.extend('mad.component.Button', {
   /* ************************************************************** */
 
   /**
-   * @function mad.component.Button.click
-   * @parent mad.component.Button.view_events
    * Listen to the event click on the DOM button element
-   * @return {void}
    */
-  click: function(el, ev) {
+  '{element} click': function(el, ev) {
     // if the component is disabled, stop the propagation
     if (this.state.is('disabled')) {
       ev.stopImmediatePropagation();
@@ -109,11 +104,8 @@ const Button = Component.extend('mad.component.Button', {
   /* ************************************************************** */
 
   /**
-   * @function mad.component.Button.stateDisabled
-   * @parent mad.component.Button.state_changes
    * Listen to the change relative to the state Disabled
    * @param {boolean} go Enter or leave the state
-   * @return {void}
    */
   stateDisabled: function(go) {
     if (go) {
