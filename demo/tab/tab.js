@@ -14,12 +14,12 @@ import $ from 'jquery';
 import can from "can/can";
 import 'can/construct/super/super';
 import mad from "passbolt-mad/passbolt-mad";
-import Tree from "passbolt-mad/component/tab";
+import Tab from "passbolt-mad/component/tab";
 import FreeComposite from "passbolt-mad/component/component";
 import Button from "passbolt-mad/component/button";
 
 // Instantiate the main tabs controller
-var tabs = new mad.component.Tab('#tab', {
+var tabs = Tab('#tab', {
     autoMenu: true,
     menu: new can.Control('body')
 });

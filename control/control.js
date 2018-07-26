@@ -58,36 +58,27 @@ const Control = CanControl.extend('mad.Control', /** @prototype */ {
    * defined in the optional parameters will override the one defined on the HTML Element.
    */
   init: function(el, options) {
-    /*
-     * A controller is always associated to a DOM element.
-     * If the element is null, or does not exist, throw an exception.
-     */
+    // Crash if no element selector is given.
     if (!el || !$(el).length) {
-      throw new mad.Exception(`The parameter "el" (${$(el).selector}) should refer to an existing DOM node.`);
+      throw new Error(`The parameter "el" (${el}) should refer to an existing DOM node.`);
     }
 
     // The identifier has not been defined in the option parameters.
-    if (typeof options.id == 'undefined' || options.id == null || options.id == '') {
+    if (!options.id || options.id == null || options.id == '') {
+      // If one defined on the DOM element used it, otherwise create a new one.
       const elId = $(this.element).attr('id');
-
-      // If an identifier has been defined on the associated Controller's DOM Element.
-      if (typeof elId != 'undefined' && elId != '') {
+      if (elId && elId != '') {
         options.id = elId;
       } else {
-        // Otherwise generate a unique identifier.
         options.id = uuid();
         $(this.element).attr('id', options.id);
       }
     } else {
-      /*
-       * The id is given in the options.
-       * Override the DOM element id by the one defined in the optional parameters.
-       */
+      // On element id is defined in the component options, update the DOM with it.
       $(this.element).attr('id', options.id);
     }
 
-    // Augment the default options with the one given in parameters.
-    this.options = $.extend(true, {}, this.options, options);
+    this.id = options.id;
   },
 
   /**

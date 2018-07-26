@@ -14,77 +14,75 @@ import "passbolt-mad/test/bootstrap";
 import MadMap from 'passbolt-mad/model/map/map';
 import State from 'passbolt-mad/model/map/state';
 
-describe("mad.model.State", function(){
+describe("mad.model.State", () => {
+  it("should inherit can.Model & mad.Model", () => {
+    const state = new State();
+    expect(state).to.be.instanceOf(MadMap);
+    expect(state).to.be.instanceOf(State);
+  });
 
-	it("should inherit can.Model & mad.Model", function(){
-		var state = new State();
-		expect(state).to.be.instanceOf(MadMap);
-		expect(state).to.be.instanceOf(State);
-	});
+  it("setState() should change the current state(s)", () => {
+    const state = new State();
 
-	it("setState() should change the current state(s)", function(){
-		var state = new State();
+    expect(state.previous.length).to.be.equal(0);
+    expect(state.current.length).to.be.equal(0);
 
-		expect(state.previous.length).to.be.equal(0);
-		expect(state.current.length).to.be.equal(0);
+    // Set the state to A.
+    state.setState('A');
 
-		// Set the state to A.
-		state.setState('A');
+    expect(state.previous.length).to.be.equal(0);
+    expect(state.current.length).to.be.equal(1);
+    expect(state.is('A')).to.be.true;
 
-		expect(state.previous.length).to.be.equal(0);
-		expect(state.current.length).to.be.equal(1);
-		expect(state.is('A')).to.be.true;
+    // Set the state to B.
+    state.setState('B');
+    expect(state.previous.length).to.be.equal(1);
+    expect(state.current.length).to.be.equal(1);
+    expect(state.is('A')).to.be.false;
+    expect(state.is('B')).to.be.true;
+    expect(state.was('A')).to.be.true;
 
-		// Set the state to B.
-		state.setState('B');
-		expect(state.previous.length).to.be.equal(1);
-		expect(state.current.length).to.be.equal(1);
-		expect(state.is('A')).to.be.false;
-		expect(state.is('B')).to.be.true;
-		expect(state.was('A')).to.be.true;
+    // Flush the current states list.
+    state.setState();
+    expect(state.previous.length).to.be.equal(1);
+    expect(state.current.length).to.be.equal(0);
+    expect(state.is('B')).to.be.false;
+    expect(state.was('B')).to.be.true;
+  });
 
-		// Flush the current states list.
-		state.setState();
-		expect(state.previous.length).to.be.equal(1);
-		expect(state.current.length).to.be.equal(0);
-		expect(state.is('B')).to.be.false;
-		expect(state.was('B')).to.be.true;
-	});
+  it("add() & remove() states", () => {
+    const state = new State();
 
-	it("add() & remove() states", function(){
-		var state = new State();
+    // Set the state to A.
+    state.addState('A');
+    expect(state.previous.length).to.be.equal(0);
+    expect(state.current.length).to.be.equal(1);
+    expect(state.is('A')).to.be.true;
 
-		// Set the state to A.
-		state.addState('A');
-		expect(state.previous.length).to.be.equal(0);
-		expect(state.current.length).to.be.equal(1);
-		expect(state.is('A')).to.be.true;
+    // Set the state to B.
+    state.addState('B');
+    expect(state.previous.length).to.be.equal(1);
+    expect(state.current.length).to.be.equal(2);
+    expect(state.is('A')).to.be.true;
+    expect(state.is('B')).to.be.true;
+    expect(state.was('A')).to.be.true;
 
-		// Set the state to B.
-		state.addState('B');
-		expect(state.previous.length).to.be.equal(1);
-		expect(state.current.length).to.be.equal(2);
-		expect(state.is('A')).to.be.true;
-		expect(state.is('B')).to.be.true;
-		expect(state.was('A')).to.be.true;
+    // Remove the state A.
+    state.removeState('A');
+    expect(state.previous.length).to.be.equal(2);
+    expect(state.current.length).to.be.equal(1);
+    expect(state.was('A')).to.be.true;
+    expect(state.was('B')).to.be.true;
+    expect(state.is('A')).to.be.false;
+    expect(state.is('B')).to.be.true;
 
-		// Remove the state A.
-		state.removeState('A');
-		expect(state.previous.length).to.be.equal(2);
-		expect(state.current.length).to.be.equal(1);
-		expect(state.was('A')).to.be.true;
-		expect(state.was('B')).to.be.true;
-		expect(state.is('A')).to.be.false;
-		expect(state.is('B')).to.be.true;
-
-		// Remove the state B.
-		state.removeState('B');
-		expect(state.previous.length).to.be.equal(1);
-		expect(state.current.length).to.be.equal(0);
-		expect(state.was('A')).to.be.false;
-		expect(state.was('B')).to.be.true;
-		expect(state.is('A')).to.be.false;
-		expect(state.is('B')).to.be.false;
-	});
-
+    // Remove the state B.
+    state.removeState('B');
+    expect(state.previous.length).to.be.equal(1);
+    expect(state.current.length).to.be.equal(0);
+    expect(state.was('A')).to.be.false;
+    expect(state.was('B')).to.be.true;
+    expect(state.is('A')).to.be.false;
+    expect(state.is('B')).to.be.false;
+  });
 });

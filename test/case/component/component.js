@@ -10,113 +10,138 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import $ from 'jquery';
 import 'passbolt-mad/test/bootstrap';
 import CanControl from 'can-control';
 import Component from 'passbolt-mad/component/component';
 import MadControl from 'passbolt-mad/control/control';
+import $ from 'jquery';
 
-import customTemplate from 'passbolt-mad/test/case/component/component_custom_template.stache!'
+import customTemplate from 'passbolt-mad/test/case/component/component_custom_template.stache!';
 
-describe("mad.Component", function(){
+const MyComponent = Component.extend('MyComponent', {
+  defaults: {
+    cssClasses: ['js_test_component']
+  }
+}, {});
 
-	// Extend Component for the needs of the tests.
-	var MyComponent = Component.extend('MyComponent', {
-		defaults: {
-			cssClasses: ['js_test_component']
-		}
-	}, {});
+describe("Component", () => {
+  afterEach(() => {
+    $('#test-html').empty();
+  });
 
-	it("should inherit can.Control & mad.Control", function(){
-		var component = new Component('#test-html');
+  describe("Constructor", () => {
+    it("inherits vampire", () => {
+      const component = new Component('#test-html');
+      expect(component).to.be.instanceOf(CanControl);
+      expect(component).to.be.instanceOf(MadControl);
+      expect(component).to.be.instanceOf(Component);
+      component.destroy();
+    });
 
-		// Basic control of classes inheritance.
-		expect(component).to.be.instanceOf(CanControl);
-		expect(component).to.be.instanceOf(MadControl);
-		expect(component).to.be.instanceOf(Component);
+    it("sets the cycle control properties as expected", () => {
+      const component = new MyComponent('#test-html');
+      expect(component.state.disabled).to.be.false;
+      expect(component.state.destroyed).to.be.false;
+      expect(component.state.hidden).to.be.false;
+      expect(component.state.loaded).to.be.false;
+      expect(component.state.started).to.be.false;
+    });
 
-		component.destroy();
-	});
+    it("should use the state given in options as value", () => {
+      const options = {
+        state: {
+          destroyed: true,
+          disabled: true,
+          hidden: true,
+          loaded: true,
+          started: true
+        }
+      };
+      const component = new MyComponent('#test-html', options);
+      expect(component.state.disabled).to.be.true;
+      expect(component.state.destroyed).to.be.true;
+      expect(component.state.hidden).to.be.true;
+      expect(component.state.loaded).to.be.true;
+      expect(component.state.started).to.be.true;
+    });
+  });
 
-	it("should be instantiated with the right properties & values", function(){
-		var component = new MyComponent('#test-html'),
-			$elt = $(component.element);
+  describe("start()", () => {
+    it("updates the state properties", () => {
+      const component = new MyComponent('#test-html');
+      component.start();
+      expect(component.state.loaded).to.be.true;
+      expect(component.state.started).to.be.true;
+      component.destroy();
+    });
 
-		// The state property should be empty.
-		expect(component.state.previous.length).to.be.equal(0);
-		expect(component.state.current.length).to.be.equal(0);
+    it("updates the DOM element css classes", () => {
+      const component = new MyComponent('#test-html');
+      const $elt = $(component.element);
+      component.start();
+      expect($elt.hasClass('MyComponent')).to.be.true;
+      expect($elt.hasClass('js_test_component')).to.be.true;
+      expect($elt.hasClass('ready')).to.be.true;
+      component.destroy();
+    });
 
-		// The associated HTML Element should have the Component fullName as css class.
-		expect($elt.hasClass('MyComponent')).to.be.true;
-		// The associated HTML Element should have the Component optional cssClasses as css classes.
-		expect($elt.hasClass('js_test_component')).to.be.true;
+    it("starts and does not set the loaded property to true if requested in options", () => {
+      const MyComponentOverriddenState = Component.extend('MyComponentOverriddenState', {
+        defaults: {
+          loadedOnStart: false
+        }
+      }, {});
+      const component = new MyComponentOverriddenState('#test-html');
+      const $elt = $(component.element);
+      expect(component.state.disabled).to.be.false;
+      expect(component.state.destroyed).to.be.false;
+      expect(component.state.loaded).to.be.false;
+      expect(component.state.started).to.be.false;
+      component.start();
+      expect(component.state.disabled).to.be.false;
+      expect(component.state.destroyed).to.be.false;
+      expect(component.state.loaded).to.be.false;
+      expect(component.state.started).to.be.true;
+      expect($elt.hasClass('ready')).to.be.false;
+      component.destroy();
+    });
+  });
 
-		component.destroy();
+  describe("render()", () => {
+    it("renders a custom template", () => {
+      const CustomComponent = Component.extend('MyComponentOverriddenTemplate', {
+        defaults: {
+          template: customTemplate
+        }
+      }, {
+        beforeRender: function() {
+          this.setViewData('variable', 'Mr. Wayne');
+        }
+      });
+      const component = new CustomComponent('#test-html');
+      const $elt = $(component.element);
+      component.start();
+      expect($elt.text()).to.contain('There\'s a storm coming, Mr. Wayne. You and your friends better batten down the hatches, because when it hits, you\'re all gonna wonder how you ever thought you could live so large and leave so little for the rest of us.');
+      component.destroy();
+    });
+  });
 
-		// After destroy, the associated HTML Element should not have the Component fullName as css class.
-		expect($elt.hasClass('MyComponent')).to.be.false;
-		// After destroy, the associated HTML Element should not have the Component optional cssClasses as css classes.
-		expect($elt.hasClass('js_test_component')).to.be.false;
-	});
+  describe("destroy()", () => {
+    it("updates the state properties", () => {
+      const component = new MyComponent('#test-html');
+      component.start();
+      component.destroy();
+      expect(component.state.destroyed).to.be.true;
+    });
 
-	it("should be in the default state after being started", function() {
-		var component = new MyComponent('#test-html'),
-			$elt = $(component.element);
-
-		component.start();
-
-		// After start, the component' state is initialized with the Component default option.
-		expect(component.state.is('loading')).to.be.false;
-		expect(component.state.is('ready')).to.be.true;
-
-		// After start, the associated HTML Element should have the Component current state name as css class.
-		expect($elt.hasClass('ready')).to.be.true;
-
-		component.destroy();
-
-		// After destroy, the associated HTML Element should not have the Component current state name as css class.
-		expect($elt.hasClass('ready')).to.be.false;
-	});
-
-	it("should be in the overridden default state after being started", function() {
-		var MyComponentOverriddenState = Component.extend('MyComponentOverriddenState', {
-			defaults: {
-				state: 'disabled'
-			}
-		}, {});
-
-		var component = new MyComponentOverriddenState('#test-html');
-		component.start();
-
-		// After start, the component' state is initialized with the Component overriden option.
-		expect(component.state.is('loading')).to.be.false;
-		expect(component.state.is('ready')).to.be.false;
-		expect(component.state.is('disabled')).to.be.true;
-
-		component.destroy();
-	});
-
-	it("should be rendered based on a custom template if defined", function() {
-		var CustomComponent = Component.extend('MyComponentOverriddenTemplate', {
-			defaults: {
-				state: 'disabled',
-				template: customTemplate
-			}
-		}, {
-			beforeRender: function() {
-				this.setViewData('variable', 'VARIABLE VALUE');
-			}
-		});
-
-		var component = new CustomComponent('#test-html'),
-			$elt = $(component.element);
-
-		component.start();
-
-		// I should see a trace of the rendered custom template on the page.
-		expect($elt.text()).to.contain('look this is my custom template and my custom variable value VARIABLE VALUE');
-
-		$elt.empty();
-		component.destroy();
-	});
+    it("updates the DOM element css classes", () => {
+      const component = new MyComponent('#test-html');
+      const $elt = $(component.element);
+      component.start();
+      component.destroy();
+      expect($elt.hasClass('MyComponent')).to.be.false;
+      expect($elt.hasClass('js_test_component')).to.be.false;
+      expect($elt.hasClass('ready')).to.be.false;
+    });
+  });
 });

@@ -10,17 +10,29 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/test/bootstrap";
-import CanControl from "can-control";
-import MadControl from 'passbolt-mad/control/control';
+import DefineMap from 'can-define/map/map';
 
-describe("Control", () => {
-  describe("Constructor", () => {
-    it("inherits Centaur", () => {
-      const control = new MadControl('#test-html');
-      expect(control).to.be.instanceOf(CanControl);
-      expect(control).to.be.instanceOf(MadControl);
-      control.destroy();
-    });
-  });
+const ComponentState = DefineMap.extend({
+  destroyed: {
+    type: 'boolean',
+    default: false
+  },
+  disabled: {
+    type: 'boolean',
+    default: false
+  },
+  hidden: {
+    type: 'boolean',
+    default: false
+  },
+  loaded: {
+    type: 'boolean',
+    default: false
+  },
+  started: {
+    type: 'boolean',
+    default: false
+  }
 });
+
+export default ComponentState;

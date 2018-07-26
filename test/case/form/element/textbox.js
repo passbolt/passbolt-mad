@@ -12,186 +12,182 @@
  */
 import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
-import TextboxFormElement from "passbolt-mad/form/element/textbox"
+import TextboxFormElement from "passbolt-mad/form/element/textbox";
 import Component from 'passbolt-mad/component/component';
 import domEvents from 'can-dom-events';
 import FormElement from 'passbolt-mad/form/element';
 import MadControl from 'passbolt-mad/control/control';
 
-describe("mad.form.element.Textbox", function () {
+let $textbox = null;
 
-    // The HTMLElement which will carry the textbox component.
-    var $textbox = null;
+describe("Textbox", () => {
+  beforeEach(() => {
+    $textbox = $('<input id="textbox" type="text" />').appendTo($('#test-html'));
+  });
 
-    // Insert a <input> HTMLElement into the DOM for the test.
-    beforeEach(function () {
-        $textbox = $('<input id="textbox" type="text" />').appendTo($('#test-html'));
+  afterEach(() => {
+    $('#test-html').empty();
+  });
+
+  describe("Constructor", () => {
+    it("inherits jinn", () => {
+      const textbox = new TextboxFormElement('#textbox', {});
+      expect(textbox).to.be.instanceOf(CanControl);
+      expect(textbox).to.be.instanceOf(Component);
+      expect(textbox).to.be.instanceOf(FormElement);
+      textbox.destroy();
     });
+  });
 
-    // Clean the DOM after each test.
-    afterEach(function () {
-        $('#test-html').empty();
-    });
+  describe("getValue()", () => {
+    it("returns the value of the element", done => {
+      const textbox = new TextboxFormElement('#textbox', {});
+      textbox.start();
 
-    it("constructed instance should inherit mad.form.Element & the inherited parent classes", function () {
-        var textbox = new TextboxFormElement('#textbox', {});
+      // Simulate a keypress
+      $textbox.val('abc');
+      domEvents.dispatch($textbox[0], 'input');
 
-        // Basic control of classes inheritance.
-        expect(textbox).to.be.instanceOf(CanControl);
-        expect(textbox).to.be.instanceOf(Component);
-        expect(textbox).to.be.instanceOf(FormElement);
-
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.equal('abc');
         textbox.destroy();
+        done();
+      }, 0);
     });
 
-    it("getValue() should return the value of the textbox", function (done) {
-        var firedChanged = false,
-            textbox = new TextboxFormElement('#textbox', {});
+    it("returns the value of the element (several elements on the page)", done => {
+      let $textbox2 = $('<input id="textbox2" type="text" />').appendTo($('#test-html')),
+        textbox = new TextboxFormElement('#textbox', {}).start(),
+        textbox2 = new TextboxFormElement('#textbox2', {}).start();
 
-        textbox.start();
+      // Simulate a keypress
+      $textbox.val('abc');
+      domEvents.dispatch($textbox[0], 'input');
+      $textbox2.val('xyz');
+      domEvents.dispatch($textbox2[0], 'input');
 
-        // Simulate a keypress
-        $textbox.val('abc');
-        domEvents.dispatch($textbox[0], 'input');
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.equal('abc');
+        expect(textbox2.getValue()).to.be.equal('xyz');
+        textbox.destroy();
+        textbox2.destroy();
+        done();
+      }, 0);
+    });
+  });
 
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.equal('abc');
-            textbox.destroy();
-            done();
-        }, 0);
+  describe("Events", () => {
+    it("listens to changes on the component and triggers the event changed", done => {
+      let firedChanged = false;
+      const textbox = new TextboxFormElement('#textbox', {});
+
+      // While the textbox value change.
+      $textbox.on('changed', () => {
+        firedChanged = true;
+      });
+      expect(firedChanged).to.be.false;
+
+      // Start the textbox.
+      textbox.start();
+
+      // Simulate a keypress and check after the timeout
+      $textbox.val('abc');
+      domEvents.dispatch($textbox[0], 'input');
+
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.equal('abc');
+        expect(firedChanged).to.be.true;
+        textbox.destroy();
+        done();
+      }, 0);
     });
 
-    it("getValue() should return the value of the textbox for several textboxes", function (done) {
-        var firedChanged = false,
-            $textbox2 = $('<input id="textbox2" type="text" />').appendTo($('#test-html')),
-            textbox = new TextboxFormElement('#textbox', {}).start(),
-            textbox2 = new TextboxFormElement('#textbox2', {}).start();
+    it("triggers a changed event only when the value reached a threshold defined in the options", done => {
+      let firedChanged = false;
+      const textbox = new TextboxFormElement('#textbox', {
+        onChangeAfterLength: 3
+      });
 
-        // Simulate a keypress
-        $textbox.val('abc');
-        domEvents.dispatch($textbox[0], 'input');
-        $textbox2.val('xyz');
-        domEvents.dispatch($textbox2[0], 'input');
+      // While the textbox value change.
+      $textbox.on('changed', () => {
+        firedChanged = true;
+      });
+      expect(firedChanged).to.be.false;
 
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.equal('abc');
-            expect(textbox2.getValue()).to.be.equal('xyz');
-            textbox.destroy();
-            textbox2.destroy();
-            done();
-        }, 0);
-    });
+      // Start the textbox.
+      textbox.start();
 
-    it("Changing the value of the textbox should fire the changed event", function (done) {
-        var firedChanged = false,
-            textbox = new TextboxFormElement('#textbox', {});
+      // Simulate a keypress and check after the timeout
+      $textbox.val('ab');
+      domEvents.dispatch($textbox[0], 'input');
 
-        // While the textbox value change.
-        $textbox.on('changed', function () {
-            firedChanged = true;
-        });
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.null;
         expect(firedChanged).to.be.false;
+      }, 0);
 
-        // Start the textbox.
-        textbox.start();
+      $textbox.val('abc');
+      domEvents.dispatch($textbox[0], 'input');
 
-        // Simulate a keypress and check after the timeout
-        $textbox.val('abc');
-        domEvents.dispatch($textbox[0], 'input');
-
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.equal('abc');
-            expect(firedChanged).to.be.true;
-            textbox.destroy();
-            done();
-        }, 0);
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.equal('abc');
+        expect(firedChanged).to.be.true;
+        textbox.destroy();
+        done();
+      }, 0);
     });
 
-    it("With onChangeAfterLength changing the value of the textbox should fire the changed event after the value length limit has been reached", function (done) {
-        var firedChanged = false,
-            textbox = new TextboxFormElement('#textbox', {
-                onChangeAfterLength: 3
-            });
+    it("triggers a changed event only when the waiting period is reached defined in the options", done => {
+      let firedChanged = false;
+      const textbox = new TextboxFormElement('#textbox', {
+        onChangeTimeout: 100
+      });
 
-        // While the textbox value change.
-        $textbox.on('changed', function () {
-            firedChanged = true;
-        });
+      // While the textbox value change.
+      $textbox.on('changed', () => {
+        firedChanged = true;
+      });
+      expect(firedChanged).to.be.false;
+
+      // Start the textbox.
+      textbox.start();
+
+      // Simulate a keypress
+      $textbox.val('a');
+      domEvents.dispatch($textbox[0], 'input');
+
+      // Simulate a keypress and check after the timeout
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.null;
         expect(firedChanged).to.be.false;
+      }, 0);
 
-        // Start the textbox.
-        textbox.start();
+      // Simulate a keypress
+      $textbox.val('b');
+      domEvents.dispatch($textbox[0], 'input');
 
-        // Simulate a keypress and check after the timeout
-        $textbox.val('ab');
-        domEvents.dispatch($textbox[0], 'input');
-
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.null;
-            expect(firedChanged).to.be.false;
-        }, 0);
-
-        $textbox.val('abc');
-        domEvents.dispatch($textbox[0], 'input');
-
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.equal('abc');
-            expect(firedChanged).to.be.true;
-            textbox.destroy();
-            done();
-        }, 0);
-    });
-
-    it("With onChangeTimeout changing the value of the textbox should fire the changed event after a period of time", function (done) {
-        var firedChanged = false,
-            textbox = new TextboxFormElement('#textbox', {
-                onChangeTimeout: 100
-            });
-
-        // While the textbox value change.
-        $textbox.on('changed', function () {
-            firedChanged = true;
-        });
+      // Simulate a keypress and check after the timeout
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.null;
         expect(firedChanged).to.be.false;
+      }, 0);
 
-        // Start the textbox.
-        textbox.start();
+      // Simulate a keypress and check after the timeout
+      $textbox.val('c');
+      domEvents.dispatch($textbox[0], 'input');
 
-        // Simulate a keypress
-        $textbox.val('a');
-        domEvents.dispatch($textbox[0], 'input');
-
-        // Simulate a keypress and check after the timeout
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.null;
-            expect(firedChanged).to.be.false;
-        }, 0);
-
-        // Simulate a keypress
-        $textbox.val('b');
-        domEvents.dispatch($textbox[0], 'input');
-
-        // Simulate a keypress and check after the timeout
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.null;
-            expect(firedChanged).to.be.false;
-        }, 0);
-
-        // Simulate a keypress and check after the timeout
-        $textbox.val('c');
-        domEvents.dispatch($textbox[0], 'input');
-
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(textbox.getValue()).to.be.equal('c');
-            expect(firedChanged).to.be.true;
-            textbox.destroy();
-            done();
-        }, 150);
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(textbox.getValue()).to.be.equal('c');
+        expect(firedChanged).to.be.true;
+        textbox.destroy();
+        done();
+      }, 150);
     });
+  });
 });

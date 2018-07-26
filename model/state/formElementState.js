@@ -10,17 +10,13 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/test/bootstrap";
-import CanControl from "can-control";
-import MadControl from 'passbolt-mad/control/control';
+import ComponentState from 'passbolt-mad/model/state/componentState';
 
-describe("Control", () => {
-  describe("Constructor", () => {
-    it("inherits Centaur", () => {
-      const control = new MadControl('#test-html');
-      expect(control).to.be.instanceOf(CanControl);
-      expect(control).to.be.instanceOf(MadControl);
-      control.destroy();
-    });
-  });
+const FormElementState = ComponentState.extend({
+  error: {
+    type: 'boolean',
+    default: false
+  }
 });
+
+export default FormElementState;

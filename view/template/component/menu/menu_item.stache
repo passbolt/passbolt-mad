@@ -1,4 +1,4 @@
-<li id="{{mappedItem.id}}" class="{{cssClasses}}">
+<li id="{{mappedItem.id}}" class="{{mappedItem.cssClasses}}{{#unless(mappedItem.enabled}} disabled{{/unless}}">
 	<div class="row">
 		<div class="main-cell-wrapper">
 			<div class="main-cell">

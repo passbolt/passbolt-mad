@@ -506,6 +506,7 @@ const Grid = Component.extend('mad.component.Grid', {
 
     // Retrieve the mapped item attribute name.
     const columnId = columnModel.name;
+
     // Copy the mappedItems associativate array into array.
     const mappedItemsCopy = $.map(this.mappedItems, (value, index) => {
       value.id = index;

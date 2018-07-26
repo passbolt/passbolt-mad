@@ -11,8 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import ButtonComponent from 'passbolt-mad/component/button';
-import MenuComponent from 'passbolt-mad/component/menu';
+import ButtonDropdownState from 'passbolt-mad/model/state/buttonDropdownState';
 import ButtonDropdownView from 'passbolt-mad/view/component/button_dropdown';
+import MenuComponent from 'passbolt-mad/component/menu';
 
 import template from 'passbolt-mad/view/template/component/button_dropdown/button_dropdown.stache!';
 
@@ -40,6 +41,7 @@ const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
   defaults: {
     label: 'Button Dropdown Component',
     viewClass: ButtonDropdownView,
+    stateClass: ButtonDropdownState,
     // The menu items.
     items: null,
     // Customize the element which will carry the dropdown content
@@ -77,12 +79,19 @@ const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
   },
 
   /**
-   * Set the item state.
+   * Enable an item
    * @param {string} id The item id.
-   * @param {string} stateName The state to set.
    */
-  setItemState: function(id, stateName) {
-    this.options.menu.setItemState(id, stateName);
+  enableItem: function(id) {
+    this.options.menu.enableItem(id);
+  },
+
+  /**
+   * Disable an item
+   * @param {string} id The item id.
+   */
+  disableItem: function(id) {
+    this.options.menu.disableItem(id);
   },
 
   /**
@@ -92,22 +101,7 @@ const ButtonDropdown = ButtonComponent.extend('mad.component.ButtonDropdown', {
    */
   '{menu.element} item_selected': function(el, ev) {
     const item = ev.data.item;
-    if (this.options.closeOnItemClick === true  && !item.state.is('disabled')) {
-      this.view.close();
-    }
-  },
-
-  /* ************************************************************** */
-  /* LISTEN TO THE STATE CHANGES */
-  /* ************************************************************** */
-
-  /**
-   * Listen to the change relative to the state Disabled
-   * @param {boolean} go Enter or leave the state
-   */
-  stateDisabled: function(go) {
-    this._super(go);
-    if (go) {
+    if (this.options.closeOnItemClick === true  && item.enabled) {
       this.view.close();
     }
   }

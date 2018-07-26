@@ -36,7 +36,7 @@ const View = Control.extend('mad.View', /** @static */{
     /**
      * The DOM element associated to this view controller
      */
-    element: null,
+    element: null
   },
 
   /**

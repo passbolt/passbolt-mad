@@ -11,86 +11,80 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import "passbolt-mad/test/bootstrap";
-import ButtonComponent from "passbolt-mad/component/button";
+import Button from "passbolt-mad/component/button";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import MadControl from 'passbolt-mad/control/control';
 import $ from 'jquery';
 
-describe("mad.component.Button", function () {
+describe("Button", () => {
+  let $button = null;
+  let $debugOutput = null;
 
-    // The HTMLElement which will carry the button component.
-    var $button = null;
-    var $debugOutput = null;
+  beforeEach(() => {
+    $button = $('<div id="button"></div>').appendTo($('#test-html'));
+    $debugOutput = $('<div id="test-output"></div>').appendTo($('#test-html'));
+  });
 
-    // Insert a <ul> HTMLElement into the DOM for the test.
-    beforeEach(function () {
-        $button = $('<div id="button"></div>').appendTo($('#test-html'));
-        $debugOutput = $('<div id="test-output"></div>').appendTo($('#test-html'));
+  afterEach(() => {
+    $('#test-html').empty();
+  });
+
+  describe("Constructor", () => {
+    it("inherits werewolf", () => {
+      const button = new Button('#button');
+      expect(button).to.be.instanceOf(CanControl);
+      expect(button).to.be.instanceOf(MadControl);
+      expect(button).to.be.instanceOf(Component);
+      expect(button).to.be.instanceOf(Button);
+      button.destroy();
+    });
+  });
+
+  describe("Event click", () => {
+    it("executes callback on click", () => {
+      const valueTest = 'werewolf';
+      const button = new Button('#button', {
+        value: valueTest,
+        events: {
+          'click': function(el, ev, value) {
+            $debugOutput.html(value);
+          }
+        }
+      });
+      button.start();
+
+      $button.click();
+      expect($debugOutput.text()).to.contain(valueTest);
+
+      button.destroy();
     });
 
-    // Clean the DOM after each test.
-    afterEach(function () {
-        $('#test-html').empty();
+    it("does not execute callback on click if disabled", () => {
+      const valueTest = 'werewolf';
+      const button = new Button('#button', {
+        value: valueTest,
+        events: {
+          'click': function(el, ev, value) {
+            $debugOutput.html(value);
+          }
+        }
+      });
+      button.start();
+
+      button.state.disabled = true;
+      expect($button.hasClass('disabled')).to.be.true;
+      expect($button.attr('disabled')).to.be.equal('disabled');
+      $button.click();
+      expect($debugOutput.text()).to.not.contain(valueTest);
+
+      button.state.disabled = false;
+      expect($button.hasClass('disabled')).to.be.false;
+      expect($button.attr('disabled')).to.be.undefined;
+      $button.click();
+      expect($debugOutput.text()).to.contain(valueTest);
+
+      button.destroy();
     });
-
-    it("constructed instance should inherit mad.Grid & the inherited parent classes", function () {
-        var button = new ButtonComponent('#button');
-
-        // Basic control of classes inheritance.
-        expect(button).to.be.instanceOf(CanControl);
-        expect(button).to.be.instanceOf(MadControl);
-        expect(button).to.be.instanceOf(Component);
-        expect(button).to.be.instanceOf(ButtonComponent);
-
-        button.start();
-        button.destroy();
-    });
-
-    it("a click on button should trigger the associated function", function () {
-        var valueTest = 'k3d';
-        var button = new ButtonComponent('#button', {
-            value: valueTest,
-            events: {
-                'click': function (el, ev, value) {
-                    $debugOutput.html(value);
-                }
-            }
-        });
-        button.start();
-
-        $button.click();
-        expect($debugOutput.text()).to.contain(valueTest);
-
-        button.destroy();
-    });
-
-    it("state disabled should be intercepted", function () {
-        var button = new ButtonComponent('#button');
-        button.start();
-
-        button.setState('disabled');
-        expect($button.attr('class')).to.contain('disabled');
-
-        button.destroy();
-    });
-
-    it("click should not be executed if the state is disabled", function () {
-        var valueTest = 'k3d';
-        var button = new ButtonComponent('#button', {
-            value: valueTest,
-            events: {
-                'click': function (el, ev, value) {
-                    $debugOutput.html(value);
-                }
-            }
-        });
-        button.start();
-
-        button.setState('disabled');
-        $button.click();
-        expect($debugOutput.text()).to.not.contain(valueTest);
-
-        button.destroy();
-    });
+  });
 });

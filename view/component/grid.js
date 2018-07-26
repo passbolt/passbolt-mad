@@ -260,7 +260,7 @@ const Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @proto
       }
     }
 
-    domEvents.dispatch(this.element, {type: 'column_sort', data: {columnModel: columnModel, sort: sortAsc, srcEv: ev}});
+    domEvents.dispatch(this.element, {type: 'column_sort', data: {columnModel: columnModel, sortAsc: sortAsc, srcEv: ev}});
   },
 
   /**

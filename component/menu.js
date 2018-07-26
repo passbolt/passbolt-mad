@@ -13,7 +13,6 @@
 import Action from 'passbolt-mad/model/map/action';
 import MadMap from 'passbolt-mad/util/map/map';
 import TreeComponent from 'passbolt-mad/component/tree';
-import TreeView from 'passbolt-mad/view/component/tree';
 
 import itemTemplate from 'passbolt-mad/view/template/component/menu/menu_item.stache!';
 
@@ -41,8 +40,6 @@ const Menu = TreeComponent.extend('mad.component.Menu', {
   defaults: {
     label: 'Menu',
     cssClasses: ['menu'],
-    // View class.
-    viewClass: TreeView,
     // The template to use to render each action.
     itemTemplate: itemTemplate,
     // The class which represent the item.
@@ -51,25 +48,8 @@ const Menu = TreeComponent.extend('mad.component.Menu', {
     map: new MadMap({
       id: 'id',
       label: 'label',
-      /*
-       * @todo : be carefull, for now if no cssClasses defined while creating the action.
-       * @todo : this mapping is not done, and the state is not added to css classes.
-       */
-      cssClasses: {
-        key: 'cssClasses',
-        // eslint-disable-next-line no-unused-vars
-        func: function(value, map, item, mappedValues) {
-          let mappedValue = $.merge([], value);
-          /*
-           * If a state is defined for the given item.
-           * Add the state to the css classes.
-           */
-          if (typeof item.state != 'undefined') {
-            mappedValue = $.merge(mappedValue, item.state.current);
-          }
-          return mappedValue.join(' ');
-        }
-      },
+      cssClasses: 'cssClasses',
+      enabled: 'enabled',
       children: {
         key: 'children',
         func: MadMap.mapObjects
@@ -80,19 +60,27 @@ const Menu = TreeComponent.extend('mad.component.Menu', {
 }, /** @prototype */ {
 
   /**
-   * Set the item state.
-   * @param id The item id.
-   * @param stateName The state to set.
+   * Disable an item
+   * @param {string} id The item id.
    */
-  setItemState: function(id, stateName) {
-    for (const i in this.options.items) {
-      if (this.options.items[i].id == id) {
-        this.options.items[i].state.setState(stateName);
-        this.refreshItem(this.options.items[i]);
-        return;
-      }
+  enableItem: function(id) {
+    const item = this.options.items.filter({id: id}).pop();
+    if (item) {
+      item.enabled = true;
+      this.refreshItem(item);
     }
-    throw mad.Exception.get('The item [%0] is not an item of the menu', [id]);
+  },
+
+  /**
+   * Disable an item
+   * @param {string} id The item id.
+   */
+  disableItem: function(id) {
+    const item = this.options.items.filter({id: id}).pop();
+    if (item) {
+      item.enabled = false;
+      this.refreshItem(item);
+    }
   },
 
   /* ************************************************************** */
@@ -104,14 +92,13 @@ const Menu = TreeComponent.extend('mad.component.Menu', {
    * @parent mad.component.Menu.view_events
    * @param {HTMLElement} el The element the event occured on
    * @param {HTMLEvent} ev The event which occured
-   * @return {void}
    */
   '{element} item_selected': function(el, ev) {
     const item = ev.data.item;
     this._super(el, ev, item);
 
     // If this item is not disabled, try to execute the item action.
-    if (!item.state.is('disabled')) {
+    if (item.enabled) {
       item.execute(this);
     }
   }

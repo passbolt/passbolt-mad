@@ -28,7 +28,6 @@ const Textbox = FormElementView.extend('mad.view.form.Textbox', /* @static */ {
 
   /**
    * Get the value from the associated HTML Element.
-   *
    * @return {mixed} The value of the component
    */
   getValue: function() {
@@ -37,40 +36,26 @@ const Textbox = FormElementView.extend('mad.view.form.Textbox', /* @static */ {
 
   /**
    * Set the value of the associated HTML Element.
-   *
    * @param {mixed} value The value to set
    */
   setValue: function(value) {
     $(this.element).val(value);
   },
 
-  /* ************************************************************** */
-  /* LISTEN TO THE VIEW EVENTS */
-  /* ************************************************************** */
-
   /**
    * The value of the HTML Element changed.
    */
-  ' input': function() {
-    const self = this;
-
-    // Extract the value from the HTML Element.
+  '{element} input': function() {
     const newValue = this.getValue();
 
-    // Is there a limit of characters before firing the changed event ?
     if (newValue.length >= this.getController().options.onChangeAfterLength) {
-      /*
-       * If a firing of the changed event has already been planed.
-       * Remove it, and plan a new firing.
-       */
+      // If a trigger of changed event is already schedule, remove it.
       if (this._changeTimeout != null) {
         clearTimeout(this._changeTimeout);
       }
-
-      // Plan a new firing of the changed event.
       this._changeTimeout = setTimeout(() => {
-        domEvents.dispatch(self.element, {type: 'changed', data: {
-          value: self.getValue()
+        domEvents.dispatch(this.element, {type: 'changed', data: {
+          value: this.getValue()
         }});
       }, this.getController().options.onChangeTimeout);
     }

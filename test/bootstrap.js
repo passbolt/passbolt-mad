@@ -15,7 +15,7 @@ import "passbolt-mad/test/lib/stealMocha.js";
 import chai from "chai";
 
 // Define the global context.
-var glbl = typeof window !== "undefined" ? window : global;
+const glbl = typeof window !== "undefined" ? window : global;
 
 // Extract the expect & assert functions from chai and make them global
 glbl.expect = chai.expect;

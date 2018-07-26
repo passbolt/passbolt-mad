@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import ButtonComponent from 'passbolt-mad/component/button';
+import ToggleButtonState from 'passbolt-mad/model/state/toggleButtonState';
 
 /**
  * @parent Mad.components_api
@@ -33,11 +34,44 @@ import ButtonComponent from 'passbolt-mad/component/button';
  */
 const ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @static */ {
 
+  defaults: {
+    stateClass: ToggleButtonState,
+    selected: false
+  }
+
 }, /** @prototype */ {
 
-  /* ************************************************************** */
-  /* LISTEN TO THE VIEW EVENTS */
-  /* ************************************************************** */
+  /**
+   * @inheritdoc
+   */
+  init: function(el, options) {
+    this._super(el, options);
+    this.state.on('selected', (ev, selected) => this.onSelectedChange(selected));
+  },
+
+  /**
+   * Observe when the component is selected / unselected
+   * @param {boolean} selected True if selected, false otherwise
+   */
+  onSelectedChange: function(selected) {
+    if (selected) {
+      $(this.element).addClass('selected');
+    } else {
+      $(this.element).removeClass('selected');
+    }
+  },
+
+  /**
+   * Update the DOM wrapper element.
+   */
+  updateWrapperElement: function() {
+    this._super();
+    if (this.state.selected) {
+      this.view.addClass('selected');
+    } else {
+      this.view.removeClass('selected');
+    }
+  },
 
   /**
    * Listen to the event click on the DOM toggle button element
@@ -46,27 +80,10 @@ const ToggleButton = ButtonComponent.extend('mad.component.ToggleButton', /** @s
    */
   '{element} click': function(el, ev) {
     this._super(el, ev);
-    if (!this.state.is('selected')) {
-      this.setState('selected');
-    } else {
-      this.setState('ready');
+    if (this.state.disabled) {
+      return;
     }
-  },
-
-  /* ************************************************************** */
-  /* LISTEN TO THE STATE CHANGES */
-  /* ************************************************************** */
-
-  /**
-   * Listen to the change relative to the state Disabled
-   * @param {boolean} go Enter or leave the state
-   */
-  'stateSelected': function(go) {
-    if (go) {
-      $(this.element).addClass('selected');
-    } else {
-      $(this.element).removeClass('selected');
-    }
+    this.state.selected = !this.state.selected;
   }
 });
 

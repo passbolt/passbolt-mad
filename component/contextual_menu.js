@@ -50,6 +50,11 @@ const ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMen
   },
 
   /**
+   * Current contextual menu instance.
+   */
+  _instance: null,
+
+  /**
    * Instantiate a contextual menu.
    * If a contextual menu is already instantiated, remove it.
    *
@@ -59,28 +64,16 @@ const ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMen
    * this.options and merged with defaults static variable
    *   * source : element which requests the contextual menu.
    *   * coordinates [ x, y ] : coordinates where you want to display the contextual menu.
-   * @return {mad.component.ContextualMenu}
+   * @return {ContextualMenu}
    */
   instantiate: function(options) {
-    if ($('#js_contextual_menu').length != 0) {
-      $('#js_contextual_menu').remove();
+    if (this._instance) {
+      this._instance.destroyAndRemove();
     }
-
-    HtmlHelper.create(
-      'body',
-      'first',
-      '<ul id="js_contextual_menu" />'
-    );
-
-    return new this('#js_contextual_menu', options);
-  },
-
-  /**
-   * Removes existing contextual menu from the dom.
-   * Static function, can be called from anywhere.
-   */
-  remove: function() {
-    $('#js_contextual_menu').remove();
+    HtmlHelper.create('body', 'last', '<ul id="js_contextual_menu" />');
+    const instance = new this('#js_contextual_menu', options);
+    this._instance = instance;
+    return instance;
   }
 
 }, /** @prototype */ {
@@ -94,15 +87,8 @@ const ContextualMenu = DropdownMenuComponent.extend('mad.component.ContextualMen
     this.view.position({
       coordinates: this.options.coordinates
     });
-  },
-
-  /**
-   * Destructor.
-   * Remove the contextual menu from the dom.
-   */
-  destroy: function() {
-    this._super();
-    ContextualMenu.remove();
+    // @todo Hidden in css, change this to make it hidden by the js
+    $(this.element).show();
   }
 });
 

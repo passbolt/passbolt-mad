@@ -12,7 +12,6 @@
  */
 import MenuComponent from 'passbolt-mad/component/menu';
 import DropdownMenuView from 'passbolt-mad/view/component/dropdown_menu';
-import itemTemplate from 'passbolt-mad/view/template/component/dropdown_menu/dropdown_menu.stache!';
 
 /**
  * @parent Mad.components_api
@@ -40,7 +39,6 @@ const DropdownMenu = MenuComponent.extend('mad.component.DropdownMenu', {
   defaults: {
     label: 'Drop Down Menu Component',
     viewClass: DropdownMenuView,
-    itemTemplate: itemTemplate,
     cssClasses: ['dropdownmenu'],
     callbacks: {
       item_selected: null,

@@ -1,1 +1,1 @@
-<div>look this is my custom template and my custom variable value {{ variable }}</div>
+<div>There's a storm coming, {{ variable }}. You and your friends better batten down the hatches, because when it hits, you're all gonna wonder how you ever thought you could live so large and leave so little for the rest of us.</div>

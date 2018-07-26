@@ -14,6 +14,8 @@ import $ from 'jquery';
 import DialogComponent from 'passbolt-mad/component/dialog';
 import ConfirmView from 'passbolt-mad/view/component/confirm';
 import HtmlHelper from 'passbolt-mad/helper/html';
+// eslint-disable-next-line no-unused-vars
+import I18n from 'passbolt-mad/util/lang/i18n';
 import template from 'passbolt-mad/view/template/component/confirm/confirm.stache!';
 
 const Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
@@ -43,7 +45,7 @@ const Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
    *
    * @param {Object} [options] option values for the component.  These get added to
    * this.options and merged with defaults static variable
-   * @return {mad.component.Dialog}
+   * @return {Confirm}
    */
   instantiate: function(options) {
     // Create the DOM entry point for the dialog
@@ -69,13 +71,10 @@ const Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
    * @inheritdoc
    */
   beforeRender: function() {
+    this._super();
     this.setViewData('content', this.options.content);
     this.setViewData('subtitle', this.options.subtitle);
     this.setViewData('submitButton', this.options.submitButton);
-    for (const name in this.options.viewData) {
-      this.setViewData(name, this.options.viewData[name]);
-    }
-    this._super();
   },
 
   /**

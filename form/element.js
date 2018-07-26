@@ -12,6 +12,7 @@
  */
 import Component from 'passbolt-mad/component/component';
 import ElementView from 'passbolt-mad/view/form/element';
+import FormElementState from 'passbolt-mad/model/state/formElementState';
 
 /**
  * @parent Mad.form_api
@@ -33,7 +34,7 @@ const Element = Component.extend('mad.form.Element', /* @static */ {
     tag: null,
     // Override the viewClass option.
     viewClass: ElementView,
-
+    stateClass: FormElementState,
     // The model reference.
     modelReference: null,
     // The form element requires a validation.
@@ -57,119 +58,50 @@ const Element = Component.extend('mad.form.Element', /* @static */ {
 
 }, /** @prototype */ {
 
-  // Constructor like.
+  /**
+   * @inheritdoc
+   */
   init: function(el, options) {
+    this._super(el, options);
     this.defaultValue = options.value;
     this.value = options.value;
-    this._super(el, options);
+    this._initStateListener();
   },
 
   /**
-   * Get the associated validate function
-   *
-   * @return {func}
+   * Init state listener
    */
-  getValidateFunction: function() {
-    return this.options.validateFunction;
+  _initStateListener: function() {
+    this.state.on('error', (ev, error) => this.onErrorChange(error));
   },
 
   /**
-   * Check if the element has to be validated.
-   *
-   * @return {bool}
+   * Update the DOM wrapper element.
    */
-  requireValidation: function() {
-    return this.options.validate;
+  updateWrapperElement: function() {
+    if (this.state.disabled) {
+      $(this.element).attr('disabled', 'disabled')
+        .addClass('disabled');
+    } else {
+      $(this.element).removeAttr('disabled')
+        .removeClass('disabled');
+    }
+    this._super();
   },
 
   /**
-   * Get the value of the form element
-   *
-   * @return {mixed} value The value of the form element
-   */
-  getValue: function() {
-    return this.value;
-  },
-
-  /**
-   * Switch the component to its initial state
-   */
-  reset: function() {
-    this.setState('reset');
-    this.setValue(this.options.value);
-    this.setState('ready');
-  },
-
-  /**
-   * Set the value of the form element
-   *
-   * @param {mixed} value The value to set
-   *
-   * @return {mad.form.FormElement}
-   */
-  setValue: function(value) {
-    this.value = value;
-    this.view.setValue(this.value);
-    return this;
-  },
-
-  /**
-   * Implements afterStart hook().
+   * @inheritdoc
    */
   afterStart: function() {
-    // set the value after the component
     this.setValue(this.options.value);
   },
 
-  /* ************************************************************** */
-  /* LISTEN TO THE STATE CHANGES */
-  /* ************************************************************** */
-
   /**
-   * @function mad.form.Element.stateReset
-   * @parent mad.form.Element.states_changes
-   *
-   * Listen to the change relative to the state Reset
-   * @param {boolean} go Enter or leave the state
+   * @inheritdoc
    */
-  // eslint-disable-next-line no-unused-vars
-  stateReset: function(go) {
-    this.setState('ready');
-  },
-
-  /**
-   * @function mad.form.Element.stateReady
-   * @parent mad.form.Element.states_changes
-   *
-   * Listen to the change relative to the state Ready
-   * @param {boolean} go Enter or leave the state
-   */
-  // eslint-disable-next-line no-unused-vars
-  stateReady: function(go) {
-    // override the function to catch the state switch to ready
-  },
-
-  /**
-   * @function mad.form.Element.stateError
-   * @parent mad.form.Element.states_changes
-   *
-   * Listen to the change relative to the state Error
-   * @param {boolean} go Enter or leave the state
-   */
-  // eslint-disable-next-line no-unused-vars
-  stateError: function(go) {
-    // override the function to catch the state switch to error
-  },
-
-  /**
-   * @function mad.form.Element.stateDisabled
-   * @parent mad.form.Element.states_changes
-   *
-   * Listen to the change relative to the state Disabled
-   * @param {boolean} go Enter or leave the state
-   */
-  stateDisabled: function(go) {
-    if (go) {
+  onDisabledChange: function(disabled) {
+    this._super(disabled);
+    if (disabled) {
       $(this.element).attr('disabled', 'disabled')
         .addClass('disabled');
     } else {
@@ -178,16 +110,62 @@ const Element = Component.extend('mad.form.Element', /* @static */ {
     }
   },
 
-  /* ************************************************************** */
-  /* LISTEN TO THE VIEW EVENTS */
-  /* ************************************************************** */
+  /**
+   * Observer when the component has error or not
+   * @param {boolean} error True if error, false otherwise
+   */
+  onErrorChange: function(error) {
+    if (error) {
+      $(this.element).addClass('error');
+    } else {
+      $(this.element).removeClass('error');
+    }
+  },
 
   /**
-   * @function mad.form.Element.__changed
-   * @parent mad.form.Element.view_events
-   *
+   * Get the value of the form element
+   * @return {mixed} value The value of the form element
+   */
+  getValue: function() {
+    return this.value;
+  },
+
+  /**
+   * Set the value of the form element
+   * @param {mixed} value The value to set
+   * @return {FormElement}
+   */
+  setValue: function(value) {
+    this.value = value;
+    this.view.setValue(this.value);
+    return this;
+  },
+
+  /**
+   * Get the associated validate function
+   * @return {func}
+   */
+  getValidateFunction: function() {
+    return this.options.validateFunction;
+  },
+
+  /**
+   * Check if the element has to be validated.
+   * @return {boolean}
+   */
+  requireValidation: function() {
+    return this.options.validate;
+  },
+
+  /**
+   * Switch the component to its initial state
+   */
+  reset: function() {
+    this.setValue(this.options.value);
+  },
+
+  /**
    * Listen to the view event changed
-   *
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */

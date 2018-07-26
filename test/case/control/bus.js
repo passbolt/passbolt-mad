@@ -15,30 +15,32 @@ import CanControl from 'can-control';
 import MadBus from "passbolt-mad/control/bus";
 import MadControl from 'passbolt-mad/control/control';
 
-describe("mad.Bus", function(){
+describe("Bus", () => {
+  afterEach(() => {
+    $('#test-html').empty();
+  });
 
-    // Clean the DOM after each test.
-    afterEach(function () {
-        $('#test-html').empty();
+  describe("Constructor", () => {
+    it("should inherit can.Control & mad.Control", () => {
+      $('<div id="bus"></div>').prependTo('#test-html');
+      const bus = MadBus.singleton('#bus');
+      expect(bus).to.be.instanceOf(CanControl);
+      expect(bus).to.be.instanceOf(MadControl);
+      MadBus.destroy();
     });
+  });
 
-    it("should inherit can.Control & mad.Control", function(){
-        $('<div id="bus"></div>').prependTo('#test-html');
-        var bus = MadBus.singleton('#bus');
-        expect(bus).to.be.instanceOf(CanControl);
-        expect(bus).to.be.instanceOf(MadControl);
-        MadBus.destroy();
+  describe("bind() and trigger()", () => {
+    it("sends and listens to message on the application bus", () => {
+      let caught = false;
+      $('<div id="bus"/>').prependTo('#test-html');
+      MadBus.singleton('#bus');
+      MadBus.bind('event_name', () => {
+        caught = true;
+      });
+      MadBus.trigger('event_name');
+      expect(caught).to.be.true;
+      MadBus.destroy();
     });
-
-    it("trigger() & bind(): should help to broadcast & intercept message on the bus", function() {
-        var caught = false;
-        $('<div id="bus"/>').prependTo('#test-html');
-        MadBus.singleton('#bus');
-        MadBus.bind('event_name', function() {
-            caught = true;
-        });
-        MadBus.trigger('event_name');
-        expect(caught).to.be.true;
-        MadBus.destroy();
-    });
+  });
 });

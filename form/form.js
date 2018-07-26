@@ -117,9 +117,7 @@ const Form = Component.extend('mad.Form', /* @static */ {
 
       // Reset feedback element if any.
       if (feedbackElement != undefined) {
-        feedbackElement
-          .setMessage('')
-          .setState('success');
+        feedbackElement.reset();
       }
     }
   },
@@ -317,17 +315,13 @@ const Form = Component.extend('mad.Form', /* @static */ {
       const eltId = element.getId();
 
       if (elementErrors) {
-        element.state.addState('error');
-
-        // set the feedback message, and switch the feedback element state to error
+        element.state.error = true;
         if (this.feedbackElements[eltId]) {
           let error = '';
           for (const rule in elementErrors) {
             error += `${elementErrors[rule]} `;
           }
-          this.feedbackElements[eltId]
-            .setMessage(error)
-            .setState('error');
+          this.feedbackElements[eltId].error(error);
         }
       }
     }
@@ -410,37 +404,18 @@ const Form = Component.extend('mad.Form', /* @static */ {
 
       // The validation of the element failed.
       if (validationResult.length > 0) {
-        const eltStates = ['error'];
-        if (this.elements[eltId].state.is('hidden')) {
-          eltStates.push('hidden');
-        }
-        // switch the state of the element to error
-        this.elements[eltId].setState(eltStates);
-        // set the feedback message, and switch the feedback element state to error
+        this.elements[eltId].state.error = true;
         if (this.feedbackElements[eltId]) {
-          this.feedbackElements[eltId]
-            .setMessage(validationResult[0])
-            .setState([])
-            .setState('error');
+          this.feedbackElements[eltId].error(validationResult[0]);
         }
-        // Update the view.
         this.view.setElementState(this.elements[eltId], 'error');
         returnValue = false;
-
-        // otherwise the validation is successful
       } else {
-        const eltStates = ['success'];
-        if (this.elements[eltId].state.is('hidden')) {
-          eltStates.push('hidden');
-        }
-        this.elements[eltId].setState(eltStates);
-        // set the feedback message, and switch the feedback element state to success
+        // otherwise the validation is successful
+        this.elements[eltId].state.error = false;
         if (this.feedbackElements[eltId]) {
-          this.feedbackElements[eltId]
-            .setMessage('')
-            .setState('success');
+          this.feedbackElements[eltId].success();
         }
-        // Update the view.
         this.view.setElementState(this.elements[eltId], 'success');
       }
     }

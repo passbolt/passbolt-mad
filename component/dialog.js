@@ -29,7 +29,7 @@ import template from 'passbolt-mad/view/template/component/dialog/dialog.stache!
  * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
  * @param {Object} [options] option values for the component.  These get added to
  * this.options and merged with defaults static variable
- * @return {mad.component.Dialog}
+ * @return {Dialog}
  */
 const Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static */ {
 
@@ -53,7 +53,7 @@ const Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static
    *
    * @param {Object} [options] option values for the component.  These get added to
    * this.options and merged with defaults static variable
-   * @return {mad.component.Dialog}
+   * @return {Dialog}
    */
   instantiate: function(options) {
     // Create the DOM entry point for the dialog

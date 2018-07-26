@@ -2,33 +2,30 @@ import mocha from "mocha";
 import steal from "@steal";
 import loader from "@loader";
 
-if(loader.mocha) {
-    var opts = loader.mocha;
-    mocha.setup(opts);
+if (loader.mocha) {
+  const opts = loader.mocha;
+  mocha.setup(opts);
 }
 
-var getOpts,
-    mochaRequire = loader.mochaRequire,
-    global = loader.global;
+let getOpts,
+  mochaRequire = loader.mochaRequire,
+  global = loader.global;
 
-if(mochaRequire) {
-    getOpts = loader["import"](mochaRequire).then(function(mochaConfig) {
-        return mochaConfig.default || mochaConfig;
-    });
-}
-else {
-    getOpts = Promise.resolve(function() {});
+if (mochaRequire) {
+  getOpts = loader["import"](mochaRequire).then(mochaConfig => mochaConfig.default || mochaConfig);
+} else {
+  getOpts = Promise.resolve(() => {});
 }
 
-steal.done().then(function() {
-    if (global.Testee && global.Testee.init) {
-        global.Testee.init();
-    }
+steal.done().then(() => {
+  if (global.Testee && global.Testee.init) {
+    global.Testee.init();
+  }
 
-    return getOpts;
-}).then(function(mochaConfig) {
-    mochaConfig(mocha);
-    mocha.run();
+  return getOpts;
+}).then(mochaConfig => {
+  mochaConfig(mocha);
+  mocha.run();
 });
 
 export default mocha;

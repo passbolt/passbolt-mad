@@ -48,18 +48,36 @@ const Button = Component.extend('mad.component.Button', {
 }, /** @prototype */ {
 
   /**
-   * Value of the button.
-   * This value will be released as event parameter when an event occured
-   * @type {string}
-   */
-  value: null,
-
-  /**
    * @inheritdoc
    */
   init: function(el, options) {
     this._super(el, options);
     this.value = options.value;
+  },
+
+  /**
+   * Observe when the component is enable / disable
+   * @param {boolean} disabled Disable the component. Enable it otherwise.
+   */
+  onDisabledChange: function(disabled) {
+    if (disabled) {
+      $(this.element).attr('disabled', 'disabled');
+    } else {
+      $(this.element).removeAttr('disabled');
+    }
+    this._super(disabled);
+  },
+
+  /**
+   * Update the DOM wrapper element.
+   */
+  updateWrapperElement: function() {
+    if (this.state.disabled) {
+      $(this.element).attr('disabled', 'disabled');
+    } else {
+      $(this.element).removeAttr('disabled');
+    }
+    this._super();
   },
 
   /**
@@ -89,33 +107,15 @@ const Button = Component.extend('mad.component.Button', {
    */
   '{element} click': function(el, ev) {
     // if the component is disabled, stop the propagation
-    if (this.state.is('disabled')) {
+    if (this.state.disabled) {
       ev.stopImmediatePropagation();
     } else {
-      // if callbacks associated to the button
       if (this.options.events.click) {
         this.options.events.click(this.element, ev, this.value);
       }
     }
-  },
-
-  /* ************************************************************** */
-  /* LISTEN TO THE STATE CHANGES */
-  /* ************************************************************** */
-
-  /**
-   * Listen to the change relative to the state Disabled
-   * @param {boolean} go Enter or leave the state
-   */
-  stateDisabled: function(go) {
-    if (go) {
-      $(this.element).attr('disabled', 'disabled')
-        .addClass('disabled');
-    } else {
-      $(this.element).removeAttr('disabled')
-        .removeClass('disabled');
-    }
   }
+
 });
 
 export default Button;

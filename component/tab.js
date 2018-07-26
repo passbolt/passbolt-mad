@@ -51,15 +51,15 @@ const Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
    * @inheritdoc
    */
   init: function(el, options) {
-    /**
-     * The current enabled tab id
-     * @type {string}
-     */
-    this.enabledId = null;
-
     this._super(el, options);
+    this._activeTab = null;
+    this._tabSettings = {};
+  },
 
-    // Set the view vars.
+  /**
+   * @inheritdoc
+   */
+  beforeRender: function() {
     this.setViewData('autoMenu', this.options.autoMenu);
   },
 
@@ -88,79 +88,70 @@ const Tab = CompositeComponent.extend('mad.component.Tab',  /** @static */ {
   },
 
   /**
-   * Enable a tab
-   * @param {string} tabId id of the tab to enable
+   * Add a tab
+   * @param {Component.prototype} ComponentClass The component class to use to instantiate the tab
+   * @param {object} options The options to use to instantiate the tab
    */
-  enableTab: function(tabId) {
-    /*
-     * if a previous tab is enabled
-     * -> unselect it
-     */
-    if (this.enabledTabId) {
-      this.getComponent(this.enabledTabId).setState('hidden');
-      this.view.unselectTab(this.enabledTabId);
-    }
-
-    // get the component defined by the tabId
-    this.enabledTabId = tabId;
-    const tab = this.getComponent(this.enabledTabId);
-
-    /*
-     * if the tab to select is not already started
-     * -> start it
-     */
-    if (tab.state.is(null)) {
-      tab.start();
-    } else if (tab.state.is('hidden')) {
-      /*
-       * if the tab is hidden
-       * -> display it
-       */
-      tab.setState('ready');
-    }
-
-    this.view.selectTab(this.enabledTabId);
+  addTab: function(ComponentClass, options) {
+    options.id = options.id || uuid();
+    options.cssClasses = options.cssClasses || [];
+    options.cssClasses.push('tab-content');
+    this.addMenuEntry(options);
+    this._tabSettings[options.id] = {ComponentClass: ComponentClass, options: options};
   },
 
   /**
-   * Add a component to the container
-   * @param {string} Class The component class to use to instantiate the component
-   * @param {array} options The optional data to pass to the component constructor
+   * Add a menu entry. If a menu is created automatically with the tabs.
+   * @param {object} tabOptions
    */
-  addComponent: function(Class, options) {
-    // default tab content css
-    const defaultTabCss = ['tab-content'];
-    // get the component if or create it
-    if (typeof options.id != 'undefined') {
-      options.id = options.id;
-    } else {
-      options.id = uuid();
+  addMenuEntry: function(tabOptions) {
+    if (!this.options.autoMenu) {
+      return;
     }
+    const menuEntry = new Action({
+      id: `js_tab_nav_${tabOptions.id}`,
+      label: tabOptions.label
+    });
+    this.options.menu.insertItem(menuEntry);
+  },
 
-    // insert the associated menu entry
+  /**
+   * Select menu entry
+   * @param {string} tabId The tab identifier
+   */
+  selectMenuEntry: function(tabId) {
     if (this.options.autoMenu) {
-      const menuEntry = new Action({
-        id: `js_tab_nav_${options.id}`,
-        label: options.label
-      });
-      this.options.menu.insertItem(menuEntry);
+      $(`#js_tab_nav_${tabId} a`).addClass('selected');
+    }
+  },
+
+  /**
+   * Select menu entry
+   * @param {string} tabId The tab identifier
+   */
+  unselectMenuEntry: function(tabId) {
+    if (this.options.autoMenu) {
+      $(`#js_tab_nav_${tabId} a`).removeClass('selected');
+    }
+  },
+
+  /**
+   * Enable a tab
+   * @param {string} tabId The tab identifier
+   */
+  enableTab: function(tabId) {
+    if (this._activeTab) {
+      const previousTabId = this._activeTab.getId();
+      this.unselectMenuEntry(previousTabId);
+      this._activeTab.destroyAndRemove();
     }
 
-    // Add the default css classes to the new tab
-    if ($.isArray(options.cssClasses)) {
-      $.merge(options.cssClasses, defaultTabCss);
-    } else {
-      options.cssClasses = defaultTabCss;
-    }
-
-    const component = ComponentHelper.create(
-      $('.js_tabs_content', this.element),
-      'last',
-      Class,
-      options
-    );
-
-    return this._super(component);
+    this.selectMenuEntry(tabId);
+    const tabSettings = this._tabSettings[tabId];
+    const tabSelector = $('.js_tabs_content', this.element);
+    const tab = ComponentHelper.create(tabSelector, 'last', tabSettings.ComponentClass, tabSettings.options);
+    tab.start();
+    this._activeTab = tab;
   }
 
 });

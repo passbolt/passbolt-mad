@@ -11,8 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import DefineList from 'can-define/list/list';
-import MadMap from 'passbolt-mad/model/map/map';
-import State from 'passbolt-mad/model/map/state';
+import DefineMap from 'passbolt-mad/model/map/map';
 
 /**
  * @inherits mad.model.Model
@@ -23,9 +22,9 @@ import State from 'passbolt-mad/model/map/state';
  * @constructor
  * Creates a new Action
  * @param {array} options
- * @return {mad.model.Action}
+ * @return {Action}
  */
-const Action = MadMap.extend('mad.model.Action', {
+const Action = DefineMap.extend('mad.model.Action', {
 
   /**
    * Identifier of the action
@@ -73,43 +72,16 @@ const Action = MadMap.extend('mad.model.Action', {
    */
   cssClasses: {
     type: '*',
-    value: () => []
-  },
-
-
-  /**
-   * Initial state of the action
-   * @type string
-   */
-  initial_state: {
-    type: 'string',
-    value: 'ready'
+    default: () => []
   },
 
   /**
    * State of the action
-   * @type State
-   */
-  state: {
-    Type: State,
-    Value: () => new State()
-  },
-
-  /**
-   * Is the action active
    * @type boolean
    */
-  active: {
-    type: 'boolean'
-  },
-
-  /**
-   * Constructor like.
-   * @param params
-   */
-  init: function(params) {
-    this._super(params);
-    this.state.setState([this.initial_state]);
+  enabled: {
+    type: 'boolean',
+    default: true
   },
 
   /**

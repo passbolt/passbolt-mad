@@ -14,84 +14,82 @@ import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import ChoiceFormElement from 'passbolt-mad/form/choice_element';
 import domEvents from 'can-dom-events';
-import DropdownFormElement from "passbolt-mad/form/element/dropdown"
+import DropdownFormElement from "passbolt-mad/form/element/dropdown";
 import Component from 'passbolt-mad/component/component';
 import FormElement from 'passbolt-mad/form/element';
 import MadControl from 'passbolt-mad/control/control';
 
-describe("mad.form.element.Dropdown", function () {
+let $dropdown = null;
 
-    // The HTMLElement which will carry the dropdown component.
-    var $dropdown = null;
+describe("Dropdown", () => {
+  beforeEach(() => {
+    $dropdown = $('<select id="dropdown" />').appendTo($('#test-html'));
+  });
 
-    // Insert a <input> HTMLElement into the DOM for the test.
-    beforeEach(function () {
-        $dropdown = $('<select id="dropdown" />').appendTo($('#test-html'));
+  afterEach(() => {
+    $('#test-html').empty();
+  });
+
+  describe("Constructor", () => {
+    it("inherits pixie", () => {
+      const dropdown = new DropdownFormElement('#dropdown', {});
+      expect(dropdown).to.be.instanceOf(CanControl);
+      expect(dropdown).to.be.instanceOf(Component);
+      expect(dropdown).to.be.instanceOf(FormElement);
+      expect(dropdown).to.be.instanceOf(ChoiceFormElement);
+      dropdown.destroy();
     });
+  });
 
-    // Clean the DOM after each test.
-    afterEach(function () {
-        $('#test-html').empty();
-    });
+  describe("getValue()", () => {
+    it("returns the value of the element", done => {
+      const dropdown = new DropdownFormElement('#dropdown', {
+        availableValues: {
+          ID_1: 'VALUE 1',
+          ID_2: 'VALUE 2',
+          ID_3: 'VALUE 3'
+        },
+        value: 'ID_1'
+      }).start();
 
-    it("constructed instance should inherit mad.form.Element & the inherited parent classes", function () {
-        var dropdown = new DropdownFormElement('#dropdown', {});
-
-        // Basic control of classes inheritance.
-        expect(dropdown).to.be.instanceOf(CanControl);
-        expect(dropdown).to.be.instanceOf(Component);
-        expect(dropdown).to.be.instanceOf(FormElement);
-        expect(dropdown).to.be.instanceOf(ChoiceFormElement);
-
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(dropdown.getValue()).to.be.equal('ID_1');
         dropdown.destroy();
+        done();
+      }, 0);
     });
+  });
 
-    it("getValue() should return the value of the dropdown", function (done) {
-        var dropdown = new DropdownFormElement('#dropdown', {
-                availableValues: {
-                    ID_1: 'VALUE 1',
-                    ID_2: 'VALUE 2',
-                    ID_3: 'VALUE 3'
-                },
-                value: 'ID_1'
-            }).start();
-
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(dropdown.getValue()).to.be.equal('ID_1');
-            dropdown.destroy();
-            done();
-        }, 0);
-    });
-
-    it("Changing the value of the dropdown should fire the changed event", function (done) {
-        var firedChanged = false,
-            dropdown = new DropdownFormElement('#dropdown', {
-            availableValues: {
-                ID_1: 'VALUE 1',
-                ID_2: 'VALUE 2',
-                ID_3: 'VALUE 3'
-            },
-            value: 'ID_1'
+  describe("Events", () => {
+    it("listens to changes on the component and triggers the event changed", done => {
+      let firedChanged = false,
+        dropdown = new DropdownFormElement('#dropdown', {
+          availableValues: {
+            ID_1: 'VALUE 1',
+            ID_2: 'VALUE 2',
+            ID_3: 'VALUE 3'
+          },
+          value: 'ID_1'
         }).start();
 
-        // While the dropdown value change.
-        $dropdown.on('changed', function () {
-            firedChanged = true;
-        });
-        expect(firedChanged).to.be.false;
+      // While the dropdown value change.
+      $dropdown.on('changed', () => {
+        firedChanged = true;
+      });
+      expect(firedChanged).to.be.false;
 
-        // Simulate a keypress and check after the timeout
-        $dropdown.val('ID_2');
-        domEvents.dispatch($dropdown[0], 'change');
+      // Simulate a keypress and check after the timeout
+      $dropdown.val('ID_2');
+      domEvents.dispatch($dropdown[0], 'change');
 
-        // After all event handlers have done their treatment.
-        setTimeout(function () {
-            expect(dropdown.getValue()).to.be.equal('ID_2');
-            expect(firedChanged).to.be.true;
-            dropdown.destroy();
-            done();
-        }, 0);
+      // After all event handlers have done their treatment.
+      setTimeout(() => {
+        expect(dropdown.getValue()).to.be.equal('ID_2');
+        expect(firedChanged).to.be.true;
+        dropdown.destroy();
+        done();
+      }, 0);
     });
-
+  });
 });

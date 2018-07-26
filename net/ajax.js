@@ -13,9 +13,10 @@
 import $ from 'jquery';
 import canAjax from 'can-ajax';
 import Construct from 'can-construct';
-import MadBus from 'passbolt-mad/control/bus';
+import DefineList from 'passbolt-mad/model/list/list';
 import Response from 'passbolt-mad/net/response';
 import StringUtil from 'can-util/js/string/string';
+import uuid from 'uuid/v4';
 
 /**
  * @inherits can.Construct
@@ -33,6 +34,10 @@ import StringUtil from 'can-util/js/string/string';
  * ```
  */
 const Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
+  /**
+   * Registered of requests.
+   */
+  _requests: new DefineList(),
 
   /**
    * Perform an ajax request
@@ -40,6 +45,7 @@ const Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
    * @return {jQuery.deferred}
    */
   request: function(request) {
+    request.id = uuid();
     // Keep the original parameters.
     request.originParams = $.extend({}, request.params);
     // Treat templated uris (e.g. /control/action/{id}).
@@ -72,11 +78,38 @@ const Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
       };
     }
 
-    this._triggerAjaxStartEvent(request);
-
+    this._registerRequest(request);
     return canAjax(request)
       .then(data => this.handleSuccess(request, data),
         data => this.handleError(request, data));
+  },
+
+  /**
+   * Register the request.
+   * @param {object} The request to register
+   * @private
+   */
+  _registerRequest: function(request) {
+    if (request.register === false) {
+      return;
+    }
+    Ajax._requests.push(request);
+  },
+
+  /**
+   * Unregister the request.
+   * @param {object} The request to register
+   * @private
+   */
+  _unregisterRequest: function(request) {
+    if (request.register === false) {
+      return;
+    }
+    const id = request.id;
+    const index = Ajax._requests.indexOf({id: id});
+    if (index != -1) {
+      Ajax._requests.splice(index, 1);
+    }
   },
 
   /**
@@ -94,7 +127,7 @@ const Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
       response = data;
     }
     request._response = response;
-    this._triggerAjaxCompleteEvent(request);
+    this._unregisterRequest(request);
 
     if (response instanceof Response) {
       return Promise.resolve(response.body);
@@ -119,33 +152,9 @@ const Ajax = Construct.extend('mad.net.Ajax', /** @static */ {
       response = Response.getResponse(request._xhr.status);
     }
     request._response = response;
-    this._triggerAjaxCompleteEvent(request, response);
+    this._unregisterRequest(request);
 
     return Promise.reject(response);
-  },
-
-  /**
-   * Trigger a complete event.
-   *
-   * @param request The request to trigger an event for
-   * @private
-   */
-  _triggerAjaxCompleteEvent: function(request) {
-    if (typeof(mad.bus) != 'undefined') {
-      MadBus.trigger('mad_ajax_request_complete', {request: request});
-    }
-  },
-
-  /**
-   * Trigger a start event.
-   *
-   * @param request The request to trigger an event for
-   * @private
-   */
-  _triggerAjaxStartEvent: function(request) {
-    if (typeof(mad.bus) != 'undefined') {
-      MadBus.trigger('mad_ajax_request_start', {request: request});
-    }
   }
 
 }, /** @prototype */ {

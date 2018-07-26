@@ -22,11 +22,9 @@ const ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @sta
 
   /**
    * Get the dropdown element for the current dropdown button.
-   * @return {jQuery}
    */
   getDropdownContentElement: function() {
     const contentElement = this.getController().options.contentElement;
-
     // a custom dropdown content element has been defined
     if (contentElement != null) {
       return $(contentElement);
@@ -38,47 +36,34 @@ const ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @sta
 
   /**
    * Open an item
-   * @param {DefineMap} item The target item to open
    */
   open: function() {
     $(this.element).addClass('pressed');
     const $contentElement = this.getDropdownContentElement();
     $contentElement.addClass('visible');
-    this.getController().state.addState('open');
+    this.getController().state.open = true;
   },
 
   /**
    * Close an item
-   * @param {DefineMap} item The target item to close
    */
   close: function() {
     $(this.element).removeClass('pressed');
     const $contentElement = this.getDropdownContentElement();
     $contentElement.removeClass('visible');
-    if (this.getController().state.is('open')) { this.getController().state.removeState('open'); }
+    this.getController().state.open = false;
   },
 
-  /* ************************************************************** */
-  /* LISTEN TO THE VIEW EVENTS */
-  /* ************************************************************** */
-
   /**
-   * @function mad.component.ButtonDropdown.click
-   * @parent mad.component.ButtonDropdown.view_events
-   * Listen to the event click on the DOM button element
+   * Observe when the component is clicked
    * @return {bool}
    */
   '{element} click': function() {
-    // If state is disabled, do not do anything on click.
-    if (this.getController().state.is('disabled')) {
+    const controller = this.getController();
+    if (controller.state.disabled) {
       return false;
     }
-
-    /*
-     * If state is not disabled,
-     * manage opening and closing of button dropdown.
-     */
-    if (!this.getController().state.is('open')) {
+    if (!controller.state.open) {
       this.open();
     } else {
       this.close();
@@ -88,7 +73,10 @@ const ButtonDropdown = View.extend('mad.view.component.ButtonDropdown', /** @sta
   },
 
   /**
-   * Intercept global click event and close menu if open.
+   * Observe when a click occurred on the document.
+   * If the click does not target the component or its content, close the dropdown.
+   * @param {HTMLElement} el The element the event occurred on
+   * @param {HTMLEvent} ev The event which occurred
    */
   '{document} click': function(el, ev) {
     const componentSelector = `#${this.getController().getId()}`;

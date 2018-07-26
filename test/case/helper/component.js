@@ -13,46 +13,38 @@
 import "passbolt-mad/test/bootstrap";
 import ComponentHelper from 'passbolt-mad/helper/component';
 import DefineList from 'passbolt-mad/model/list/list';
-import TreeComponent from "passbolt-mad/component/tree";
+import Tree from "passbolt-mad/component/tree";
 
-describe("mad.helper.Component", function(){
+describe("mad.helper.Component", () => {
+  beforeEach(() => {
+  });
 
-	beforeEach(function(){
-	});
+  afterEach(() => {
+    $('#test-html').empty();
+  });
 
-	afterEach(function(){
-        $('#test-html').empty();
-	});
+  describe('create()', () => {
+    it("instantiates and inserts a component", () => {
+      const selector = $('#test-html');
+      const component = ComponentHelper.create(selector, 'last', Tree);
+      component.start();
+      const items = new DefineList([{
+        id: 'item_1',
+        label: 'Item 1'
+      }, {
+        id: 'item_2',
+        label: 'Item 2'
+      }, {
+        id: 'item_3',
+        label: 'Item 3'
+      }]);
+      component.load(items);
 
-    it("create() should initialize and insert a new Component", function() {
-        // Use a helper to insert a component.
-        var component = ComponentHelper.create(
-            $('#test-html'),
-            'last',
-            TreeComponent
-        );
-        expect(component instanceof TreeComponent).to.be.true;
-
-        // The component has been well inserted.
-        component.start();
-        expect($('ul', $('#test-html')).length).to.be.equal(1);
-
-        // Quick check that everything is working fine with the primitive of the component.
-        var items = new DefineList([{
-            id: 'item_1',
-            label: 'Item 1'
-        }, {
-            id: 'item_2',
-            label: 'Item 2'
-        }, {
-            id: 'item_3',
-            label: 'Item 3'
-        }]);
-        component.load(items);
-
-        expect($rootElement.text()).to.contain('Item 1');
-        expect($rootElement.text()).to.contain('Item 2');
-        expect($rootElement.text()).to.contain('Item 3');
+      expect(component instanceof Tree).to.be.true;
+      expect($('ul', $('#test-html')).length).to.be.equal(1);
+      expect($rootElement.text()).to.contain('Item 1');
+      expect($rootElement.text()).to.contain('Item 2');
+      expect($rootElement.text()).to.contain('Item 3');
     });
-
+  });
 });

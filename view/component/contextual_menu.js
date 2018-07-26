@@ -36,7 +36,7 @@ const ContextualMenu = DropdownMenuView.extend('mad.view.component.ContextualMen
     const menuIsSrc = this.element.id == ev.target.id;
     const menuIsParent = $(ev.target).parents(`#${controller.getId()}`).length;
     if (!menuIsSrc && !menuIsParent) {
-      controller.remove();
+      controller.destroyAndRemove();
     }
   },
 

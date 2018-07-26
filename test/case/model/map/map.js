@@ -19,47 +19,46 @@ import Profile from 'passbolt-mad/test/model/map/profile';
 import User from 'passbolt-mad/test/model/map/user';
 import uuid from 'uuid/v4';
 
-describe("mad.Map", function () {
+describe("mad.Map", () => {
+  it("should inherit MadMap", () => {
+    const model = new MadMap();
+    expect(model).to.be.instanceOf(MadMap);
+  });
 
-    it("should inherit MadMap", function () {
-        var model = new MadMap();
-        expect(model).to.be.instanceOf(MadMap);
-    });
+  it("findAll() should retrieve the data", done => {
+    User.findAll()
+      .then(users => {
+        expect(users[0]).to.be.instanceOf(User);
+        expect(users[0].profile).to.be.instanceOf(Profile);
+        done();
+      });
+  });
 
-    it("findAll() should retrieve the data", function (done) {
-        User.findAll()
-        .then((users) => {
-            expect(users[0]).to.be.instanceOf(User);
-            expect(users[0].profile).to.be.instanceOf(Profile);
-            done();
-        });
-    });
+  it("validateAttribute() should validate scalar attribute", () => {
+    let isValid = null;
+    const rules = User.validationRules;
 
-    it("validateAttribute() should validate scalar attribute", function () {
-        var isValid = null;
-        var rules = User.validationRules;
+    // By default, if no rule defined empty value is allowed
+    isValid = User.validateAttribute('id', '');
+    expect(isValid).to.be.empty;
 
-        // By default, if no rule defined empty value is allowed
-        isValid = User.validateAttribute('id', '');
-        expect(isValid).to.be.empty;
+    // Validation rule allow what it should
+    isValid = User.validateAttribute('id', uuid());
+    expect(isValid).to.be.empty;
 
-        // Validation rule allow what it should
-        isValid = User.validateAttribute('id', uuid());
-        expect(isValid).to.be.empty;
+    // Check that validation rule is well executed, and return a default message if nothing specified.
+    isValid = User.validateAttribute('id', 'ABCDE');
+    expect(isValid).to.not.be.empty;
+    expect(isValid[0]).to.contain('Not valid uuid');
 
-        // Check that validation rule is well executed, and return a default message if nothing specified.
-        isValid = User.validateAttribute('id', 'ABCDE');
-        expect(isValid).to.not.be.empty;
-        expect(isValid[0]).to.contain('Not valid uuid');
+    // Validation rule with custom message.
+    isValid = User.validateAttribute('username', '');
+    expect(isValid).to.not.be.empty;
+    expect(isValid[0]).to.contain(rules.username.filter(item => item.rule == 'notEmpty')[0].message);
 
-        // Validation rule with custom message.
-        isValid = User.validateAttribute('username', '');
-        expect(isValid).to.not.be.empty;
-        expect(isValid[0]).to.contain(rules.username.filter(item => item.rule=='notEmpty')[0].message);
-
-        // Field is required
-        isValid = User.validateAttribute('username', undefined);
-        expect(isValid).to.not.be.empty;
-        expect(isValid[0]).to.contain(rules.username.filter(item => item.rule=='required')[0].message);
-    });
+    // Field is required
+    isValid = User.validateAttribute('username', undefined);
+    expect(isValid).to.not.be.empty;
+    expect(isValid[0]).to.contain(rules.username.filter(item => item.rule == 'required')[0].message);
+  });
 });

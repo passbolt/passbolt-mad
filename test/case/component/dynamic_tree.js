@@ -15,104 +15,106 @@ import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import DefineMap from 'passbolt-mad/model/map/map';
 import domEvents from 'can-dom-events';
-import DynamicTreeComponent from "passbolt-mad/component/dynamic_tree"
+import DynamicTreeComponent from "passbolt-mad/component/dynamic_tree";
 import MadControl from 'passbolt-mad/control/control';
 import TreeComponent from 'passbolt-mad/component/tree';
 
-describe("mad.component.DynamicTree", function () {
+describe("DynamicTree", () => {
+  let $tree = null;
 
-    // The HTMLElement which will carry the tree component.
-    var $tree = null;
+  beforeEach(() => {
+    $tree = $('<ul id="tree"></ul>').appendTo($('#test-html'));
+  });
 
-    // Insert a <ul> HTMLElement into the DOM for the test.
-    beforeEach(function () {
-        $tree = $('<ul id="tree"></ul>').appendTo($('#test-html'));
+  afterEach(() => {
+    $('#test-html').empty();
+  });
+
+  describe("Constructor", () => {
+    it("inherits basilisks", () => {
+      const tree = new DynamicTreeComponent('#tree', {
+        itemClass: DefineMap
+      });
+
+      // Basic control of classes inheritance.
+      expect(tree).to.be.instanceOf(CanControl);
+      expect(tree).to.be.instanceOf(MadControl);
+      expect(tree).to.be.instanceOf(Component);
+      expect(tree).to.be.instanceOf(TreeComponent);
+      expect(tree).to.be.instanceOf(DynamicTreeComponent);
+
+      tree.start();
+      tree.destroy();
     });
+  });
 
-    // Clean the DOM after each test.
-    afterEach(function () {
-        $('#test-html').empty();
-    });
+  describe("open() / close()", () => {
+    it('opens / closes tree sections', () => {
+      const tree = new DynamicTreeComponent('#tree', {
+        itemClass: DefineMap
+      });
+      tree.start();
 
-    it("constructed instance should inherit mad.component.Tree & the inherited parent classes", function () {
-        var tree = new DynamicTreeComponent('#tree', {
-            itemClass: DefineMap
-        });
-
-        // Basic control of classes inheritance.
-        expect(tree).to.be.instanceOf(CanControl);
-        expect(tree).to.be.instanceOf(MadControl);
-        expect(tree).to.be.instanceOf(Component);
-        expect(tree).to.be.instanceOf(TreeComponent);
-        expect(tree).to.be.instanceOf(DynamicTreeComponent);
-
-        tree.start();
-        tree.destroy();
-    });
-
-    it('open() and close() should open and close the corresponding sections of the tree', function () {
-        var tree = new DynamicTreeComponent('#tree', {
-            itemClass: DefineMap
-        });
-        tree.start();
-
-        var items = new DefineMap.List([{
-            id: 'item_1',
-            label: 'Item 1'
+      const items = new DefineMap.List([{
+        id: 'item_1',
+        label: 'Item 1'
+      }, {
+        id: 'item_2',
+        label: 'Item 2',
+        'children': new DefineMap.List([{
+          id: 'item_21',
+          label: 'Item 21'
         }, {
-            id: 'item_2',
-            label: 'Item 2',
-            'children': new DefineMap.List([{
-                id: 'item_21',
-                label: 'Item 21'
-            }, {
-                id: 'item_22',
-                label: 'Item 22'
-            }])
-        }, {
-            id: 'item_3',
-            label: 'Item 3'
-        }]);
-        tree.load(items);
+          id: 'item_22',
+          label: 'Item 22'
+        }])
+      }, {
+        id: 'item_3',
+        label: 'Item 3'
+      }]);
+      tree.load(items);
 
-        expect($('#item_2').hasClass('close')).to.be.true;
-        tree.open(items[1]);
-        expect($('#item_2').hasClass('close')).to.be.false;
-        expect($('#item_2').hasClass('open')).to.be.true;
-        tree.close(items[1]);
-        expect($('#item_2').hasClass('close')).to.be.true;
+      expect($('#item_2').hasClass('close')).to.be.true;
+      tree.open(items[1]);
+      expect($('#item_2').hasClass('close')).to.be.false;
+      expect($('#item_2').hasClass('open')).to.be.true;
+      tree.close(items[1]);
+      expect($('#item_2').hasClass('close')).to.be.true;
     });
+  });
 
-    it('Clicking on the open/close trigger should open and close the corresponding section of the tree', function () {
-        var tree = new DynamicTreeComponent('#tree', {
-            itemClass: DefineMap
-        });
-        tree.start();
+  describe("Event click", () => {
+    it('opens / closes tree sections ', () => {
+      const tree = new DynamicTreeComponent('#tree', {
+        itemClass: DefineMap
+      });
+      tree.start();
 
-        var items = new DefineMap.List([{
-            id: 'item_1',
-            label: 'Item 1'
+      const items = new DefineMap.List([{
+        id: 'item_1',
+        label: 'Item 1'
+      }, {
+        id: 'item_2',
+        label: 'Item 2',
+        'children': new DefineMap.List([{
+          id: 'item_21',
+          label: 'Item 21'
         }, {
-            id: 'item_2',
-            label: 'Item 2',
-            'children': new DefineMap.List([{
-                id: 'item_21',
-                label: 'Item 21'
-            }, {
-                id: 'item_22',
-                label: 'Item 22'
-            }])
-        }, {
-            id: 'item_3',
-            label: 'Item 3'
-        }]);
-        tree.load(items);
+          id: 'item_22',
+          label: 'Item 22'
+        }])
+      }, {
+        id: 'item_3',
+        label: 'Item 3'
+      }]);
+      tree.load(items);
 
-        expect($('#item_2').hasClass('close')).to.be.true;
-        domEvents.dispatch($('#item_2 .left-cell.node-ctrl > a')[0], 'click');
-        expect($('#item_2').hasClass('close')).to.be.false;
-        expect($('#item_2').hasClass('open')).to.be.true;
-        domEvents.dispatch($('#item_2 .left-cell.node-ctrl > a')[0], 'click');
-        expect($('#item_2').hasClass('close')).to.be.true;
+      expect($('#item_2').hasClass('close')).to.be.true;
+      domEvents.dispatch($('#item_2 .left-cell.node-ctrl > a')[0], 'click');
+      expect($('#item_2').hasClass('close')).to.be.false;
+      expect($('#item_2').hasClass('open')).to.be.true;
+      domEvents.dispatch($('#item_2 .left-cell.node-ctrl > a')[0], 'click');
+      expect($('#item_2').hasClass('close')).to.be.true;
     });
+  });
 });

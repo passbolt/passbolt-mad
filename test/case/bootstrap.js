@@ -16,15 +16,13 @@ import Construct from "can-construct";
 import Bootstrap from "passbolt-mad/bootstrap";
 import Component from "passbolt-mad/component/component";
 
-describe("mad.Bootstrap", function () {
+describe("mad.Bootstrap", () => {
+  it("should inherit can.Construct", () => {
+    const AppControl = Component.extend('mad.test.bootstrap.AppControl', {
+      defaults: {}
+    }, { });
 
-    it("should inherit can.Construct", function () {
-        var AppControl = Component.extend('mad.test.bootstrap.AppControl', {
-            defaults: {}
-        }, { });
-
-        var bootstrap = new Bootstrap();
-        expect(bootstrap).to.be.instanceOf(Construct);
-    });
-
+    const bootstrap = new Bootstrap();
+    expect(bootstrap).to.be.instanceOf(Construct);
+  });
 });

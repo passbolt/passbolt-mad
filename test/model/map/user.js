@@ -23,48 +23,48 @@ import DefineMap from 'passbolt-mad/model/map/map';
 import Profile from 'passbolt-mad/test/model/map/profile';
 import Role from 'passbolt-mad/test/model/map/role';
 
-var User = DefineMap.extend('mad.test.model.User', {
-    id: 'string',
-    username: 'string',
-    email: 'string',
-    active: 'boolean',
-    profile: Profile,
-    role: Role.List
+const User = DefineMap.extend('mad.test.model.User', {
+  id: 'string',
+  username: 'string',
+  email: 'string',
+  active: 'boolean',
+  profile: Profile,
+  role: Role.List
 });
 DefineMap.setReference('User', User);
 
-User.List = DefineList.extend({'#': { Type: User }});
+User.List = DefineList.extend({'#': {Type: User}});
 User.List.itemReference = User;
 
 User.validationRules = {
-    id: [
-        {rule: 'uuid'}
-    ],
-    email: [
-        {rule: 'email', message: __('The email should be a valid email address.')}
-    ],
-    username: [
-        {rule: 'required', message:  __('A username is required.')},
-        {rule: 'notEmpty', message:  __('A username is required.')},
-        {rule: 'utf8', message:  __('The username should be a valid utf8 string.')},
-        {rule: ['lengthBetween', 0, 255], message: __('The username length should be maximum 254 characters.')}
-    ]
+  id: [
+    {rule: 'uuid'}
+  ],
+  email: [
+    {rule: 'email', message: __('The email should be a valid email address.')}
+  ],
+  username: [
+    {rule: 'required', message:  __('A username is required.')},
+    {rule: 'notEmpty', message:  __('A username is required.')},
+    {rule: 'utf8', message:  __('The username should be a valid utf8 string.')},
+    {rule: ['lengthBetween', 0, 255], message: __('The username length should be maximum 254 characters.')}
+  ]
 };
 
 User.connection = connect([connectParse, connectDataUrl, connectConstructor, connectStore, connectMap, connectConstructorHydrate], {
-    Map: User,
-    List: User.List,
-    url: {
-        resource: '/',
-        getListData: function(params) {
-            return Ajax.request({
-                url: '/test/users',
-                type: 'GET',
-                params: params
-            });
-        },
-        destroyData: 'DELETE /test/users/{id}'
-    }
+  Map: User,
+  List: User.List,
+  url: {
+    resource: '/',
+    getListData: function(params) {
+      return Ajax.request({
+        url: '/test/users',
+        type: 'GET',
+        params: params
+      });
+    },
+    destroyData: 'DELETE /test/users/{id}'
+  }
 });
 
 export default User;

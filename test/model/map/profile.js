@@ -12,20 +12,20 @@
  */
 import MadMap from 'passbolt-mad/model/map/map';
 
-var Profile = MadMap.extend('mad.test.model.Profile', {
-    first_name: 'string',
-    last_name: 'string'
+const Profile = MadMap.extend('mad.test.model.Profile', {
+  first_name: 'string',
+  last_name: 'string'
 });
 
 Profile.validationRules = {
-    first_name: [
-        {rule: 'required', message:  __('A first name is required.')},
-        {rule: 'notEmpty', message:  __('A first name is required.')}
-    ],
-    last_name: [
-        {rule: 'required', message:  __('A last name is required.')},
-        {rule: 'notEmpty', message:  __('A last name is required.')}
-    ]
+  first_name: [
+    {rule: 'required', message:  __('A first name is required.')},
+    {rule: 'notEmpty', message:  __('A first name is required.')}
+  ],
+  last_name: [
+    {rule: 'required', message:  __('A last name is required.')},
+    {rule: 'notEmpty', message:  __('A last name is required.')}
+  ]
 };
 
 export default Profile;

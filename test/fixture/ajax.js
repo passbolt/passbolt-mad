@@ -16,36 +16,32 @@ import uuid from 'uuid/v4';
 
 // Server success ajax request
 fixture({
-    type: 'POST',
-    url: '/ajax/success'
-}, function (params) {
-    return {
-        header: {
-            id: uuid(),
-            status: Response.STATUS_SUCCESS,
-            title: 'Ajax Unit Test fixture title',
-            message: 'Ajax Unit Test fixture message',
-            controller: 'controllerName',
-            action: 'actionName'
-        },
-        body: 'success response'
-    };
-});
+  type: 'POST',
+  url: '/ajax/success'
+}, params => ({
+  header: {
+    id: uuid(),
+    status: Response.STATUS_SUCCESS,
+    title: 'Ajax Unit Test fixture title',
+    message: 'Ajax Unit Test fixture message',
+    controller: 'controllerName',
+    action: 'actionName'
+  },
+  body: 'success response'
+}));
 
 // Server error ajax request
 fixture({
-    type: 'POST',
-    url: '/ajax/error'
-}, function (params) {
-    return {
-        header: {
-            id: uuid(),
-            status: Response.STATUS_ERROR,
-            title: 'Ajax Unit Test fixture title',
-            message: 'Ajax Unit Test fixture message',
-            controller: 'controllerName',
-            action: 'actionName'
-        },
-        body: 'error response'
-    };
-});
+  type: 'POST',
+  url: '/ajax/error'
+}, params => ({
+  header: {
+    id: uuid(),
+    status: Response.STATUS_ERROR,
+    title: 'Ajax Unit Test fixture title',
+    message: 'Ajax Unit Test fixture message',
+    controller: 'controllerName',
+    action: 'actionName'
+  },
+  body: 'error response'
+}));
