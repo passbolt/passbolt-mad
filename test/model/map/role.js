@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import DefineList from 'passbolt-mad/model/list/list';
+import I18n from "passbolt-mad/util/lang/i18n";
 import MadMap from 'passbolt-mad/model/map/map';
 
 const Role = MadMap.extend('mad.test.model.Role', {

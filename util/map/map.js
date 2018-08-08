@@ -78,20 +78,6 @@ const MadMap = Construct.extend('mad.Map', /** @static */ {
   },
 
   /**
-   * Get the fields name the map targets in the model.
-   * @return {array}
-   */
-  getModelTargetFieldsNames: function() {
-    const returnValue = [];
-    for (const key in this.map) {
-      if (typeof this.map[key] == 'string') {
-        returnValue.push(this.map[key]);
-      }
-    }
-    return returnValue;
-  },
-
-  /**
    * Map an object into another.
    *
    * @param {Object} object The object to map

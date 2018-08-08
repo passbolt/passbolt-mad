@@ -24,7 +24,12 @@ const Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @proto
    * Flush the grid
    */
   reset: function() {
-    $('tbody tr', this.element).remove();
+    const tableElement = $('.tableview-content', this.element);
+    const tableTbody = tableElement.find('tbody');
+
+    tableElement.scrollTop(0);
+    tableTbody.empty();
+    this.markAsUnsorted();
   },
 
   /**
@@ -116,11 +121,12 @@ const Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @proto
   /**
    * Render a row for a given item
    * @param {DefineMap} item
+   * @param {object} options
    */
-  _renderRow: function(item) {
+  _renderRow: function(item, options) {
     const control = this.getController();
     const columnModels = control.getColumnModel();
-    const mappedItem = control.getMap().mapObject(item);
+    const mappedItem = control.mappedItems[item.id];
 
     // Render the row with the row data.
     return View.render(control.options.itemTemplate, {
@@ -128,7 +134,8 @@ const Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @proto
       id: control.options.prefixItemId + mappedItem.id,
       columnModels: columnModels,
       mappedItem: mappedItem,
-      cellTemplate: control.options.cellTemplate
+      cellTemplate: control.options.cellTemplate,
+      options: options
     });
   },
 
@@ -148,8 +155,9 @@ const Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @proto
    * By default the item will be inserted as last element of the grid.
    * @param {string} position (optional) If the reference item has been defined. The position
    * of the item to insert, regarding the reference item.
+   * @param {object} options
    */
-  insertItem: function(item, refItem, position) {
+  insertItem: function(item, refItem, position, options) {
     // By default position the new element inside as final element
     position = position || 'last';
     let $item = null;
@@ -180,7 +188,7 @@ const Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @proto
     }
 
     // Render the row.
-    row = this._renderRow(item);
+    row = this._renderRow(item, options);
 
     // Insert the row html fragment in the grid.
     $item = HtmlHelper.create($refElement, position, row);
@@ -193,10 +201,11 @@ const Grid = View.extend('mad.view.component.Grid', /* @static */ {}, /** @proto
   /**
    * Refresh an item.
    * @param {DefineMap} item The item to refresh
+   * @param {object} options
    */
-  refreshItem: function(item) {
+  refreshItem: function(item, options) {
     const $current = this.getItemElement(item);
-    const row = this._renderRow(item);
+    const row = this._renderRow(item, options);
     const $item = HtmlHelper.create($current, 'replace_with', row);
     DomData.set($item[0], this.getController().getItemClass().shortName, item);
   },

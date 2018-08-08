@@ -39,6 +39,7 @@ import "passbolt-mad/test/case/helper/html";
 
 import "passbolt-mad/test/case/net/ajax";
 
+import "passbolt-mad/test/case/model/list/list";
 import "passbolt-mad/test/case/model/map/map";
 
 import "passbolt-mad/test/case/util/i18n";

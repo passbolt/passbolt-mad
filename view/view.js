@@ -83,19 +83,6 @@ const View = Control.extend('mad.View', /** @static */{
   },
 
   /**
-   * The component is loading
-   * @param {boolean} loading Display or not the loading
-   * @return {void}
-   */
-  loading: function(loading) {
-    if (loading) {
-      $(this.element).prepend('<div class="js_loading" />');
-    } else {
-      $('.js_loading', $(this.element)).remove();
-    }
-  },
-
-  /**
    * Remove	the given class
    * @param {string} className The class to remove
    * @return {void}

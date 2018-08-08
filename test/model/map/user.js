@@ -20,6 +20,7 @@ import connectStore from 'can-connect/constructor/store/store';
 import connectConstructorHydrate from 'can-connect/can/constructor-hydrate/constructor-hydrate';
 import DefineList from 'passbolt-mad/model/list/list';
 import DefineMap from 'passbolt-mad/model/map/map';
+import I18n from "passbolt-mad/util/lang/i18n";
 import Profile from 'passbolt-mad/test/model/map/profile';
 import Role from 'passbolt-mad/test/model/map/role';
 

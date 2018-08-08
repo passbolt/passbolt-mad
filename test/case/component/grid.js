@@ -15,7 +15,7 @@ import "passbolt-mad/test/fixture/users";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import DefineMap from 'passbolt-mad/model/map/map';
-import GridColumn from 'passbolt-mad/model/grid_column';
+import GridColumn from 'passbolt-mad/model/map/grid_column';
 import GridComponent from "passbolt-mad/component/grid";
 import HtmlHelper from 'passbolt-mad/helper/html';
 import MadControl from 'passbolt-mad/control/control';
@@ -24,6 +24,12 @@ import User from 'passbolt-mad/test/model/map/user';
 import xss from 'passbolt-mad/test/fixture/xss';
 
 let $grid = null;
+
+const map = new MadMap({
+  id: 'id',
+  label: 'label'
+});
+
 const generate_dummy_items = function(n) {
   n = n || 10;
   const items = [];
@@ -37,6 +43,49 @@ const generate_dummy_items = function(n) {
   return items;
 };
 
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const generate_alphabet_dummy_items = function() {
+  const items = [];
+  const alphabetCopy = alphabet.slice();
+  let rand;
+  let letter;
+
+  for (var i = 0; i < alphabet.length; i++) {
+    rand = Math.floor(Math.random() * alphabetCopy.length);
+    letter = alphabetCopy.splice(rand, 1);
+
+    items[i] = new DefineMap({
+      id: `item_${letter}`,
+      label: `item label ${letter}`
+    });
+  }
+
+  return items;
+};
+
+const instantiateGrid = function(options) {
+  const columnModel = [new GridColumn({
+    name: 'id',
+    index: 'id',
+    label: 'id',
+    css: ['id_custom_css']
+  }), new GridColumn({
+    name: 'label',
+    index: 'label',
+    label: 'label',
+    css: ['label_custom_css']
+  })];
+  const _defaultOptions = {
+    itemClass: DefineMap,
+    map: map,
+    columnModel: columnModel,
+    fadeInTimeout: 0
+  };
+  const _options = $.extend({}, _defaultOptions, options);
+  const grid = new GridComponent('#grid', _options);
+  return grid;
+};
+
 describe("Grid", () => {
   beforeEach(() => {
     $grid = $('<div id="grid"></div>').appendTo($('#test-html'));
@@ -46,663 +95,637 @@ describe("Grid", () => {
     $('#test-html').empty();
   });
 
-  it("inherits phoenix", () => {
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap
+  describe("Constructor", () => {
+    it("inherits phoenix", () => {
+      const grid = new GridComponent('#grid', {
+        itemClass: DefineMap,
+        map: map
+      });
+
+      // Basic control of classes inheritance.
+      expect(grid).to.be.instanceOf(CanControl);
+      expect(grid).to.be.instanceOf(MadControl);
+      expect(grid).to.be.instanceOf(Component);
+      expect(grid).to.be.instanceOf(GridComponent);
+
+      grid.start();
+      grid.destroy();
     });
-
-    // Basic control of classes inheritance.
-    expect(grid).to.be.instanceOf(CanControl);
-    expect(grid).to.be.instanceOf(MadControl);
-    expect(grid).to.be.instanceOf(Component);
-    expect(grid).to.be.instanceOf(GridComponent);
-
-    grid.start();
-    grid.destroy();
   });
 
-  it("insertItem() requires the map option to be defined", () => {
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap
+  describe("start()", () => {
+    it("requires a map to proceed", () => {
+      const grid = new GridComponent('#grid', {
+        itemClass: DefineMap
+      });
+      expect(() => {
+        grid.start();
+      }).to.throw(Error);
+      grid.destroy();
     });
-    grid.start();
+  });
 
-    // Insert a first item.
-    const itemInside = new DefineMap({
-      id: 'item_inside',
-      label: 'item inside label'
-    });
+  describe("insertItem()", () => {
+    it("inserts an item into the grid", () => {
+      const grid = instantiateGrid();
+      grid.start();
 
-    // Asserts.
-    expect(() => {
+      // Insert a first item.
+      const itemInside = new DefineMap({
+        id: 'item_inside',
+        label: 'item inside label'
+      });
       grid.insertItem(itemInside);
-    }).to.throw(Error); // should work but doesn't : mad.Exception.get(mad.error.MISSING_OPTION, 'map')
+      expect($('#test-html').text()).to.contain(itemInside.label);
 
-    grid.destroy();
+      // Insert an item before the first one.
+      const itemBefore = new DefineMap({
+        id: 'item_before',
+        label: 'item before label'
+      });
+      grid.insertItem(itemBefore, itemInside, 'before');
+      expect($grid.text()).to.contain(itemBefore.label);
+      expect(grid.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_before');
+
+      // Insert an item after the before one.
+      const itemAfter = new DefineMap({
+        id: 'item_after',
+        label: 'item after label'
+      });
+      grid.insertItem(itemAfter, itemBefore, 'after');
+      expect($grid.text()).to.contain(itemInside.label);
+      expect(grid.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_after');
+      expect(grid.view.getItemElement(itemBefore).next().attr('id')).to.be.equal('item_after');
+
+      // Insert an item in first.
+      const itemFirst = new DefineMap({
+        id: 'item_first',
+        label: 'item first label'
+      });
+      grid.insertItem(itemFirst, null, 'first');
+      expect($grid.text()).to.contain(itemFirst.label);
+      expect(grid.view.getItemElement(itemBefore).prev().attr('id')).to.be.equal('item_first');
+
+      // Insert an item in last.
+      const itemLast = new DefineMap({
+        id: 'item_last',
+        label: 'item DefineMap label'
+      });
+      grid.insertItem(itemLast, null, 'last');
+      expect($grid.text()).to.contain(itemLast.label);
+      expect(grid.view.getItemElement(itemInside).next().attr('id')).to.be.equal('item_last');
+
+      grid.destroy();
+    });
+
+    it("inserts executes the after render function after inserting an item", () => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id'
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        afterRender: function(cellElement, cellValue, mappedItem, item, columnModel) {
+          const html = `<p>Cell adapted applied : ${cellValue}</p>`;
+          HtmlHelper.create(cellElement, 'inside_replace', html);
+        }
+      })];
+      const grid = instantiateGrid({columnModel});
+      grid.start();
+
+      // Insert the item.
+      const itemInside = new DefineMap({
+        id: 'item',
+        label: 'item label'
+      });
+      grid.insertItem(itemInside);
+      expect($('#test-html').text()).to.contain(`Cell adapted applied : ${itemInside.label}`);
+
+      grid.destroy();
+    });
   });
 
-  it("insertItem() should insert an item into the grid", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id',
-      css: ['id_custom_css']
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label',
-      css: ['label_custom_css']
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
+  describe("load()", () => {
+    it('inserts a batch of items', done => {
+      const grid = instantiateGrid();
+      grid.start();
 
-    // Insert a first item.
-    const itemInside = new DefineMap({
-      id: 'item_inside',
-      label: 'item inside label'
-    });
-    grid.insertItem(itemInside);
-    expect($('#test-html').text()).to.contain(itemInside.label);
+      // Load items
+      const items = generate_dummy_items(3);
+      grid.load(items).then(() => {
+        expect($grid.text()).to.contain('item label 0');
+        expect($grid.text()).to.contain('item label 1');
+        expect($grid.text()).to.contain('item label 2');
 
-    // Insert an item before the first one.
-    const itemBefore = new DefineMap({
-      id: 'item_before',
-      label: 'item before label'
+        grid.destroy();
+        done();
+      });
     });
-    grid.insertItem(itemBefore, itemInside, 'before');
-    expect($grid.text()).to.contain(itemBefore.label);
-    expect(grid.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_before');
 
-    // Insert an item after the before one.
-    const itemAfter = new DefineMap({
-      id: 'item_after',
-      label: 'item after label'
+    it('paginates the rows if the options paginate is defined to true', done => {
+      const grid = instantiateGrid({paginate: true});
+      grid.start();
+
+      const items = generate_dummy_items(150);
+      grid.load(items).then(() => {
+        const visibleItems = $('.tableview-content tbody tr').not('.hidden');
+        expect(visibleItems.length).to.be.equal(grid.options.itemsByPage);
+
+        for (var i = 0; i<50; i++) {
+          expect(visibleItems.find(`div[title="item_${i}"]`).length).to.be.not.equal(0);
+        }
+        const bufferItems = $('.tableview-content tbody tr.hidden');
+        expect(bufferItems.length).to.be.equal(grid.options.itemsByPage);
+        for (var i = 50; i<100; i++) {
+          expect(bufferItems.find(`div[title="item_${i}"]`).length).to.be.not.equal(0);
+        }
+        for (var i = 100; i<150; i++) {
+          expect($('.tableview-content tbody tr').find(`div[title="item_${i}"]`).length).to.be.equal(0);
+        }
+
+        grid.destroy();
+        done();
+      });
     });
-    grid.insertItem(itemAfter, itemBefore, 'after');
-    expect($grid.text()).to.contain(itemInside.label);
-    expect(grid.view.getItemElement(itemInside).prev().attr('id')).to.be.equal('item_after');
-    expect(grid.view.getItemElement(itemBefore).next().attr('id')).to.be.equal('item_after');
 
-    // Insert an item in first.
-    const itemFirst = new DefineMap({
-      id: 'item_first',
-      label: 'item first label'
+    it('is able to paginates a big batch of items', done => {
+      const grid = instantiateGrid({paginate: true});
+      grid.start();
+
+      const items = generate_dummy_items(20000);
+      grid.load(items).then(() => {
+        grid.destroy();
+        done();
+      });
     });
-    grid.insertItem(itemFirst, null, 'first');
-    expect($grid.text()).to.contain(itemFirst.label);
-    expect(grid.view.getItemElement(itemBefore).prev().attr('id')).to.be.equal('item_first');
-
-    // Insert an item in last.
-    const itemLast = new DefineMap({
-      id: 'item_last',
-      label: 'item DefineMap label'
-    });
-    grid.insertItem(itemLast, null, 'last');
-    expect($grid.text()).to.contain(itemLast.label);
-    expect(grid.view.getItemElement(itemInside).next().attr('id')).to.be.equal('item_last');
-
-    grid.destroy();
   });
 
-  it("insertItem() should insert an item and execute the post rendering function", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label',
-      afterRender: function(cellElement, cellValue, mappedItem, item, columnModel) {
-        const html = `<p>Cell adapted applied : ${cellValue}</p>`;
-        HtmlHelper.create(cellElement, 'inside_replace', html);
-      }
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
+  describe("refreshItem()", () => {
+    it("refreshes an item row", () => {
+      const grid = instantiateGrid();
+      grid.start();
 
-    // Insert the item.
-    const itemInside = new DefineMap({
-      id: 'item',
-      label: 'item label'
-    });
-    grid.insertItem(itemInside);
-    expect($('#test-html').text()).to.contain(`Cell adapted applied : ${itemInside.label}`);
+      // Insert a first item.
+      const item = new DefineMap({
+        id: 'item',
+        label: 'item label'
+      });
+      grid.insertItem(item);
+      expect($('#test-html').text()).to.contain(item.label);
 
-    grid.destroy();
+      // Update the item and refresh the grid.
+      item.label = 'updated item label';
+      grid.refreshItem(item);
+      expect($('#test-html').text()).to.contain('updated item label');
+
+      grid.destroy();
+    });
+
+    it("refreshes a paginated & buffered item row", done => {
+      const grid = instantiateGrid({
+        paginate: true,
+        itemsByPage: 1
+      });
+      grid.start();
+
+      const items = generate_dummy_items(2);
+      grid.load(items).then(() => {
+        items[1].label = 'UPDATED LABEL';
+        grid.refreshItem(items[1]);
+        expect($('#item_1').text()).to.contain(items[1].label);
+        expect($('#item_1').hasClass('hidden')).to.be.true;
+
+        grid.destroy();
+        done();
+      });
+    });
+
+    it("refreshes a paginated but not yet buffered item row", done => {
+      const grid = instantiateGrid({
+        paginate: true,
+        itemsByPage: 1
+      });
+      grid.start();
+
+      const items = generate_dummy_items(3);
+      grid.load(items).then(() => {
+        items[2].label = 'UPDATED LABEL';
+        grid.refreshItem(items[2]);
+        expect($('#item_2').length).to.be.equal(0);
+        grid.mappedItems['item_2'].label = items[2].label;
+
+        grid.destroy();
+        done();
+      });
+    });
   });
 
-  it('load() should insert several items in the grid', () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
+  describe("removeItem()", () => {
+    it("removes item", done => {
+      const grid = instantiateGrid();
+      grid.start();
+
+      // Load items.
+      const items = generate_dummy_items(5);
+      grid.load(items).then(() => {
+        // Remove an item.
+        grid.removeItem(items[2]);
+        // Check that the item we removed is not present anymore, but the other are still there.
+        expect($('#test-html').text()).not.to.contain(items[2].label);
+        expect($('#test-html').text()).to.contain(items[0].label);
+        expect($('#test-html').text()).to.contain(items[1].label);
+        expect($('#test-html').text()).to.contain(items[3].label);
+        expect($('#test-html').text()).to.contain(items[4].label);
+
+        grid.destroy();
+        done();
+      });
     });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
+
+    it("removes a paginated & buffered item row", done => {
+      const grid = instantiateGrid({
+        paginate: true,
+        itemsByPage: 1
+      });
+      grid.start();
+
+      const items = generate_dummy_items(2);
+      grid.load(items).then(() => {
+        expect($('#test-html').text()).to.contain(items[1].label);
+        grid.removeItem(items[1]);
+        expect($('#test-html').text()).not.to.contain(items[1].label);
+
+        grid.destroy();
+        done();
+      });
     });
-    grid.start();
 
-    // Load items
-    const items = generate_dummy_items(3);
-    grid.load(items);
+    it("removes a paginated but not yet buffered item row", done => {
+      const grid = instantiateGrid({
+        paginate: true,
+        itemsByPage: 1
+      });
+      grid.start();
 
-    expect($grid.text()).to.contain('item label 0');
-    expect($grid.text()).to.contain('item label 1');
-    expect($grid.text()).to.contain('item label 2');
+      const items = generate_dummy_items(3);
+      grid.load(items).then(() => {
+        expect($('#test-html').text()).not.to.contain(items[2].label);
+        grid.removeItem(items[2]);
+        expect(grid.mappedItems[items[2]]).to.be.undefined;
 
-    grid.destroy();
+        grid.destroy();
+        done();
+      });
+    });
   });
 
-  it("refreshItem() should refresh an item row with an updated items", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
+  describe("model event listener", () => {
+    it("{itemClass} destroyed: should catch when an items displayed by the grid is destroyed and remove it from the grid", done => {
+      const map = new MadMap({
+        id: 'id',
+        label: 'username'
+      });
+      const grid = instantiateGrid({map: map, itemClass: User});
+      grid.start();
 
-    // Insert a first item.
-    const item = new DefineMap({
-      id: 'item',
-      label: 'item label'
-    });
-    grid.insertItem(item);
-    expect($('#test-html').text()).to.contain(item.label);
+      // Retrieve the items to insert into the grid.
+      User.findAll()
+        .then(items => {
+          // Insert all the items into the grid
+          items.forEach(item => {
+            grid.insertItem(item);
+            expect($('#test-html').text()).to.contain(item.username);
+          });
 
-    // Update the item and refresh the grid.
-    item.label = 'updated item label';
-    grid.refreshItem(item);
-    expect($('#test-html').text()).to.contain('updated item label');
-
-    grid.destroy();
-  });
-
-  it("removeItem() should remove an item from the grid", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
-
-    // Load items.
-    const items = generate_dummy_items(5);
-    grid.load(items);
-
-    // Remove an item.
-    grid.removeItem(items[2]);
-    // Check that the item we removed is not present anymore, but the other are still there.
-    expect($('#test-html').text()).not.to.contain(items[2].label);
-    expect($('#test-html').text()).to.contain(items[0].label);
-    expect($('#test-html').text()).to.contain(items[1].label);
-    expect($('#test-html').text()).to.contain(items[3].label);
-    expect($('#test-html').text()).to.contain(items[4].label);
-
-    grid.destroy();
-  });
-
-  it("{itemClass} destroyed: should catch when an items displayed by the grid is destroyed and remove it from the grid", done => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'username'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: User,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
-
-    // Retrieve the items to insert into the grid.
-    User.findAll()
-      .then(items => {
-        // Insert all the items into the grid
-        items.forEach(item => {
-          grid.insertItem(item);
-          expect($('#test-html').text()).to.contain(item.username);
+          // Destroy an item.
+          items[2].destroy()
+            .then(() => {
+              // Check that the item we removed is not present anymore, but the other are still there.
+              expect($('#test-html').text()).not.to.contain(items[2].username);
+              expect($('#test-html').text()).to.contain(items[0].username);
+              expect($('#test-html').text()).to.contain(items[1].username);
+              grid.destroy();
+              done();
+            });
         });
+    });
+  });
 
-        // Destroy an item.
-        items[2].destroy()
-          .then(() => {
-            // Check that the item we removed is not present anymore, but the other are still there.
-            expect($('#test-html').text()).not.to.contain(items[2].username);
-            expect($('#test-html').text()).to.contain(items[0].username);
-            expect($('#test-html').text()).to.contain(items[1].username);
+  describe("scroll event listener", () => {
+    it('paginates the rows if the options paginate is defined to true', done => {
+      const grid = instantiateGrid({paginate: true});
+      grid.start();
+
+      $('.tableview-content').css({'height': '300px', 'overflow': 'auto'});
+
+      const items = generate_dummy_items(100);
+      grid.load(items).then(() => {
+        let visibleItems = $('.tableview-content tbody tr').not('.hidden').length;
+        expect(visibleItems).to.be.equal(grid.options.itemsByPage);
+        let paginatedItems = $('.tableview-content tbody tr.hidden').length;
+        expect(paginatedItems).to.be.equal(grid.options.itemsByPage);
+
+        $('.tableview-content').scrollTop($('.tableview-content table').height());
+        setTimeout(() =>  {
+          visibleItems = $('.tableview-content tbody tr').not('.hidden').length;
+          expect(visibleItems).to.be.equal(grid.options.itemsByPage * 2);
+          paginatedItems = $('.tableview-content tbody tr.hidden').length;
+          expect(paginatedItems).to.be.equal(0);
+
+          grid.destroy();
+          done();
+        }, 500);
+      });
+    });
+  });
+
+  describe("selectItem()", () => {
+    it("selects an item in the grid", () => {
+      const grid = instantiateGrid({callbacks: {
+        itemSelected: function (el, ev, item, srcEvent) {
+          grid.selectItem(item);
+        }
+      }});
+      grid.start();
+
+      // Insert a first item.
+      const item = new DefineMap({
+        id: 'item_inside',
+        label: 'item inside label'
+      });
+      grid.insertItem(item);
+      expect($('#test-html').text()).to.contain(item.label);
+
+      // By default an item shouldn't be selected.
+      const $item = $(`#test-html #${item.id}`);
+      expect($item.hasClass('selected')).to.be.false;
+
+      // Select an item by clicking on it.
+      $item.trigger('click');
+      expect($item.hasClass('selected')).to.be.true;
+
+      // Unselect all items.
+      grid.unselectItem(item);
+      expect($item.hasClass('selected')).to.be.false;
+
+      grid.destroy();
+    });
+
+    it("selects an item in the grid after refresh", () => {
+      const grid = instantiateGrid({callbacks: {
+        itemSelected: function (el, ev, item, srcEvent) {
+          grid.selectItem(item);
+        }
+      }});
+      grid.start();
+
+      // Insert a first item.
+      const item = new DefineMap({
+        id: 'item_inside',
+        label: 'item inside label'
+      });
+      grid.insertItem(item);
+      item.label = 'item inside label updated';
+      grid.refreshItem(item);
+      expect($('#test-html').text()).to.contain(item.label);
+
+      // By default an item shouldn't be selected.
+      const $item = $(`#test-html #${item.id}`);
+      expect($item.hasClass('selected')).to.be.false;
+
+      // Select an item by clicking on it.
+      $item.trigger('click');
+      expect($item.hasClass('selected')).to.be.true;
+
+      // Unselect all items.
+      grid.unselectItem(item);
+      expect($item.hasClass('selected')).to.be.false;
+
+      grid.destroy();
+    });
+  });
+
+  describe("filterByKeywords()", () => {
+    it("filters the grid by keywords", done => {
+      const grid = instantiateGrid();
+      grid.start();
+
+      const items = generate_dummy_items(5);
+      const filterFields = ['id', 'label', 'hidden_label'];
+      grid.load(items).then(() => {
+        grid.filterByKeywords('_ item 2', filterFields).then(() => {
+          let visibleItems = $('.tableview-content tbody tr').not('.hidden').length;
+          expect(visibleItems).to.be.equal(1);
+          let targetItem = $(`.tableview-content tbody tr#${items[2].id}`).length;
+          expect(targetItem).to.be.equal(1);
+
+          grid.destroy();
+          done();
+        });
+      });
+    });
+  });
+
+  describe("sort()", () => {
+    it("marks a column as sorted", done => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id',
+        sortable: true
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        sortable: true
+      })];
+      const grid = instantiateGrid({columnModel});
+      grid.start();
+
+      // Sortable columns should be marked as sortable.
+      expect('sortable').to.be.oneOf($(`.js_grid_column_${columnModel[0].name}`, grid.element).attr('class').split(' '));
+      expect('sortable').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+
+      // Check that the grid is marked as sorted ascendingly when sorting ascendinly.
+      grid.sort(columnModel[1], true).then(() => {
+        expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+        expect('sort-asc').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+
+        // Check that the grid is marked as sorted ascendingly when sorting descendingly.
+        grid.sort(columnModel[1], false).then(() => {
+          expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+          expect('sort-desc').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+          expect('sort-asc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+
+          grid.sort(columnModel[0], true).then(() => {
+            expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[0].name}`, grid.element).attr('class').split(' '));
+            expect('sort-asc').to.be.oneOf($(`.js_grid_column_${columnModel[0].name}`, grid.element).attr('class').split(' '));
+
+            expect('sorted').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+            expect('sort-desc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+            expect('sort-asc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+            done();
+          });
+        });
+      });
+    });
+
+    it("marks the grid as unsorted after load", done => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id',
+        sortable: true
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        sortable: true
+      })];
+      const grid = instantiateGrid({columnModel});
+      grid.start();
+
+      // Load items.
+      const items = generate_dummy_items(5);
+      grid.load(items).then(() => {
+        // Check that the grid is marked as sorted ascendingly when sorting descendingly.
+        grid.sort(columnModel[1], false).then(() => {
+          expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+          expect('sort-desc').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+
+          // Reloading the grid should mark the grid as unsorted.
+          grid.load(items);
+          expect('sorted').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+          expect('sort-desc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+          expect('sort-asc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
+          done();
+        });
+      });
+    });
+
+    it("sorts content regarding a given column", done => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id',
+        sortable: true
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        sortable: true
+      })];
+      const grid = instantiateGrid({columnModel});
+      grid.start();
+
+      // Insert items at root level.
+      const items = generate_alphabet_dummy_items();
+      grid.load(items).then(() => {
+        // Check that the grid is sorted ascendantly.
+        grid.sort(columnModel[1], true).then(() => {
+          for (var i = 0; i < alphabet.length; i++) {
+            expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label ${alphabet[i]}`);
+          }
+          // Check that the grid is sorted descendantly.
+          grid.sort(columnModel[1], false).then(() => {
+            for (var i = alphabet.length - 1, j = 0; i >= 0; i--, j++) {
+              expect($('tbody tr', grid.element).eq(j).html()).to.contain(`item label ${alphabet[i]}`);
+            }
+            // Check that the grid is sorted ascendantly.
+            grid.sort(columnModel[1], true).then(() => {
+              for (var i = 0; i < alphabet.length; i++) {
+                expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label ${alphabet[i]}`);
+              }
+              grid.destroy();
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it("sorts paginated content regarding a given column", done => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id',
+        sortable: true
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        sortable: true
+      })];
+      const grid = instantiateGrid({
+        columnModel,
+        paginate: true,
+        itemsByPage: 5
+      });
+      grid.start();
+
+      // Insert items at root level.
+      const items = generate_alphabet_dummy_items();
+      grid.load(items).then(() => {
+        // Check that the grid is sorted ascendantly.
+        grid.sort(columnModel[1], true).then(() => {
+          for (var i = 0; i < 5; i++) {
+            expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label ${alphabet[i]}`);
+          }
+          // Check that the grid is sorted descendantly.
+          grid.sort(columnModel[1], false).then(() => {
+            for (var i = alphabet.length - 1, j = 0; i >= 26-5; i--, j++) {
+              expect($('tbody tr', grid.element).eq(j).html()).to.contain(`item label ${alphabet[i]}`);
+            }
+            // Check that the grid is sorted ascendantly.
+            grid.sort(columnModel[1], true).then(() =>  {
+              for (var i = 0; i < 5; i++) {
+                expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label ${alphabet[i]}`);
+              }
+              grid.destroy();
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it("sorts filtered items", done => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id',
+        sortable: true
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        sortable: true
+      })];
+      const grid = instantiateGrid({
+        columnModel,
+        paginate: true,
+        itemsByPage: 5
+      });
+      grid.start();
+
+      const items = generate_dummy_items(5);
+      const filterFields = ['id', 'label', 'hidden_label'];
+      grid.load(items).then(() => {
+        grid.filterByKeywords('_ item 2', filterFields).then(() => {
+          grid.sort(columnModel[1], true).then(() => {
+            let visibleItems = $('.tableview-content tbody tr').not('.hidden').length;
+            expect(visibleItems).to.be.equal(1);
+            let targetItem = $(`.tableview-content tbody tr#${items[2].id}`).length;
+            expect(targetItem).to.be.equal(1);
+
             grid.destroy();
             done();
           });
+        });
       });
-  });
-
-  it("selectItem() should select an item in the grid", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
     });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    var grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel,
-      callbacks: {
-        itemSelected: function(el, ev, item, srcEvent) {
-          grid.selectItem(item);
-        }
-      }
-    });
-    grid.start();
-
-    // Insert a first item.
-    const item = new DefineMap({
-      id: 'item_inside',
-      label: 'item inside label'
-    });
-    grid.insertItem(item);
-    expect($('#test-html').text()).to.contain(item.label);
-
-    // By default an item shouldn't be selected.
-    const $item = $(`#test-html #${item.id}`);
-    expect($item.hasClass('selected')).to.be.false;
-
-    // Select an item by clicking on it.
-    $item.trigger('click');
-    expect($item.hasClass('selected')).to.be.true;
-
-    // Unselect all items.
-    grid.unselectItem(item);
-    expect($item.hasClass('selected')).to.be.false;
-
-    grid.destroy();
-  });
-
-  it("selectItem() should select an item in the grid after refresh", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    var grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel,
-      callbacks: {
-        itemSelected: function(el, ev, item, srcEvent) {
-          grid.selectItem(item);
-        }
-      }
-    });
-    grid.start();
-
-    // Insert a first item.
-    const item = new DefineMap({
-      id: 'item_inside',
-      label: 'item inside label'
-    });
-    grid.insertItem(item);
-    item.label = 'item inside label updated';
-    grid.refreshItem(item);
-    expect($('#test-html').text()).to.contain(item.label);
-
-    // By default an item shouldn't be selected.
-    const $item = $(`#test-html #${item.id}`);
-    expect($item.hasClass('selected')).to.be.false;
-
-    // Select an item by clicking on it.
-    $item.trigger('click');
-    expect($item.hasClass('selected')).to.be.true;
-
-    // Unselect all items.
-    grid.unselectItem(item);
-    expect($item.hasClass('selected')).to.be.false;
-
-    grid.destroy();
-  });
-
-  it("filter() should filter the grid with the given items", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
-
-    // Load items.
-    const items = generate_dummy_items(5);
-    grid.load(items);
-
-    // Check that the grid is not filtered.
-    expect(grid.isFiltered()).to.be.false;
-
-    // Filter the grid
-    const filteredItems = new DefineMap.List([items[2], items[4]]);
-    grid.filter(filteredItems);
-
-    // Check that the grid is filtered.
-    expect(grid.isFiltered()).to.be.true;
-
-    // Check that the item we removed is not present anymore, but the other are still there.
-    expect(grid.view.getItemElement(items[0]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[1]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[2]).css('display')).to.not.be.equal('none');
-    expect(grid.view.getItemElement(items[3]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[4]).css('display')).to.not.be.equal('none');
-
-    grid.destroy();
-  });
-
-  it("filterByKeywords() should filter the grid by keywords", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label'
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
-
-    // Load items.
-    const items = generate_dummy_items(5);
-    grid.load(items);
-
-    // Filter the grid on visible value
-    grid.filterByKeywords('_ item 2');
-
-    // Check that the item we removed is not present anymore, but the other are still there.
-    expect(grid.view.getItemElement(items[0]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[1]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[2]).css('display')).to.not.be.equal('none');
-    expect(grid.view.getItemElement(items[3]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[4]).css('display')).to.be.equal('none');
-
-    // Filter the grid on items hidden field
-    const searchInFields = grid.options.map.getModelTargetFieldsNames()
-      .concat(['hiddenField']);
-
-    grid.filterByKeywords('hidden item 3', {
-      searchInFields: searchInFields
-    });
-
-    // Check that the item we removed is not present anymore, but the other are still there.
-    expect(grid.view.getItemElement(items[0]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[1]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[2]).css('display')).to.be.equal('none');
-    expect(grid.view.getItemElement(items[3]).css('display')).to.not.be.equal('none');
-    expect(grid.view.getItemElement(items[4]).css('display')).to.be.equal('none');
-
-    grid.destroy();
-  });
-
-  it("sort() should mark a column as sorted", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id',
-      sortable: true
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label',
-      sortable: true
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
-
-    // Sortable columns should be marked as sortable.
-    expect('sortable').to.be.oneOf($(`.js_grid_column_${columnModel[0].name}`, grid.element).attr('class').split(' '));
-    expect('sortable').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-
-    // Check that the grid is marked as sorted ascendingly when sorting ascendinly.
-    grid.sort(columnModel[1], true);
-    expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-asc').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-
-    // Check that the grid is marked as sorted ascendingly when sorting descendingly.
-    grid.sort(columnModel[1], false);
-    expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-desc').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-asc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-
-    grid.sort(columnModel[0], true);
-    expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[0].name}`, grid.element).attr('class').split(' '));
-    expect('sort-asc').to.be.oneOf($(`.js_grid_column_${columnModel[0].name}`, grid.element).attr('class').split(' '));
-
-    expect('sorted').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-desc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-asc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-  });
-
-  it("sort() should sort the grid regarding a given column", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label',
-      sortable: true
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
-
-    // Insert items at root level.
-    let items = [],
-      alphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''),
-      alphabetCopy = alphabet.slice();
-
-    for (var i = 0; i < alphabet.length; i++) {
-      let rand = Math.floor(Math.random() * alphabetCopy.length),
-        letter = alphabetCopy.splice(rand, 1);
-
-      items[i] = new DefineMap({
-        id: `item_${letter}`,
-        label: `item label ${letter}`
-      });
-      grid.insertItem(items[i]);
-    }
-
-    // Check that the grid is sorted ascendingly.
-    grid.sort(columnModel[1], true);
-    for (var i = 0; i < alphabet.length; i++) {
-      expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label ${alphabet[i]}`);
-    }
-
-    // Check that the grid is sorted descendingly.
-    grid.sort(columnModel[1], false);
-    for (var i = alphabet.length - 1, j = 0; i >= 0; i--, j++) {
-      expect($('tbody tr', grid.element).eq(j).html()).to.contain(`item label ${alphabet[i]}`);
-    }
-
-    // Check that the grid is sorted ascendingly.
-    grid.sort(columnModel[1], true);
-    for (var i = 0; i < alphabet.length; i++) {
-      expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label ${alphabet[i]}`);
-    }
-
-    grid.destroy();
-  });
-
-  it("sort() reloading should mark the grid as unsorted", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      label: 'label'
-    });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'id',
-      index: 'id',
-      label: 'id'
-    }), new GridColumn({
-      name: 'label',
-      index: 'label',
-      label: 'label',
-      sortable: true
-    })];
-    const grid = new GridComponent('#grid', {
-      itemClass: DefineMap,
-      map: map,
-      columnModel: columnModel
-    });
-    grid.start();
-
-    // Load items.
-    const items = generate_dummy_items(5);
-    grid.load(items);
-
-    // Check that the grid is marked as sorted ascendingly when sorting descendingly.
-    grid.sort(columnModel[1], false);
-    expect('sorted').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-desc').to.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-
-    // Reloading the grid should mark the grid as unsorted.
-    grid.load(items);
-    expect('sorted').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-desc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
-    expect('sort-asc').to.not.be.oneOf($(`.js_grid_column_${columnModel[1].name}`, grid.element).attr('class').split(' '));
   });
 
   /*
@@ -714,49 +737,40 @@ describe("Grid", () => {
    * - Check the row selection
    * - Check the cell selection
    */
-  it("Xss vulnerability check", () => {
-    // Set the grid map that will be used to transform the data for the view.
-    const map = new MadMap({
-      id: 'id',
-      rule: 'rule',
-      exploit: 'exploit'
+  describe("security ", () => {
+    it("is not vulnerable to XSS attack", () => {
+      const columnModel = [new GridColumn({
+        name: 'rule',
+        index: 'rule',
+        label: 'rule',
+        css: ['test']
+      }), new GridColumn({
+        name: 'exploit',
+        index: 'exploit',
+        label: 'exploit'
+      })];
+
+      for (const rule in xss) {
+        const grid = instantiateGrid({columnModel});
+        grid.start();
+
+        const item = new DefineMap({
+          id: xss[rule],
+          rule: rule,
+          exploit: xss[rule]
+        });
+
+        // No Xss when inserting the item
+        grid.insertItem(item);
+
+        // No Xss when clicking on the row which as the id attribute
+        $('#grid tr').trigger('click');
+
+        // No Xss when clicking on the cell which contain the value
+        $('#grid td.js_grid_column_exploit div').trigger('click');
+
+        grid.destroy();
+      }
     });
-    // Set the grid columns model.
-    const columnModel = [new GridColumn({
-      name: 'rule',
-      index: 'rule',
-      label: 'rule',
-      css: ['test']
-    }), new GridColumn({
-      name: 'exploit',
-      index: 'exploit',
-      label: 'exploit'
-    })];
-
-    for (const rule in xss) {
-      const grid = new GridComponent('#grid', {
-        itemClass: DefineMap,
-        map: map,
-        columnModel: columnModel
-      });
-      grid.start();
-
-      const item = new DefineMap({
-        id: xss[rule],
-        rule: rule,
-        exploit: xss[rule]
-      });
-
-      // No Xss when inserting the item
-      grid.insertItem(item);
-
-      // No Xss when clicking on the row which as the id attribute
-      $('#grid tr').trigger('click');
-
-      // No Xss when clicking on the cell which contain the value
-      $('#grid td.js_grid_column_exploit div').trigger('click');
-
-      grid.destroy();
-    }
   });
 });

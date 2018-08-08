@@ -10,11 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import CanList from 'can-list';
 import Component from 'passbolt-mad/component/component';
 import DomData from 'can-dom-data';
-import getObject from 'can-util/js/get/get';
-import GridColumn from 'passbolt-mad/model/grid_column';
+import GridColumn from 'passbolt-mad/model/map/grid_column';
 import GridView from 'passbolt-mad/view/component/grid';
 
 import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.stache!';
@@ -73,53 +71,103 @@ const Grid = Component.extend('mad.component.Grid', {
     // Is the grid filtered.
     isFiltered: false,
     // Is the grid sorted.
-    isSorted: false
+    isSorted: false,
+    // Paginate the items
+    paginate: false,
+    itemsByPage: 50,
+    displayedPage: 0,
+    // Fade in animation when rendering the first set of items
+    fadeInTimeout: 250
   }
 
 }, /** @prototype */ {
 
   /**
-   * Constructor.
-   * Instantiate a new Grid Component.
-   * @param {HTMLElement|can.NodeList|CSSSelectorString} el The element the control will be created on
-   * @param {Object} [options] option values for the component.  These get added to
-   * this.options and merged with defaults static variable
-   * @return {mad.component.Grid}
+   * @inheritdoc
    */
   init: function(el, options) {
     options.items = new options.itemClass.List();
+    options.sourceItems = new options.itemClass.List();
     this._super(el, options);
-
-    /*
-     * Keep a trace of the items after mapping.
-     * This data will be used for post rendering treatments :
-     * * sort ;
-     */
     this.mappedItems = {};
-
     this.on();
   },
 
   /**
-   * After start hook().
+   * @inheritdoc
    */
-  afterStart: function() {
-    const columnModel = this.getColumnModel();
-
-    /*
-     * Associate columnModel definitions to corresponding DOM elements th column header.
-     * It will be used by the view to retrieve associated column model definition.
-     */
-    for (const i in columnModel) {
-      const $el = $(`th.js_grid_column_${columnModel[i].name}`, this.element);
-      DomData.set($el[0], this.getColumnModelClass().constructor.shortName, columnModel[i]);
+  start: function() {
+    if (!this.options.map) {
+      throw new Error('A map is required.');
     }
-
     this._super();
   },
 
   /**
-   * Before render.
+   * @inheritdoc
+   */
+  afterStart: function() {
+    this._afterColumnRender();
+    this._initEventListener();
+    this._super();
+  },
+
+  /**
+   * Associate columnModel definitions to corresponding DOM elements th column header.
+   * It will be used by the view to retrieve associated column model definition.
+   * @private
+   */
+  _afterColumnRender: function() {
+    const columnModel = this.getColumnModel();
+    for (const i in columnModel) {
+      const $el = $(`th.js_grid_column_${columnModel[i].name}`, this.element);
+      DomData.set($el[0], this.getColumnModelClass().constructor.shortName, columnModel[i]);
+    }
+  },
+
+  /**
+   * Init the component event listener
+   * @private
+   */
+  _initEventListener: function() {
+    $('.tableview-content', this.element).scroll(ev => this._handleTableContentScroll(ev));
+  },
+
+  /**
+   * Handle table content scroll
+   * @private
+   */
+  _handleTableContentScroll: function() {
+    if (!this.options.paginate) {
+      return;
+    }
+
+    const tableElement = $('.tableview-content', this.element);
+    const tableContentElement = $('.tableview-content table', this.element);
+    let scrollPercent = (tableElement.scrollTop() / (tableContentElement.height() - tableElement.height())) * 100;
+
+    if (scrollPercent >= 100) {
+      this._displayBufferedPage();
+      this.options.displayedPage++;
+      const itemsByPage = this.options.itemsByPage;
+      const itemsToBufferStart = (this.options.displayedPage + 1) * itemsByPage;
+      const itemsToBuffer = this.options.items.slice(itemsToBufferStart, itemsToBufferStart + itemsByPage);
+      // Insert the next set of items in the DOM. Keep them hidden. Do it after 200ms for a smooth experience.
+      setTimeout(() => {
+        itemsToBuffer.forEach(item => {
+          this._renderItem(item, null, null, {hidden: true});
+        });
+        // If the user scrolled like it his birthday
+        scrollPercent = (tableElement.scrollTop() / (tableContentElement.height() - tableElement.height())) * 100;
+        if (scrollPercent >= 100) {
+          this._handleTableContentScroll();
+        }
+      }, 200);
+    }
+  },
+
+  /**
+   * @inheritdoc
    */
   beforeRender: function() {
     this.setViewData('columnModel', this.options.columnModel);
@@ -133,7 +181,7 @@ const Grid = Component.extend('mad.component.Grid', {
    * If no target
    *
    * @param {string} name (optional) The name of the column model to retrieve, if not provided return all.
-   * @return {mad.model.Model}
+   * @return {Column}
    */
   getColumnModel: function(name) {
     let returnValue = null;
@@ -152,7 +200,7 @@ const Grid = Component.extend('mad.component.Grid', {
   /**
    * Get the itemClass which represents the items managed by the component.
    *
-   * @return {mad.model.Model}
+   * @return {DefineMap.prototype}
    */
   getItemClass: function() {
     return this.options.itemClass;
@@ -161,7 +209,7 @@ const Grid = Component.extend('mad.component.Grid', {
   /**
    * Get the column model class.
    *
-   * @return {can.Map}
+   * @return {DefineMap.prototype}
    */
   getColumnModelClass: function() {
     return this.options.columnModelClass;
@@ -170,19 +218,10 @@ const Grid = Component.extend('mad.component.Grid', {
   /**
    * Return true if the grid is filtered, else return false.
    *
-   * @returns {boolean}
+   * @return {boolean}
    */
   isFiltered: function() {
     return this.options.isFiltered;
-  },
-
-  /**
-   * Set the itemClass which represents the items managed by the component.
-   *
-   * @param {DefineMap.prototype} itemClass The item class
-   */
-  setItemClass: function(itemClass) {
-    this.options.itemClass = itemClass;
   },
 
   /**
@@ -196,16 +235,6 @@ const Grid = Component.extend('mad.component.Grid', {
   },
 
   /**
-   * Set the associated map, which will be used to map the model data to the
-   * expected view format.
-   *
-   * @param {UtilMap} map The map
-   */
-  setMap: function(map) {
-    this.options.map = map;
-  },
-
-  /**
    * Select an item.
    *
    * @param {DefineMap}
@@ -216,7 +245,6 @@ const Grid = Component.extend('mad.component.Grid', {
 
   /**
    * Right select an item.
-   *
    * @param {DefineMap}
    */
   rightSelectItem: function(item) {
@@ -235,7 +263,6 @@ const Grid = Component.extend('mad.component.Grid', {
 
   /**
    * Hover an item.
-   *
    * @param {DefineMap}
    */
   hoverItem: function(item) {
@@ -251,7 +278,6 @@ const Grid = Component.extend('mad.component.Grid', {
 
   /**
    * Remove an item from the grid.
-   *
    * @param {DefineMap} item The item to remove
    */
   removeItem: function(item) {
@@ -262,11 +288,23 @@ const Grid = Component.extend('mad.component.Grid', {
     });
     if (index != -1) {
       this.options.items.splice(index, 1);
+      delete this.mappedItems[item.id];
+      if (this.isItemDisplayed(item)) {
+        this.view.removeItem(item);
+      }
     }
-    // Remove the item to the view
-    this.view.removeItem(item);
-    // Free space, remove the relative mapped item
-    delete this.mappedItems[item.id];
+  },
+
+  /**
+   * Assert an item is an instance of the ItemClass defined as option
+   * @param {DefineMap} item
+   * @private
+   */
+  _assertItemClass: function(item) {
+    const itemClass = this.getItemClass();
+    if (itemClass && !(item instanceof itemClass)) {
+      throw new Error('Expect the item to be an instance of the ItemClass defined in optoin');
+    }
   },
 
   /**
@@ -275,69 +313,144 @@ const Grid = Component.extend('mad.component.Grid', {
    * @param {DefineMap} item The item to insert
    * @param {DefineMap} refItem (optional) The reference item to use to position the new item.
    * By default the item will be inserted as last element of the grid.
-   * @param {string} position (optional) If the reference item has been defined. The position
-   * of the item to insert, regarding the reference item.
-   *
-   * Available values : before, after, first, last.
-   *
-   * By default last.
+   * @param {string} position (optional) If the reference item has been defined. The position of the item to insert,
+   * regarding the reference item. Available values : before, after, first, last. By default last.
+   * @param {boolean} render Render the row if true. By default true.
+   * @param {object} options
+   * - hidden: Render the item in the DOM, but hide it.
    */
-  insertItem: function(item, refItem, position) {
-    const map = this.getMap();
-    let mappedItem = null;
-    const columnModels = this.getColumnModel();
-    const itemClass = this.getItemClass();
-
-    // An item should be given as parameter and valid.
-    if (itemClass && !(item instanceof itemClass)) {
-      throw mad.Exception.get(mad.error.WRONG_PARAMETER, 'item');
-    }
-
-    // A map should be defined and valid.
-    if (map == null) {
-      throw mad.Exception.get(mad.error.MISSING_OPTION, 'map');
-    }
-
-    // Add the item to the list of observed items
+  insertItem: function(item, refItem, position, render, options) {
+    render = render != undefined ? render : true;
+    this._assertItemClass(item);
     this.options.items.push(item);
-
-    // Map the item.
-    mappedItem = this.getMap().mapObject(item);
-    this.mappedItems[item.id] = mappedItem;
-
-    // insert the item in the view
-    this.view.insertItem(item, refItem, position);
-
-    // Post rendering process.
-    for (const j in columnModels) {
-      const columnModel = columnModels[j];
-
-      // Execute post cell rendered function if any.
-      if (columnModel.afterRender) {
-        const itemId = this.options.prefixItemId + mappedItem.id;
-        const $cell = $(`#${itemId} .js_grid_column_${columnModel.name} div`);
-        const cellValue = mappedItem[columnModel.name];
-        columnModel.afterRender($cell, cellValue, mappedItem, item, columnModel);
-      }
+    this._mapItem(item);
+    if (render) {
+      this._renderItem(item, refItem, position, options);
     }
   },
 
   /**
+   * Check if an item is displayed
+   * @param {DefineMap} item
+   * @return {boolean}
+   */
+  isItemDisplayed: function(item) {
+    return this.view.getItemElement(item).length;
+  },
+
+  /**
    * Refresh an item.
-   *
    * @param {DefineMap} item The item to refresh
    */
   refreshItem: function(item) {
-    this.view.refreshItem(item);
-
-    let mappedItem = null;
-    const columnModels = this.getColumnModel();
-
-    // Map the item.
-    mappedItem = this.getMap().mapObject(item);
+    this._assertItemClass(item);
+    const options = {};
+    const mappedItem = this.getMap().mapObject(item);
     this.mappedItems[item.id] = mappedItem;
 
-    // apply a widget to cells following the columns model
+    if (this.isItemDisplayed(item)) {
+      const hidden = this.view.getItemElement(item).hasClass('hidden');
+      options.hidden = hidden;
+      this.view.refreshItem(item, options);
+      this._afterRenderItem(item, mappedItem);
+    }
+  },
+
+  /**
+   * Load items in the grid. If the grid contain items, reset it.
+   * @param {array<DefineMap>} data The list of items to insert in the grid
+   * @param {object} options
+   * - filter: Filter the items
+   *   filter.keywords {string}: The keywords to filter on
+   *   filter.fields {array}: The fields to filter on
+   * @return {Promise}
+   */
+  load: function(data, options) {
+    options = options || {};
+    const sourceItems = this.options.sourceItems;
+    const items = this.options.items;
+
+    this.state.loaded = false;
+    this.reset();
+    data.forEach(item => items.push(item));
+    data.forEach(item => sourceItems.push(item));
+    this._mapItems(items);
+
+    if (options.filter) {
+      return this.filterByKeywords(options.filter.keywords, options.filter.fields);
+    } else {
+      return this._renderItems(items).then(() => {
+        this.state.loaded = true;
+      });
+    }
+  },
+
+  /**
+   * Render items.
+   * @param {DefineList} items The list of items to render.
+   *
+   * @returns {Promise}
+   * @private
+   */
+  _renderItems: function(items) {
+    const paginate = this.options.paginate;
+    const itemsByPage = this.options.itemsByPage;
+    const table = $('.tableview-content table', this.element);
+    let itemsToRender, itemsToBuffer;
+
+    table.hide();
+
+    if (!paginate) {
+      itemsToRender = items;
+    } else {
+      itemsToRender = items.slice(0, itemsByPage);
+      itemsToBuffer = items.slice(itemsByPage, itemsByPage * 2);
+    }
+
+    // The rendering has to be wrapped in a timeout in order for the DOM to complete the operations above before starting to treat the operations below.
+    return new Promise(resolve => {
+      setTimeout(() => {
+        itemsToRender.forEach(item => {
+          this._renderItem(item);
+        });
+        table.fadeIn(this.options.fadeInTimeout, () => {
+          if (paginate) {
+            itemsToBuffer.forEach(item => {
+              this._renderItem(item, null, null, {hidden: true});
+            });
+          }
+          resolve();
+        });
+      });
+    });
+  },
+
+  /**
+   * Render an item in the DOM
+   * @param {DefineMap} item The item to insert
+   * @param {DefineMap} refItem (optional) The reference item to use to position the new item.
+   * By default the item will be inserted as last element of the grid.
+   * @param {string} position (optional) If the reference item has been defined. The position of the item to insert,
+   * regarding the reference item. Available values : before, after, first, last. By default last.
+   * @param {object} options
+   * - hidden: Render the item in the DOM, but hide it.
+   * @private
+   */
+  _renderItem: function(item, refItem, position, options) {
+    options = options || {};
+    const mappedItem = this.mappedItems[item.id];
+    this.view.insertItem(item, refItem, position, options);
+    this._afterRenderItem(item, mappedItem);
+  },
+
+  /**
+   * After an item has been rendered hook.
+   * @param {DefineMap} item The item to insert
+   * @param {object} mappedItem Mapped item values
+   * @private
+   */
+  _afterRenderItem: function(item, mappedItem) {
+    const columnModels = this.getColumnModel();
     for (const j in columnModels) {
       const columnModel = columnModels[j];
 
@@ -356,31 +469,43 @@ const Grid = Component.extend('mad.component.Grid', {
    * Remove all the displayed (and hidden) items.
    */
   reset: function() {
-    /*
-     * reset the list of observed items
-     * by removing an item from the items list stored in options, the grid will
-     * update itself (check "{items} remove" listener)
-     */
     this.options.items.splice(0, this.options.items.length);
+    this.options.sourceItems.splice(0, this.options.sourceItems.length);
+    this.mappedItems = {};
+    this.options.isFiltered = false;
+    this.options.isSorted = false;
     this.view.reset();
   },
 
   /**
-   * Load items in the grid. If the grid contain items, reset it.
-   *
-   * @param {array<DefineMap>} items The array or list of items to insert in the grid
+   * Map a list of items.
+   * @param {DefineList} items The list of items to map
+   * @private
    */
-  load: function(items) {
-    this.reset();
-    this.options.isFiltered = false;
-    this.options.isSorted = false;
-    this.view.markAsUnsorted();
-
+  _mapItems: function(items) {
     items.forEach(item => {
-      this.insertItem(item);
+      this._mapItem(item);
     });
+  },
 
-    return this;
+  /**
+   * Map an item
+   * @param {DefineMap} item The item to map
+   * @returns {*|Object}
+   * @private
+   */
+  _mapItem: function(item) {
+    const mappedItem = this.getMap().mapObject(item);
+    this.mappedItems[item.id] = mappedItem;
+    return mappedItem;
+  },
+
+  /**
+   * Display the buffered page of items.
+   * @private
+   */
+  _displayBufferedPage: function() {
+    $('.tableview-content table tbody tr.hidden', this.element).removeClass('hidden');
   },
 
   /**
@@ -397,144 +522,61 @@ const Grid = Component.extend('mad.component.Grid', {
    */
   resetFilter: function() {
     this.options.isFiltered = false;
-    const items = this.options.items;
-
-    items.forEach(item => {
-      this.view.showItem(item);
+    this.options.items = this.options.sourceItems;
+    this.state.loaded = false;
+    return this._renderItems(this.options.items).then(() => {
+      this.options.isFiltered = true;
     });
   },
 
   /**
    * Filter items in the grid by keywords
    * @param {string} needle The string to search in the grid
+   * @param {array} fields The fields to search in
+   * @return {Promise}
    */
-  filterByKeywords: function(needle, options) {
-    options = options || {};
-
-    // The fields to look into.
-    let searchInFields = [];
-    // The keywords to search.
-    const keywords = needle.split(/\s+/);
-    // Filtered resource.
-    const filteredItems = new CanList();
-
-    // The fields to look into have been given in options.
-    if (typeof options.searchInFields != 'undefined') {
-      searchInFields = options.searchInFields;
-    } else {
-      searchInFields = this.options.map.getModelTargetFieldsNames();
-    }
-
-    // Search the keywords in the list of items.
-    const items = this.options.items;
-    items.forEach(item => {
-      // Foreach keywords.
-      for (const j in keywords) {
-        let found = false;
-        let field = null;
-        let i = 0;
-
-        // Search in the item fields.
-        while (!found && (field = searchInFields[i])) {
-          /*
-           * Is the field relative to a submodel with a multiple cardinality
-           * Only search in first level.
-           */
-          if (/(\[\])+/.test(searchInFields[i])) {
-            const crumbs = field.split('[].');
-            const objects = getObject(item, crumbs[0]);
-            objects.forEach(object => {
-              if (!found) {
-                const fieldValue = getObject(object, crumbs[1]);
-                if (fieldValue) {
-                  found = fieldValue.toLowerCase()
-                    .indexOf(keywords[j].toLowerCase()) != -1;
-                }
-              }
-            });
-          } else {
-            const object = getObject(item, field);
-            if (object) {
-              found = object.toLowerCase().indexOf(keywords[j].toLowerCase()) != -1;
-            }
-          }
-
-          i++;
-        }
-
-        /*
-         * If the keyword hasn't been found in any field.
-         * Search in the next resource.
-         */
-        if (!found) {
-          return;
-        }
-      }
-
-      filteredItems.push(item);
-    });
-
-    // Filter the grid
-    this.filter(filteredItems);
-  },
-
-  /**
-   * Filter items in the grid
-   * @param {can.List} items The list of items to filter
-   */
-  filter: function(filteredItems) {
-    const self = this;
-    this.options.isFiltered = true;
-    const items = this.options.items;
-
-    items.forEach(item => {
-      if (filteredItems.indexOf(item) != -1) {
-        self.view.showItem(item);
-      } else {
-        self.view.hideItem(item);
-      }
+  filterByKeywords: function(needle, fields) {
+    const items = this.options.sourceItems;
+    this.state.loaded = false;
+    this.view.reset();
+    this.options.items = items.filterContain(needle, fields);
+    return this._renderItems(this.options.items).then(() => {
+      this.options.isFiltered = true;
+      this.state.loaded = true;
     });
   },
 
   /**
    * Sort the grid functions of a given column.
-   * @param columnModel The column the grid should be sort in functions of.
-   * @param sortAsc Should the sort be ascending. True by default.
+   * @param {GridColumn} columnModel The column the grid should be sort in functions of.
+   * @param {boolean} sortAsc Should the sort be ascending. True by default.
+   * @return {Promise}
    */
   sort: function(columnModel, sortAsc) {
-    this.options.isSorted = true;
-
-    // Retrieve the mapped item attribute name.
     const columnId = columnModel.name;
+    const items = this.options.items;
 
-    // Copy the mappedItems associativate array into array.
-    const mappedItemsCopy = $.map(this.mappedItems, (value, index) => {
-      value.id = index;
-      return [value];
-    });
+    this.state.loaded = false;
+    this.view.reset();
 
-    // Sort the mapped items
-    mappedItemsCopy.sort((itemA, itemB) => {
+    items.sort((itemA, itemB) => {
       // ignore upper and lowercase
       const valueA = itemA[columnId] ? itemA[columnId].toUpperCase() : '';
       const valueB = itemB[columnId] ? itemB[columnId].toUpperCase() : '';
-
       if (valueA < valueB) {
         return sortAsc ? -1 : 1;
       } else if (valueA > valueB) {
         return sortAsc ? 1 : -1;
       }
-
       return 0;
     });
 
-    // Move all the items following the sort result
-    for (const i in mappedItemsCopy) {
-      this.moveItem(mappedItemsCopy[i], i);
-    }
-
-    // Mark the column as sorted
-    this.view.markColumnAsSorted(columnModel, sortAsc);
+    return this._renderItems(items)
+      .then(() => {
+        this.options.isSorted = true;
+        this.view.markColumnAsSorted(columnModel, sortAsc);
+        this.state.loaded = true;
+      });
   },
 
   /**
@@ -553,7 +595,7 @@ const Grid = Component.extend('mad.component.Grid', {
   /**
    * Observe when items are removed from the list of observed items and
    * remove it from the grid
-   * @param {mad.model.Model} model The model reference
+   * @param {DefinedMap.prototype} model The model reference
    * @param {HTMLEvent} ev The event which occurred
    * @param {CanList} items The removed items
    */
@@ -566,11 +608,7 @@ const Grid = Component.extend('mad.component.Grid', {
   /* ************************************************************** */
 
   /**
-   * @function mad.component.Grid.__column_sort_asc
-   * @parent mad.component.Grid.view_events
-   *
    * Observe when a sort is requested on a column.
-   *
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */
@@ -581,11 +619,7 @@ const Grid = Component.extend('mad.component.Grid', {
   },
 
   /**
-   * @function mad.component.Grid.__item_selected
-   * @parent mad.component.Grid.view_events
-   *
    * Observe when an item is selected.
-   *
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */
@@ -600,11 +634,7 @@ const Grid = Component.extend('mad.component.Grid', {
   },
 
   /**
-   * @function mad.component.Grid.__item_hovered
-   * @parent mad.component.Grid.view_events
-   *
    * Observe when an item has been hovered.
-   *
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */
