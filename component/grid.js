@@ -10,7 +10,6 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import canString from 'can-util/js/string/string';
 import Component from 'passbolt-mad/component/component';
 import DomData from 'can-dom-data';
 import getObject from 'can-util/js/get/get';

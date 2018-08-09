@@ -110,9 +110,6 @@
     "chai-jquery": "^2.0.0",
     "eslint": "^4.19.1",
     "eslint-plugin-import": "^2.13.0",
-    "grunt": "^1.0.2",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-shell": "^1.3.0",
     "http-server": "^0.11.1",
     "mocha": "^5.2.0",
     "sinon": "^1.16.1",
@@ -120,7 +117,6 @@
     "steal-tools": "^1.11.0"
   },
   "scripts": {
-    "build": "steal-tools build --config stealconfig.js",
     "lint": "eslint component config control error form helper model net util view",
     "lint-fix": "eslint --fix component config control error form helper model net util view"
   },
