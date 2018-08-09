@@ -10,8 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import canString from 'can-util/js/string/string';
 import Component from 'passbolt-mad/component/component';
 import DomData from 'can-dom-data';
+import getObject from 'can-util/js/get/get';
 import GridColumn from 'passbolt-mad/model/map/grid_column';
 import GridView from 'passbolt-mad/view/component/grid';
 
@@ -553,16 +555,15 @@ const Grid = Component.extend('mad.component.Grid', {
    * @return {Promise}
    */
   sort: function(columnModel, sortAsc) {
-    const columnId = columnModel.name;
+    const columnId = columnModel.sortOn ? columnModel.sortOn : columnModel.name;
     const items = this.options.items;
 
     this.state.loaded = false;
     this.view.reset();
 
     items.sort((itemA, itemB) => {
-      // ignore upper and lowercase
-      const valueA = itemA[columnId] ? itemA[columnId].toUpperCase() : '';
-      const valueB = itemB[columnId] ? itemB[columnId].toUpperCase() : '';
+      const valueA = (getObject(itemA, columnId) || '').toUpperCase();
+      const valueB = (getObject(itemB, columnId) || '').toUpperCase();
       if (valueA < valueB) {
         return sortAsc ? -1 : 1;
       } else if (valueA > valueB) {
