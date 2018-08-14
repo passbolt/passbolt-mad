@@ -69,6 +69,7 @@ const Component = Control.extend('mad.Component', /* @static */{
     state.on('hidden', (ev, hidden) => this.onHiddenChange(hidden));
     state.on('loaded', (ev, loaded) => this.onLoadedChange(loaded));
     state.on('started', (ev, started) => this.onStartedChange(started));
+    state.on('empty', (ev, empty) => this.onEmptyChange(empty));
     this.state = state;
   },
 
@@ -109,7 +110,7 @@ const Component = Control.extend('mad.Component', /* @static */{
    */
 
   /**
-   * Observer when the component is destroyed
+   * Observe when the component is destroyed
    * @param {boolean} started True if destroyed. It cannot be false
    */
   onDestroyedChange: function(destroyed) {
@@ -119,7 +120,7 @@ const Component = Control.extend('mad.Component', /* @static */{
   },
 
   /**
-   * Observer when the component is enable / disable
+   * Observe when the component is enable / disable
    * @param {boolean} disabled True if disabled, false otherwise
    */
   onDisabledChange: function(disabled) {
@@ -131,7 +132,7 @@ const Component = Control.extend('mad.Component', /* @static */{
   },
 
   /**
-   * Observer when the component is shown / hidden
+   * Observe when the component is shown / hidden
    * @param {boolean} hidden True if hidden, false otherwise
    */
   onHiddenChange: function(hidden) {
@@ -143,7 +144,7 @@ const Component = Control.extend('mad.Component', /* @static */{
   },
 
   /**
-   * Observer when the component is loaded / loading
+   * Observe when the component is loaded / loading
    * @param {boolean} loaded True if loaded, false otherwise
    */
   onLoadedChange: function(loaded) {
@@ -155,11 +156,26 @@ const Component = Control.extend('mad.Component', /* @static */{
   },
 
   /**
-   * Observer when the component is started / stopped
+   * Observe when the component is started / stopped
    * @param {boolean} started True if started, false otherwise
    */
   // eslint-disable-next-line no-unused-vars
   onStartedChange: function(started) {
+  },
+
+  /**
+   * Observe when the component is empty / filled
+   * @param {boolean} empty True if empty, false otherwise
+   */
+  onEmptyChange: function(empty) {
+    const emptyFeedback = $('.empty-content', this.element);
+    if (empty) {
+      $(this.element).addClass('empty');
+      emptyFeedback.removeClass('hidden');
+    } else {
+      $(this.element).removeClass('empty');
+      emptyFeedback.addClass('hidden');
+    }
   },
 
   /**

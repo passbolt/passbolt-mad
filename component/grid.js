@@ -14,6 +14,7 @@ import Component from 'passbolt-mad/component/component';
 import DomData from 'can-dom-data';
 import getObject from 'can-util/js/get/get';
 import GridColumn from 'passbolt-mad/model/map/grid_column';
+import GridState from 'passbolt-mad/model/state/gridState';
 import GridView from 'passbolt-mad/view/component/grid';
 
 import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.stache!';
@@ -50,6 +51,7 @@ const Grid = Component.extend('mad.component.Grid', {
     cellTemplate: cellTemplate,
     // Override the viewClass option.
     viewClass: GridView,
+    stateClass: GridState,
     // Prefix the id of each row.
     prefixItemId: '',
     // The Model Class that defines the items displayed by the grud.
@@ -69,8 +71,6 @@ const Grid = Component.extend('mad.component.Grid', {
     },
     // The items the grid works with.
     items: null,
-    // Is the grid filtered.
-    isFiltered: false,
     // Is the grid sorted.
     isSorted: false,
     // Paginate the items
@@ -92,6 +92,39 @@ const Grid = Component.extend('mad.component.Grid', {
     this._super(el, options);
     this.mappedItems = {};
     this.on();
+  },
+
+  /**
+   * @inheritdoc
+   */
+  _initState: function(options) {
+    this._super(options);
+    this.state.on('filtered', (ev, filtered) => this.onFilteredChange(filtered));
+    this.state.on('filtering', (ev, filtering) => this.onFilteringChange(filtering));
+  },
+
+  /**
+   * Observe when the component is filtered / unfiltered
+   * @param {boolean} started True if filtered, false otherwise
+   */
+  onFilteredChange: function(filtered) {
+    if (filtered) {
+      $(this.element).addClass('filtered');
+    } else {
+      $(this.element).removeClass('filtered');
+    }
+  },
+
+  /**
+   * Observe when the component is filtering / stop the filtering
+   * @param {boolean} started True if filtering, false otherwise
+   */
+  onFilteringChange: function(filtering) {
+    if (filtering) {
+      $(this.element).addClass('filtering');
+    } else {
+      $(this.element).removeClass('filtering');
+    }
   },
 
   /**
@@ -217,15 +250,6 @@ const Grid = Component.extend('mad.component.Grid', {
   },
 
   /**
-   * Return true if the grid is filtered, else return false.
-   *
-   * @return {boolean}
-   */
-  isFiltered: function() {
-    return this.options.isFiltered;
-  },
-
-  /**
    * Get the associated map, which will be used to map the model data to the
    * expected view format.
    *
@@ -282,17 +306,20 @@ const Grid = Component.extend('mad.component.Grid', {
    * @param {DefineMap} item The item to remove
    */
   removeItem: function(item) {
-    // Remove the item from the list.
+    const items = this.options.items;
     let index = -1;
-    this.options.items.forEach((_item, i) => {
-      if (_item.id == item.id) { index = i; }
+    items.forEach((_item, i) => {
+      if (_item.id == item.id) {
+        index = i;
+      }
     });
     if (index != -1) {
-      this.options.items.splice(index, 1);
+      items.splice(index, 1);
       delete this.mappedItems[item.id];
       if (this.isItemDisplayed(item)) {
         this.view.removeItem(item);
       }
+      this.state.empty = items.length == 0;
     }
   },
 
@@ -323,11 +350,14 @@ const Grid = Component.extend('mad.component.Grid', {
   insertItem: function(item, refItem, position, render, options) {
     render = render != undefined ? render : true;
     this._assertItemClass(item);
+    this.state.loaded = false;
     this.options.items.push(item);
     this._mapItem(item);
     if (render) {
       this._renderItem(item, refItem, position, options);
     }
+    this.state.loaded = true;
+    this.state.empty = false;
   },
 
   /**
@@ -371,15 +401,16 @@ const Grid = Component.extend('mad.component.Grid', {
     const sourceItems = this.options.sourceItems;
     const items = this.options.items;
 
-    this.state.loaded = false;
     this.reset();
     data.forEach(item => items.push(item));
     data.forEach(item => sourceItems.push(item));
     this._mapItems(items);
+    this.state.empty = items.length == 0;
 
     if (options.filter) {
       return this.filterByKeywords(options.filter.keywords, options.filter.fields);
     } else {
+      this.state.loaded = false;
       return this._renderItems(items).then(() => {
         this.state.loaded = true;
       });
@@ -473,8 +504,9 @@ const Grid = Component.extend('mad.component.Grid', {
     this.options.items.splice(0, this.options.items.length);
     this.options.sourceItems.splice(0, this.options.sourceItems.length);
     this.mappedItems = {};
-    this.options.isFiltered = false;
+    this.state.filtered = false;
     this.options.isSorted = false;
+    this.state.empty = false;
     this.view.reset();
   },
 
@@ -522,11 +554,12 @@ const Grid = Component.extend('mad.component.Grid', {
    * Reset the filtering
    */
   resetFilter: function() {
-    this.options.isFiltered = false;
-    this.options.items = this.options.sourceItems;
     this.state.loaded = false;
+    this.options.items = this.options.sourceItems;
+    this.state.empty = this.options.items == 0;
+    this.state.filtered = false;
     return this._renderItems(this.options.items).then(() => {
-      this.options.isFiltered = true;
+      this.state.loaded = true;
     });
   },
 
@@ -537,12 +570,14 @@ const Grid = Component.extend('mad.component.Grid', {
    * @return {Promise}
    */
   filterByKeywords: function(needle, fields) {
-    const items = this.options.sourceItems;
+    this.state.filtering = true;
     this.state.loaded = false;
     this.view.reset();
-    this.options.items = items.filterContain(needle, fields);
+    this.options.items = this.options.sourceItems.filterContain(needle, fields);
+    this.state.empty = this.options.items.length == 0;
     return this._renderItems(this.options.items).then(() => {
-      this.options.isFiltered = true;
+      this.state.filtering = false;
+      this.state.filtered = true;
       this.state.loaded = true;
     });
   },

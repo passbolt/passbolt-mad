@@ -15,6 +15,7 @@ import "passbolt-mad/test/fixture/users";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
 import DefineMap from 'passbolt-mad/model/map/map';
+import getTimeAgo from 'passbolt-mad/util/time/get_time_ago';
 import GridColumn from 'passbolt-mad/model/map/grid_column';
 import GridComponent from "passbolt-mad/component/grid";
 import HtmlHelper from 'passbolt-mad/helper/html';
@@ -27,7 +28,14 @@ let $grid = null;
 
 const map = new MadMap({
   id: 'id',
-  label: 'label'
+  label: 'label',
+  date: 'date',
+  timeago: {
+    key: 'date',
+    func: function(value) {
+      return getTimeAgo(value);
+    }
+  }
 });
 
 const generate_dummy_items = function(n) {
@@ -58,6 +66,25 @@ const generate_alphabet_dummy_items = function() {
       id: `item_${letter}`,
       label: `item label ${letter}`
     });
+  }
+
+  return items;
+};
+
+const generate_date_dummy_items = function(n) {
+  const items = [];
+  const start = new Date();
+  start.setMonth(start.getMonth()-12);
+  const end = new Date();
+  for (var i = 0; i < n; i++) {
+    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    const formatedDate = date.toISOString();
+    const item = new DefineMap({
+      id: `item_${i}`,
+      label: `item label ${i}`,
+      date: `${formatedDate}`
+    });
+    items.push(item);
   }
 
   return items;
@@ -645,6 +672,50 @@ describe("Grid", () => {
         });
       });
     });
+
+    it("sorts content by dates", done => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id',
+        sortable: true
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        sortable: true
+      }), new GridColumn({
+        name: 'date',
+        index: 'date',
+        label: 'date',
+        sortable: true
+      }), new GridColumn({
+        name: 'timeago',
+        index: 'timeago',
+        label: 'timeago',
+        sortable: true
+      })];
+      const grid = instantiateGrid({columnModel});
+      grid.start();
+
+      // Insert items at root level.
+      const items = generate_date_dummy_items(200);
+      grid.load(items).then(() => {
+        // Check that the grid is sorted ascendantly.
+        grid.sort(columnModel[2], true).then(() => {
+          const dates = $('tbody tr td.js_grid_column_date div', grid.element);
+          let previousDate = null;
+          for (let i = 0; i<dates.length; i++) {
+            const date = new Date($(dates[i]).html().trim());
+            if (previousDate != null) {
+              expect(previousDate<date).to.be.true;
+            }
+            previousDate = date;
+          }
+          done();
+        });
+      });
+    }).timeout(10000);
 
     it("sorts paginated content regarding a given column", done => {
       const columnModel = [new GridColumn({

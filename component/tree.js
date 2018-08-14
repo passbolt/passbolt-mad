@@ -205,6 +205,7 @@ const Tree = Component.extend('mad.component.Tree', {
 
     this.options.items.push(item);
     this.view.insertItem(item, refItem, position);
+    this.state.empty = false;
 
     /*
      * Insert children.
@@ -232,6 +233,7 @@ const Tree = Component.extend('mad.component.Tree', {
       this.options.items.splice(position, 1);
       this.view.removeItem(item);
     }
+    this.state.empty = this.options.items.length == 0;
   },
 
   /**
@@ -268,7 +270,7 @@ const Tree = Component.extend('mad.component.Tree', {
     if (!items || !this.element) {
       return;
     }
-
+    this.state.empty = items.length == 0;
     items.forEach(item => {
       this.insertItem(item);
     });

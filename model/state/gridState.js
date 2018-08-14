@@ -10,33 +10,17 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DefineMap from 'can-define/map/map';
+import ComponentState from 'passbolt-mad/model/state/componentState';
 
-const ComponentState = DefineMap.extend({
-  destroyed: {
+const GridState = ComponentState.extend({
+  filtered: {
     type: 'boolean',
     default: false
   },
-  disabled: {
-    type: 'boolean',
-    default: false
-  },
-  empty: {
-    type: 'boolean',
-    default: false
-  },
-  hidden: {
-    type: 'boolean',
-    default: false
-  },
-  loaded: {
-    type: 'boolean',
-    default: false
-  },
-  started: {
+  filtering: {
     type: 'boolean',
     default: false
   }
 });
 
-export default ComponentState;
+export default GridState;
