@@ -635,7 +635,9 @@ const Grid = Component.extend('mad.component.Grid', {
    * @param {CanList} items The removed items
    */
   '{itemClass} destroyed': function(model, event, destroyedItem) {
+    this.state.loaded = false;
     this.removeItem(destroyedItem);
+    this.state.loaded = true;
   },
 
   /* ************************************************************** */
