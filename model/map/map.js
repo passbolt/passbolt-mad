@@ -22,7 +22,13 @@ const DefineMap = CanDefineMap.extend({
    * Should the data be filtered before being send to the server.
    * User when performing a create or an update request.
    */
-  __FILTER_CASE__: 'string'
+  __FILTER_CASE__: 'string',
+  /**
+   * Should the request marked as silent.
+   * It is useful when we want to delete resources in bulk and we don't want the default notification displayed
+   * for each call to the API.
+   */
+  __SILENT_NOTIFY__: 'boolean'
 });
 DefineMap.List = DefineList.extend({
   '#': DefineMap
