@@ -24,3 +24,4 @@ glbl.assert = chai.assert;
 // Make a global reference to the root reference element.
 glbl.$rootElement = $('#test-html');
 
+mocha.setup({ timeout: 5000 });
