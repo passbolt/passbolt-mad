@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DefineMap from 'passbolt-mad/model/map/map';
+import DefineMap from '../model/map/map';
 
 /**
  * @inherits can.Model

@@ -10,11 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/test/bootstrap";
-import Config from 'passbolt-mad/config/config';
+import "../bootstrap.js";
+import Config from '../../config/config';
 import Construct from "can-construct";
-import Bootstrap from "passbolt-mad/bootstrap";
-import Component from "passbolt-mad/component/component";
+import Bootstrap from "../../bootstrap";
+import Component from "../../component/component";
+import $ from 'jquery';
 
 describe("mad.Bootstrap", () => {
   it("should inherit can.Construct", () => {

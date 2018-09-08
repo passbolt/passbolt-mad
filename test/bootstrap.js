@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from 'jquery';
-import "passbolt-mad/test/lib/stealMocha.js";
+//import "./lib/stealMocha.js";
 import chai from "chai";
 
 // Define the global context.

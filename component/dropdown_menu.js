@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import MenuComponent from 'passbolt-mad/component/menu';
-import DropdownMenuView from 'passbolt-mad/view/component/dropdown_menu';
+import MenuComponent from './menu';
+import DropdownMenuView from '../view/component/dropdown_menu';
 
 /**
  * @parent Mad.components_api

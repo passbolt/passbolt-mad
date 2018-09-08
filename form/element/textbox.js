@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Element from 'passbolt-mad/form/element';
-import TextboxView from 'passbolt-mad/view/form/element/textbox';
+import Element from '../element';
+import TextboxView from '../../view/form/element/textbox';
 
 /**
  * @parent Mad.form_api

@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import Construct from 'can-construct';
-import HtmlHelper from 'passbolt-mad/helper/html';
-import View from 'passbolt-mad/view/view';
+import HtmlHelper from '../helper/html';
+import View from '../view/view';
 
 import componentTagTemplate from 'passbolt-mad/view/template/helper/componentTag.stache!';
 

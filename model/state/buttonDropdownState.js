@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import ComponentState from 'passbolt-mad/model/state/componentState';
+import ComponentState from './componentState';
 
 const ButtonDropdownState = ComponentState.extend({
   open: {

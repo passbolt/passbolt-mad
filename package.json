@@ -114,11 +114,15 @@
     "mocha": "^5.2.0",
     "sinon": "^1.16.1",
     "steal-css": "^1.3.2",
-    "steal-tools": "^1.11.0"
+    "steal-tools": "^1.11.0",
+    "test-saucelabs": "0.0.6",
+    "testee": "^0.8.1"
   },
   "scripts": {
     "lint": "eslint component config control error form helper model net util view",
-    "lint-fix": "eslint --fix component config control error form helper model net util view"
+    "lint-fix": "eslint --fix component config control error form helper model net util view",
+    "test": "npm run testee",
+    "testee": "testee test/test.html --browsers firefox --reporter Spec"
   },
   "steal": {
     "meta": {

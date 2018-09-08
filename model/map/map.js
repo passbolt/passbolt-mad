@@ -12,10 +12,10 @@
  * @since         2.0.0
  */
 import CanDefineMap from 'can-define/map/map';
-import DefineList from 'passbolt-mad/model/list/list';
+import DefineList from '../list/list';
 import getObject from 'can-util/js/get/get';
-import setObject from 'passbolt-mad/util/set/set';
-import Validation from 'passbolt-mad/util/validation';
+import setObject from '../../util/set/set';
+import Validation from '../../util/validation';
 
 const DefineMap = CanDefineMap.extend({
   /**

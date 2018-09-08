@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Component from 'passbolt-mad/component/component';
-import ElementView from 'passbolt-mad/view/form/element';
-import FormElementState from 'passbolt-mad/model/state/formElementState';
+import Component from '../component/component';
+import ElementView from '../view/form/element';
+import FormElementState from '../model/state/formElementState';
 
 /**
  * @parent Mad.form_api

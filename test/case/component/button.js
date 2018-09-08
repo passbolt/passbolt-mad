@@ -10,11 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/test/bootstrap";
-import Button from "passbolt-mad/component/button";
+import "../../bootstrap.js";
+import Button from "../../../component/button";
 import CanControl from "can-control";
-import Component from "passbolt-mad/component/component";
-import MadControl from 'passbolt-mad/control/control';
+import Component from "../../..//component/component";
+import MadControl from '../../..//control/control';
 import $ from 'jquery';
 
 describe("Button", () => {

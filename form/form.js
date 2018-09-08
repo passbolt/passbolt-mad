@@ -10,11 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Component from 'passbolt-mad/component/component';
-import DefineMap from 'passbolt-mad/model/map/map';
-import FormView from 'passbolt-mad/view/form/form';
+import Component from '../component/component';
+import DefineMap from '../model/map/map';
+import FormView from '../view/form/form';
 import getObject from 'can-util/js/get/get';
-import setObject from 'passbolt-mad/util/set/set';
+import setObject from '../util/set/set';
 
 /**
  * @parent Mad.form_api

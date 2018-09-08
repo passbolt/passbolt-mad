@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import DefineList from 'can-define/list/list';
-import DefineMap from 'passbolt-mad/model/map/map';
+import DefineMap from './map';
 
 /**
  * @inherits mad.model.Model

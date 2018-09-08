@@ -10,10 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import DialogView from 'passbolt-mad/view/component/dialog';
-import FreeCompositeComponent from 'passbolt-mad/component/free_composite';
-import HtmlHelper from 'passbolt-mad/helper/html';
-import template from 'passbolt-mad/view/template/component/dialog/dialog.stache!';
+import DialogView from '../view/component/dialog';
+import FreeCompositeComponent from './free_composite';
+import HtmlHelper from '../helper/html';
+import template from '../view/template/component/dialog/dialog.stache!';
 
 /**
  * @parent Mad.components_api

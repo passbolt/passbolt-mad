@@ -10,12 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import ButtonComponent from 'passbolt-mad/component/button';
-import ButtonDropdownState from 'passbolt-mad/model/state/buttonDropdownState';
-import ButtonDropdownView from 'passbolt-mad/view/component/button_dropdown';
-import MenuComponent from 'passbolt-mad/component/menu';
+import ButtonComponent from './button';
+import ButtonDropdownState from '../model/state/buttonDropdownState';
+import ButtonDropdownView from '../view/component/button_dropdown';
+import MenuComponent from './menu';
 
-import template from 'passbolt-mad/view/template/component/button_dropdown/button_dropdown.stache!';
+import template from '../view/template/component/button_dropdown/button_dropdown.stache!';
 
 /**
  * @parent Mad.components_api

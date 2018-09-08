@@ -12,7 +12,7 @@
  */
 import DomData from 'can-dom-data';
 import domEvents from 'can-dom-events';
-import TreeView from 'passbolt-mad/view/component/tree';
+import TreeView from './tree';
 
 /**
  * @inherits mad.view.component.Tree

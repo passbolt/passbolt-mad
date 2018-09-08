@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import stache from 'can-stache';
-import View from 'passbolt-mad/view/view';
+import View from '../../../view';
 
 import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.stache!';
 

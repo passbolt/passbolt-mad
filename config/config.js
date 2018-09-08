@@ -12,8 +12,9 @@
  */
 import Construct from 'can-construct';
 import getObject from 'can-util/js/get/get';
-import setObject from 'passbolt-mad/util/set/set';
-import mad from 'passbolt-mad/util/util';
+import setObject from '../util/set/set';
+import mad from '../util/util';
+import $ from 'jquery';
 
 /**
  * Our config utilities and environment.

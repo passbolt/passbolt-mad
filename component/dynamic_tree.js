@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import TreeComponent from 'passbolt-mad/component/tree';
-import DynamicTreeView from 'passbolt-mad/view/component/dynamic_tree';
-import itemTemplate from 'passbolt-mad/view/template/component/dynamic_tree/dynamic_tree.stache!';
+import TreeComponent from './tree';
+import DynamicTreeView from '../view/component/dynamic_tree';
+import itemTemplate from '../view/template/component/dynamic_tree/dynamic_tree.stache!';
 
 /**
  * @parent Mad.components_api

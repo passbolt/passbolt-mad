@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "passbolt-mad/test/bootstrap";
+import "../../bootstrap.js";
 import Action from "passbolt-mad/model/map/action";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";

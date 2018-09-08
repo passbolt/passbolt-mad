@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import ButtonComponent from 'passbolt-mad/component/button';
-import ToggleButtonState from 'passbolt-mad/model/state/toggleButtonState';
+import ButtonComponent from './button';
+import ToggleButtonState from '../model/state/toggleButtonState';
 
 /**
  * @parent Mad.components_api
