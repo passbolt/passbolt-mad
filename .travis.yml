@@ -7,8 +7,6 @@ addons:
     secure: "TBQ/bgANERR0+w2UqnmyulCGLDCpug3BfoXQOv4O18fYNvqXTyTxG6z3U6/at4NFmFNuvfdTCh6er4ctGDoOYgHK8GHMbLN4RHJz98XRdMByiH0hWA/L7dQK8ay14uiQbjXWbstyZ3k4sYQOVI7kJq1kW/0ocfX8XO7784pLzCRrmZlEc2ZEYOXJgiAL27gMZ85kEd66OSIiHskWaIq8/IHPlkxEyuDWHBPbq9TburJm+tnyhJHV/YuuBQBTjIOgruDnoJFCbKCjnCuCdV1f64mInY31pq6hfrptMXAW41mDiiMvkhRNGyU5Q4EQ6KTAQhGEk8irnC+BLI98LziPiGvMHWx9E63isdUFIaGehVjNcT76yOlo0X5rCvx11iMsFNe3kcPcfmE+tbLRHJYZNKOiUjFcvdywmgLYrxFkAPJV3sDcMiGhPKZDmE8jAgPeQrUKtY2YtdfqRUc41L6yk8Sn3o7Er3tWtROR49ZPKQxvzxJzXxYlCCg6G/mYy+w3krIVeC/FDtpo/KwmjZyIFJ6Nj9W3wVZvDlW+bg9CGjuF4lkqBhQLsse97mqc29sQa0Ui8KT5yRA4Psonjxt5WzCi9uTt/Cqi2l2RRoe7MuiPI1Tl3rAv3w/cDBCS+pml+oDzlqO1R9DiiV8+NQkGCXVLMc1JQN9lejzQpSXV/hQ="
 matrix:
   include:
-    - node_js: 8
-      script: npm run test-node:ci
     - node_js: node
       addons:
         sauce_connect: true
