@@ -13,8 +13,8 @@
 import "../../bootstrap.js";
 import Button from "../../../component/button";
 import CanControl from "can-control";
-import Component from "../../..//component/component";
-import MadControl from '../../..//control/control';
+import Component from "../../../component/component";
+import MadControl from '../../../control/control';
 import $ from 'jquery';
 
 describe("Button", () => {
