@@ -119,6 +119,7 @@
     "testee": "^0.8.1"
   },
   "scripts": {
+    "http-server": "http-server -p 3000 --silent",
     "lint": "eslint component config control error form helper model net util view",
     "lint-fix": "eslint --fix component config control error form helper model net util view",
     "ui": "node test/config/saucelabs.js"
