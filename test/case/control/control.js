@@ -10,23 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import "../../bootstrap";
-//import jest from 'jest';
-window.$ = Cypress.$;
+import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import MadControl from '../../../control/control';
-//window.$ = Cypress.$;
-//import $ from 'jquery';
-//jest.mock('jquery', Cypress.$);
-//import sinon from 'sinon';
-//
+
 describe("Control", () => {
-  beforeEach(() => {
-    //$('body').append('<div id="test-html"/>');
-    cy.visit('/test/test.html');
-    //cy.stub(MadControl, '$', $);
-    //sinon:
-  });
   describe("Constructor", () => {
     it("inherits Centaur", () => {
       const control = new MadControl('#test-html');
