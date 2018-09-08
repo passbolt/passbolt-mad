@@ -2,15 +2,16 @@ sudo: false
 language: node_js
 addons:
   sauce_connect:
-    username: "passbolt"
-  jwt:
-    secure: "TBQ/bgANERR0+w2UqnmyulCGLDCpug3BfoXQOv4O18fYNvqXTyTxG6z3U6/at4NFmFNuvfdTCh6er4ctGDoOYgHK8GHMbLN4RHJz98XRdMByiH0hWA/L7dQK8ay14uiQbjXWbstyZ3k4sYQOVI7kJq1kW/0ocfX8XO7784pLzCRrmZlEc2ZEYOXJgiAL27gMZ85kEd66OSIiHskWaIq8/IHPlkxEyuDWHBPbq9TburJm+tnyhJHV/YuuBQBTjIOgruDnoJFCbKCjnCuCdV1f64mInY31pq6hfrptMXAW41mDiiMvkhRNGyU5Q4EQ6KTAQhGEk8irnC+BLI98LziPiGvMHWx9E63isdUFIaGehVjNcT76yOlo0X5rCvx11iMsFNe3kcPcfmE+tbLRHJYZNKOiUjFcvdywmgLYrxFkAPJV3sDcMiGhPKZDmE8jAgPeQrUKtY2YtdfqRUc41L6yk8Sn3o7Er3tWtROR49ZPKQxvzxJzXxYlCCg6G/mYy+w3krIVeC/FDtpo/KwmjZyIFJ6Nj9W3wVZvDlW+bg9CGjuF4lkqBhQLsse97mqc29sQa0Ui8KT5yRA4Psonjxt5WzCi9uTt/Cqi2l2RRoe7MuiPI1Tl3rAv3w/cDBCS+pml+oDzlqO1R9DiiV8+NQkGCXVLMc1JQN9lejzQpSXV/hQ="
+    username: passbolt
 matrix:
   include:
-    - node_js: node
-      addons:
-        sauce_connect: true
-      before_script:
-        - npm run http-server &
-        - sleep 2
-      script: npm run ui
+  - node_js: node
+    addons:
+      sauce_connect: true
+    before_script:
+    - npm run http-server &
+    - sleep 2
+    script: npm run ui
+env:
+  global:
+    secure: nvw2GlMI0kyZ519cC8d2ktOQM8T4jb9P1ePKhl6qfQJdP0Kns+3qrDj7BLa0lE50WaVtC4JMrtqh2QUhu/PLkvWzMhfngtbrW/v2jOwTb2EQa50FHKHXvtMeAG/ZFN69NHCMnll9TGxD4ZGy6YXDr8FWL7t88gTP18ZNVErVLYtDZfWvlADqC3XLmQTL5QkOTyOx0QVnwclh18q5sykH2f4KEnXfir8BM9ozMFs9qAMWaqB50NCOu8wWwk8CVDdYJ0gSvxIEqE22YXEqPWvWAiQ2oY43Ifwo4PWDoPzeVUXiYuXvxu1Ss3wNy5vasyFGcX5No0Nh6/VjUenTMnGKaA6IU3uoSNyOwplCGh4XCK+w23aUxlSR+IV4lWLZPv+BRKOUe7UDyChuZIOvtgaDlr6Y6Ro9K9i/3NEhPmB9HKSB1cWptQdljBxwvupF+t0neu072okjVYU1gWhcWOUzukcLJoMGumJrFO+UMKjVb0brFYNwaU85g3GO8YBvQDv8nBMAPHmpiPR2/Gj+kRV/FR9ngF9HJ6njhG2ySLuHla2bjwtfyxPAqueE5OF8MhLZwrBST/+Zzih1crw5M97PuPB9tuY3pYxMoifyK0NiI7uk9/mWULzgRos0yOko5CV4ofu97Wcflk3T/QJgn5jiMhX5iKYkURKKCmew9q74NV0=
