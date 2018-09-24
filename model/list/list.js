@@ -35,6 +35,7 @@ const DefineMadList = DefineList.extend({
    * Filter items in the grid by keywords
    * @param {string} needle The string to search in the grid
    * @param {array} fields The fields to search in
+   * @return {DefineList}
    */
   filterContain: function(needle, fields) {
     const keywords = needle.split(/\s+/);
@@ -80,6 +81,30 @@ const DefineMadList = DefineList.extend({
     });
 
     return filteredItems;
+  },
+
+  /**
+   * Filter items by range. All elements contained in the items given in parameter.
+   * @param {DefineMap} first the first element
+   * @param {DefineMap} last The last element
+   * @return {DefineList}
+   */
+  filterRange: function(first, last) {
+    let inRange = false;
+    let firstFound = false;
+
+    return this.filter(item => {
+      if (item.id == first.id || item.id == last.id) {
+        if (!firstFound) {
+          firstFound = true;
+          inRange = true;
+        } else {
+          inRange = false;
+          return true;
+        }
+      }
+      return inRange;
+    });
   },
 
   /**
