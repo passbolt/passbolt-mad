@@ -168,6 +168,19 @@ const Grid = Component.extend('mad.component.Grid', {
   },
 
   /**
+   * Observe when the component is loaded
+   * @param {boolean} loaded True if loaded, false otherwise
+   */
+  onLoadedChange: function(loaded) {
+    this._super(loaded);
+    if (!loaded) {
+      // Hide the table content.
+      const table = $('.tableview-content table', this.element);
+      table.hide();
+    }
+  },
+
+  /**
    * Handle table content scroll
    * @private
    */
