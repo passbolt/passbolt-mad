@@ -20,6 +20,10 @@ const GridState = ComponentState.extend({
   filtering: {
     type: 'boolean',
     default: false
+  },
+  selectType: {
+    type: 'string',
+    default: 'single'
   }
 });
 
