@@ -442,6 +442,8 @@ const Grid = Component.extend('mad.component.Grid', {
   _renderItems: function(items) {
     const paginate = this.options.paginate;
     const itemsByPage = this.options.itemsByPage;
+    this.options.displayedPage = 0;
+
     const table = $('.tableview-content table', this.element);
     let itemsToRender, itemsToBuffer;
 

@@ -34,9 +34,11 @@ import template from 'passbolt-mad/view/template/component/dialog/dialog.stache!
 const Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static */ {
 
   defaults: {
-    label: 'Dialog Controller',
+    label: null,
     viewClass: DialogView,
     template: template,
+    subtitle: null,
+    titleInfo: null,
     cssClasses: ['dialog-wrapper'],
     tag: 'div'
   },
@@ -70,17 +72,26 @@ const Dialog = FreeCompositeComponent.extend('mad.component.Dialog', /** @static
     // Insert the element in the page DOM.
     const $el = HtmlHelper.create(refElt, position, '<div/>');
 
-    const dialog = new Dialog($el[0], options);
-    return dialog;
+    return new Dialog($el[0], options);
   }
+
 
 }, /** @prototype */ {
 
   /**
+   * @inheritdoc
+   */
+  beforeRender: function() {
+    this.setViewData('subtitle', this.options.subtitle);
+    this.setViewData('titleInfo', this.options.titleInfo);
+  },
+
+  /**
    * Add a component to the dialog container
-   * @param {mad.controller.ComponentController} Class The class of the component to add, or the html to
+   * @param {Component.prototype} Class The class of the component to add, or the html to
    *   display.
-   * @param {Object} options Option of the component
+   * @param {object} options Option of the component
+   * @return {Component}
    */
   add: function(Class, options) {
     if (typeof options == 'undefined' || options == null) {

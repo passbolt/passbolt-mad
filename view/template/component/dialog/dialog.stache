@@ -1,6 +1,16 @@
 <div class="dialog">
     <div class="dialog-header">
-        <h2><span class="dialog-header-title">{{label}}</span> <span class="dialog-header-subtitle"></span></h2>
+        <h2><span class="dialog-header-title">{{label}}</span>{{#if(subtitle)}}<span class="dialog-header-subtitle">{{subtitle}}</span>{{/if}}{{#if(titleInfo)}}<div class="more_details tooltip-alt">
+                <i class="fa fa-info-circle"></i>
+                <div class="tooltip-text right">
+                    {{#if(titleInfo.name)}}
+                        {{>titleInfo}}
+                    {{#else}}
+                        {{titleInfo}}
+                    {{/if}}
+                </div>
+            </div>{{/if}}
+        </h2>
         <a class="dialog-close">
             <i class="fa fa-close"></i>
             <span class="visuallyhidden">close</span>

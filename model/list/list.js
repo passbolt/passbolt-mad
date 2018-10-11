@@ -20,11 +20,14 @@ const DefineMadList = DefineList.extend({
    * Find the position of a given element in the list
    * @param item
    * @param fromIndex
+   * @param {object} options
+   * - key {string} The property name to look into, default id
    * @returns {*}
    */
-  indexOf: function(item, fromIndex) {
+  indexOf: function(item, fromIndex, options) {
+    const key = getObject(options, 'key') || 'id';
     for (let i = fromIndex || 0, len = this.length; i < len; i++) {
-      if (this.get(i).id === item.id) {
+      if (this.get(i)[key] === item[key]) {
         return i;
       }
     }
