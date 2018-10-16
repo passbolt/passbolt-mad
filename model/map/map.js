@@ -17,7 +17,7 @@ import getObject from 'can-util/js/get/get';
 import setObject from 'passbolt-mad/util/set/set';
 import Validation from 'passbolt-mad/util/validation';
 
-const DefineMap = CanDefineMap.extend({
+const DefineMap = CanDefineMap.extend('passbolt.model.Map', {
   /**
    * Should the data be filtered before being send to the server.
    * User when performing a create or an update request.

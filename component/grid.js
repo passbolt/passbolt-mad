@@ -168,6 +168,21 @@ const Grid = Component.extend('mad.component.Grid', {
   },
 
   /**
+   * Observe when the component is loaded
+   * @param {boolean} loaded True if loaded, false otherwise
+   */
+  onLoadedChange: function(loaded) {
+    this._super(loaded);
+    // Hide the table while loading.
+    const table = $('.tableview-content table', this.element);
+    if (!loaded) {
+      table.hide();
+    } else {
+      table.show();
+    }
+  },
+
+  /**
    * Handle table content scroll
    * @private
    */
@@ -431,6 +446,8 @@ const Grid = Component.extend('mad.component.Grid', {
   _renderItems: function(items) {
     const paginate = this.options.paginate;
     const itemsByPage = this.options.itemsByPage;
+    this.options.displayedPage = 0;
+
     const table = $('.tableview-content table', this.element);
     let itemsToRender, itemsToBuffer;
 
@@ -639,9 +656,7 @@ const Grid = Component.extend('mad.component.Grid', {
    * @param {CanList} items The removed items
    */
   '{itemClass} destroyed': function(model, event, destroyedItem) {
-    this.state.loaded = false;
     this.removeItem(destroyedItem);
-    this.state.loaded = true;
   },
 
   /* ************************************************************** */
