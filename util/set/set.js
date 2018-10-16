@@ -1,5 +1,3 @@
-
-
 /**
  *
  * @signature `set(obj, path, value)`

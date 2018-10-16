@@ -182,8 +182,12 @@ const Grid = Component.extend('mad.component.Grid', {
 
     if (scrollPercent >= 100) {
       this._displayBufferedPage();
-      this.options.displayedPage++;
       const itemsByPage = this.options.itemsByPage;
+      // If max page reach
+      if (this.options.displayedPage * itemsByPage >= this.options.items.length){
+        return;
+      }
+      this.options.displayedPage++;
       const itemsToBufferStart = (this.options.displayedPage + 1) * itemsByPage;
       const itemsToBuffer = this.options.items.slice(itemsToBufferStart, itemsToBufferStart + itemsByPage);
       // Insert the next set of items in the DOM. Keep them hidden. Do it after 200ms for a smooth experience.
