@@ -32,7 +32,9 @@ import "passbolt-mad/test/case/form/form";
 import "passbolt-mad/test/case/form/element";
 import "passbolt-mad/test/case/form/element/checkbox";
 import "passbolt-mad/test/case/form/element/dropdown";
+import "passbolt-mad/test/case/form/element/radio";
 import "passbolt-mad/test/case/form/element/textbox";
+import "passbolt-mad/test/case/form/element/toggle_button";
 
 import "passbolt-mad/test/case/helper/component";
 import "passbolt-mad/test/case/helper/html";

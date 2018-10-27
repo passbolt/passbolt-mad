@@ -1,0 +1,6 @@
+{{#each(availableValues)}}
+<div class="input radio">
+	<input type="radio" name="radio_{{../id}}" value="{{scope.key}}" id="radio_{{../id}}_{{hash(scope.key)}}" {{#if(../controller.state.disabled)}}disabled{{/if}}/>
+	<label for="radio_{{../id}}_{{hash(scope.key)}}">{{this}}</label>
+</div>
+{{/each}}

@@ -100,7 +100,6 @@ const Element = Component.extend('mad.form.Element', /* @static */ {
    * @inheritdoc
    */
   onDisabledChange: function(disabled) {
-    this._super(disabled);
     if (disabled) {
       $(this.element).attr('disabled', 'disabled')
         .addClass('disabled');
@@ -151,9 +150,13 @@ const Element = Component.extend('mad.form.Element', /* @static */ {
 
   /**
    * Check if the element has to be validated.
+   * @param {object} formData The form data
    * @return {boolean}
    */
-  requireValidation: function() {
+  requireValidation: function(formData) {
+    if (typeof this.options.validate == 'function') {
+      return this.options.validate(formData);
+    }
     return this.options.validate;
   },
 

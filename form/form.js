@@ -343,7 +343,7 @@ const Form = Component.extend('mad.Form', /* @static */ {
    *
    * @return {boolean}
    */
-  validateElement: function(element) {
+  validateElement: function(element, formData) {
     let returnValue = true;
     // The form element is driven by an associated model.
     const modelReference = element.options.modelReference;
@@ -353,7 +353,7 @@ const Form = Component.extend('mad.Form', /* @static */ {
     const eltId = element.getId();
 
     // The element requires a validation.
-    if (element.requireValidation()) {
+    if (element.requireValidation(formData)) {
       // Get the element value.
       const value = element.getValue();
       // The direct validate function associated to the form element.
@@ -430,9 +430,10 @@ const Form = Component.extend('mad.Form', /* @static */ {
    */
   validate: function() {
     let returnValue = true;
+    const formData = this.getData();
 
     for (const i in this.elements) {
-      returnValue &= this.validateElement(this.elements[i]);
+      returnValue &= this.validateElement(this.elements[i], formData);
     }
 
     // Increment number of validations.

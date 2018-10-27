@@ -1,6 +1,6 @@
 {{#each(availableValues)}}
 <div class="input checkbox">
-	<input type="checkbox" value="{{scope.key}}" id="checkbox_{{../id}}_{{hash(scope.key)}}"/>
+	<input type="checkbox" value="{{scope.key}}" id="checkbox_{{../id}}_{{hash(scope.key)}}" {{#if(../controller.state.disabled)}}disabled{{/if}}/>
 	<label for="checkbox_{{../id}}_{{hash(scope.key)}}">{{this}}</label>
 </div>
 {{/each}}

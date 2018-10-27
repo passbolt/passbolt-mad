@@ -118,7 +118,8 @@
   },
   "scripts": {
     "lint": "eslint component config control error form helper model net util view",
-    "lint-fix": "eslint --fix component config control error form helper model net util view"
+    "lint-fix": "eslint --fix component config control error form helper model net util view",
+    "server" : "http-server"
   },
   "steal": {
     "meta": {

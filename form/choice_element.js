@@ -40,6 +40,15 @@ const ChoiceElement = Element.extend('mad.form.ChoiceElement', /* @static */ {
     this.setViewData('availableValues', this.options.availableValues);
     this.setViewData('counter', 0);
     this.setViewData('valueClasses', this.options.valueClasses);
+    this.setViewData('state', this.state);
+  },
+
+  /**
+   * Set the available values
+   */
+  setAvailableValues: function(values) {
+    this.options.availableValues = values;
+    this.refresh();
   }
 
 });

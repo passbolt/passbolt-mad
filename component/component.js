@@ -106,10 +106,6 @@ const Component = Control.extend('mad.Component', /* @static */{
   },
 
   /**
-   * Unregister a child component.
-   */
-
-  /**
    * Observe when the component is destroyed
    * @param {boolean} started True if destroyed. It cannot be false
    */
@@ -339,6 +335,7 @@ const Component = Control.extend('mad.Component', /* @static */{
     this.setViewData('icon', this.options.icon);
     this.setViewData('label', this.options.label);
     this.setViewData('view', this.view);
+    this.setViewData('id', this.id);
   },
 
   /**

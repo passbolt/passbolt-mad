@@ -10,28 +10,27 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import ChoiceElement from 'passbolt-mad/form/choice_element';
-import CheckboxView from 'passbolt-mad/view/form/element/checkbox';
-import template from 'passbolt-mad/view/template/form/checkbox.stache!';
+import Element from 'passbolt-mad/form/element';
+import ToggleButtonView from 'passbolt-mad/view/form/element/toggle_button';
+import template from 'passbolt-mad/view/template/form/toggle_button.stache!';
 
 /**
  * @parent Mad.form_api
  * @inherits mad.Component
  *
- * The Checkbox Form Element
- * @todo TBD
+ * The Toggle Button Form Element
  */
-const Checkbox = ChoiceElement.extend('mad.form.Checkbox', /* @static */ {
+const ToggleButton = Element.extend('mad.form.ToggleButton', /* @static */ {
 
   defaults: {
     // Override the label option.
-    label: 'Checkbox Form Element',
+    label: 'Toggle Button Element',
     // Override the tag option.
     tag: 'div',
     // Override the template option.
     template: template,
     // Override the viewClass option.
-    viewClass: CheckboxView
+    viewClass: ToggleButtonView
   }
 
 }, /** @prototype */ {
@@ -51,4 +50,4 @@ const Checkbox = ChoiceElement.extend('mad.form.Checkbox', /* @static */ {
 
 });
 
-export default Checkbox;
+export default ToggleButton;

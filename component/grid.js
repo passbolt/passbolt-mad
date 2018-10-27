@@ -579,6 +579,7 @@ const Grid = Component.extend('mad.component.Grid', {
     this.options.items = this.options.sourceItems;
     this.state.empty = this.options.items == 0;
     this.state.filtered = false;
+    this.view.reset();
     return this._renderItems(this.options.items).then(() => {
       this.state.loaded = true;
     });

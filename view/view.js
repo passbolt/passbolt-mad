@@ -77,8 +77,10 @@ const View = Control.extend('mad.View', /** @static */{
   /**
    * Hide the element
    * @return {void}
+   * @deprecated Not sture it's still in use
    */
   hide: function() {
+    console.debug('view.hide()');
     $(this.element).hide();
   },
 
