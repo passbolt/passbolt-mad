@@ -1,6 +1,6 @@
 {
   "name": "passbolt-mad",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "author": "Passbolt SARL",
   "license": "AGPL-3.0",
   "description": "Passbolt javascript application library for the open source password manager for teams",
@@ -119,7 +119,7 @@
   "scripts": {
     "lint": "eslint component config control error form helper model net util view",
     "lint-fix": "eslint --fix component config control error form helper model net util view",
-    "server" : "http-server"
+    "server": "http-server"
   },
   "steal": {
     "meta": {
