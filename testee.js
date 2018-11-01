@@ -4,7 +4,7 @@ process.env.LAUNCHPAD_CHROMIUM = puppeteer.executablePath();
 module.exports = {
   "browsers": [
     {
-      "browser": "chromium",
+      "browser": "chrome",
       "args": [
         "--headless",
         "--disable-gpu",

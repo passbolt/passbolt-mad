@@ -31,7 +31,7 @@ const Response = DefineMap.extend('mad.net.Response', /** @static */ {
     type: 'any',
     value: {}
   },
-  code: 'integer'
+  code: 'number'
 });
 
 // Allowed response status.
