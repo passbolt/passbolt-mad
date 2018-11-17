@@ -1,6 +1,6 @@
 {
   "name": "passbolt-mad",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "author": "Passbolt SARL",
   "license": "AGPL-3.0",
   "description": "Passbolt javascript application library for the open source password manager for teams",
