@@ -111,7 +111,7 @@
     "eslint": "^4.19.1",
     "eslint-plugin-import": "^2.13.0",
     "grunt": "^1.0.3",
-    "grunt-testee": "^1.0.2",
+    "grunt-testee": "github:passbolt/grunt-testee#master",
     "http-server": "^0.11.1",
     "mocha": "^5.2.0",
     "sinon": "^1.16.1",
