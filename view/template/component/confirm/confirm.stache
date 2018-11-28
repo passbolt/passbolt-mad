@@ -26,6 +26,6 @@
     </div>
     <div class="submit-wrapper clearfix">
         <input type="submit" value="{{submitButton.label}}" class="button primary js-dialog-confirm {{submitButton.cssClasses.join(' ')}}" id="confirm-button">
-        <a class="js-dialog-cancel cancel">{{__('cancel')}}</a>
+        <a class="js-dialog-cancel cancel {{cancelButton.cssClasses.join(' ')}}">{{__('cancel')}}</a>
     </div>
 </div>

@@ -25,7 +25,7 @@ GNU Affero General Public License for more details.
 
 [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
 
-## ## About passbolt browser extension
+## About passbolt mad
 
 Passbolt mad is a low level brick on which the [passbolt browser application](https://github.com/passbolt/passbolt-appjs) is based.
 

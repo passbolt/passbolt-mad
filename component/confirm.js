@@ -75,6 +75,7 @@ const Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
     this.setViewData('content', this.options.content);
     this.setViewData('subtitle', this.options.subtitle);
     this.setViewData('submitButton', this.options.submitButton);
+    this.setViewData('cancelButton', this.options.cancelButton);
   },
 
   /**
