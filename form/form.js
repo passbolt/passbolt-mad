@@ -414,7 +414,7 @@ const Form = Component.extend('mad.Form', /* @static */ {
         // otherwise the validation is successful
         this.elements[eltId].state.error = false;
         if (this.feedbackElements[eltId]) {
-          this.feedbackElements[eltId].success();
+          this.feedbackElements[eltId].success('');
         }
         this.view.setElementState(this.elements[eltId], 'success');
       }
