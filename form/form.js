@@ -498,7 +498,8 @@ const Form = Component.extend('mad.Form', /* @static */ {
     if (validateOnChange) {
       const formElement = this.getElement(ev.target.id);
       if (formElement) {
-        this.validateElement(formElement);
+        const formData = this.getData();
+        this.validateElement(formElement, formData);
       } else {
         throw mad.Exception.get('No form element found.');
       }
