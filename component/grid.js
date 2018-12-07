@@ -76,7 +76,10 @@ const Grid = Component.extend('mad.component.Grid', {
     // Paginate the items
     paginate: false,
     itemsByPage: 50,
-    displayedPage: 0,
+    displayedPages: {
+      first: 0,
+      last: 0
+    },
     // Fade in animation when rendering the first set of items
     fadeInTimeout: 250
   }
@@ -179,43 +182,6 @@ const Grid = Component.extend('mad.component.Grid', {
       table.hide();
     } else {
       table.show();
-    }
-  },
-
-  /**
-   * Handle table content scroll
-   * @private
-   */
-  _handleTableContentScroll: function() {
-    if (!this.options.paginate) {
-      return;
-    }
-
-    const tableElement = $('.tableview-content', this.element);
-    const tableContentElement = $('.tableview-content table', this.element);
-    let scrollPercent = (tableElement.scrollTop() / (tableContentElement.height() - tableElement.height())) * 100;
-
-    if (scrollPercent >= 100) {
-      this._displayBufferedPage();
-      const itemsByPage = this.options.itemsByPage;
-      // If max page reach
-      if (this.options.displayedPage * itemsByPage >= this.options.items.length){
-        return;
-      }
-      this.options.displayedPage++;
-      const itemsToBufferStart = (this.options.displayedPage + 1) * itemsByPage;
-      const itemsToBuffer = this.options.items.slice(itemsToBufferStart, itemsToBufferStart + itemsByPage);
-      // Insert the next set of items in the DOM. Keep them hidden. Do it after 200ms for a smooth experience.
-      setTimeout(() => {
-        itemsToBuffer.forEach(item => {
-          this._renderItem(item, null, null, {hidden: true});
-        });
-        // If the user scrolled like it his birthday
-        scrollPercent = (tableElement.scrollTop() / (tableContentElement.height() - tableElement.height())) * 100;
-        if (scrollPercent >= 100) {
-          this._handleTableContentScroll();
-        }
-      }, 200);
     }
   },
 
@@ -419,7 +385,6 @@ const Grid = Component.extend('mad.component.Grid', {
     options = options || {};
     const sourceItems = this.options.sourceItems;
     const items = this.options.items;
-
     this.reset();
     data.forEach(item => items.push(item));
     data.forEach(item => sourceItems.push(item));
@@ -430,7 +395,7 @@ const Grid = Component.extend('mad.component.Grid', {
       return this.filterByKeywords(options.filter.keywords, options.filter.fields);
     } else {
       this.state.loaded = false;
-      return this._renderItems(items).then(() => {
+      return this._renderItems(options).then(() => {
         this.state.loaded = true;
       });
     }
@@ -438,43 +403,102 @@ const Grid = Component.extend('mad.component.Grid', {
 
   /**
    * Render items.
-   * @param {DefineList} items The list of items to render.
-   *
+   * @param {object} options The options
    * @returns {Promise}
    * @private
    */
-  _renderItems: function(items) {
+  _renderItems: function(options) {
+    options = options || {};
+    const items = this.options.items;
     const paginate = this.options.paginate;
     const itemsByPage = this.options.itemsByPage;
-    this.options.displayedPage = 0;
-
     const table = $('.tableview-content table', this.element);
-    let itemsToRender, itemsToBuffer;
+    let itemsToRender;
 
     table.hide();
 
     if (!paginate) {
       itemsToRender = items;
     } else {
-      itemsToRender = items.slice(0, itemsByPage);
-      itemsToBuffer = items.slice(itemsByPage, itemsByPage * 2);
+      let page = 1;
+      const visibleItemId = options.visibleItemId;
+      if (visibleItemId) {
+        const visibleItemIndex = items.indexOf({id: visibleItemId});
+        page = Math.ceil((visibleItemIndex + 1) / itemsByPage);
+      }
+      this.options.displayedPages.first = page;
+      this.options.displayedPages.last = page;
+      itemsToRender = items.slice((page - 1) * itemsByPage, (page) * itemsByPage);
     }
 
-    // The rendering has to be wrapped in a timeout in order for the DOM to complete the operations above before starting to treat the operations below.
     return new Promise(resolve => {
+      // The timeout makes the UX smoother.
       setTimeout(() => {
         itemsToRender.forEach(item => {
           this._renderItem(item);
         });
         table.fadeIn(this.options.fadeInTimeout, () => {
-          if (paginate) {
-            itemsToBuffer.forEach(item => {
-              this._renderItem(item, null, null, {hidden: true});
-            });
-          }
+          // Scroll to 1 px, it will allow the infinite top pagination if any.
+          $('.tableview-content').scrollTop(1)
+          this.bufferPreviousPage();
+          this.bufferNextPage();
           resolve();
         });
       });
+    });
+  },
+
+  /**
+   * Scroll the grid to the given item
+   * @param {DefineMap} item The item to scrollTo
+   */
+  scrollToItem: function(item) {
+    const itemElement = this.view.getItemElement(item);
+    $('.tableview-content', this.element).scrollTop($(itemElement).position().top);
+  },
+
+  /**
+   * Buffer the previous page in the DOM.
+   */
+  bufferPreviousPage: function() {
+    const items = this.options.items;
+    const paginate = this.options.paginate;
+    const pageToBuffer = this.options.displayedPages.first - 1;
+    const itemsByPage = this.options.itemsByPage;
+    let itemsToBuffer;
+
+    // If pagination is disabled or there is nothing to buffer
+    if (!paginate || pageToBuffer < 0) {
+      return;
+    }
+
+    itemsToBuffer = items.slice((pageToBuffer - 1) * itemsByPage, pageToBuffer * itemsByPage);
+    let previousItem = DomData.get($('.tableview-content tr:first', this.element)[0], this.options.itemClass.shortName);
+    itemsToBuffer.reverse().forEach(item => {
+      this._renderItem(item, previousItem, 'before', {hidden: true, css: ['buffer-before']});
+      previousItem = item;
+    });
+  },
+
+  /**
+   * Buffer the next page in the DOM.
+   */
+  bufferNextPage: function() {
+    const items = this.options.items;
+    const paginate = this.options.paginate;
+    const itemsByPage = this.options.itemsByPage;
+    const pageToBuffer = this.options.displayedPages.last + 1;
+    const totalPage = Math.ceil(items.length / itemsByPage);
+    let itemsToBuffer;
+
+    // If pagination is disabled or there is nothing to buffer.
+    if (!paginate || pageToBuffer > totalPage) {
+      return;
+    }
+
+    itemsToBuffer = items.slice((pageToBuffer - 1) * itemsByPage, pageToBuffer * itemsByPage);
+    itemsToBuffer.forEach(item => {
+      this._renderItem(item, null, null, {hidden: true, css: ['buffer-after']});
     });
   },
 
@@ -518,6 +542,69 @@ const Grid = Component.extend('mad.component.Grid', {
   },
 
   /**
+   * Handle table content scroll
+   * @private
+   */
+  _handleTableContentScroll: function() {
+    if (!this.options.paginate) {
+      return;
+    }
+
+    const tableElement = $('.tableview-content', this.element);
+    const tableContentElement = $('.tableview-content table', this.element);
+    let scrollPercent = (tableElement.scrollTop() / (tableContentElement.height() - tableElement.height())) * 100;
+
+    if (scrollPercent == 0) {
+      this._handleTableContentScrollTop();
+    }
+    else if (scrollPercent >= 100) {
+      this._handleTableContentScrollBottom();
+    }
+  },
+
+  /**
+   * Handle infinite scroll top.
+   */
+  _handleTableContentScrollTop: function() {
+    // If min page reach
+    if (this.options.displayedPages.first == 1){
+      return;
+    }
+    const $topElement = $('.tableview-content tr:not(".hidden"):first', this.element);
+    this._displayBufferedPage('before');
+    $('.tableview-content', this.element).scrollTop($topElement.position().top);
+    this.options.displayedPages.first--;
+
+    // To ensure a nice experience, insert buffer in the DOM after 200ms.
+    setTimeout(() => {
+      this.bufferPreviousPage();
+    }, 200);
+  },
+
+  /**
+   * Handle infinite scroll bottom.
+   */
+  _handleTableContentScrollBottom: function() {
+    const items = this.options.items;
+    const itemsByPage = this.options.itemsByPage;
+    const totalPage = Math.ceil(items.length / itemsByPage);
+    const pageToDisplay = this.options.displayedPages.last + 1;
+
+    // If max page reach.
+    if (pageToDisplay > totalPage) {
+      return;
+    }
+
+    this._displayBufferedPage('after');
+    this.options.displayedPages.last++;
+    
+    // To ensure a nice experience, insert buffer in the DOM after 200ms.
+    setTimeout(() => {
+      this.bufferNextPage();
+    }, 200);
+  },
+
+  /**
    * Reset the grid.
    * Remove all the displayed (and hidden) items.
    */
@@ -556,10 +643,12 @@ const Grid = Component.extend('mad.component.Grid', {
 
   /**
    * Display the buffered page of items.
+   * @param {string} position Which before should be displayed. Options: before, after.
    * @private
    */
-  _displayBufferedPage: function() {
-    $('.tableview-content table tbody tr.hidden', this.element).removeClass('hidden');
+  _displayBufferedPage: function(position) {
+    $(`.tableview-content table tbody tr.hidden.buffer-${position}`, this.element)
+    .removeClass(`hidden buffer-${position}`);
   },
 
   /**
@@ -580,7 +669,7 @@ const Grid = Component.extend('mad.component.Grid', {
     this.state.empty = this.options.items == 0;
     this.state.filtered = false;
     this.view.reset();
-    return this._renderItems(this.options.items).then(() => {
+    return this._renderItems().then(() => {
       this.state.loaded = true;
     });
   },
@@ -597,7 +686,7 @@ const Grid = Component.extend('mad.component.Grid', {
     this.view.reset();
     this.options.items = this.options.sourceItems.filterContain(needle, fields);
     this.state.empty = this.options.items.length == 0;
-    return this._renderItems(this.options.items).then(() => {
+    return this._renderItems().then(() => {
       this.state.filtering = false;
       this.state.filtered = true;
       this.state.loaded = true;
@@ -628,7 +717,7 @@ const Grid = Component.extend('mad.component.Grid', {
       return 0;
     });
 
-    return this._renderItems(items)
+    return this._renderItems()
       .then(() => {
         this.options.isSorted = true;
         this.view.markColumnAsSorted(columnModel, sortAsc);
