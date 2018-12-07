@@ -424,7 +424,9 @@ const Grid = Component.extend('mad.component.Grid', {
       const visibleItemId = options.visibleItemId;
       if (visibleItemId) {
         const visibleItemIndex = items.indexOf({id: visibleItemId});
-        page = Math.ceil((visibleItemIndex + 1) / itemsByPage);
+        if (visibleItemIndex > 0) {
+          page = Math.ceil((visibleItemIndex + 1) / itemsByPage);
+        }
       }
       this.options.displayedPages.first = page;
       this.options.displayedPages.last = page;
