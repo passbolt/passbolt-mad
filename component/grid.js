@@ -413,14 +413,14 @@ const Grid = Component.extend('mad.component.Grid', {
     const paginate = this.options.paginate;
     const itemsByPage = this.options.itemsByPage;
     const table = $('.tableview-content table', this.element);
-    let itemsToRender;
+    let itemsToRender, page;
 
     table.hide();
 
     if (!paginate) {
       itemsToRender = items;
     } else {
-      let page = 1;
+      page = 1;
       const visibleItemId = options.visibleItemId;
       if (visibleItemId) {
         const visibleItemIndex = items.indexOf({id: visibleItemId});
@@ -441,9 +441,17 @@ const Grid = Component.extend('mad.component.Grid', {
         });
         table.fadeIn(this.options.fadeInTimeout, () => {
           // Scroll to 1 px, it will allow the infinite top pagination if any.
-          $('.tableview-content').scrollTop(1)
           this.bufferPreviousPage();
           this.bufferNextPage();
+          // Allow the user to scroll to top by initializing the component with a scroll of 1px.
+          const pageCount = Math.ceil(items.length / itemsByPage);
+          // If last page is displayed, to prevent the case where there is not enough element in the page to scroll of 1px.
+          if (pageCount == page) {
+            this._handleTableContentScrollTop();
+            this.scrollToItem(itemsToRender[1]);
+          } else {
+            $('.tableview-content').scrollTop(1)
+          }
           resolve();
         });
       });
