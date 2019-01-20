@@ -446,9 +446,9 @@ const Grid = Component.extend('mad.component.Grid', {
           // Allow the user to scroll to top by initializing the component with a scroll of 1px.
           const pageCount = Math.ceil(items.length / itemsByPage);
           // If last page is displayed, to prevent the case where there is not enough element in the page to scroll of 1px.
-          if (pageCount == page) {
+          if (page != 1 && pageCount == page) {
             this._handleTableContentScrollTop();
-            this.scrollToItem(itemsToRender[1]);
+            this.scrollToItem(itemsToRender[0]);
           } else {
             $('.tableview-content').scrollTop(1)
           }
