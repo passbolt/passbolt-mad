@@ -99,6 +99,9 @@ const Component = Control.extend('mad.Component', /* @static */{
    */
   addLoadedDependency: function(component) {
     this._loadedDependencies.push(component);
+    if (component.state.loaded == false) {
+      this.state.loaded = false;
+    }
     component.state.on('loaded', () => {
       const loaded = this._loadedDependencies.reduce((carry, dependency) => carry && dependency.state.loaded, true);
       this.state.loaded = loaded;
