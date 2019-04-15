@@ -450,7 +450,7 @@ const Grid = Component.extend('mad.component.Grid', {
             this._handleTableContentScrollTop();
             this.scrollToItem(itemsToRender[0]);
           } else {
-            $('.tableview-content').scrollTop(1)
+            $('.tableview-content').scrollTop(1);
           }
           resolve();
         });
@@ -475,14 +475,13 @@ const Grid = Component.extend('mad.component.Grid', {
     const paginate = this.options.paginate;
     const pageToBuffer = this.options.displayedPages.first - 1;
     const itemsByPage = this.options.itemsByPage;
-    let itemsToBuffer;
 
     // If pagination is disabled or there is nothing to buffer
     if (!paginate || pageToBuffer < 0) {
       return;
     }
 
-    itemsToBuffer = items.slice((pageToBuffer - 1) * itemsByPage, pageToBuffer * itemsByPage);
+    const itemsToBuffer = items.slice((pageToBuffer - 1) * itemsByPage, pageToBuffer * itemsByPage);
     let previousItem = DomData.get($('.tableview-content tr:first', this.element)[0], this.options.itemClass.shortName);
     itemsToBuffer.reverse().forEach(item => {
       this._renderItem(item, previousItem, 'before', {hidden: true, css: ['buffer-before']});
@@ -499,14 +498,13 @@ const Grid = Component.extend('mad.component.Grid', {
     const itemsByPage = this.options.itemsByPage;
     const pageToBuffer = this.options.displayedPages.last + 1;
     const totalPage = Math.ceil(items.length / itemsByPage);
-    let itemsToBuffer;
 
     // If pagination is disabled or there is nothing to buffer.
     if (!paginate || pageToBuffer > totalPage) {
       return;
     }
 
-    itemsToBuffer = items.slice((pageToBuffer - 1) * itemsByPage, pageToBuffer * itemsByPage);
+    const itemsToBuffer = items.slice((pageToBuffer - 1) * itemsByPage, pageToBuffer * itemsByPage);
     itemsToBuffer.forEach(item => {
       this._renderItem(item, null, null, {hidden: true, css: ['buffer-after']});
     });
@@ -562,12 +560,11 @@ const Grid = Component.extend('mad.component.Grid', {
 
     const tableElement = $('.tableview-content', this.element);
     const tableContentElement = $('.tableview-content table', this.element);
-    let scrollPercent = (tableElement.scrollTop() / (tableContentElement.height() - tableElement.height())) * 100;
+    const scrollPercent = (tableElement.scrollTop() / (tableContentElement.height() - tableElement.height())) * 100;
 
     if (scrollPercent == 0) {
       this._handleTableContentScrollTop();
-    }
-    else if (scrollPercent >= 100) {
+    } else if (scrollPercent >= 100) {
       this._handleTableContentScrollBottom();
     }
   },
@@ -577,7 +574,7 @@ const Grid = Component.extend('mad.component.Grid', {
    */
   _handleTableContentScrollTop: function() {
     // If min page reach
-    if (this.options.displayedPages.first == 1){
+    if (this.options.displayedPages.first == 1) {
       return;
     }
     const $topElement = $('.tableview-content tr:not(".hidden"):first', this.element);
@@ -607,7 +604,7 @@ const Grid = Component.extend('mad.component.Grid', {
 
     this._displayBufferedPage('after');
     this.options.displayedPages.last++;
-    
+
     // To ensure a nice experience, insert buffer in the DOM after 200ms.
     setTimeout(() => {
       this.bufferNextPage();
@@ -658,7 +655,7 @@ const Grid = Component.extend('mad.component.Grid', {
    */
   _displayBufferedPage: function(position) {
     $(`.tableview-content table tbody tr.hidden.buffer-${position}`, this.element)
-    .removeClass(`hidden buffer-${position}`);
+      .removeClass(`hidden buffer-${position}`);
   },
 
   /**

@@ -62,7 +62,7 @@ const Radio = FormElementView.extend('mad.view.form.Radio', /* @static */ {
    * @param {HTMLElement} el The element the event occurred on
    * @param {HTMLEvent} ev The event that occurred
    */
-  '{element} input click': function(el, ev) {
+  '{element} input change': function(el, ev) {
     ev.stopPropagation();
     if ($(el).is(':checked')) {
       domEvents.dispatch(this.element, {type: 'changed', data: {

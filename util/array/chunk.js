@@ -15,12 +15,12 @@
 function chunk(arr, size) {
   return arr.reduce((chunks, el, i) => {
     if (i % size === 0) {
-      chunks.push([el])
+      chunks.push([el]);
     } else {
-      chunks[chunks.length - 1].push(el)
+      chunks[chunks.length - 1].push(el);
     }
-    return chunks
-  }, [])
+    return chunks;
+  }, []);
 }
 
 export default chunk;
