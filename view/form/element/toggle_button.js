@@ -39,6 +39,18 @@ const ToggleButton = FormElementView.extend('mad.view.form.ToggleButton', /* @st
     domEvents.dispatch(this.element, {type: 'changed', data: {
       value: !isChecked
     }});
+  },
+
+  /**
+   * Listen when the associated checkbox value change.
+   */
+  '{element} input change': function() {
+    if (this.getController().state.disabled) { return; }
+    const $checkbox = $('input', this.element);
+    const isChecked = $checkbox.is(':checked');
+    domEvents.dispatch(this.element, {type: 'changed', data: {
+      value: isChecked
+    }});
   }
 });
 
