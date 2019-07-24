@@ -13,8 +13,8 @@
 import $ from 'jquery';
 import canAjax from 'can-ajax';
 import Construct from 'can-construct';
-import DefineList from 'passbolt-mad/model/list/list';
-import Response from 'passbolt-mad/net/response';
+import DefineList from '../model/list/list';
+import Response from './response';
 import StringUtil from 'can-util/js/string/string';
 import uuid from 'uuid/v4';
 

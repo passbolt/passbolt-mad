@@ -11,9 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import stache from 'can-stache';
-import getTimeAgo from 'passbolt-mad/util/time/get_time_ago';
+import getTimeAgo from '../../../util/time/get_time_ago';
 
 // Register a stache helper to help convert date to time ago.
 stache.registerHelper('getTimeAgo', function() {
+  console.log('get time ago');
   return getTimeAgo.apply(this, arguments);
 });

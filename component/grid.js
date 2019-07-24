@@ -10,19 +10,19 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Component from 'passbolt-mad/component/component';
+import Component from './component';
 import DomData from 'can-dom-data';
 import getObject from 'can-util/js/get/get';
-import GridColumn from 'passbolt-mad/model/map/grid_column';
-import GridState from 'passbolt-mad/model/state/gridState';
-import GridView from 'passbolt-mad/view/component/grid';
+import GridColumn from '../model/map/grid_column';
+import GridState from '../model/state/gridState';
+import GridView from '../view/component/grid';
 
-import columnHeaderTemplate from 'passbolt-mad/view/template/component/grid/gridColumnHeader.stache!';
-import template from 'passbolt-mad/view/template/component/grid/grid.stache!';
-import itemTemplate from 'passbolt-mad/view/template/component/grid/gridItem.stache!';
-import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.stache!';
+import columnHeaderTemplate from '../view/template/component/grid/gridColumnHeader.stache!';
+import template from '../view/template/component/grid/grid.stache!';
+import itemTemplate from '../view/template/component/grid/gridItem.stache!';
+import cellTemplate from '../view/template/component/grid/gridCell.stache!';
 
-import 'passbolt-mad/view/helper/stache/grid/grid_cell.js';
+import '../view/helper/stache/grid/grid_cell.js';
 
 /**
  * @parent Mad.components_api

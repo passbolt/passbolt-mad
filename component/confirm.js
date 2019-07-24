@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import $ from 'jquery';
-import DialogComponent from 'passbolt-mad/component/dialog';
-import ConfirmView from 'passbolt-mad/view/component/confirm';
-import HtmlHelper from 'passbolt-mad/helper/html';
+import DialogComponent from './dialog';
+import ConfirmView from '../view/component/confirm';
+import HtmlHelper from '../helper/html';
 // eslint-disable-next-line no-unused-vars
-import I18n from 'passbolt-mad/util/lang/i18n';
-import template from 'passbolt-mad/view/template/component/confirm/confirm.stache!';
+import I18n from '../util/lang/i18n';
+import template from '../view/template/component/confirm/confirm.stache!';
 
 const Confirm = DialogComponent.extend('mad.component.Confirm', /** @static */ {
 

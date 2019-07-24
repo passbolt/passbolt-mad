@@ -12,8 +12,8 @@
  */
 import DomData from 'can-dom-data';
 import domEvents from 'can-dom-events';
-import View from 'passbolt-mad/view/view';
-import HtmlHelper from 'passbolt-mad/helper/html';
+import View from '../view';
+import HtmlHelper from '../../helper/html';
 
 /**
  * @inherits mad.View

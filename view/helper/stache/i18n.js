@@ -12,7 +12,7 @@
  */
 import stache from 'can-stache';
 
-// Register a stache helper to help generate uuid.
+// Register a stache helper to help template translation.
 stache.registerHelper('__', function() {
   return __.apply(this, arguments);
 });

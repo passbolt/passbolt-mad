@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import domEvents from 'can-dom-events';
-import FormElementView from 'passbolt-mad/view/form/element';
+import FormElementView from '../element';
 
 /**
  * @inherits mad.view.form.Element

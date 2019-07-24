@@ -10,15 +10,15 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Config from 'passbolt-mad/config/config';
+import Config from './config/config';
 import Construct from 'can-construct';
-import ErrorHandler from 'passbolt-mad/error/error_handler';
-import global from 'passbolt-mad/util/global/global';
-import HtmlHelper from 'passbolt-mad/helper/html';
-import MadBus from "passbolt-mad/control/bus";
-import I18n from "passbolt-mad/util/lang/i18n";
+import ErrorHandler from './error/error_handler';
+import global from './util/global/global';
+import HtmlHelper from './helper/html';
+import MadBus from "./control/bus";
+import I18n from "./util/lang/i18n";
 
-import madConfig from "passbolt-mad/config/config.js";
+import madConfig from "./config/config.js";
 
 // Load the default mad config.
 // See mad/config/config.json

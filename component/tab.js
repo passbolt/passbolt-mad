@@ -10,12 +10,12 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Action from 'passbolt-mad/model/map/action';
-import ComponentHelper from 'passbolt-mad/helper/component';
-import CompositeComponent from 'passbolt-mad/component/composite';
-import MenuComponent from 'passbolt-mad/component/menu';
-import TabView from 'passbolt-mad/view/component/tab';
-import template from 'passbolt-mad/view/template/component/tab/tab.stache!';
+import Action from '../model/map/action';
+import ComponentHelper from '../helper/component';
+import CompositeComponent from './composite';
+import MenuComponent from './menu';
+import TabView from '../view/component/tab';
+import template from '../view/template/component/tab/tab.stache!';
 import uuid from 'uuid/v4';
 
 /**

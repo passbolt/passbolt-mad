@@ -10,9 +10,10 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import ChoiceElement from 'passbolt-mad/form/choice_element';
-import RadioView from 'passbolt-mad/view/form/element/radio';
-import template from 'passbolt-mad/view/template/form/radio.stache!';
+import $ from 'jquery/dist/jquery.min.js';
+import ChoiceElement from '../choice_element';
+import RadioView from '../../view/form/element/radio';
+import template from '../../view/template/form/radio.stache!';
 
 /**
  * @parent Mad.form_api

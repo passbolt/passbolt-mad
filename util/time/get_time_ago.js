@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 
-import Config from 'passbolt-mad/config/config';
+import Config from '../../config/config';
 import moment from 'moment/moment';
 import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 

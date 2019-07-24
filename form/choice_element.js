@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Element from 'passbolt-mad/form/element';
+import Element from './element';
 
 /**
  * @parent Mad.form_api

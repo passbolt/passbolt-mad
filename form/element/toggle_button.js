@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Element from 'passbolt-mad/form/element';
-import ToggleButtonView from 'passbolt-mad/view/form/element/toggle_button';
-import template from 'passbolt-mad/view/template/form/toggle_button.stache!';
+import Element from '../element';
+import ToggleButtonView from '../../view/form/element/toggle_button';
+import template from '../../view/template/form/toggle_button.stache!';
 
 /**
  * @parent Mad.form_api

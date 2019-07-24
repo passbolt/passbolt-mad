@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import stache from 'can-stache';
-import View from 'passbolt-mad/view/view';
+import View from '../../../view';
 
-import cellTemplate from 'passbolt-mad/view/template/component/grid/gridCell.stache!';
+import cellTemplate from '../../../template/component/grid/gridCell.stache!';
 
 // Register a stache helper to help the grid to render the cells.
 stache.registerHelper('gridCell', (gridColumn, options) => {

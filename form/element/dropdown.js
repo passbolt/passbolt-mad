@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import ChoiceElement from 'passbolt-mad/form/choice_element';
-import DropdownView from 'passbolt-mad/view/form/element/dropdown';
-import template from 'passbolt-mad/view/template/form/dropdown.stache!';
+import ChoiceElement from '../choice_element';
+import DropdownView from '../../view/form/element/dropdown';
+import template from '../../view/template/form/dropdown.stache!';
 
 /**
  * @parent Mad.form_api

@@ -10,13 +10,13 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Control from 'passbolt-mad/control/control';
-import HtmlHelper from 'passbolt-mad/helper/html';
-import 'passbolt-mad/view/helper/stache/i18n.js';
-import 'passbolt-mad/view/helper/stache/hash.js';
-import 'passbolt-mad/view/helper/stache/string.js';
-import 'passbolt-mad/view/helper/stache/time.js';
-import 'passbolt-mad/view/helper/stache/uuid.js';
+import Control from '../control/control';
+import HtmlHelper from '../helper/html';
+import './helper/stache/i18n.js';
+import './helper/stache/hash.js';
+import './helper/stache/string.js';
+import './helper/stache/time.js'; 
+import './helper/stache/uuid.js';
 
 /**
  * @parent Mad.core_api

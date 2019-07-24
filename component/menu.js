@@ -10,11 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import Action from 'passbolt-mad/model/map/action';
-import MadMap from 'passbolt-mad/util/map/map';
-import TreeComponent from 'passbolt-mad/component/tree';
+import Action from '../model/map/action';
+import MadMap from '../util/map/map';
+import TreeComponent from './tree';
 
-import itemTemplate from 'passbolt-mad/view/template/component/menu/menu_item.stache!';
+import itemTemplate from '../view/template/component/menu/menu_item.stache!';
 
 /**
  * @parent Mad.components_api
