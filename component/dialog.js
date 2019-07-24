@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import DialogView from '../view/component/dialog';
-import FreeCompositeComponent from './free_composite'; 
+import FreeCompositeComponent from './free_composite';
 import HtmlHelper from '../helper/html';
 import template from '../view/template/component/dialog/dialog.stache!';
 

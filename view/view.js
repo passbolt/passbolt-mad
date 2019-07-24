@@ -15,7 +15,7 @@ import HtmlHelper from '../helper/html';
 import './helper/stache/i18n.js';
 import './helper/stache/hash.js';
 import './helper/stache/string.js';
-import './helper/stache/time.js'; 
+import './helper/stache/time.js';
 import './helper/stache/uuid.js';
 
 /**
