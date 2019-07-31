@@ -10,8 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import View from '../view';
 import $ from 'jquery';
+import View from '../view';
 
 /**
  * @inherits mad.View

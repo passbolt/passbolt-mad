@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import mad from "passbolt-mad/passbolt-mad";
 import Button from "passbolt-mad/component/button";
 import template from 'passbolt-mad/demo/bootstrap/app.ejs!';

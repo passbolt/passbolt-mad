@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import Control from '../control/control';
 import HtmlHelper from '../helper/html';
 import './helper/stache/i18n.js';

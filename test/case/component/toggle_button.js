@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import "passbolt-mad/test/bootstrap";
 import Button from 'passbolt-mad/component/button';
 import CanControl from "can-control";

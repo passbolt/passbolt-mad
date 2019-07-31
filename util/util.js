@@ -14,6 +14,7 @@
  * Override the can/util/string.js to use our patched version of the function getObject
  * Our version allow to set a value in a nested object if required. (@todo remove this trick)
  */
+import $ from 'jquery';
 
 // Define the global context.
 const glbl = typeof window !== "undefined" ? window : global;

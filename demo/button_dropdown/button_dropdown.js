@@ -12,8 +12,6 @@
  */
 import $ from 'jquery';
 import mad from "passbolt-mad/passbolt-mad";
-import ButtonDropdown from "passbolt-mad/component/button_dropdown";
-import Action from "passbolt-mad/model/map/action";
 
 // Create a list of actions.
 var menuItems = [

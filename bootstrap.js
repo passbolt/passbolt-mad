@@ -17,6 +17,7 @@ import global from './util/global/global';
 import HtmlHelper from './helper/html';
 import MadBus from "./control/bus";
 import I18n from "./util/lang/i18n";
+import $ from 'jquery';
 
 import madConfig from "./config/config.js";
 

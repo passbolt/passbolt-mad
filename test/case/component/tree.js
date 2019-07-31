@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import Component from "passbolt-mad/component/component";
@@ -20,7 +21,6 @@ import DefineMap from 'passbolt-mad/model/map/map';
 import TreeComponent from "passbolt-mad/component/tree";
 import User from 'passbolt-mad/test/model/map/user';
 import xss from 'passbolt-mad/test/fixture/xss';
-import $ from 'jquery';
 
 describe("Tree", () => {
   let $tree = null;

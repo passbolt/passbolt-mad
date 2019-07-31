@@ -10,9 +10,9 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import Control from './control';
 import domEvents from 'can-dom-events';
-import $ from 'jquery';
 
 /**
  * @parent Mad.core_api

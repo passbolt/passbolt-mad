@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import ComponentHelper from '../helper/component';
 import CompositeComponent from './composite';
 import template from '../view/template/component/free_composite/workspace.stache!';

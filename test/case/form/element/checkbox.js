@@ -10,6 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import "passbolt-mad/test/bootstrap";
 import CanControl from "can-control";
 import CheckboxFormElement from "passbolt-mad/form/element/checkbox";
@@ -17,7 +18,6 @@ import Component from 'passbolt-mad/component/component';
 import domEvents from 'can-dom-events';
 import FormElement from 'passbolt-mad/form/element';
 import MadControl from 'passbolt-mad/control/control';
-import $ from 'jquery';
 
 let $checkbox = null;
 

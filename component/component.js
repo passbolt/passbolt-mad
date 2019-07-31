@@ -10,11 +10,11 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import $ from 'jquery';
 import Control from '../control/control';
 import DefineList from '../model/list/list';
 import ComponentState from '../model/state/componentState';
 import View from '../view/view';
-import $ from 'jquery';
 
 const Component = Control.extend('mad.Component', /* @static */{
 
