@@ -31,6 +31,7 @@ const map = new MadMap({
   id: 'id',
   label: 'label',
   date: 'date',
+  value: 'value',
   timeago: {
     key: 'date',
     func: function(value) {
@@ -66,6 +67,22 @@ const generate_alphabet_dummy_items = function() {
     items[i] = new DefineMap({
       id: `item_${letter}`,
       label: `item label ${letter}`
+    });
+  }
+
+  return items;
+};
+
+const generate_boolean_dummy_items = function() {
+  const items = [];
+
+  for (let i = 0; i < 10; i++) {
+    const boolean = (i % 2) === 0;
+    const text = boolean ? 'true' : 'false';
+    items[i] = new DefineMap({
+      id: `item_${i}`,
+      label: `item label ${text}`,
+      value: boolean
     });
   }
 
@@ -665,6 +682,66 @@ describe("Grid", () => {
             grid.sort(columnModel[1], true).then(() => {
               for (var i = 0; i < alphabet.length; i++) {
                 expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label ${alphabet[i]}`);
+              }
+              grid.destroy();
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it("sorts content by boolean", done => {
+      const columnModel = [new GridColumn({
+        name: 'id',
+        index: 'id',
+        label: 'id',
+        sortable: true
+      }), new GridColumn({
+        name: 'label',
+        index: 'label',
+        label: 'label',
+        sortable: true
+      }), new GridColumn({
+        name: 'value',
+        index: 'value',
+        label: 'value',
+        sortable: true
+      })];
+      const grid = instantiateGrid({columnModel: columnModel});
+      grid.start();
+
+      // Insert items at root level.
+      const items = generate_boolean_dummy_items();
+      grid.load(items).then(() => {
+        // Check that the grid is in ascending order.
+        grid.sort(columnModel[2], true).then(() => {
+          const totalItemsCount = items.length;
+          const halfItemsCount = items.length / 2;
+          for (var i = 0; i < halfItemsCount; i++) {
+            expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label false`);
+          }
+          for (var i = 5; i < totalItemsCount; i++) {
+            expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label true`);
+          }
+
+          // Check that the grid is in descending order.
+          grid.sort(columnModel[2], false).then(() => {
+            for (var i = (totalItemsCount - 1), j = 0; i >= halfItemsCount; i--, j++) {
+              expect($('tbody tr', grid.element).eq(j).html()).to.contain(`item label true`);
+            }
+
+            for (var i = (halfItemsCount - 1), j = halfItemsCount; i >= 0; i--, j++) {
+              expect($('tbody tr', grid.element).eq(j).html()).to.contain(`item label false`);
+            }
+
+            // Check that the grid is sorted in ascending order.
+            grid.sort(columnModel[2], true).then(() => {
+              for (var i = 0; i < 5; i++) {
+                expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label false`);
+              }
+              for (var i = 5; i < 10; i++) {
+                expect($('tbody tr', grid.element).eq(i).html()).to.contain(`item label true`);
               }
               grid.destroy();
               done();
