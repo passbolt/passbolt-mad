@@ -713,10 +713,14 @@ const Grid = Component.extend('mad.component.Grid', {
 
     this.state.loaded = false;
     this.view.reset();
-
     items.sort((itemA, itemB) => {
-      const valueA = (getObject(itemA, columnId) || '').toUpperCase();
-      const valueB = (getObject(itemB, columnId) || '').toUpperCase();
+      itemA = getObject(itemA, columnId);
+      itemB = getObject(itemB, columnId);
+
+      const isBoolean = (typeof itemA === "boolean");
+      const valueA = isBoolean ? itemA : (itemA || '').toUpperCase();
+      const valueB = isBoolean ? itemB : (itemB || '').toUpperCase();
+
       if (valueA < valueB) {
         return sortAsc ? -1 : 1;
       } else if (valueA > valueB) {
