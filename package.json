@@ -1,6 +1,6 @@
 {
   "name": "passbolt-mad",
-  "version": "2.11.3",
+  "version": "2.12.0",
   "author": "Passbolt SA",
   "license": "AGPL-3.0",
   "description": "Passbolt javascript application library for the open source password manager for teams",
@@ -94,7 +94,7 @@
     "can-view-scope": "4.5.0",
     "can-view-target": "4.1.0",
     "can-zone": "0.6.22",
-    "jquery": "3.4.0",
+    "jquery": "3.5.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.26",
     "react-view-model": "1.0.1",
@@ -107,20 +107,18 @@
   "devDependencies": {
     "chai": "^4.0.0",
     "chai-jquery": "^2.0.0",
-    "eslint": "^4.19.1",
+    "eslint": "6.8.0",
     "eslint-plugin-import": "^2.18.2",
     "grunt": "^1.0.4",
     "grunt-testee": "github:passbolt/grunt-testee#master",
-    "http-server": "^0.11.1",
-    "mocha": "^5.2.0",
+    "mocha": "^7.1.1",
     "sinon": "^1.16.1",
     "steal-mocha": "^2.0.1",
-    "testee": "^0.9.1"
+    "testee": "github:passbolt/testee#master"
   },
   "scripts": {
     "lint": "eslint component config control error form helper model net util view",
     "lint-fix": "eslint --fix component config control error form helper model net util view",
-    "server": "http-server",
     "test": "grunt test"
   },
   "steal": {
